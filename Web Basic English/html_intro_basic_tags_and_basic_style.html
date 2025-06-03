@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 1: Basic Web Programming - HTML & CSS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f0f4f8;
+            /* Light blue-gray background for the page */
+        }
+
+        .slide {
+            min-height: 85vh;
+            /* Increased min-height for more content */
+            scroll-snap-align: start;
+            scroll-margin-top: 70px;
+            /* Adjusted for navbar height */
+            background-color: white;
+            border-radius: 12px;
+            /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.04);
+            /* Softer shadow */
+            margin-bottom: 2rem;
+            /* Space between slides */
+        }
+
+        .code-block {
+            background-color: #2d3748;
+            /* Dark background for code */
+            color: #e2e8f0;
+            /* Light text color */
+            padding: 1.5rem;
+            /* Increased padding */
+            border-radius: 0.75rem;
+            /* More rounded */
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            /* Common mono fonts */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            line-height: 1.6;
+            /* Improved line spacing */
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        /* Green for comments */
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        /* Blue for keywords like <!DOCTYPE> */
+        .code-block .tag {
+            color: #569cd6;
+        }
+
+        /* Blue for HTML tags */
+        .code-block .attr-name {
+            color: #9cdcfe;
+        }
+
+        /* Light blue for attribute names */
+        .code-block .attr-value {
+            color: #ce9178;
+        }
+
+        /* Orange for attribute values */
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        /* Orange for strings in JS/CSS */
+        .code-block .property {
+            color: #9cdcfe;
+        }
+
+        /* For CSS properties */
+        .code-block .css-value {
+            color: #ce9178;
+        }
+
+        /* For CSS values */
+        .code-block .selector {
+            color: #d7ba7d;
+        }
+
+        /* For CSS selectors */
+
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #007bff;
+            /* Blue scrollbar thumb */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+            /* Darker blue on hover */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            /* Ensure navbar is on top */
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            /* Slightly stronger shadow for navbar */
+        }
+
+        .slide-content-wrapper {
+            /* Renamed from .slide-content to avoid conflict if user has that class */
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .slide-content-wrapper.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .html-output {
+            border: 1px solid #cbd5e0;
+            /* Tailwind gray-300 */
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            /* Tailwind gray-100 */
+            min-height: 100px;
+        }
+
+        .html-output h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #2c5282;
+            /* Tailwind blue-800 */
+        }
+
+        .html-output h2 {
+            font-size: 1.75em;
+            margin-bottom: 0.4em;
+            color: #2c5282;
+        }
+
+        .html-output h3 {
+            font-size: 1.5em;
+            margin-bottom: 0.3em;
+            color: #2c5282;
+        }
+
+        .html-output h4 {
+            font-size: 1.25em;
+            margin-bottom: 0.2em;
+            color: #2c5282;
+        }
+
+        .html-output h5 {
+            font-size: 1em;
+            margin-bottom: 0.2em;
+            color: #2c5282;
+        }
+
+        .html-output h6 {
+            font-size: 0.875em;
+            margin-bottom: 0.2em;
+            color: #2c5282;
+        }
+
+        .html-output p {
+            margin-bottom: 1em;
+            line-height: 1.6;
+            color: #4a5568;
+            /* Tailwind gray-700 */
+        }
+
+        .html-output a {
+            color: #3182ce;
+            /* Tailwind blue-600 */
+            text-decoration: underline;
+        }
+
+        .html-output img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1em;
+        }
+
+        .html-output button {
+            background-color: #4299e1;
+            /* Tailwind blue-500 */
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            /* Tailwind rounded-md */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .html-output button:hover {
+            background-color: #2b6cb0;
+            /* Tailwind blue-700 */
+        }
+
+        /* Enhanced button styling for nav */
+        #prevSlide,
+        #nextSlide {
+            background-color: #007bff;
+            /* Primary blue */
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+        }
+
+        #prevSlide:hover,
+        #nextSlide:hover {
+            background-color: #0056b3;
+            /* Darker blue */
+        }
+
+        #prevSlide:disabled,
+        #nextSlide:disabled {
+            background-color: #6c757d;
+            /* Gray for disabled */
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-600">Web Basics Session 1</h1>
+            <div class="mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block mr-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Prev
+                </button>
+                <button id="nextSlide"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block ml-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4">
+        <div id="slide-1" class="slide-content-wrapper active slide p-8">
+            <h2 class="text-5xl font-bold text-center text-blue-700 mb-6">Session 1: Introduction to Web Programming
+            </h2>
+            <p class="text-3xl text-center text-gray-600 mb-12">Basic HTML & CSS - The Foundation of Every Website!</p>
+            <div class="flex justify-center">
+                <img src="https://placehold.co/500x300/007BFF/FFFFFF?text=HTML+%26+CSS+Foundation"
+                    alt="[Web Programming HTML CSS Image]" class="rounded-lg shadow-xl">
+            </div>
+            <p class="text-center mt-10 text-xl text-gray-700">Welcome to your first session on Web Programming!</p>
+        </div>
+
+        <div id="slide-2" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">1. Introduction to HTML and CSS</h3>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-bold text-blue-700 mb-3">What is HTML?</h4>
+                    <p class="mb-3 text-lg text-gray-700"><strong>HTML</strong> (HyperText Markup Language) is the
+                        standard language for creating web pages.</p>
+                    <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
+                        <li><strong>Role:</strong> Builds the structure and framework for web page content (headings,
+                            paragraphs, images, links, etc.).</li>
+                        <li><strong>Example:</strong> Like the skeleton of the human body, defining its shape and basic
+                            structure.</li>
+                    </ul>
+                </div>
+                <div class="bg-green-50 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-bold text-green-700 mb-3">What is CSS?</h4>
+                    <p class="mb-3 text-lg text-gray-700"><strong>CSS</strong> (Cascading Style Sheets) is a language
+                        used to describe the presentation of HTML elements on screen.</p>
+                    <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
+                        <li><strong>Role:</strong> Creates the style and layout for the web page (colors, fonts, layout,
+                            spacing, etc.).</li>
+                        <li><strong>Example:</strong> Like clothes, skin color, hairstyle, making the "body" (web page)
+                            look attractive.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <img src="https://placehold.co/450x200/7E3AF2/FFFFFF?text=HTML+(Structure)+%2B+CSS+(Presentation)+%3D+Web+Page"
+                    alt="[Diagram HTML + CSS = Web Page]" class="rounded-lg shadow-lg mx-auto">
+                <p class="mt-4 text-xl text-gray-800">HTML provides the <strong>structure</strong>, CSS adds the
+                    <strong>style</strong>, together creating a complete and visual web page.</p>
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">2. Basic HTML Syntax and File Structure</h3>
+            <h4 class="text-2xl font-medium text-gray-700 mb-3">Basic HTML file structure:</h4>
+            <div class="code-block">
+                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
+                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
+                    class="attr-value">"en"</span>&gt; <span class="comment">&lt;!-- Changed lang to "en" --&gt;</span>
+                &lt;<span class="tag">head</span>&gt;
+                &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span
+                    class="attr-value">"UTF-8"</span>&gt;
+                &lt;<span class="tag">meta</span> <span class="attr-name">name</span>=<span
+                    class="attr-value">"viewport"</span> <span class="attr-name">content</span>=<span
+                    class="attr-value">"width=device-width, initial-scale=1.0"</span>&gt;
+                &lt;<span class="tag">title</span>&gt;Page Title&lt;/<span class="tag">title</span>&gt; <span
+                    class="comment">&lt;!-- Translated --&gt;</span>
+                &lt;/<span class="tag">head</span>&gt;
+                &lt;<span class="tag">body</span>&gt;
+                <span class="comment">&lt;!-- Main content of the web page goes here --&gt;</span> <span
+                    class="comment">&lt;!-- Translated --&gt;</span>
+                Hello World!
+                &lt;/<span class="tag">body</span>&gt;
+                &lt;/<span class="tag">html</span>&gt;
+            </div>
+            <p class="mb-2 font-medium mt-4">Explanation:</p>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                <li><code>&lt;!DOCTYPE html&gt;</code>: Declares the document type, helping the browser understand it's
+                    an HTML5 document.</li>
+                <li><code>&lt;html&gt;</code>: The root tag, wrapping all page content. The <code>lang="en"</code>
+                    attribute specifies the page language as English.</li>
+                <li><code>&lt;head&gt;</code>: Contains meta-information about the page (not displayed directly), like
+                    title, encoding, CSS links, scripts.</li>
+                <li><code>&lt;title&gt;</code>: Sets the page title, displayed on the browser tab.</li>
+                <li><code>&lt;body&gt;</code>: Contains all visible content of the web page (text, images, links, etc.).
+                </li>
+            </ul>
+
+            <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">HTML Tag Syntax:</h4>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                <li>Most HTML tags have an <strong>opening tag</strong> (e.g., <code>&lt;p&gt;</code>) and a
+                    <strong>closing tag</strong> (e.g., <code>&lt;/p&gt;</code>).</li>
+                <li>Content lies between the opening and closing tags.</li>
+                <li>Some tags are <strong>self-closing tags</strong> (void elements), having no content inside and not
+                    needing a separate closing tag (e.g., <code>&lt;img src="..."&gt;</code>, <code>&lt;br&gt;</code>).
+                </li>
+                <li>Tags can contain <strong>attributes</strong>, providing additional information to the tag.
+                    Attributes are written in the opening tag, in the form <code>attribute_name="value"</code>.</li>
+            </ul>
+            <div class="code-block">
+                &lt;<span class="tag">p</span> <span class="attr-name">class</span>=<span
+                    class="attr-value">"description"</span>&gt;This is a paragraph with a class attribute.&lt;/<span
+                    class="tag">p</span>&gt; <span class="comment">&lt;!-- Translated example text --&gt;</span>
+                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
+                    class="attr-value">"image.jpg"</span> <span class="attr-name">alt</span>=<span
+                    class="attr-value">"Image description"</span>&gt; <span class="comment">&lt;!-- Self-closing tag
+                    --&gt;</span> <span class="comment">&lt;!-- Translated comment --&gt;</span>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Headings <code>&lt;h1&gt;</code> -
+                <code>&lt;h6&gt;</code></h3>
+            <p class="mb-4 text-lg text-gray-700">Heading tags are used to define heading levels in an HTML document.
+                <code>&lt;h1&gt;</code> is the most important heading (highest level), and <code>&lt;h6&gt;</code> is
+                the least important.</p>
+            <p class="mb-4 text-lg text-gray-700">Using heading tags correctly improves page structure, is good for SEO
+                (Search Engine Optimization), and accessibility.</p>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Code Example:</h4>
+            <div class="code-block">
+                &lt;<span class="tag">h1</span>&gt;This is Heading H1 (most important)&lt;/<span
+                    class="tag">h1</span>&gt;
+                &lt;<span class="tag">h2</span>&gt;This is Heading H2&lt;/<span class="tag">h2</span>&gt;
+                &lt;<span class="tag">h3</span>&gt;This is Heading H3&lt;/<span class="tag">h3</span>&gt;
+                &lt;<span class="tag">h4</span>&gt;This is Heading H4&lt;/<span class="tag">h4</span>&gt;
+                &lt;<span class="tag">h5</span>&gt;This is Heading H5&lt;/<span class="tag">h5</span>&gt;
+                &lt;<span class="tag">h6</span>&gt;This is Heading H6 (least important)&lt;/<span
+                    class="tag">h6</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result:</h4>
+            <div class="html-output">
+                <h1>This is Heading H1 (most important)</h1>
+                <h2>This is Heading H2</h2>
+                <h3>This is Heading H3</h3>
+                <h4>This is Heading H4</h4>
+                <h5>This is Heading H5</h5>
+                <h6>This is Heading H6 (least important)</h6>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Paragraph <code>&lt;p&gt;</code></h3>
+            <p class="mb-4 text-lg text-gray-700">The <code>&lt;p&gt;</code> (paragraph) tag is used to define a
+                paragraph of text.</p>
+            <p class="mb-4 text-lg text-gray-700">Browsers automatically add some white space (margin) before and after
+                each <code>&lt;p&gt;</code> element.</p>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Code Example:</h4>
+            <div class="code-block">
+                &lt;<span class="tag">p</span>&gt;This is the first paragraph. HTML is very interesting and is the
+                foundation of the web.&lt;/<span class="tag">p</span>&gt;
+                &lt;<span class="tag">p</span>&gt;This is the second paragraph. Each &lt;p&gt; tag creates a separate
+                block of text.&lt;/<span class="tag">p</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result:</h4>
+            <div class="html-output">
+                <p>This is the first paragraph. HTML is very interesting and is the foundation of the web.</p>
+                <p>This is the second paragraph. Each &lt;p&gt; tag creates a separate block of text.</p>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Link <code>&lt;a&gt;</code></h3>
+            <p class="mb-4 text-lg text-gray-700">The <code>&lt;a&gt;</code> (anchor) tag is used to create hyperlinks
+                to other web pages, files, email addresses, or locations within the same page.</p>
+            <p class="mb-2 font-medium text-gray-700">Important attributes:</p>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                <li><code>href</code>: (Hypertext Reference) Specifies the URL (address) of the page the link goes to.
+                </li>
+                <li><code>target="_blank"</code>: Opens the link in a new browser tab or window.</li>
+                <li>The content inside the <code>&lt;a&gt;...&lt;/a&gt;</code> tags is the text or image that users will
+                    click on.</li>
+            </ul>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Code Example:</h4>
+            <div class="code-block">
+                &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
+                    class="attr-value">"https://www.google.com"</span>&gt;Visit Google&lt;/<span
+                    class="tag">a</span>&gt;
+                &lt;<span class="tag">br</span>&gt; <span class="comment">&lt;!-- Line break tag so links don't stick
+                    together --&gt;</span>
+                &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
+                    class="attr-value">"https://www.bbc.com"</span> <span class="attr-name">target</span>=<span
+                    class="attr-value">"_blank"</span>&gt;Read news on BBC (new tab)&lt;/<span class="tag">a</span>&gt;
+                &lt;<span class="tag">br</span>&gt;
+                &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
+                    class="attr-value">"mailto:info@example.com"</span>&gt;Email Us&lt;/<span class="tag">a</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result:</h4>
+            <div class="html-output">
+                <a href="javascript:void(0);" onclick="alert('You clicked the Google link (simulated)!')">Visit
+                    Google</a>
+                <br>
+                <a href="javascript:void(0);" onclick="alert('You clicked the BBC link (simulated)!')">Read news on BBC
+                    (new tab)</a>
+                <br>
+                <a href="javascript:void(0);" onclick="alert('You clicked the Email link (simulated)!')">Email Us</a>
+            </div>
+            <p class="mt-3 text-sm text-gray-600">Note: In the display example, actual links have been replaced with a
+                JavaScript <code>alert</code> to avoid navigating away from this page.</p>
+        </div>
+
+        <div id="slide-7" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Image <code>&lt;img&gt;</code></h3>
+            <p class="mb-4 text-lg text-gray-700">The <code>&lt;img&gt;</code> (image) tag is used to embed an image
+                into a web page. It is a self-closing tag (no <code>&lt;/img&gt;</code> closing tag).</p>
+            <p class="mb-2 font-medium text-gray-700">Important attributes:</p>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                <li><code>src</code>: (Source) Specifies the path (URL) to the image file.</li>
+                <li><code>alt</code>: (Alternative text) Provides a text description for the image. This text will be
+                    displayed if the image cannot be loaded and is very important for SEO and visually impaired users.
+                </li>
+                <li><code>width</code>, <code>height</code>: (Optional) Define the width and height of the image (in
+                    pixels or percentage). It's better to use CSS to control image sizes flexibly.</li>
+            </ul>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Code Example:</h4>
+            <div class="code-block">
+                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
+                    class="attr-value">"https://placehold.co/300x150/3498db/ffffff?text=Sample+Image+1"</span> <span
+                    class="attr-name">alt</span>=<span class="attr-value">"Blue sample image"</span>&gt;
+                &lt;<span class="tag">br</span>&gt;
+                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
+                    class="attr-value">"https://placehold.co/200x200/e74c3c/ffffff?text=Square+Image"</span> <span
+                    class="attr-name">alt</span>=<span class="attr-value">"Red square image"</span> <span
+                    class="attr-name">width</span>=<span class="attr-value">"100"</span> <span
+                    class="attr-name">height</span>=<span class="attr-value">"100"</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result:</h4>
+            <div class="html-output">
+                <img src="https://placehold.co/300x150/3498db/ffffff?text=Sample+Image+1" alt="Blue sample image">
+                <br>
+                <img src="https://placehold.co/200x200/e74c3c/ffffff?text=Square+Image" alt="Red square image"
+                    width="100" height="100">
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Button <code>&lt;button&gt;</code></h3>
+            <p class="mb-4 text-lg text-gray-700">The <code>&lt;button&gt;</code> tag is used to create a clickable
+                button. Buttons are often used to trigger an action, usually via JavaScript (e.g., submitting a form,
+                opening a dialog).</p>
+            <p class="mb-2 font-medium text-gray-700">Basic attributes:</p>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                <li><code>type</code>: Defines the button type. Common values:
+                    <ul>
+                        <li><code>"button"</code>: A clickable button (default).</li>
+                        <li><code>"submit"</code>: A button that submits form data.</li>
+                        <li><code>"reset"</code>: A button that resets form fields to their initial values.</li>
+                    </ul>
+                </li>
+                <li>The content inside the <code>&lt;button&gt;...&lt;/button&gt;</code> tags is the text or HTML that
+                    will be displayed on the button.</li>
+            </ul>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Code Example:</h4>
+            <div class="code-block">
+                &lt;<span class="tag">button</span> <span class="attr-name">type</span>=<span
+                    class="attr-value">"button"</span> <span class="attr-name">onclick</span>=<span
+                    class="attr-value">"alert('You clicked the regular button!')"</span>&gt;Click Me&lt;/<span
+                    class="tag">button</span>&gt;
+                &lt;<span class="tag">br</span>&gt;&lt;<span class="tag">br</span>&gt;
+                &lt;<span class="tag">button</span> <span class="attr-name">type</span>=<span
+                    class="attr-value">"submit"</span>&gt;Submit Data&lt;/<span class="tag">button</span>&gt;
+                &lt;<span class="tag">br</span>&gt;&lt;<span class="tag">br</span>&gt;
+                &lt;<span class="tag">button</span> <span class="attr-name">type</span>=<span
+                    class="attr-value">"reset"</span>&gt;Reset Form&lt;/<span class="tag">button</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result:</h4>
+            <div class="html-output">
+                <button type="button" onclick="alert('You clicked the regular button!')">Click Me</button>
+                <br><br>
+                <button type="submit"
+                    onclick="event.preventDefault(); alert('You clicked the Submit Data button (simulated)!')">Submit
+                    Data</button>
+                <br><br>
+                <button type="reset"
+                    onclick="event.preventDefault(); alert('You clicked the Reset Form button (simulated)!')">Reset
+                    Form</button>
+            </div>
+            <p class="mt-3 text-sm text-gray-600">Note: The <code>onclick</code> attribute with <code>alert()</code> is
+                added to illustrate the action when the button is clicked.</p>
+        </div>
+
+        <div id="slide-9" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">4. Basic CSS for Text Tags (<code>style</code>
+                Attribute)</h3>
+            <p class="mb-4 text-lg text-gray-700">CSS (Cascading Style Sheets) is used to format the appearance of HTML.
+                A simple way to add CSS is using <strong>inline CSS</strong> via the <code>style</code> attribute
+                directly on an HTML tag.</p>
+            <p class="mb-2 font-medium text-gray-700">Some basic CSS properties for text:</p>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                <li><code><span class="property">color</span>: <span class="css-value">color_value</span>;</code>: Sets
+                    the text color. E.g., <code>color: blue;</code>, <code>color: #FF0000;</code> (hex code),
+                    <code>color: rgb(0, 255, 0);</code>.</li>
+                <li><code><span class="property">font-size</span>: <span class="css-value">size_value</span>;</code>:
+                    Sets the text size. E.g., <code>font-size: 20px;</code>, <code>font-size: 1.5em;</code>,
+                    <code>font-size: 120%;</code>.</li>
+                <li><code><span class="property">font-family</span>: <span class="css-value">font_name</span>;</code>:
+                    Sets the font type. E.g., <code>font-family: Arial, sans-serif;</code> (if Arial is not available,
+                    use the default sans-serif font).</li>
+                <li><code><span class="property">text-align</span>: <span class="css-value">alignment_value</span>;</code>:
+                    Aligns the text. E.g., <code>text-align: center;</code>, <code>text-align: left;</code>,
+                    <code>text-align: right;</code>.</li>
+                <li><code><span class="property">font-weight</span>: <span class="css-value">weight_value</span>;</code>:
+                    Sets the text boldness. E.g., <code>font-weight: bold;</code>, <code>font-weight: normal;</code>,
+                    <code>font-weight: 700;</code>.</li>
+                <li><code><span class="property">background-color</span>: <span class="css-value">color_value</span>;</code>:
+                    Sets the background color of the element.</li>
+            </ul>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Code Example:</h4>
+            <div class="code-block">
+                &lt;<span class="tag">h1</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">color</span>: <span class="css-value">green</span>; <span
+                        class="property">text-align</span>: <span class="css-value">center</span>;"</span>&gt;This
+                heading is green and centered.&lt;/<span class="tag">h1</span>&gt;
+                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">font-size</span>: <span class="css-value">18px</span>; <span
+                        class="property">color</span>: <span class="css-value">#555555</span>; <span
+                        class="property">font-family</span>: <span class="css-value">'Courier New', monospace</span>;
+                    <span class="property">background-color</span>: <span class="css-value">#f0f0f0</span>; <span
+                        class="property">padding</span>: <span class="css-value">10px</span>;"</span>&gt;
+                This paragraph has a font size of 18px, dark gray color, Courier New font, light gray background, and
+                10px padding.
+                &lt;/<span class="tag">p</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result:</h4>
+            <div class="html-output">
+                <h1 style="color: green; text-align: center;">This heading is green and centered.</h1>
+                <p
+                    style="font-size: 18px; color: #555555; font-family: 'Courier New', monospace; background-color: #f0f0f0; padding:10px;">
+                    This paragraph has a font size of 18px, dark gray color, Courier New font, light gray background,
+                    and 10px padding.
+                </p>
+            </div>
+            <p class="mt-4 text-lg text-gray-700"><strong>Note:</strong> Inline CSS is convenient for small changes, but
+                for larger projects, it's better to use CSS in a <code>&lt;style&gt;</code> tag or a separate CSS file
+                for easier management and reusability (to be covered in later sessions).</p>
+        </div>
+
+        <div id="slide-10" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Example: Creating a Personal Introduction Page
+                (HTML)</h3>
+            <p class="mb-4 text-lg text-gray-700">Let's apply the tags we've learned to create a simple personal
+                introduction page using only HTML.</p>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Requirements:</h4>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                <li>Use <code>&lt;h1&gt;</code> for your name.</li>
+                <li>Use <code>&lt;img&gt;</code> to display a profile picture (use a placeholder image).</li>
+                <li>Use <code>&lt;p&gt;</code> to write a few lines about yourself and your hobbies.</li>
+                <li>Use <code>&lt;h2&gt;</code> for a "Contact" section.</li>
+                <li>Use <code>&lt;a&gt;</code> to create links to your email or social media (simulated).</li>
+                <li>Add a <code>&lt;button&gt;</code> with a simple greeting when clicked.</li>
+            </ul>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Sample HTML Code:</h4>
+            <div class="code-block" id="personalPageHtmlCode">
+                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
+                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
+                    class="attr-value">"en"</span>&gt;
+                &lt;<span class="tag">head</span>&gt;
+                &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span
+                    class="attr-value">"UTF-8"</span>&gt;
+                &lt;<span class="tag">meta</span> <span class="attr-name">name</span>=<span
+                    class="attr-value">"viewport"</span> <span class="attr-name">content</span>=<span
+                    class="attr-value">"width=device-width, initial-scale=1.0"</span>&gt;
+                &lt;<span class="tag">title</span>&gt;My Introduction Page&lt;/<span class="tag">title</span>&gt;
+                &lt;/<span class="tag">head</span>&gt;
+                &lt;<span class="tag">body</span>&gt;
+                &lt;<span class="tag">h1</span>&gt;Hello, I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
+                    class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span
+                    class="attr-name">alt</span>=<span class="attr-value">"My profile picture"</span>&gt;
+                &lt;<span class="tag">p</span>&gt;I am a student passionate about information technology, especially web
+                development. I enjoy learning new things and challenging myself with interesting projects.&lt;/<span
+                    class="tag">p</span>&gt;
+                &lt;<span class="tag">p</span>&gt;My hobbies include gaming, reading science fiction books, and
+                traveling.&lt;/<span class="tag">p</span>&gt;
+                &lt;<span class="tag">h2</span>&gt;Contact Me:&lt;/<span class="tag">h2</span>&gt;
+                &lt;<span class="tag">p</span>&gt;
+                You can connect with me via &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
+                    class="attr-value">"#"</span> <span class="attr-name">onclick</span>=<span
+                    class="attr-value">"alert('This is a simulated Facebook link!')"</span>&gt;Facebook&lt;/<span
+                    class="tag">a</span>&gt;
+                or email me at &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
+                    class="attr-value">"mailto:johndoe@example.com"</span>&gt;johndoe@example.com&lt;/<span
+                    class="tag">a</span>&gt;.
+                &lt;/<span class="tag">p</span>&gt;
+                &lt;<span class="tag">button</span> <span class="attr-name">onclick</span>=<span
+                    class="attr-value">"alert('Thanks for visiting my page!')"</span>&gt;Click for a greeting!&lt;/<span
+                    class="tag">button</span>&gt;
+                &lt;/<span class="tag">body</span>&gt;
+                &lt;/<span class="tag">html</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result (body content only):</h4>
+            <div class="html-output" id="personalPageHtmlOutput">
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Example: Applying Basic CSS (<code>style</code>
+                Attribute)</h3>
+            <p class="mb-4 text-lg text-gray-700">Now, let's add some inline CSS to the personal introduction page to
+                make it look more appealing.</p>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">Requirements:</h4>
+            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                <li>Change the font for the entire page.</li>
+                <li>Center the main heading (your name) and change its text color.</li>
+                <li>Round the profile picture and add a border.</li>
+                <li>Change the text color and font size for paragraphs.</li>
+                <li>Style the button (background color, text color, rounded corners).</li>
+            </ul>
+            <h4 class="text-xl font-medium text-gray-700 mb-2">HTML Code with Inline CSS:</h4>
+            <div class="code-block" id="personalPageCssCode">
+                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
+                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
+                    class="attr-value">"en"</span>&gt;
+                &lt;<span class="tag">head</span>&gt;
+                &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span
+                    class="attr-value">"UTF-8"</span>&gt;
+                &lt;<span class="tag">meta</span> <span class="attr-name">name</span>=<span
+                    class="attr-value">"viewport"</span> <span class="attr-name">content</span>=<span
+                    class="attr-value">"width=device-width, initial-scale=1.0"</span>&gt;
+                &lt;<span class="tag">title</span>&gt;My Introduction Page&lt;/<span class="tag">title</span>&gt;
+                &lt;/<span class="tag">head</span>&gt;
+                &lt;<span class="tag">body</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">font-family</span>: <span class="css-value">'Segoe UI', Tahoma, Geneva,
+                        Verdana, sans-serif</span>; <span class="property">margin</span>: <span
+                        class="css-value">20px</span>; <span class="property">background-color</span>: <span
+                        class="css-value">#e9ecef</span>; <span class="property">color</span>: <span
+                        class="css-value">#343a40</span>;"</span>&gt;
+                &lt;<span class="tag">h1</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">color</span>: <span class="css-value">#007bff</span>; <span
+                        class="property">text-align</span>: <span class="css-value">center</span>; <span
+                        class="property">border-bottom</span>: <span class="css-value">2px solid #007bff</span>; <span
+                        class="property">padding-bottom</span>: <span class="css-value">10px</span>;"</span>&gt;Hello,
+                I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+                &lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">text-align</span>: <span class="css-value">center</span>; <span
+                        class="property">margin-bottom</span>: <span class="css-value">20px</span>;"</span>&gt;
+                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
+                    class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span
+                    class="attr-name">alt</span>=<span class="attr-value">"My profile picture"</span> <span
+                    class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">border-radius</span>: <span class="css-value">50%</span>; <span
+                        class="property">border</span>: <span class="css-value">4px solid #007bff</span>; <span
+                        class="property">box-shadow</span>: <span class="css-value">0 0 10px
+                        rgba(0,0,0,0.1)</span>;"</span>&gt;
+                &lt;/<span class="tag">div</span>&gt;
+                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">font-size</span>: <span class="css-value">1.1em</span>; <span
+                        class="property">line-height</span>: <span class="css-value">1.7</span>; <span
+                        class="property">color</span>: <span class="css-value">#495057</span>;"</span>&gt;I am a student
+                passionate about information technology, especially web development. I enjoy learning new things and
+                challenging myself with interesting projects.&lt;/<span class="tag">p</span>&gt;
+                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">font-size</span>: <span class="css-value">1.1em</span>; <span
+                        class="property">line-height</span>: <span class="css-value">1.7</span>; <span
+                        class="property">color</span>: <span class="css-value">#495057</span>;"</span>&gt;My hobbies
+                include gaming, reading science fiction books, and traveling.&lt;/<span class="tag">p</span>&gt;
+                &lt;<span class="tag">h2</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">color</span>: <span class="css-value">#28a745</span>; <span
+                        class="property">margin-top</span>: <span class="css-value">30px</span>;"</span>&gt;Contact
+                Me:&lt;/<span class="tag">h2</span>&gt;
+                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">font-size</span>: <span class="css-value">1.1em</span>;"</span>&gt;
+                You can connect with me via &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
+                    class="attr-value">"#"</span> <span class="attr-name">onclick</span>=<span
+                    class="attr-value">"alert('This is a simulated Facebook link!')"</span> <span
+                    class="attr-name">style</span>=<span class="attr-value">"<span class="property">color</span>: <span
+                        class="css-value">#007bff</span>; <span class="property">text-decoration</span>: <span
+                        class="css-value">none</span>; <span class="property">font-weight</span>: <span
+                        class="css-value">bold</span>;"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+                or email me at &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
+                    class="attr-value">"mailto:johndoe@example.com"</span> <span class="attr-name">style</span>=<span
+                    class="attr-value">"<span class="property">color</span>: <span class="css-value">#007bff</span>;
+                    <span class="property">text-decoration</span>: <span class="css-value">none</span>; <span
+                        class="property">font-weight</span>: <span
+                        class="css-value">bold</span>;"</span>&gt;johndoe@example.com&lt;/<span
+                    class="tag">a</span>&gt;.
+                &lt;/<span class="tag">p</span>&gt;
+                &lt;<span class="tag">button</span> <span class="attr-name">onclick</span>=<span
+                    class="attr-value">"alert('Thanks for visiting my page!')"</span> <span
+                    class="attr-name">style</span>=<span class="attr-value">"<span
+                        class="property">background-color</span>: <span class="css-value">#28a745</span>; <span
+                        class="property">color</span>: <span class="css-value">white</span>; <span
+                        class="property">padding</span>: <span class="css-value">12px 20px</span>; <span
+                        class="property">border</span>: <span class="css-value">none</span>; <span
+                        class="property">border-radius</span>: <span class="css-value">5px</span>; <span
+                        class="property">cursor</span>: <span class="css-value">pointer</span>; <span
+                        class="property">font-size</span>: <span class="css-value">1em</span>; <span
+                        class="property">margin-top</span>: <span class="css-value">15px</span>;"</span>&gt;Click for a
+                greeting!&lt;/<span class="tag">button</span>&gt;
+                &lt;/<span class="tag">body</span>&gt;
+                &lt;/<span class="tag">html</span>&gt;
+            </div>
+            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Display Result (body content only):</h4>
+            <div class="html-output" id="personalPageCssOutput">
+            </div>
+        </div>
+
+        <div id="slide-12" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-green-600 mb-6">6. Practice Exercise</h3>
+            <p class="mb-4 text-lg text-gray-700">Your turn to practice! Apply what you've learned to create a simple
+                web page on a topic you like.</p>
+            <h4 class="text-2xl font-medium text-gray-700 mb-3">Requirements:</h4>
+            <ol class="list-decimal list-inside mb-6 pl-4 text-gray-700 space-y-2 text-lg">
+                <li>Choose a topic you like (e.g., a dish, movie, book, sports team, travel destination, etc.).</li>
+                <li>Create a new HTML file (e.g., <code>my_favorite_topic.html</code>).</li>
+                <li>Use the <code>&lt;h1&gt;</code> tag for the main title of the page (topic name).</li>
+                <li>Write a few paragraphs describing the topic using <code>&lt;p&gt;</code> tags.</li>
+                <li>Insert at least one relevant image using the <code>&lt;img&gt;</code> tag. Don't forget the
+                    <code>alt</code> attribute!</li>
+                <li>Add an <code>&lt;a&gt;</code> tag linking to an external website with more information about the
+                    topic (open in a new tab).</li>
+                <li>Create a <code>&lt;button&gt;</code> with a simple message (e.g., "Learn More").</li>
+                <li>Use the <code>style</code> attribute to apply inline CSS:
+                    <ul class="list-disc list-inside pl-6 mt-1">
+                        <li>Change the color and alignment for the <code>&lt;h1&gt;</code> title.</li>
+                        <li>Change the font and font size for the <code>&lt;p&gt;</code> paragraphs.</li>
+                        <li>Style the button (background color, text color).</li>
+                    </ul>
+                </li>
+            </ol>
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow" role="alert">
+                <p class="font-bold">Hint:</p>
+                <p>Be creative and experiment with different CSS properties! You can search for "CSS color picker" to
+                    choose color codes, or "CSS font list" for common fonts.</p>
+            </div>
+            <div class="mt-6 flex justify-center">
+                <img src="https://placehold.co/400x250/28A745/FFFFFF?text=Practice+Now!"
+                    alt="[Image for HTML CSS Practice]" class="rounded-lg shadow-lg">
+            </div>
+        </div>
+
+        <div id="slide-13" class="slide-content-wrapper slide p-8">
+            <h3 class="text-4xl font-semibold text-blue-600 mb-6">7. Summary and Q&A</h3>
+            <p class="mb-4 text-xl text-gray-700">In today's session, we covered the fundamental concepts of HTML and
+                CSS:</p>
+            <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                <li><strong>What is HTML?</strong> HyperText Markup Language, used to build the structure (framework) of
+                    a web page.</li>
+                <li><strong>What is CSS?</strong> Cascading Style Sheets, used to format and style (present) HTML
+                    elements.</li>
+                <li><strong>Basic HTML file structure</strong> and the meaning of <code>&lt;!DOCTYPE&gt;</code>,
+                    <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>,
+                    <code>&lt;title&gt;</code> tags.</li>
+                <li><strong>Basic HTML Tags:</strong>
+                    <ul class="list-circle list-inside pl-6 mt-1">
+                        <li>Headings: <code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code></li>
+                        <li>Paragraphs: <code>&lt;p&gt;</code></li>
+                        <li>Links: <code>&lt;a&gt;</code> (with <code>href</code>, <code>target</code> attributes)</li>
+                        <li>Images: <code>&lt;img&gt;</code> (with <code>src</code>, <code>alt</code> attributes)</li>
+                        <li>Buttons: <code>&lt;button&gt;</code></li>
+                    </ul>
+                </li>
+                <li><strong>Inline CSS:</strong> Using the <code>style</code> attribute to apply CSS rules directly to
+                    HTML tags (e.g., <code>color</code>, <code>font-size</code>, <code>text-align</code>,
+                    <code>background-color</code>).</li>
+            </ul>
+            <p class="text-xl text-gray-800 mb-8">These are the first and crucial building blocks on your journey to
+                mastering web programming. Keep practicing to solidify your knowledge!</p>
+            <div class="flex justify-center mb-8">
+                <img src="https://placehold.co/350x200/17A2B8/FFFFFF?text=Any+Questions%3F" alt="[Q&A Image]"
+                    class="rounded-lg shadow-xl">
+            </div>
+            <h4 class="text-3xl font-semibold text-center text-green-600">Thank you for participating! Any questions?
+            </h4>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide-content-wrapper');
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+        let currentSlide = 0;
+        totalSlidesNumDisplay.textContent = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+            // Scroll to the top of the slide
+            if (slides[index]) {
+                slides[index].parentElement.scrollTop = slides[index].offsetTop - document.getElementById('navbar').offsetHeight - 20; // Adjust for navbar and some padding
+            }
+        }
+
+        function updateNavButtons() {
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        prevButton.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Render examples when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // For Slide 10
+            const personalPageHtmlCodeEl = document.getElementById('personalPageHtmlCode');
+            const personalPageHtmlOutputEl = document.getElementById('personalPageHtmlOutput');
+            if (personalPageHtmlCodeEl && personalPageHtmlOutputEl) {
+                let htmlToRender = personalPageHtmlCodeEl.textContent || personalPageHtmlCodeEl.innerText;
+                const bodyStartIndex = htmlToRender.toLowerCase().indexOf('<body>');
+                const bodyEndIndex = htmlToRender.toLowerCase().lastIndexOf('</body>');
+                if (bodyStartIndex !== -1 && bodyEndIndex !== -1) {
+                    personalPageHtmlOutputEl.innerHTML = htmlToRender.substring(bodyStartIndex + 6, bodyEndIndex);
+                }
+            }
+
+            // For Slide 11
+            const personalPageCssCodeEl = document.getElementById('personalPageCssCode');
+            const personalPageCssOutputEl = document.getElementById('personalPageCssOutput');
+            if (personalPageCssCodeEl && personalPageCssOutputEl) {
+                let cssHtmlToRender = personalPageCssCodeEl.textContent || personalPageCssCodeEl.innerText;
+                const cssBodyStartIndex = cssHtmlToRender.toLowerCase().indexOf('<body>');
+                const cssBodyEndIndex = cssHtmlToRender.toLowerCase().lastIndexOf('</body>');
+                if (cssBodyStartIndex !== -1 && cssBodyEndIndex !== -1) {
+                    // Extract only the content of the body tag
+                    let bodyContent = cssHtmlToRender.substring(cssBodyStartIndex + cssHtmlToRender.substring(cssBodyStartIndex).indexOf('>') + 1, cssBodyEndIndex);
+
+                    // Extract the style attribute from the body tag itself
+                    const bodyTagMatch = cssHtmlToRender.substring(cssBodyStartIndex).match(/<body(.*?)>/i);
+                    let bodyStyle = "";
+                    if (bodyTagMatch && bodyTagMatch[1]) {
+                        const styleMatch = bodyTagMatch[1].match(/style\s*=\s*"(.*?)"/i);
+                        if (styleMatch && styleMatch[1]) {
+                            bodyStyle = styleMatch[1];
+                        }
+                    }
+
+                    // Apply body style to the output div and set its innerHTML
+                    personalPageCssOutputEl.setAttribute('style', bodyStyle);
+                    personalPageCssOutputEl.innerHTML = bodyContent;
+                }
+            }
+            showSlide(currentSlide); // Initialize first slide
+        });
+
+
+    </script>
+
+</body>
+
+</html>
