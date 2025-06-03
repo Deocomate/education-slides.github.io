@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 2: Câu Lệnh Điều Kiện trong Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+            /* Slightly off-white background for the body */
+        }
+
+        /* Fixed navigation bar */
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+            /* Add some space below the navbar */
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            /* p-8 */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* shadow-lg */
+            margin-bottom: 2rem;
+            /* Space between slides if they were all visible (though only one is active) */
+            display: none;
+            /* Hidden by default */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            /* Ensure slide takes up significant viewport height minus navbar and some padding */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            /* Use flex to allow content to grow */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+            /* Allow content to take available space */
+        }
+
+
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .code-block .comment {
+            color: #9ae6b4;
+        }
+
+        .code-block .keyword {
+            color: #63b3ed;
+        }
+
+        .code-block .string {
+            color: #faf089;
+        }
+
+        .code-block .number {
+            color: #f6ad55;
+        }
+
+        .code-block .function {
+            color: #d6bcfa;
+        }
+
+        .code-block .operator {
+            color: #f687b3;
+        }
+
+        .code-block .boolean {
+            color: #f6ad55;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Ensure images are responsive and don't overflow */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+            /* rounded-md */
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-green-600">Python Buổi 2: Câu Lệnh Điều Kiện</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block mr-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block ml-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper">
+                <h2 class="text-4xl font-bold text-center text-green-700 mb-6">Buổi 2: Câu Lệnh Điều Kiện trong Python
+                </h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Làm chủ luồng chương trình với <code>if</code>,
+                    <code>else</code>, và <code>elif</code>
+                </p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/22C55E/FFFFFF?text=Conditional+Logic"
+                        alt="[Hình ảnh Logic Điều Kiện]" class="shadow-md">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Cùng khám phá cách Python đưa ra quyết định!</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">1. Giới Thiệu Câu Lệnh Điều Kiện</h3>
+                <p class="mb-4 text-lg">Trong cuộc sống, chúng ta thường xuyên phải đưa ra quyết định dựa trên những
+                    điều kiện nhất định. Ví dụ: "Nếu trời mưa, tôi sẽ mang ô."</p>
+                <p class="mb-4 text-lg">Trong lập trình, câu lệnh điều kiện (conditional statements) cho phép chương
+                    trình thực thi những khối mã khác nhau tùy thuộc vào việc một hoặc nhiều điều kiện có được thỏa mãn
+                    (đúng - <code>True</code>) hay không (sai - <code>False</code>).</p>
+                <p class="mb-2 font-medium text-lg">Tại sao cần câu lệnh điều kiện?</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Tạo ra các chương trình linh hoạt, có khả năng phản ứng với các tình huống khác nhau.</li>
+                    <li>Kiểm soát luồng thực thi của chương trình.</li>
+                    <li>Xử lý các trường hợp đặc biệt hoặc lỗi có thể xảy ra.</li>
+                </ul>
+                <p class="text-lg">Python sử dụng các từ khóa <code>if</code>, <code>else</code>, và <code>elif</code>
+                    (viết tắt của "else if") để xây dựng các câu lệnh điều kiện.</p>
+                <div class="flex justify-center mt-6">
+                    <img src="https://placehold.co/350x200/A3E635/FFFFFF?text=Decision+Making"
+                        alt="[Hình ảnh Ra Quyết Định]" class="shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">2. Lệnh <code>if</code> (Nếu)</h3>
+                <p class="mb-4 text-lg">Lệnh <code>if</code> được sử dụng để thực thi một khối mã nếu một điều kiện cụ
+                    thể là đúng (<code>True</code>).</p>
+                <p class="mb-2 font-medium">Cú pháp:</p>
+                <div class="code-block">
+                    <span class="keyword">if</span> <span class="variable">dieu_kien</span><span
+                        class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh sẽ được thực thi nếu dieu_kien là True</span><br>
+                    <span class="comment"> # (Lưu ý thụt đầu dòng)</span><br>
+                    <span class="variable"> hanh_dong_1</span><br>
+                    <span class="variable"> hanh_dong_2</span>
+                </div>
+                <p class="mt-4 mb-2 text-lg"><strong>Quan trọng:</strong> Khối lệnh bên trong <code>if</code> phải được
+                    thụt vào đầu dòng (thường là 4 dấu cách hoặc 1 phím Tab). Python sử dụng việc thụt lề để xác định
+                    phạm vi của khối lệnh.</p>
+                <p class="mb-2 font-medium">Ví dụ:</p>
+                <div class="code-block">
+                    <span class="variable">tuoi</span> <span class="operator">=</span> <span
+                        class="number">18</span><br><br>
+                    <span class="keyword">if</span> <span class="variable">tuoi</span> <span
+                        class="operator">&gt;=</span> <span class="number">18</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Bạn đã đủ tuổi vị thành
+                        niên."</span>)<br><br>
+                    <span class="comment"># Output: Bạn đã đủ tuổi vị thành niên.</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">3. Lệnh <code>else</code> (Nếu không thì)</h3>
+                <p class="mb-4 text-lg">Lệnh <code>else</code> thường đi kèm với lệnh <code>if</code>. Khối lệnh bên
+                    trong <code>else</code> sẽ được thực thi nếu điều kiện của <code>if</code> là sai
+                    (<code>False</code>).</p>
+                <p class="mb-2 font-medium">Cú pháp:</p>
+                <div class="code-block">
+                    <span class="keyword">if</span> <span class="variable">dieu_kien</span><span
+                        class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh thực thi nếu dieu_kien là True</span><br>
+                    <span class="variable"> hanh_dong_A</span><br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh thực thi nếu dieu_kien là False</span><br>
+                    <span class="variable"> hanh_dong_B</span>
+                </div>
+                <p class="mb-2 font-medium mt-4">Ví dụ:</p>
+                <div class="code-block">
+                    <span class="variable">nhiet_do</span> <span class="operator">=</span> <span
+                        class="number">15</span><br><br>
+                    <span class="keyword">if</span> <span class="variable">nhiet_do</span> <span
+                        class="operator">&gt;</span> <span class="number">25</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Trời nóng, nên mặc đồ mát
+                        mẻ."</span>)<br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Trời mát hoặc lạnh, nhớ mang áo
+                        khoác."</span>)<br><br>
+                    <span class="comment"># Output: Trời mát hoặc lạnh, nhớ mang áo khoác.</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">4. Lệnh <code>elif</code> (Nếu không thì nếu)
+                </h3>
+                <p class="mb-4 text-lg">Lệnh <code>elif</code> (viết tắt của "else if") cho phép bạn kiểm tra nhiều điều
+                    kiện một cách tuần tự. Nó được sử dụng khi có nhiều hơn hai khả năng.</p>
+                <p class="mb-2 font-medium">Cú pháp:</p>
+                <div class="code-block">
+                    <span class="keyword">if</span> <span class="variable">dieu_kien_1</span><span
+                        class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh thực thi nếu dieu_kien_1 là True</span><br>
+                    <span class="variable"> hanh_dong_1</span><br>
+                    <span class="keyword">elif</span> <span class="variable">dieu_kien_2</span><span
+                        class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh thực thi nếu dieu_kien_1 là False và dieu_kien_2 là
+                        True</span><br>
+                    <span class="variable"> hanh_dong_2</span><br>
+                    <span class="keyword">elif</span> <span class="variable">dieu_kien_3</span><span
+                        class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh thực thi nếu các điều kiện trước False và dieu_kien_3 là
+                        True</span><br>
+                    <span class="variable"> hanh_dong_3</span><br>
+                    <span class="comment"># ... có thể có nhiều elif khác</span><br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh thực thi nếu tất cả các điều kiện trên đều False</span><br>
+                    <span class="variable"> hanh_dong_mac_dinh</span>
+                </div>
+                <p class="mt-4 text-lg"><strong>Lưu ý:</strong> Python sẽ kiểm tra các điều kiện từ trên xuống dưới.
+                    Ngay khi một điều kiện <code>if</code> hoặc <code>elif</code> là đúng, khối lệnh tương ứng sẽ được
+                    thực thi và các điều kiện <code>elif</code> hoặc <code>else</code> còn lại sẽ bị bỏ qua.</p>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">4.1. Ví dụ <code>if-elif-else</code>: Xếp loại
+                    học lực</h3>
+                <p class="mb-4 text-lg">Hãy xem một ví dụ về việc sử dụng <code>if-elif-else</code> để xếp loại học lực
+                    dựa trên điểm số.</p>
+                <div class="code-block">
+                    <span class="variable">diem_trung_binh</span> <span class="operator">=</span> <span
+                        class="function">float</span>(<span class="function">input</span>(<span class="string">"Nhập
+                        điểm trung bình của bạn: "</span>))<br><br>
+
+                    <span class="keyword">if</span> <span class="variable">diem_trung_binh</span> <span
+                        class="operator">&gt;=</span> <span class="number">8.0</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Xếp loại: Giỏi"</span>)<br>
+                    <span class="keyword">elif</span> <span class="variable">diem_trung_binh</span> <span
+                        class="operator">&gt;=</span> <span class="number">6.5</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Xếp loại: Khá"</span>)<br>
+                    <span class="keyword">elif</span> <span class="variable">diem_trung_binh</span> <span
+                        class="operator">&gt;=</span> <span class="number">5.0</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Xếp loại: Trung bình"</span>)<br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Xếp loại: Yếu"</span>)<br><br>
+
+                    <span class="comment"># Thử nhập các giá trị khác nhau cho điểm trung bình để xem kết
+                        quả.</span><br>
+                    <span class="comment"># Ví dụ: 9.0 -> Giỏi</span><br>
+                    <span class="comment"># Ví dụ: 7.2 -> Khá</span><br>
+                    <span class="comment"># Ví dụ: 5.5 -> Trung bình</span><br>
+                    <span class="comment"># Ví dụ: 4.0 -> Yếu</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">5. Câu Lệnh Điều Kiện Lồng Nhau (Nested
+                    Conditionals)</h3>
+                <p class="mb-4 text-lg">Bạn có thể đặt một câu lệnh <code>if-elif-else</code> bên trong một câu lệnh
+                    <code>if-elif-else</code> khác. Điều này được gọi là câu lệnh điều kiện lồng nhau.
+                </p>
+                <p class="mb-2 font-medium">Cú pháp (ví dụ):</p>
+                <div class="code-block">
+                    <span class="keyword">if</span> <span class="variable">dieu_kien_ngoai</span><span
+                        class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh của if ngoài</span><br>
+                    <span class="keyword"> if</span> <span class="variable">dieu_kien_trong</span><span
+                        class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh của if trong (nếu cả hai điều kiện đều True)</span><br>
+                    <span class="variable"> hanh_dong_A</span><br>
+                    <span class="keyword"> else</span><span class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh của else trong (nếu dieu_kien_ngoai True, dieu_kien_trong
+                        False)</span><br>
+                    <span class="variable"> hanh_dong_B</span><br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="comment"> # Khối lệnh của else ngoài (nếu dieu_kien_ngoai False)</span><br>
+                    <span class="variable"> hanh_dong_C</span>
+                </div>
+                <p class="mt-4 mb-2 font-medium">Ví dụ: Kiểm tra số dương chẵn</p>
+                <div class="code-block">
+                    <span class="variable">so</span> <span class="operator">=</span> <span
+                        class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập một
+                        số nguyên: "</span>))<br><br>
+                    <span class="keyword">if</span> <span class="variable">so</span> <span class="operator">&gt;</span>
+                    <span class="number">0</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Số bạn nhập là số dương."</span>)<br>
+                    <span class="keyword"> if</span> <span class="variable">so</span> <span class="operator">%</span>
+                    <span class="number">2</span> <span class="operator">==</span> <span class="number">0</span><span
+                        class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Và đó là một số chẵn."</span>)<br>
+                    <span class="keyword"> else</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Nhưng đó là một số lẻ."</span>)<br>
+                    <span class="keyword">elif</span> <span class="variable">so</span> <span class="operator">==</span>
+                    <span class="number">0</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Số bạn nhập là số không."</span>)<br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Số bạn nhập là số âm."</span>)<br>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">Lưu ý: Nên cẩn thận khi dùng nhiều lớp lồng nhau vì có thể làm
+                    code khó đọc và khó bảo trì.</p>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">6. Toán Tử Logic (`and`, `or`, `not`)</h3>
+                <p class="mb-4 text-lg">Toán tử logic cho phép bạn kết hợp nhiều điều kiện lại với nhau.</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li><strong><code>and</code> (Và):</strong> Trả về <code>True</code> nếu TẤT CẢ các điều kiện đều
+                        <code>True</code>.
+                    </li>
+                    <li><strong><code>or</code> (Hoặc):</strong> Trả về <code>True</code> nếu ÍT NHẤT MỘT điều kiện là
+                        <code>True</code>.
+                    </li>
+                    <li><strong><code>not</code> (Phủ định):</strong> Đảo ngược giá trị logic của điều kiện
+                        (<code>True</code> thành <code>False</code>, <code>False</code> thành <code>True</code>).</li>
+                </ul>
+                <p class="mb-2 font-medium">Ví dụ với <code>and</code>:</p>
+                <div class="code-block">
+                    <span class="variable">tuoi</span> <span class="operator">=</span> <span
+                        class="number">25</span><br>
+                    <span class="variable">co_bang_lai</span> <span class="operator">=</span> <span
+                        class="boolean">True</span><br><br>
+                    <span class="keyword">if</span> <span class="variable">tuoi</span> <span
+                        class="operator">&gt;=</span> <span class="number">18</span> <span class="keyword">and</span>
+                    <span class="variable">co_bang_lai</span> <span class="operator">==</span> <span
+                        class="boolean">True</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Bạn đủ điều kiện lái xe."</span>)<br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Bạn không đủ điều kiện lái
+                        xe."</span>)<br>
+                    <span class="comment"># Output: Bạn đủ điều kiện lái xe.</span>
+                </div>
+                <p class="mt-4 mb-2 font-medium">Ví dụ với <code>or</code>:</p>
+                <div class="code-block">
+                    <span class="variable">ngay_cuoi_tuan</span> <span class="operator">=</span> <span
+                        class="boolean">True</span><br>
+                    <span class="variable">ngay_le</span> <span class="operator">=</span> <span
+                        class="boolean">False</span><br><br>
+                    <span class="keyword">if</span> <span class="variable">ngay_cuoi_tuan</span> <span
+                        class="keyword">or</span> <span class="variable">ngay_le</span><span
+                        class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Hôm nay là ngày nghỉ!"</span>)<br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Hôm nay phải đi làm/học."</span>)<br>
+                    <span class="comment"># Output: Hôm nay là ngày nghỉ!</span>
+                </div>
+                <p class="mt-4 mb-2 font-medium">Ví dụ với <code>not</code>:</p>
+                <div class="code-block">
+                    <span class="variable">troi_mua</span> <span class="operator">=</span> <span
+                        class="boolean">False</span><br><br>
+                    <span class="keyword">if</span> <span class="keyword">not</span> <span
+                        class="variable">troi_mua</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Trời không mưa, có thể ra ngoài
+                        chơi."</span>)<br>
+                    <span class="keyword">else</span><span class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="string">"Trời mưa rồi, ở nhà thôi."</span>)<br>
+                    <span class="comment"># Output: Trời không mưa, có thể ra ngoài chơi.</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">7. Câu Lệnh Điều Kiện Kết Hợp Với Vòng Lặp</h3>
+                <p class="mb-4 text-lg">Câu lệnh điều kiện thường được sử dụng bên trong các vòng lặp (như
+                    <code>for</code> hoặc <code>while</code>) để xử lý từng phần tử hoặc thực hiện hành động dựa trên
+                    điều kiện ở mỗi lần lặp.
+                </p>
+                <p class="mb-4 text-lg"><em>(Chi tiết về vòng lặp sẽ được học kỹ hơn ở các buổi sau. Dưới đây là một ví
+                        dụ đơn giản.)</em></p>
+                <p class="mb-2 font-medium">Ví dụ: In ra các số chẵn trong một danh sách</p>
+                <div class="code-block">
+                    <span class="variable">danh_sach_so</span> <span class="operator">=</span> [<span
+                        class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span
+                        class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span
+                        class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span
+                        class="number">10</span>]<br><br>
+                    <span class="function">print</span>(<span class="string">"Các số chẵn trong danh sách
+                        là:"</span>)<br>
+                    <span class="keyword">for</span> <span class="variable">so</span> <span class="keyword">in</span>
+                    <span class="variable">danh_sach_so</span><span class="operator">:</span><br>
+                    <span class="comment"> # Kiểm tra nếu 'so' chia hết cho 2</span><br>
+                    <span class="keyword"> if</span> <span class="variable">so</span> <span class="operator">%</span>
+                    <span class="number">2</span> <span class="operator">==</span> <span class="number">0</span><span
+                        class="operator">:</span><br>
+                    <span class="function"> print</span>(<span class="variable">so</span>)<br><br>
+                    <span class="comment"># Output:</span><br>
+                    <span class="comment"># Các số chẵn trong danh sách là:</span><br>
+                    <span class="comment"># 2</span><br>
+                    <span class="comment"># 4</span><br>
+                    <span class="comment"># 6</span><br>
+                    <span class="comment"># 8</span><br>
+                    <span class="comment"># 10</span>
+                </div>
+                <p class="mt-4 text-lg">Trong ví dụ này, vòng lặp <code>for</code> duyệt qua từng số trong
+                    <code>danh_sach_so</code>. Với mỗi số, lệnh <code>if</code> kiểm tra xem số đó có phải là số chẵn
+                    không. Nếu đúng, số đó sẽ được in ra.
+                </p>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-lime-600 mb-4">8. Bài Tập Cơ Bản</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài tập 1: Kiểm tra số dương, âm, hay zero</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình yêu cầu người dùng nhập vào một số
+                    nguyên. Sau đó, kiểm tra và in ra màn hình xem số đó là số dương, số âm, hay là số không.</p>
+                <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
+                <div class="code-block">
+                    <span class="comment">Nhập một số nguyên: 5</span><br>
+                    <span class="comment">Output: 5 là số dương.</span><br><br>
+                    <span class="comment">Nhập một số nguyên: -3</span><br>
+                    <span class="comment">Output: -3 là số âm.</span><br><br>
+                    <span class="comment">Nhập một số nguyên: 0</span><br>
+                    <span class="comment">Output: Số bạn nhập là 0.</span>
+                </div>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng <code>if-elif-else</code>.</p>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-lime-600 mb-4">8. Bài Tập Cơ Bản (Tiếp theo)</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài tập 2: Kiểm tra tuổi bầu cử</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình yêu cầu người dùng nhập vào tuổi của
+                    họ. Sau đó, kiểm tra xem họ có đủ tuổi để đi bầu cử hay không (giả sử tuổi bầu cử là 18).</p>
+                <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
+                <div class="code-block">
+                    <span class="comment">Nhập tuổi của bạn: 20</span><br>
+                    <span class="comment">Output: Bạn đủ tuổi để đi bầu cử.</span><br><br>
+                    <span class="comment">Nhập tuổi của bạn: 16</span><br>
+                    <span class="comment">Output: Bạn chưa đủ tuổi để đi bầu cử.</span>
+                </div>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng <code>if-else</code>.</p>
+            </div>
+        </div>
+
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-emerald-600 mb-4">9. Bài Tập Nâng Cao Tư Duy</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài tập 1: Tính chỉ số BMI và đưa ra nhận xét</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình yêu cầu người dùng nhập cân nặng
+                    (kg) và chiều cao (mét). Sau đó:</p>
+                <ol class="list-decimal list-inside mb-2 pl-4 text-gray-700">
+                    <li>Tính chỉ số BMI theo công thức: BMI = cân nặng / (chiều cao * chiều cao).</li>
+                    <li>Dựa vào chỉ số BMI, đưa ra nhận xét:
+                        <ul class="list-disc list-inside ml-4">
+                            <li>BMI < 18.5: Gầy</li>
+                            <li>18.5 <= BMI < 24.9: Bình thường</li>
+                            <li>25 <= BMI < 29.9: Hơi béo</li>
+                            <li>BMI >= 30: Béo phì</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
+                <div class="code-block">
+                    <span class="comment">Nhập cân nặng của bạn (kg): 60</span><br>
+                    <span class="comment">Nhập chiều cao của bạn (m): 1.7</span><br>
+                    <span class="comment">Output: Chỉ số BMI của bạn là 20.76. Bạn Bình thường.</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-emerald-600 mb-4">9. Bài Tập Nâng Cao Tư Duy (Tiếp theo)</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài tập 2: Kiểm tra năm nhuận</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình yêu cầu người dùng nhập vào một năm.
+                    Kiểm tra xem năm đó có phải là năm nhuận hay không.</p>
+                <p class="mb-2 text-lg"><strong>Quy tắc năm nhuận:</strong></p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Chia hết cho 4 NHƯNG không chia hết cho 100.</li>
+                    <li>HOẶC chia hết cho 400.</li>
+                </ul>
+                <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
+                <div class="code-block">
+                    <span class="comment">Nhập một năm: 2000</span><br>
+                    <span class="comment">Output: Năm 2000 là năm nhuận.</span><br><br>
+                    <span class="comment">Nhập một năm: 1900</span><br>
+                    <span class="comment">Output: Năm 1900 không phải là năm nhuận.</span><br><br>
+                    <span class="comment">Nhập một năm: 2024</span><br>
+                    <span class="comment">Output: Năm 2024 là năm nhuận.</span>
+                </div>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng toán tử logic <code>and</code>, <code>or</code> và
+                    toán tử chia lấy dư <code>%</code>.</p>
+            </div>
+        </div>
+
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-600 mb-4">10. Tóm Tắt Buổi Học</h3>
+                <p class="mb-4 text-lg">Trong buổi học hôm nay, chúng ta đã tìm hiểu về các câu lệnh điều kiện trong
+                    Python:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li><strong>Câu lệnh <code>if</code>:</strong> Thực thi mã nếu điều kiện đúng.</li>
+                    <li><strong>Câu lệnh <code>else</code>:</strong> Thực thi mã nếu điều kiện của <code>if</code> sai.
+                    </li>
+                    <li><strong>Câu lệnh <code>elif</code>:</strong> Kiểm tra nhiều điều kiện tuần tự.</li>
+                    <li><strong>Câu lệnh điều kiện lồng nhau:</strong> Đặt <code>if-else</code> bên trong
+                        <code>if-else</code> khác.
+                    </li>
+                    <li><strong>Toán tử logic (<code>and</code>, <code>or</code>, <code>not</code>):</strong> Kết hợp
+                        nhiều điều kiện.</li>
+                    <li><strong>Kết hợp điều kiện với vòng lặp (sơ lược):</strong> Áp dụng điều kiện cho từng phần tử.
+                    </li>
+                </ul>
+                <p class="text-lg mb-6">Nắm vững câu lệnh điều kiện là một bước quan trọng để xây dựng các chương trình
+                    Python thông minh và linh hoạt hơn!</p>
+                <div class="flex justify-center mt-8">
+                    <img src="https://placehold.co/350x200/5EEAD4/FFFFFF?text=Key+Takeaways" alt="[Hình ảnh Điểm Chính]"
+                        class="shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-15" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-green-700 mb-6 text-center">11. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/10B981/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4">Đừng ngần ngại đặt câu hỏi để hiểu rõ hơn về bài học nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        const navbar = document.getElementById('navbar');
+
+        let currentSlide = 0;
+        totalSlidesNumDisplay.textContent = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    // Make sure display is set to flex before transition starts
+                    slide.style.display = 'flex';
+                    setTimeout(() => { // Timeout to allow display property to apply before transition
+                        slide.classList.add('active');
+                    }, 10); // A small delay is usually enough
+                } else {
+                    slide.classList.remove('active');
+                    // Set display to none after transition for non-active slides
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) { // Double check it's not the active slide
+                            slide.style.display = 'none';
+                        }
+                    }, 400); // Match transition duration
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            // Scroll to the top of the content area below the navbar
+            if (navbar) {
+                window.scrollTo({ top: navbar.offsetHeight, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateNavButtons() {
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        prevButton.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                slides[currentSlide].classList.remove('active');
+                setTimeout(() => {
+                    if (!slides[currentSlide].classList.contains('active')) {
+                        slides[currentSlide].style.display = 'none';
+                    }
+                }, 400);
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                slides[currentSlide].classList.remove('active');
+                setTimeout(() => {
+                    if (!slides[currentSlide].classList.contains('active')) {
+                        slides[currentSlide].style.display = 'none';
+                    }
+                }, 400);
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Initialize first slide
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        }
+    </script>
+
+</body>
+
+</html>
