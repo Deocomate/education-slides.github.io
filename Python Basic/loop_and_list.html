@@ -7,11 +7,13 @@
     <title>Buổi 3: Vòng Lặp Chuyên Sâu và Danh Sách (List)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
             background-color: #f3f4f6;
+            /* Light gray background for the body */
         }
 
         #navbar {
@@ -29,14 +31,19 @@
         .slide {
             background-color: white;
             padding: 2rem;
+            /* p-8 */
             border-radius: 0.5rem;
+            /* rounded-lg */
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* shadow-lg */
             margin-bottom: 2rem;
-            display: none; /* Hidden by default */
+            display: none;
+            /* Hidden by default */
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-            min-height: calc(100vh - 120px); 
+            min-height: calc(100vh - 120px);
+            /* Ensure slide takes up significant viewport height */
             display: flex;
             flex-direction: column;
         }
@@ -46,51 +53,194 @@
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .slide-content-wrapper {
-           flex-grow: 1;
+            flex-grow: 1;
         }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            /* Darker background for code container */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            /* Header background */
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            /* Button background */
+            color: #e2e8f0;
+            /* Light text */
+            border: none;
+            padding: 0.375rem 0.75rem;
+            /* py-1.5 px-3 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            cursor: pointer;
+            font-size: 0.875rem;
+            /* text-sm */
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+            /* Lighter on hover */
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+            /* Green check */
+        }
+
 
         .code-block {
-            background-color: #2d3748;
+            background-color: #1e293b;
+            /* Match container or slightly different if needed */
             color: #e2e8f0;
+            /* Light text for code */
             padding: 1rem;
-            border-radius: 0.5rem;
-            font-family: 'Courier New', Courier, monospace;
+            /* p-4 */
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            /* More modern mono font stack */
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 0.9em;
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
+            font-size: 0.875em;
+            /* Slightly smaller for more code to fit */
+            line-height: 1.6;
+            /* Improved line spacing */
+            overflow-x: auto;
+            /* Allow horizontal scroll for long lines */
         }
 
-        .code-block .comment { color: #9ae6b4; } /* Green for comments */
-        .code-block .keyword { color: #63b3ed; } /* Blue for keywords */
-        .code-block .string  { color: #faf089; } /* Yellow for strings */
-        .code-block .number  { color: #f6ad55; } /* Orange for numbers */
-        .code-block .function{ color: #d6bcfa; } /* Purple for functions */
-        .code-block .operator{ color: #f687b3; } /* Pink for operators */
-        .code-block .boolean { color: #f6ad55; } /* Orange for True/False */
-        .code-block .method { color: #81e6d9; } /* Teal for methods */
+        /* Remove default browser focus outline for button, if desired */
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+            /* Example focus ring */
+        }
 
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        /* Emerald 300 for comments */
+        .code-block .keyword {
+            color: #93c5fd;
+        }
+
+        /* Blue 300 for keywords */
+        .code-block .string {
+            color: #fde047;
+        }
+
+        /* Yellow 300 for strings */
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        /* Orange 300 for numbers */
+        .code-block .function {
+            color: #d8b4fe;
+        }
+
+        /* Purple 300 for functions */
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+        /* Rose 300 for operators */
+        .code-block .boolean {
+            color: #fdbb74;
+        }
+
+        /* Orange 300 for True/False */
+        .code-block .method {
+            color: #67e8f9;
+        }
+
+        /* Cyan 300 for methods */
+
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #718096;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
 
         img {
             max-width: 100%;
             height: auto;
-            border-radius: 0.375rem; /* rounded-md */
+            border-radius: 0.375rem;
+            /* rounded-md */
         }
 
         /* Customizations for Buoi 3 - Purple theme */
-        .text-theme-700 { color: #6d28d9; } /* Purple 700 */
-        .text-theme-600 { color: #7c3aed; } /* Purple 600 */
-        .bg-theme-500 { background-color: #8b5cf6; } /* Purple 500 */
-        .hover\:bg-theme-700:hover { background-color: #6d28d9; } /* Purple 700 on hover */
+        .text-theme-700 {
+            color: #6d28d9;
+        }
 
+        .text-theme-600 {
+            color: #7c3aed;
+        }
+
+        .bg-theme-500 {
+            background-color: #8b5cf6;
+        }
+
+        .hover\:bg-theme-700:hover {
+            background-color: #6d28d9;
+        }
+
+        .text-purple-500 {
+            color: #a855f7;
+        }
+
+        .text-purple-600 {
+            color: #9333ea;
+        }
+
+        .text-fuchsia-600 {
+            color: #c026d3;
+        }
+
+        .text-fuchsia-700 {
+            color: #a21caf;
+        }
     </style>
 </head>
 
@@ -126,8 +276,10 @@
     <div class="container mx-auto p-4 slide-container">
         <div id="slide-1" class="slide">
             <div class="slide-content-wrapper">
-                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi 3: Vòng Lặp Chuyên Sâu và Danh Sách (List)</h2>
-                <p class="text-2xl text-center text-gray-600 mb-12">Làm chủ vòng lặp <code>while</code>, vòng lặp lồng nhau và cấu trúc dữ liệu List mạnh mẽ</p>
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi 3: Vòng Lặp Chuyên Sâu và Danh Sách
+                    (List)</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Làm chủ vòng lặp <code>while</code>, vòng lặp lồng
+                    nhau và cấu trúc dữ liệu List mạnh mẽ</p>
                 <div class="flex justify-center my-8">
                     <img src="https://placehold.co/400x250/8B5CF6/FFFFFF?text=Loops+%26+Lists"
                         alt="[Hình ảnh Vòng lặp và List]" class="shadow-md">
@@ -139,7 +291,8 @@
         <div id="slide-2" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Ôn Lại Kiến Thức Buổi 2</h3>
-                <p class="mb-4 text-lg">Trước khi bắt đầu nội dung mới, hãy cùng điểm lại nhanh các kiến thức quan trọng từ Buổi 2:</p>
+                <p class="mb-4 text-lg">Trước khi bắt đầu nội dung mới, hãy cùng điểm lại nhanh các kiến thức quan trọng
+                    từ Buổi 2:</p>
                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
                     <li><strong>Câu lệnh điều kiện:</strong>
                         <ul class="list-circle list-inside ml-6">
@@ -149,12 +302,16 @@
                             <li>Điều kiện lồng nhau.</li>
                         </ul>
                     </li>
-                    <li><strong>Toán tử logic:</strong> <code>and</code>, <code>or</code>, <code>not</code> để kết hợp điều kiện.</li>
-                    <li><strong>Vòng lặp <code>for</code> (sơ lược):</strong> Lặp qua một chuỗi các phần tử (ví dụ: danh sách, chuỗi ký tự).</li>
+                    <li><strong>Toán tử logic:</strong> <code>and</code>, <code>or</code>, <code>not</code> để kết hợp
+                        điều kiện.</li>
+                    <li><strong>Vòng lặp <code>for</code> (sơ lược):</strong> Lặp qua một chuỗi các phần tử (ví dụ: danh
+                        sách, chuỗi ký tự).</li>
                 </ul>
-                <p class="text-lg font-medium">Bạn còn nhớ cách sử dụng chúng chứ? Những kiến thức này sẽ là nền tảng cho các khái niệm phức tạp hơn hôm nay.</p>
+                <p class="text-lg font-medium">Bạn còn nhớ cách sử dụng chúng chứ? Những kiến thức này sẽ là nền tảng
+                    cho các khái niệm phức tạp hơn hôm nay.</p>
                 <div class="flex justify-center mt-6">
-                     <img src="https://placehold.co/350x200/A78BFA/FFFFFF?text=Review+Session" alt="[Hình ảnh Ôn tập]" class="shadow-md">
+                    <img src="https://placehold.co/350x200/A78BFA/FFFFFF?text=Review+Session" alt="[Hình ảnh Ôn tập]"
+                        class="shadow-md">
                 </div>
             </div>
         </div>
@@ -162,133 +319,188 @@
         <div id="slide-3" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Vòng Lặp <code>while</code></h3>
-                <p class="mb-4 text-lg">Vòng lặp <code>while</code> (trong khi) được sử dụng để thực thi một khối mã lặp đi lặp lại CHỪNG NÀO một điều kiện cụ thể còn đúng (<code>True</code>).</p>
+                <p class="mb-4 text-lg">Vòng lặp <code>while</code> (trong khi) được sử dụng để thực thi một khối mã lặp
+                    đi lặp lại CHỪNG NÀO một điều kiện cụ thể còn đúng (<code>True</code>).</p>
                 <p class="mb-2 font-medium">Cú pháp:</p>
-                <div class="code-block">
-                    <span class="keyword">while</span> <span class="variable">dieu_kien</span><span class="operator">:</span><br>
-                    <span class="comment">    # Khối lệnh sẽ được thực thi lặp đi lặp lại</span><br>
-                    <span class="comment">    # miễn là dieu_kien còn True</span><br>
-                    <span class="variable">    hanh_dong_1</span><br>
-                    <span class="variable">    hanh_dong_2</span><br>
-                    <span class="comment">    # QUAN TRỌNG: Cần có sự thay đổi trong khối lệnh</span><br>
-                    <span class="comment">    # để dieu_kien có thể trở thành False, nếu không</span><br>
-                    <span class="comment">    # vòng lặp sẽ chạy vô hạn!</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="keyword">while</span> <span class="variable">dieu_kien</span><span class="operator">:</span>
+    <span class="comment"># Khối lệnh sẽ được thực thi lặp đi lặp lại</span>
+    <span class="comment"># miễn là dieu_kien còn True</span>
+    <span class="variable">hanh_dong_1</span>
+    <span class="variable">hanh_dong_2</span>
+    <span class="comment"># QUAN TRỌNG: Cần có sự thay đổi trong khối lệnh</span>
+    <span class="comment"># để dieu_kien có thể trở thành False, nếu không</span>
+    <span class="comment"># vòng lặp sẽ chạy vô hạn!</span></code></pre>
                 </div>
                 <p class="mt-4 text-lg"><strong>Khác biệt chính so với <code>for</code>:</strong></p>
                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
-                    <li><code>for</code>: Lặp qua một tập hợp các phần tử đã biết trước số lần lặp (ví dụ: lặp qua các mục trong danh sách).</li>
-                    <li><code>while</code>: Lặp dựa trên một điều kiện. Số lần lặp không nhất thiết phải biết trước, miễn là điều kiện còn đúng.</li>
+                    <li><code>for</code>: Lặp qua một tập hợp các phần tử đã biết trước số lần lặp (ví dụ: lặp qua các
+                        mục trong danh sách).</li>
+                    <li><code>while</code>: Lặp dựa trên một điều kiện. Số lần lặp không nhất thiết phải biết trước,
+                        miễn là điều kiện còn đúng.</li>
                 </ul>
-                 <p class="text-orange-600 font-semibold">Cảnh báo: Nếu điều kiện của <code>while</code> không bao giờ trở thành <code>False</code>, bạn sẽ tạo ra một vòng lặp vô hạn, khiến chương trình bị treo.</p>
+                <p class="text-orange-600 font-semibold">Cảnh báo: Nếu điều kiện của <code>while</code> không bao giờ
+                    trở thành <code>False</code>, bạn sẽ tạo ra một vòng lặp vô hạn, khiến chương trình bị treo.</p>
             </div>
         </div>
-        
+
         <div id="slide-4" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.1. Ví dụ Vòng lặp <code>while</code></h3>
                 <p class="mb-2 font-medium">Ví dụ 1: Đếm từ 1 đến 5</p>
-                <div class="code-block">
-                    <span class="variable">dem</span> <span class="operator">=</span> <span class="number">1</span><br>
-                    <span class="keyword">while</span> <span class="variable">dem</span> <span class="operator">&lt;=</span> <span class="number">5</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">f"Số đếm hiện tại: {dem}"</span>)<br>
-                    <span class="variable">    dem</span> <span class="operator">+=</span> <span class="number">1</span> <span class="comment"># Quan trọng: Tăng biến đếm để điều kiện cuối cùng sai</span><br><br>
-                    <span class="comment"># Output:</span><br>
-                    <span class="comment"># Số đếm hiện tại: 1</span><br>
-                    <span class="comment"># Số đếm hiện tại: 2</span><br>
-                    <span class="comment"># Số đếm hiện tại: 3</span><br>
-                    <span class="comment"># Số đếm hiện tại: 4</span><br>
-                    <span class="comment"># Số đếm hiện tại: 5</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">dem</span> <span class="operator">=</span> <span class="number">1</span>
+<span class="keyword">while</span> <span class="variable">dem</span> <span class="operator">&lt;=</span> <span class="number">5</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"Số đếm hiện tại: {dem}"</span>)
+    <span class="variable">dem</span> <span class="operator">+=</span> <span class="number">1</span> <span class="comment"># Quan trọng: Tăng biến đếm để điều kiện cuối cùng sai</span>
+
+<span class="comment"># Output:</span>
+<span class="comment"># Số đếm hiện tại: 1</span>
+<span class="comment"># Số đếm hiện tại: 2</span>
+<span class="comment"># Số đếm hiện tại: 3</span>
+<span class="comment"># Số đếm hiện tại: 4</span>
+<span class="comment"># Số đếm hiện tại: 5</span></code></pre>
                 </div>
 
                 <p class="mt-6 mb-2 font-medium">Ví dụ 2: Yêu cầu người dùng nhập mật khẩu đúng</p>
-                 <div class="code-block">
-                    <span class="variable">mat_khau_dung</span> <span class="operator">=</span> <span class="string">"python123"</span><br>
-                    <span class="variable">mat_khau_nhap</span> <span class="operator">=</span> <span class="string">""</span> <span class="comment"># Khởi tạo rỗng</span><br><br>
-                    <span class="keyword">while</span> <span class="variable">mat_khau_nhap</span> <span class="operator">!=</span> <span class="variable">mat_khau_dung</span><span class="operator">:</span><br>
-                    <span class="variable">    mat_khau_nhap</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập mật khẩu: "</span>)<br>
-                    <span class="keyword">    if</span> <span class="variable">mat_khau_nhap</span> <span class="operator">!=</span> <span class="variable">mat_khau_dung</span><span class="operator">:</span><br>
-                    <span class="function">        print</span>(<span class="string">"Mật khẩu sai. Vui lòng thử lại."</span>)<br><br>
-                    <span class="function">print</span>(<span class="string">"Đăng nhập thành công!"</span>)
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">mat_khau_dung</span> <span class="operator">=</span> <span class="string">"python123"</span>
+<span class="variable">mat_khau_nhap</span> <span class="operator">=</span> <span class="string">""</span> <span class="comment"># Khởi tạo rỗng</span>
+
+<span class="keyword">while</span> <span class="variable">mat_khau_nhap</span> <span class="operator">!=</span> <span class="variable">mat_khau_dung</span><span class="operator">:</span>
+    <span class="variable">mat_khau_nhap</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập mật khẩu: "</span>)
+    <span class="keyword">if</span> <span class="variable">mat_khau_nhap</span> <span class="operator">!=</span> <span class="variable">mat_khau_dung</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="string">"Mật khẩu sai. Vui lòng thử lại."</span>)
+
+<span class="function">print</span>(<span class="string">"Đăng nhập thành công!"</span>)</code></pre>
                 </div>
             </div>
         </div>
 
         <div id="slide-5" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.2. Vòng Lặp <code>while</code> với Mệnh Đề <code>else</code></h3>
-                <p class="mb-4 text-lg">Tương tự như vòng lặp <code>for</code>, vòng lặp <code>while</code> cũng có thể có một mệnh đề <code>else</code> tùy chọn.</p>
-                <p class="mb-4 text-lg">Khối lệnh trong <code>else</code> sẽ được thực thi khi điều kiện của vòng lặp <code>while</code> trở thành <code>False</code> một cách tự nhiên (tức là không phải do lệnh <code>break</code>).</p>
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.2. Vòng Lặp <code>while</code> với Mệnh Đề
+                    <code>else</code>
+                </h3>
+                <p class="mb-4 text-lg">Tương tự như vòng lặp <code>for</code>, vòng lặp <code>while</code> cũng có thể
+                    có một mệnh đề <code>else</code> tùy chọn.</p>
+                <p class="mb-4 text-lg">Khối lệnh trong <code>else</code> sẽ được thực thi khi điều kiện của vòng lặp
+                    <code>while</code> trở thành <code>False</code> một cách tự nhiên (tức là không phải do lệnh
+                    <code>break</code>).
+                </p>
                 <p class="mb-2 font-medium">Cú pháp:</p>
-                <div class="code-block">
-                    <span class="keyword">while</span> <span class="variable">dieu_kien</span><span class="operator">:</span><br>
-                    <span class="comment">    # Khối lệnh lặp</span><br>
-                    <span class="variable">    hanh_dong</span><br>
-                    <span class="comment">    # ...</span><br>
-                    <span class="keyword">else</span><span class="operator">:</span><br>
-                    <span class="comment">    # Khối lệnh này thực thi khi dieu_kien trở thành False</span><br>
-                    <span class="variable">    hanh_dong_sau_khi_lap_xong</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="keyword">while</span> <span class="variable">dieu_kien</span><span class="operator">:</span>
+    <span class="comment"># Khối lệnh lặp</span>
+    <span class="variable">hanh_dong</span>
+    <span class="comment"># ...</span>
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="comment"># Khối lệnh này thực thi khi dieu_kien trở thành False</span>
+    <span class="variable">hanh_dong_sau_khi_lap_xong</span></code></pre>
                 </div>
                 <p class="mt-4 mb-2 font-medium">Ví dụ:</p>
-                <div class="code-block">
-                    <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span><br>
-                    <span class="keyword">while</span> <span class="variable">count</span> <span class="operator">&lt;</span> <span class="number">3</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">f"Đang đếm: {count}"</span>)<br>
-                    <span class="variable">    count</span> <span class="operator">+=</span> <span class="number">1</span><br>
-                    <span class="keyword">else</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Đã đếm xong!"</span>)<br><br>
-                    <span class="comment"># Output:</span><br>
-                    <span class="comment"># Đang đếm: 0</span><br>
-                    <span class="comment"># Đang đếm: 1</span><br>
-                    <span class="comment"># Đang đếm: 2</span><br>
-                    <span class="comment"># Đã đếm xong!</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>
+<span class="keyword">while</span> <span class="variable">count</span> <span class="operator">&lt;</span> <span class="number">3</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"Đang đếm: {count}"</span>)
+    <span class="variable">count</span> <span class="operator">+=</span> <span class="number">1</span>
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Đã đếm xong!"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># Đang đếm: 0</span>
+<span class="comment"># Đang đếm: 1</span>
+<span class="comment"># Đang đếm: 2</span>
+<span class="comment"># Đã đếm xong!</span></code></pre>
                 </div>
             </div>
         </div>
 
         <div id="slide-6" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.3. Câu Lệnh <code>break</code> trong <code>while</code></h3>
-                <p class="mb-4 text-lg">Câu lệnh <code>break</code> được sử dụng để thoát khỏi vòng lặp <code>while</code> (hoặc <code>for</code>) ngay lập tức, bất kể điều kiện của vòng lặp còn đúng hay không.</p>
-                <p class="mb-4 text-lg">Khi <code>break</code> được thực thi, khối <code>else</code> (nếu có) của vòng lặp sẽ KHÔNG được thực thi.</p>
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.3. Câu Lệnh <code>break</code> trong
+                    <code>while</code>
+                </h3>
+                <p class="mb-4 text-lg">Câu lệnh <code>break</code> được sử dụng để thoát khỏi vòng lặp
+                    <code>while</code> (hoặc <code>for</code>) ngay lập tức, bất kể điều kiện của vòng lặp còn đúng hay
+                    không.
+                </p>
+                <p class="mb-4 text-lg">Khi <code>break</code> được thực thi, khối <code>else</code> (nếu có) của vòng
+                    lặp sẽ KHÔNG được thực thi.</p>
                 <p class="mb-2 font-medium">Ví dụ: Tìm số đầu tiên chia hết cho 7</p>
-                <div class="code-block">
-                    <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span><br>
-                    <span class="keyword">while</span> <span class="boolean">True</span><span class="operator">:</span> <span class="comment"># Vòng lặp có vẻ vô hạn</span><br>
-                    <span class="function">    print</span>(<span class="string">f"Kiểm tra số: {num}"</span>)<br>
-                    <span class="keyword">    if</span> <span class="variable">num</span> <span class="operator">%</span> <span class="number">7</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span><br>
-                    <span class="function">        print</span>(<span class="string">f"Tìm thấy! {num} chia hết cho 7."</span>)<br>
-                    <span class="keyword">        break</span>  <span class="comment"># Thoát khỏi vòng lặp</span><br>
-                    <span class="variable">    num</span> <span class="operator">+=</span> <span class="number">1</span><br>
-                    <span class="keyword">else</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Khối else này sẽ không chạy do có break."</span>)<br><br>
-                    <span class="comment"># Output:</span><br>
-                    <span class="comment"># Kiểm tra số: 1</span><br>
-                    <span class="comment"># ... (đến 6)</span><br>
-                    <span class="comment"># Kiểm tra số: 7</span><br>
-                    <span class="comment"># Tìm thấy! 7 chia hết cho 7.</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>
+<span class="keyword">while</span> <span class="boolean">True</span><span class="operator">:</span> <span class="comment"># Vòng lặp có vẻ vô hạn</span>
+    <span class="function">print</span>(<span class="string">f"Kiểm tra số: {num}"</span>)
+    <span class="keyword">if</span> <span class="variable">num</span> <span class="operator">%</span> <span class="number">7</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="string">f"Tìm thấy! {num} chia hết cho 7."</span>)
+        <span class="keyword">break</span>  <span class="comment"># Thoát khỏi vòng lặp</span>
+    <span class="variable">num</span> <span class="operator">+=</span> <span class="number">1</span>
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Khối else này sẽ không chạy do có break."</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># Kiểm tra số: 1</span>
+<span class="comment"># ... (đến 6)</span>
+<span class="comment"># Kiểm tra số: 7</span>
+<span class="comment"># Tìm thấy! 7 chia hết cho 7.</span></code></pre>
                 </div>
             </div>
         </div>
 
         <div id="slide-7" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.4. Câu Lệnh <code>continue</code> trong <code>while</code></h3>
-                <p class="mb-4 text-lg">Câu lệnh <code>continue</code> được sử dụng để bỏ qua phần còn lại của khối mã trong lần lặp hiện tại và chuyển ngay sang lần lặp tiếp theo của vòng lặp <code>while</code> (hoặc <code>for</code>).</p>
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.4. Câu Lệnh <code>continue</code> trong
+                    <code>while</code>
+                </h3>
+                <p class="mb-4 text-lg">Câu lệnh <code>continue</code> được sử dụng để bỏ qua phần còn lại của khối mã
+                    trong lần lặp hiện tại và chuyển ngay sang lần lặp tiếp theo của vòng lặp <code>while</code> (hoặc
+                    <code>for</code>).
+                </p>
                 <p class="mb-4 text-lg">Điều kiện của vòng lặp sẽ được kiểm tra lại.</p>
                 <p class="mb-2 font-medium">Ví dụ: In các số lẻ từ 1 đến 10</p>
-                <div class="code-block">
-                    <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span><br>
-                    <span class="keyword">while</span> <span class="variable">num</span> <span class="operator">&lt;</span> <span class="number">10</span><span class="operator">:</span><br>
-                    <span class="variable">    num</span> <span class="operator">+=</span> <span class="number">1</span><br>
-                    <span class="keyword">    if</span> <span class="variable">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span> <span class="comment"># Nếu num là số chẵn</span><br>
-                    <span class="keyword">        continue</span>      <span class="comment"># Bỏ qua print và quay lại đầu vòng lặp</span><br>
-                    <span class="function">    print</span>(<span class="string">f"Số lẻ: {num}"</span>)<br><br>
-                    <span class="comment"># Output:</span><br>
-                    <span class="comment"># Số lẻ: 1</span><br>
-                    <span class="comment"># Số lẻ: 3</span><br>
-                    <span class="comment"># Số lẻ: 5</span><br>
-                    <span class="comment"># Số lẻ: 7</span><br>
-                    <span class="comment"># Số lẻ: 9</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>
+<span class="keyword">while</span> <span class="variable">num</span> <span class="operator">&lt;</span> <span class="number">10</span><span class="operator">:</span>
+    <span class="variable">num</span> <span class="operator">+=</span> <span class="number">1</span>
+    <span class="keyword">if</span> <span class="variable">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span> <span class="comment"># Nếu num là số chẵn</span>
+        <span class="keyword">continue</span>      <span class="comment"># Bỏ qua print và quay lại đầu vòng lặp</span>
+    <span class="function">print</span>(<span class="string">f"Số lẻ: {num}"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># Số lẻ: 1</span>
+<span class="comment"># Số lẻ: 3</span>
+<span class="comment"># Số lẻ: 5</span>
+<span class="comment"># Số lẻ: 7</span>
+<span class="comment"># Số lẻ: 9</span></code></pre>
                 </div>
             </div>
         </div>
@@ -296,24 +508,34 @@
         <div id="slide-8" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Vòng Lặp Lồng Nhau (Nested Loops)</h3>
-                <p class="mb-4 text-lg">Bạn có thể đặt một vòng lặp (<code>for</code> hoặc <code>while</code>) bên trong một vòng lặp khác. Đây được gọi là vòng lặp lồng nhau.</p>
-                <p class="mb-4 text-lg">Vòng lặp bên trong sẽ hoàn thành tất cả các lần lặp của nó cho mỗi lần lặp của vòng lặp bên ngoài.</p>
+                <p class="mb-4 text-lg">Bạn có thể đặt một vòng lặp (<code>for</code> hoặc <code>while</code>) bên trong
+                    một vòng lặp khác. Đây được gọi là vòng lặp lồng nhau.</p>
+                <p class="mb-4 text-lg">Vòng lặp bên trong sẽ hoàn thành tất cả các lần lặp của nó cho mỗi lần lặp của
+                    vòng lặp bên ngoài.</p>
                 <p class="mb-2 font-medium">Cú pháp (<code>for</code> lồng <code>for</code>):</p>
-                <div class="code-block">
-                    <span class="keyword">for</span> <span class="variable">bien_ngoai</span> <span class="keyword">in</span> <span class="variable">tap_hop_ngoai</span><span class="operator">:</span><br>
-                    <span class="comment">    # Mã của vòng lặp ngoài</span><br>
-                    <span class="keyword">    for</span> <span class="variable">bien_trong</span> <span class="keyword">in</span> <span class="variable">tap_hop_trong</span><span class="operator">:</span><br>
-                    <span class="comment">        # Mã của vòng lặp trong</span><br>
-                    <span class="comment">        # Thực thi cho mỗi bien_ngoai</span><br>
-                    <span class="variable">    # Mã của vòng lặp ngoài (sau khi vòng lặp trong kết thúc)</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="keyword">for</span> <span class="variable">bien_ngoai</span> <span class="keyword">in</span> <span class="variable">tap_hop_ngoai</span><span class="operator">:</span>
+    <span class="comment"># Mã của vòng lặp ngoài</span>
+    <span class="keyword">for</span> <span class="variable">bien_trong</span> <span class="keyword">in</span> <span class="variable">tap_hop_trong</span><span class="operator">:</span>
+        <span class="comment"># Mã của vòng lặp trong</span>
+        <span class="comment"># Thực thi cho mỗi bien_ngoai</span>
+    <span class="comment"># Mã của vòng lặp ngoài (sau khi vòng lặp trong kết thúc)</span></code></pre>
                 </div>
                 <p class="mt-4 mb-2 font-medium">Cú pháp (<code>while</code> lồng <code>while</code>):</p>
-                 <div class="code-block">
-                    <span class="keyword">while</span> <span class="variable">dieu_kien_ngoai</span><span class="operator">:</span><br>
-                    <span class="comment">    # Mã của vòng lặp ngoài</span><br>
-                    <span class="keyword">    while</span> <span class="variable">dieu_kien_trong</span><span class="operator">:</span><br>
-                    <span class="comment">        # Mã của vòng lặp trong</span><br>
-                    <span class="comment">    # Mã của vòng lặp ngoài (sau khi vòng lặp trong kết thúc)</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="keyword">while</span> <span class="variable">dieu_kien_ngoai</span><span class="operator">:</span>
+    <span class="comment"># Mã của vòng lặp ngoài</span>
+    <span class="keyword">while</span> <span class="variable">dieu_kien_trong</span><span class="operator">:</span>
+        <span class="comment"># Mã của vòng lặp trong</span>
+    <span class="comment"># Mã của vòng lặp ngoài (sau khi vòng lặp trong kết thúc)</span></code></pre>
                 </div>
                 <p class="mt-4 text-lg">Bạn cũng có thể lồng <code>for</code> vào <code>while</code> và ngược lại.</p>
             </div>
@@ -323,31 +545,45 @@
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.1. Ví dụ Vòng Lặp Lồng Nhau</h3>
                 <p class="mb-2 font-medium">Ví dụ 1: In bảng cửu chương (từ 1 đến 3)</p>
-                <div class="code-block">
-                    <span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">4</span>)<span class="operator">:</span>  <span class="comment"># Vòng lặp ngoài: i từ 1 đến 3</span><br>
-                    <span class="function">    print</span>(<span class="string">f"--- Bảng cửu chương {i} ---"</span>)<br>
-                    <span class="keyword">    for</span> <span class="variable">j</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">11</span>)<span class="operator">:</span> <span class="comment"># Vòng lặp trong: j từ 1 đến 10</span><br>
-                    <span class="function">        print</span>(<span class="string">f"{i} x {j} = {i*j}"</span>)<br>
-                    <span class="function">    print</span>() <span class="comment"># In một dòng trống để phân cách</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">4</span>)<span class="operator">:</span>  <span class="comment"># Vòng lặp ngoài: i từ 1 đến 3</span>
+    <span class="function">print</span>(<span class="string">f"--- Bảng cửu chương {i} ---"</span>)
+    <span class="keyword">for</span> <span class="variable">j</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">11</span>)<span class="operator">:</span> <span class="comment"># Vòng lặp trong: j từ 1 đến 10</span>
+        <span class="function">print</span>(<span class="string">f"{i} x {j} = {i*j}"</span>)
+    <span class="function">print</span>() <span class="comment"># In một dòng trống để phân cách</span></code></pre>
                 </div>
                 <p class="mt-6 mb-2 font-medium">Ví dụ 2: Tạo một "hình chữ nhật" bằng dấu sao (*)</p>
-                 <div class="code-block">
-                    <span class="variable">hang</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập số hàng: "</span>))<br>
-                    <span class="variable">cot</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập số cột: "</span>))<br><br>
-                    <span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="variable">hang</span>)<span class="operator">:</span><br>
-                    <span class="variable">    dong_sao</span> <span class="operator">=</span> <span class="string">""</span><br>
-                    <span class="keyword">    for</span> <span class="variable">j</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="variable">cot</span>)<span class="operator">:</span><br>
-                    <span class="variable">        dong_sao</span> <span class="operator">+=</span> <span class="string">"* "</span><br>
-                    <span class="function">    print</span>(<span class="variable">dong_sao</span>)
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">hang</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập số hàng: "</span>))
+<span class="variable">cot</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập số cột: "</span>))
+
+<span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="variable">hang</span>)<span class="operator">:</span>
+    <span class="variable">dong_sao</span> <span class="operator">=</span> <span class="string">""</span>
+    <span class="keyword">for</span> <span class="variable">j</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="variable">cot</span>)<span class="operator">:</span>
+        <span class="variable">dong_sao</span> <span class="operator">+=</span> <span class="string">"* "</span>
+    <span class="function">print</span>(<span class="variable">dong_sao</span>)</code></pre>
                 </div>
-                 <p class="mt-2 text-sm text-gray-600">Vòng lặp lồng nhau rất hữu ích để xử lý dữ liệu dạng bảng, ma trận hoặc các tác vụ lặp lại có cấu trúc phức tạp.</p>
+                <p class="mt-2 text-sm text-gray-600">Vòng lặp lồng nhau rất hữu ích để xử lý dữ liệu dạng bảng, ma trận
+                    hoặc các tác vụ lặp lại có cấu trúc phức tạp.</p>
             </div>
         </div>
-        
+
         <div id="slide-10" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Điều Kiện Kết Hợp Vòng Lặp (Nâng Cao)</h3>
-                <p class="mb-4 text-lg">Ở Buổi 2, chúng ta đã làm quen với việc sử dụng <code>if</code> bên trong vòng lặp <code>for</code>. Bây giờ, chúng ta sẽ khám phá các kịch bản phức tạp hơn, kết hợp <code>if-elif-else</code>, toán tử logic, <code>break</code>, <code>continue</code> bên trong cả vòng lặp <code>for</code> và <code>while</code>, cũng như trong các vòng lặp lồng nhau.</p>
+                <p class="mb-4 text-lg">Ở Buổi 2, chúng ta đã làm quen với việc sử dụng <code>if</code> bên trong vòng
+                    lặp <code>for</code>. Bây giờ, chúng ta sẽ khám phá các kịch bản phức tạp hơn, kết hợp
+                    <code>if-elif-else</code>, toán tử logic, <code>break</code>, <code>continue</code> bên trong cả
+                    vòng lặp <code>for</code> và <code>while</code>, cũng như trong các vòng lặp lồng nhau.
+                </p>
                 <p class="mb-4 text-lg">Sự kết hợp này cho phép chúng ta:</p>
                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
                     <li>Xử lý các phần tử một cách có chọn lọc trong một tập dữ liệu.</li>
@@ -357,7 +593,8 @@
                 </ul>
                 <p class="text-lg">Hãy xem xét các ví dụ cụ thể để hiểu rõ hơn.</p>
                 <div class="flex justify-center mt-6">
-                    <img src="https://placehold.co/350x200/C084FC/FFFFFF?text=Complex+Logic" alt="[Hình ảnh Logic Phức Tạp]" class="shadow-md">
+                    <img src="https://placehold.co/350x200/C084FC/FFFFFF?text=Complex+Logic"
+                        alt="[Hình ảnh Logic Phức Tạp]" class="shadow-md">
                 </div>
             </div>
         </div>
@@ -365,78 +602,113 @@
         <div id="slide-11" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.1. Ví dụ: Tìm Số Nguyên Tố</h3>
-                <p class="mb-4 text-lg">Yêu cầu: Viết chương trình tìm và in ra tất cả các số nguyên tố trong một khoảng cho trước (ví dụ từ 2 đến N).</p>
-                <p class="mb-2 text-sm text-gray-600">Một số là số nguyên tố nếu nó lớn hơn 1 và chỉ chia hết cho 1 và chính nó.</p>
-                <div class="code-block">
-                    <span class="variable">N</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập giới hạn trên N (N > 1): "</span>))<br><br>
-                    <span class="function">print</span>(<span class="string">f"Các số nguyên tố từ 2 đến {N} là:"</span>)<br>
-                    <span class="keyword">for</span> <span class="variable">num</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>, <span class="variable">N</span> <span class="operator">+</span> <span class="number">1</span>)<span class="operator">:</span><br>
-                    <span class="variable">    la_so_nguyen_to</span> <span class="operator">=</span> <span class="boolean">True</span><br>
-                    <span class="keyword">    if</span> <span class="variable">num</span> <span class="operator">&lt;=</span> <span class="number">1</span><span class="operator">:</span><br>
-                    <span class="variable">        la_so_nguyen_to</span> <span class="operator">=</span> <span class="boolean">False</span><br>
-                    <span class="keyword">    else</span><span class="operator">:</span><br>
-                    <span class="comment">        # Kiểm tra ước số từ 2 đến căn bậc hai của num</span><br>
-                    <span class="keyword">        for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>, <span class="function">int</span>(<span class="variable">num</span><span class="operator">**</span><span class="number">0.5</span>) <span class="operator">+</span> <span class="number">1</span>)<span class="operator">:</span><br>
-                    <span class="keyword">            if</span> <span class="variable">num</span> <span class="operator">%</span> <span class="variable">i</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span><br>
-                    <span class="variable">                la_so_nguyen_to</span> <span class="operator">=</span> <span class="boolean">False</span><br>
-                    <span class="keyword">                break</span> <span class="comment"># Không cần kiểm tra thêm nếu đã tìm thấy ước</span><br>
-                    <span class="keyword">    if</span> <span class="variable">la_so_nguyen_to</span><span class="operator">:</span><br>
-                    <span class="function">        print</span>(<span class="variable">num</span>, <span class="variable">end</span><span class="operator">=</span><span class="string">" "</span>)<br>
+                <p class="mb-4 text-lg">Yêu cầu: Viết chương trình tìm và in ra tất cả các số nguyên tố trong một khoảng
+                    cho trước (ví dụ từ 2 đến N).</p>
+                <p class="mb-2 text-sm text-gray-600">Một số là số nguyên tố nếu nó lớn hơn 1 và chỉ chia hết cho 1 và
+                    chính nó.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">N</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập giới hạn trên N (N > 1): "</span>))
+
+<span class="function">print</span>(<span class="string">f"Các số nguyên tố từ 2 đến {N} là:"</span>)
+<span class="keyword">for</span> <span class="variable">num</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>, <span class="variable">N</span> <span class="operator">+</span> <span class="number">1</span>)<span class="operator">:</span>
+    <span class="variable">la_so_nguyen_to</span> <span class="operator">=</span> <span class="boolean">True</span>
+    <span class="keyword">if</span> <span class="variable">num</span> <span class="operator">&lt;=</span> <span class="number">1</span><span class="operator">:</span>
+        <span class="variable">la_so_nguyen_to</span> <span class="operator">=</span> <span class="boolean">False</span>
+    <span class="keyword">else</span><span class="operator">:</span>
+        <span class="comment"># Kiểm tra ước số từ 2 đến căn bậc hai của num</span>
+        <span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>, <span class="function">int</span>(<span class="variable">num</span><span class="operator">**</span><span class="number">0.5</span>) <span class="operator">+</span> <span class="number">1</span>)<span class="operator">:</span>
+            <span class="keyword">if</span> <span class="variable">num</span> <span class="operator">%</span> <span class="variable">i</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span>
+                <span class="variable">la_so_nguyen_to</span> <span class="operator">=</span> <span class="boolean">False</span>
+                <span class="keyword">break</span> <span class="comment"># Không cần kiểm tra thêm nếu đã tìm thấy ước</span>
+    <span class="keyword">if</span> <span class="variable">la_so_nguyen_to</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="variable">num</span>, <span class="variable">end</span><span class="operator">=</span><span class="string">" "</span>)</code></pre>
                 </div>
-                <p class="mt-2 text-sm text-gray-600">Trong ví dụ này, vòng lặp ngoài duyệt qua các số, vòng lặp trong kiểm tra tính nguyên tố. Lệnh <code>break</code> được dùng để tối ưu hóa.</p>
+                <p class="mt-2 text-sm text-gray-600">Trong ví dụ này, vòng lặp ngoài duyệt qua các số, vòng lặp trong
+                    kiểm tra tính nguyên tố. Lệnh <code>break</code> được dùng để tối ưu hóa.</p>
             </div>
         </div>
 
         <div id="slide-12" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.2. Ví dụ: Xử Lý Menu Người Dùng</h3>
-                <p class="mb-4 text-lg">Yêu cầu: Tạo một menu đơn giản cho người dùng chọn, lặp lại cho đến khi người dùng chọn thoát.</p>
-                <div class="code-block">
-                    <span class="keyword">while</span> <span class="boolean">True</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"\n--- MENU ---"</span>)<br>
-                    <span class="function">    print</span>(<span class="string">"1. Xem thông tin"</span>)<br>
-                    <span class="function">    print</span>(<span class="string">"2. Cập nhật thông tin"</span>)<br>
-                    <span class="function">    print</span>(<span class="string">"3. Thoát"</span>)<br><br>
-                    <span class="variable">lua_chon</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập lựa chọn của bạn (1-3): "</span>)<br><br>
-                    <span class="keyword">if</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'1'</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Đang hiển thị thông tin..."</span>)<br>
-                    <span class="comment">    # Thêm code xử lý xem thông tin ở đây</span><br>
-                    <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'2'</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Đang cập nhật thông tin..."</span>)<br>
-                    <span class="comment">    # Thêm code xử lý cập nhật ở đây</span><br>
-                    <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'3'</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Cảm ơn bạn đã sử dụng chương trình. Tạm biệt!"</span>)<br>
-                    <span class="keyword">    break</span> <span class="comment"># Thoát khỏi vòng lặp while</span><br>
-                    <span class="keyword">else</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Lựa chọn không hợp lệ. Vui lòng chọn lại."</span>)<br>
+                <p class="mb-4 text-lg">Yêu cầu: Tạo một menu đơn giản cho người dùng chọn, lặp lại cho đến khi người
+                    dùng chọn thoát.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="keyword">while</span> <span class="boolean">True</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"\n--- MENU ---"</span>)
+    <span class="function">print</span>(<span class="string">"1. Xem thông tin"</span>)
+    <span class="function">print</span>(<span class="string">"2. Cập nhật thông tin"</span>)
+    <span class="function">print</span>(<span class="string">"3. Thoát"</span>)
+
+    <span class="variable">lua_chon</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập lựa chọn của bạn (1-3): "</span>)
+
+    <span class="keyword">if</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'1'</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="string">"Đang hiển thị thông tin..."</span>)
+        <span class="comment"># Thêm code xử lý xem thông tin ở đây</span>
+    <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'2'</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="string">"Đang cập nhật thông tin..."</span>)
+        <span class="comment"># Thêm code xử lý cập nhật ở đây</span>
+    <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'3'</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="string">"Cảm ơn bạn đã sử dụng chương trình. Tạm biệt!"</span>)
+        <span class="keyword">break</span> <span class="comment"># Thoát khỏi vòng lặp while</span>
+    <span class="keyword">else</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="string">"Lựa chọn không hợp lệ. Vui lòng chọn lại."</span>)</code></pre>
                 </div>
-                <p class="mt-2 text-sm text-gray-600">Vòng lặp <code>while True</code> tạo một menu lặp lại. <code>if-elif-else</code> xử lý lựa chọn, và <code>break</code> dùng để thoát.</p>
+                <p class="mt-2 text-sm text-gray-600">Vòng lặp <code>while True</code> tạo một menu lặp lại.
+                    <code>if-elif-else</code> xử lý lựa chọn, và <code>break</code> dùng để thoát.
+                </p>
             </div>
         </div>
 
         <div id="slide-13" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Giới Thiệu Danh Sách (List) trong Python</h3>
-                <p class="mb-4 text-lg">List là một trong những cấu trúc dữ liệu cơ bản và mạnh mẽ nhất trong Python. Nó cho phép bạn lưu trữ một tập hợp các mục (item) theo một thứ tự nhất định.</p>
+                <p class="mb-4 text-lg">List là một trong những cấu trúc dữ liệu cơ bản và mạnh mẽ nhất trong Python. Nó
+                    cho phép bạn lưu trữ một tập hợp các mục (item) theo một thứ tự nhất định.</p>
                 <p class="mb-2 font-medium">Đặc điểm của List:</p>
                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
-                    <li><strong>Có thứ tự (Ordered):</strong> Các phần tử được lưu trữ theo một trình tự cụ thể và trình tự này không thay đổi.</li>
-                    <li><strong>Có thể thay đổi (Mutable):</strong> Bạn có thể thêm, xóa, hoặc sửa đổi các phần tử trong list sau khi nó được tạo.</li>
-                    <li><strong>Cho phép các phần tử trùng lặp (Allows duplicates):</strong> Một list có thể chứa nhiều phần tử giống hệt nhau.</li>
-                    <li><strong>Có thể chứa nhiều kiểu dữ liệu khác nhau:</strong> Một list có thể chứa số, chuỗi, boolean, thậm chí các list khác.</li>
+                    <li><strong>Có thứ tự (Ordered):</strong> Các phần tử được lưu trữ theo một trình tự cụ thể và trình
+                        tự này không thay đổi.</li>
+                    <li><strong>Có thể thay đổi (Mutable):</strong> Bạn có thể thêm, xóa, hoặc sửa đổi các phần tử trong
+                        list sau khi nó được tạo.</li>
+                    <li><strong>Cho phép các phần tử trùng lặp (Allows duplicates):</strong> Một list có thể chứa nhiều
+                        phần tử giống hệt nhau.</li>
+                    <li><strong>Có thể chứa nhiều kiểu dữ liệu khác nhau:</strong> Một list có thể chứa số, chuỗi,
+                        boolean, thậm chí các list khác.</li>
                 </ul>
                 <p class="mb-2 font-medium">Cách khai báo List:</p>
-                <p class="mb-4 text-lg">Sử dụng dấu ngoặc vuông <code>[]</code> và các phần tử cách nhau bởi dấu phẩy <code>,</code>.</p>
-                <div class="code-block">
-                    <span class="comment"># List rỗng</span><br>
-                    <span class="variable">danh_sach_rong</span> <span class="operator">=</span> []<br><br>
-                    <span class="comment"># List các số nguyên</span><br>
-                    <span class="variable">so_nguyen</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]<br><br>
-                    <span class="comment"># List các chuỗi</span><br>
-                    <span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"táo"</span>, <span class="string">"chuối"</span>, <span class="string">"cam"</span>]<br><br>
-                    <span class="comment"># List chứa nhiều kiểu dữ liệu</span><br>
-                    <span class="variable">hon_hop</span> <span class="operator">=</span> [<span class="string">"Python"</span>, <span class="number">3.11</span>, <span class="boolean">True</span>, <span class="number">40</span>]<br><br>
-                    <span class="function">print</span>(<span class="variable">trai_cay</span>)  <span class="comment"># Output: ['táo', 'chuối', 'cam']</span>
+                <p class="mb-4 text-lg">Sử dụng dấu ngoặc vuông <code>[]</code> và các phần tử cách nhau bởi dấu phẩy
+                    <code>,</code>.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="comment"># List rỗng</span>
+<span class="variable">danh_sach_rong</span> <span class="operator">=</span> []
+
+<span class="comment"># List các số nguyên</span>
+<span class="variable">so_nguyen</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+
+<span class="comment"># List các chuỗi</span>
+<span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"táo"</span>, <span class="string">"chuối"</span>, <span class="string">"cam"</span>]
+
+<span class="comment"># List chứa nhiều kiểu dữ liệu</span>
+<span class="variable">hon_hop</span> <span class="operator">=</span> [<span class="string">"Python"</span>, <span class="number">3.11</span>, <span class="boolean">True</span>, <span class="number">40</span>]
+
+<span class="function">print</span>(<span class="variable">trai_cay</span>)  <span class="comment"># Output: ['táo', 'chuối', 'cam']</span></code></pre>
                 </div>
             </div>
         </div>
@@ -444,30 +716,46 @@
         <div id="slide-14" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">5.1. Truy Cập Phần Tử trong List</h3>
-                <p class="mb-4 text-lg">Bạn có thể truy cập các phần tử riêng lẻ trong list bằng cách sử dụng chỉ số (index). Chỉ số trong Python bắt đầu từ <code>0</code> cho phần tử đầu tiên.</p>
+                <p class="mb-4 text-lg">Bạn có thể truy cập các phần tử riêng lẻ trong list bằng cách sử dụng chỉ số
+                    (index). Chỉ số trong Python bắt đầu từ <code>0</code> cho phần tử đầu tiên.</p>
                 <p class="mb-2 font-medium">Indexing (Truy cập theo chỉ số):</p>
-                <div class="code-block">
-                    <span class="variable">colors</span> <span class="operator">=</span> [<span class="string">"đỏ"</span>, <span class="string">"xanh lá"</span>, <span class="string">"xanh dương"</span>, <span class="string">"vàng"</span>]<br><br>
-                    <span class="function">print</span>(<span class="variable">colors</span>[<span class="number">0</span>])  <span class="comment"># Output: đỏ (phần tử đầu tiên)</span><br>
-                    <span class="function">print</span>(<span class="variable">colors</span>[<span class="number">2</span>])  <span class="comment"># Output: xanh dương</span><br><br>
-                    <span class="comment"># Chỉ số âm: truy cập từ cuối list (-1 là phần tử cuối cùng)</span><br>
-                    <span class="function">print</span>(<span class="variable">colors</span>[<span class="operator">-</span><span class="number">1</span>]) <span class="comment"># Output: vàng</span><br>
-                    <span class="function">print</span>(<span class="variable">colors</span>[<span class="operator">-</span><span class="number">3</span>]) <span class="comment"># Output: xanh lá</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">colors</span> <span class="operator">=</span> [<span class="string">"đỏ"</span>, <span class="string">"xanh lá"</span>, <span class="string">"xanh dương"</span>, <span class="string">"vàng"</span>]
+
+<span class="function">print</span>(<span class="variable">colors</span>[<span class="number">0</span>])  <span class="comment"># Output: đỏ (phần tử đầu tiên)</span>
+<span class="function">print</span>(<span class="variable">colors</span>[<span class="number">2</span>])  <span class="comment"># Output: xanh dương</span>
+
+<span class="comment"># Chỉ số âm: truy cập từ cuối list (-1 là phần tử cuối cùng)</span>
+<span class="function">print</span>(<span class="variable">colors</span>[<span class="operator">-</span><span class="number">1</span>]) <span class="comment"># Output: vàng</span>
+<span class="function">print</span>(<span class="variable">colors</span>[<span class="operator">-</span><span class="number">3</span>]) <span class="comment"># Output: xanh lá</span></code></pre>
                 </div>
                 <p class="mt-4 mb-2 font-medium">Slicing (Cắt List):</p>
-                <p class="mb-4 text-lg">Slicing cho phép bạn lấy một phần (một sub-list) của list. Cú pháp: <code>list[start:stop:step]</code></p>
+                <p class="mb-4 text-lg">Slicing cho phép bạn lấy một phần (một sub-list) của list. Cú pháp:
+                    <code>list[start:stop:step]</code>
+                </p>
                 <ul class="list-disc list-inside mb-2 pl-4 text-gray-700 text-sm">
                     <li><code>start</code>: Chỉ số bắt đầu (bao gồm). Mặc định là 0.</li>
                     <li><code>stop</code>: Chỉ số kết thúc (KHÔNG bao gồm). Mặc định là hết list.</li>
                     <li><code>step</code>: Bước nhảy. Mặc định là 1.</li>
                 </ul>
-                <div class="code-block">
-                    <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]<br><br>
-                    <span class="function">print</span>(<span class="variable">numbers</span>[<span class="number">2</span><span class="operator">:</span><span class="number">5</span>])     <span class="comment"># Output: [2, 3, 4] (từ index 2 đến trước index 5)</span><br>
-                    <span class="function">print</span>(<span class="variable">numbers</span>[<span class="operator">:</span><span class="number">3</span>])      <span class="comment"># Output: [0, 1, 2] (từ đầu đến trước index 3)</span><br>
-                    <span class="function">print</span>(<span class="variable">numbers</span>[<span class="number">5</span><span class="operator">:</span>])      <span class="comment"># Output: [5, 6, 7, 8, 9] (từ index 5 đến hết)</span><br>
-                    <span class="function">print</span>(<span class="variable">numbers</span>[<span class="operator">:</span><span class="operator">:</span><span class="number">2</span>])     <span class="comment"># Output: [0, 2, 4, 6, 8] (tất cả, bước nhảy 2)</span><br>
-                    <span class="function">print</span>(<span class="variable">numbers</span>[<span class="operator">-</span><span class="number">3</span><span class="operator">:</span>])    <span class="comment"># Output: [7, 8, 9] (3 phần tử cuối)</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]
+
+<span class="function">print</span>(<span class="variable">numbers</span>[<span class="number">2</span><span class="operator">:</span><span class="number">5</span>])     <span class="comment"># Output: [2, 3, 4] (từ index 2 đến trước index 5)</span>
+<span class="function">print</span>(<span class="variable">numbers</span>[<span class="operator">:</span><span class="number">3</span>])      <span class="comment"># Output: [0, 1, 2] (từ đầu đến trước index 3)</span>
+<span class="function">print</span>(<span class="variable">numbers</span>[<span class="number">5</span><span class="operator">:</span>])      <span class="comment"># Output: [5, 6, 7, 8, 9] (từ index 5 đến hết)</span>
+<span class="function">print</span>(<span class="variable">numbers</span>[<span class="operator">:</span><span class="operator">:</span><span class="number">2</span>])     <span class="comment"># Output: [0, 2, 4, 6, 8] (tất cả, bước nhảy 2)</span>
+<span class="function">print</span>(<span class="variable">numbers</span>[<span class="operator">-</span><span class="number">3</span><span class="operator">:</span>])    <span class="comment"># Output: [7, 8, 9] (3 phần tử cuối)</span></code></pre>
                 </div>
             </div>
         </div>
@@ -475,36 +763,54 @@
         <div id="slide-15" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">5.2. Thao Tác Với List: Thêm Phần Tử</h3>
-                <p class="mb-4 text-lg">Vì List là mutable (có thể thay đổi), bạn có thể dễ dàng thêm phần tử mới vào nó.</p>
-                
+                <p class="mb-4 text-lg">Vì List là mutable (có thể thay đổi), bạn có thể dễ dàng thêm phần tử mới vào
+                    nó.</p>
+
                 <p class="mb-2 font-medium">1. Phương thức <code>append(item)</code>:</p>
                 <p class="mb-2 text-lg">Thêm một <code>item</code> vào cuối list.</p>
-                <div class="code-block">
-                    <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'táo'</span>, <span class="string">'chuối'</span>]<br>
-                    <span class="function">print</span>(<span class="string">f"Trước khi append: {fruits}"</span>)<br>
-                    <span class="variable">fruits</span>.<span class="method">append</span>(<span class="string">'cam'</span>)<br>
-                    <span class="function">print</span>(<span class="string">f"Sau khi append: {fruits}"</span>) <span class="comment"># Output: ['táo', 'chuối', 'cam']</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'táo'</span>, <span class="string">'chuối'</span>]
+<span class="function">print</span>(<span class="string">f"Trước khi append: {fruits}"</span>)
+<span class="variable">fruits</span>.<span class="method">append</span>(<span class="string">'cam'</span>)
+<span class="function">print</span>(<span class="string">f"Sau khi append: {fruits}"</span>) <span class="comment"># Output: ['táo', 'chuối', 'cam']</span></code></pre>
                 </div>
 
                 <p class="mt-4 mb-2 font-medium">2. Phương thức <code>insert(index, item)</code>:</p>
                 <p class="mb-2 text-lg">Chèn một <code>item</code> vào vị trí <code>index</code> cụ thể.</p>
-                <div class="code-block">
-                    <span class="variable">animals</span> <span class="operator">=</span> [<span class="string">'chó'</span>, <span class="string">'mèo'</span>, <span class="string">'chim'</span>]<br>
-                    <span class="function">print</span>(<span class="string">f"Trước khi insert: {animals}"</span>)<br>
-                    <span class="variable">animals</span>.<span class="method">insert</span>(<span class="number">1</span>, <span class="string">'cá'</span>) <span class="comment"># Chèn 'cá' vào vị trí index 1</span><br>
-                    <span class="function">print</span>(<span class="string">f"Sau khi insert: {animals}"</span>) <span class="comment"># Output: ['chó', 'cá', 'mèo', 'chim']</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">animals</span> <span class="operator">=</span> [<span class="string">'chó'</span>, <span class="string">'mèo'</span>, <span class="string">'chim'</span>]
+<span class="function">print</span>(<span class="string">f"Trước khi insert: {animals}"</span>)
+<span class="variable">animals</span>.<span class="method">insert</span>(<span class="number">1</span>, <span class="string">'cá'</span>) <span class="comment"># Chèn 'cá' vào vị trí index 1</span>
+<span class="function">print</span>(<span class="string">f"Sau khi insert: {animals}"</span>) <span class="comment"># Output: ['chó', 'cá', 'mèo', 'chim']</span></code></pre>
                 </div>
 
                 <p class="mt-4 mb-2 font-medium">3. Phương thức <code>extend(iterable)</code>:</p>
-                <p class="mb-2 text-lg">Nối tất cả các phần tử từ một <code>iterable</code> (ví dụ: một list khác, một tuple) vào cuối list hiện tại.</p>
-                <div class="code-block">
-                    <span class="variable">list1</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]<br>
-                    <span class="variable">list2</span> <span class="operator">=</span> [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]<br>
-                    <span class="function">print</span>(<span class="string">f"List1 ban đầu: {list1}"</span>)<br>
-                    <span class="variable">list1</span>.<span class="method">extend</span>(<span class="variable">list2</span>)<br>
-                    <span class="function">print</span>(<span class="string">f"List1 sau extend: {list1}"</span>) <span class="comment"># Output: [1, 2, 3, 4, 5, 6]</span>
+                <p class="mb-2 text-lg">Nối tất cả các phần tử từ một <code>iterable</code> (ví dụ: một list khác, một
+                    tuple) vào cuối list hiện tại.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">list1</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+<span class="variable">list2</span> <span class="operator">=</span> [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
+<span class="function">print</span>(<span class="string">f"List1 ban đầu: {list1}"</span>)
+<span class="variable">list1</span>.<span class="method">extend</span>(<span class="variable">list2</span>)
+<span class="function">print</span>(<span class="string">f"List1 sau extend: {list1}"</span>) <span class="comment"># Output: [1, 2, 3, 4, 5, 6]</span></code></pre>
                 </div>
-                 <p class="mt-2 text-sm text-gray-600">Bạn cũng có thể dùng toán tử <code>+</code> để nối hai list, tạo ra một list mới.</p>
+                <p class="mt-2 text-sm text-gray-600">Bạn cũng có thể dùng toán tử <code>+</code> để nối hai list, tạo
+                    ra một list mới.</p>
             </div>
         </div>
 
@@ -512,39 +818,54 @@
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">5.3. Thao Tác Với List: Xem List</h3>
                 <p class="mb-2 font-medium">1. In toàn bộ List:</p>
-                <p class="mb-2 text-lg">Cách đơn giản nhất để xem nội dung của list là dùng hàm <code>print()</code>.</p>
-                <div class="code-block">
-                    <span class="variable">my_list</span> <span class="operator">=</span> [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="boolean">True</span>]<br>
-                    <span class="function">print</span>(<span class="variable">my_list</span>) <span class="comment"># Output: ['a', 'b', 1, 2, True]</span>
+                <p class="mb-2 text-lg">Cách đơn giản nhất để xem nội dung của list là dùng hàm <code>print()</code>.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">my_list</span> <span class="operator">=</span> [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="boolean">True</span>]
+<span class="function">print</span>(<span class="variable">my_list</span>) <span class="comment"># Output: ['a', 'b', 1, 2, True]</span></code></pre>
                 </div>
 
                 <p class="mt-4 mb-2 font-medium">2. Duyệt qua các phần tử bằng vòng lặp <code>for</code>:</p>
                 <p class="mb-2 text-lg">Đây là cách phổ biến để xử lý từng phần tử trong list.</p>
-                <div class="code-block">
-                    <span class="variable">hoc_sinh</span> <span class="operator">=</span> [<span class="string">"An"</span>, <span class="string">"Bình"</span>, <span class="string">"Chi"</span>, <span class="string">"Dũng"</span>]<br>
-                    <span class="function">print</span>(<span class="string">"Danh sách học sinh:"</span>)<br>
-                    <span class="keyword">for</span> <span class="variable">ten</span> <span class="keyword">in</span> <span class="variable">hoc_sinh</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">f"- {ten}"</span>)<br><br>
-                    <span class="comment"># Output:</span><br>
-                    <span class="comment"># Danh sách học sinh:</span><br>
-                    <span class="comment"># - An</span><br>
-                    <span class="comment"># - Bình</span><br>
-                    <span class="comment"># - Chi</span><br>
-                    <span class="comment"># - Dũng</span>
-                </div>
-                
-                <p class="mt-4 mb-2 font-medium">3. Kiểm tra sự tồn tại của một phần tử (toán tử <code>in</code>):</p>
-                 <div class="code-block">
-                    <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>]<br>
-                    <span class="keyword">if</span> <span class="number">30</span> <span class="keyword">in</span> <span class="variable">numbers</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Số 30 có trong danh sách."</span>)<br>
-                    <span class="keyword">else</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Số 30 không có trong danh sách."</span>)<br>
-                    <span class="comment"># Output: Số 30 có trong danh sách.</span><br><br>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">hoc_sinh</span> <span class="operator">=</span> [<span class="string">"An"</span>, <span class="string">"Bình"</span>, <span class="string">"Chi"</span>, <span class="string">"Dũng"</span>]
+<span class="function">print</span>(<span class="string">"Danh sách học sinh:"</span>)
+<span class="keyword">for</span> <span class="variable">ten</span> <span class="keyword">in</span> <span class="variable">hoc_sinh</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"- {ten}"</span>)
 
-                    <span class="keyword">if</span> <span class="number">100</span> <span class="keyword">not in</span> <span class="variable">numbers</span><span class="operator">:</span><br>
-                    <span class="function">    print</span>(<span class="string">"Số 100 không có trong danh sách."</span>)<br>
-                    <span class="comment"># Output: Số 100 không có trong danh sách.</span>
+<span class="comment"># Output:</span>
+<span class="comment"># Danh sách học sinh:</span>
+<span class="comment"># - An</span>
+<span class="comment"># - Bình</span>
+<span class="comment"># - Chi</span>
+<span class="comment"># - Dũng</span></code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium">3. Kiểm tra sự tồn tại của một phần tử (toán tử <code>in</code>):</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>]
+<span class="keyword">if</span> <span class="number">30</span> <span class="keyword">in</span> <span class="variable">numbers</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Số 30 có trong danh sách."</span>)
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Số 30 không có trong danh sách."</span>)
+<span class="comment"># Output: Số 30 có trong danh sách.</span>
+
+<span class="keyword">if</span> <span class="number">100</span> <span class="keyword">not in</span> <span class="variable">numbers</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Số 100 không có trong danh sách."</span>)
+<span class="comment"># Output: Số 100 không có trong danh sách.</span></code></pre>
                 </div>
             </div>
         </div>
@@ -555,35 +876,58 @@
                 <p class="mb-4 text-lg">Có nhiều cách để xóa phần tử khỏi list.</p>
 
                 <p class="mb-2 font-medium">1. Phương thức <code>remove(item)</code>:</p>
-                <p class="mb-2 text-lg">Xóa phần tử <code>item</code> đầu tiên được tìm thấy trong list. Nếu <code>item</code> không tồn tại, sẽ gây ra lỗi <code>ValueError</code>.</p>
-                <div class="code-block">
-                    <span class="variable">letters</span> <span class="operator">=</span> [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'b'</span>, <span class="string">'d'</span>]<br>
-                    <span class="function">print</span>(<span class="string">f"Trước remove: {letters}"</span>)<br>
-                    <span class="variable">letters</span>.<span class="method">remove</span>(<span class="string">'b'</span>) <span class="comment"># Xóa chữ 'b' đầu tiên</span><br>
-                    <span class="function">print</span>(<span class="string">f"Sau remove 'b': {letters}"</span>) <span class="comment"># Output: ['a', 'c', 'b', 'd']</span>
+                <p class="mb-2 text-lg">Xóa phần tử <code>item</code> đầu tiên được tìm thấy trong list. Nếu
+                    <code>item</code> không tồn tại, sẽ gây ra lỗi <code>ValueError</code>.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">letters</span> <span class="operator">=</span> [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'b'</span>, <span class="string">'d'</span>]
+<span class="function">print</span>(<span class="string">f"Trước remove: {letters}"</span>)
+<span class="variable">letters</span>.<span class="method">remove</span>(<span class="string">'b'</span>) <span class="comment"># Xóa chữ 'b' đầu tiên</span>
+<span class="function">print</span>(<span class="string">f"Sau remove 'b': {letters}"</span>) <span class="comment"># Output: ['a', 'c', 'b', 'd']</span></code></pre>
                 </div>
 
                 <p class="mt-4 mb-2 font-medium">2. Phương thức <code>pop(index)</code>:</p>
-                <p class="mb-2 text-lg">Xóa và trả về phần tử tại vị trí <code>index</code>. Nếu không có <code>index</code>, mặc định xóa và trả về phần tử cuối cùng. Nếu <code>index</code> không hợp lệ, sẽ gây lỗi <code>IndexError</code>.</p>
-                <div class="code-block">
-                    <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>]<br>
-                    <span class="variable">phan_tu_cuoi</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="method">pop</span>() <span class="comment"># Xóa phần tử cuối</span><br>
-                    <span class="function">print</span>(<span class="string">f"Phần tử bị xóa (cuối): {phan_tu_cuoi}"</span>) <span class="comment"># Output: 50</span><br>
-                    <span class="function">print</span>(<span class="string">f"List sau pop(): {numbers}"</span>) <span class="comment"># Output: [10, 20, 30, 40]</span><br><br>
-                    <span class="variable">phan_tu_index_1</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="method">pop</span>(<span class="number">1</span>) <span class="comment"># Xóa phần tử tại index 1</span><br>
-                    <span class="function">print</span>(<span class="string">f"Phần tử bị xóa (index 1): {phan_tu_index_1}"</span>) <span class="comment"># Output: 20</span><br>
-                    <span class="function">print</span>(<span class="string">f"List sau pop(1): {numbers}"</span>) <span class="comment"># Output: [10, 30, 40]</span>
+                <p class="mb-2 text-lg">Xóa và trả về phần tử tại vị trí <code>index</code>. Nếu không có
+                    <code>index</code>, mặc định xóa và trả về phần tử cuối cùng. Nếu <code>index</code> không hợp lệ,
+                    sẽ gây lỗi <code>IndexError</code>.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>]
+<span class="variable">phan_tu_cuoi</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="method">pop</span>() <span class="comment"># Xóa phần tử cuối</span>
+<span class="function">print</span>(<span class="string">f"Phần tử bị xóa (cuối): {phan_tu_cuoi}"</span>) <span class="comment"># Output: 50</span>
+<span class="function">print</span>(<span class="string">f"List sau pop(): {numbers}"</span>) <span class="comment"># Output: [10, 20, 30, 40]</span>
+
+<span class="variable">phan_tu_index_1</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="method">pop</span>(<span class="number">1</span>) <span class="comment"># Xóa phần tử tại index 1</span>
+<span class="function">print</span>(<span class="string">f"Phần tử bị xóa (index 1): {phan_tu_index_1}"</span>) <span class="comment"># Output: 20</span>
+<span class="function">print</span>(<span class="string">f"List sau pop(1): {numbers}"</span>) <span class="comment"># Output: [10, 30, 40]</span></code></pre>
                 </div>
 
                 <p class="mt-4 mb-2 font-medium">3. Từ khóa <code>del</code>:</p>
-                <p class="mb-2 text-lg">Xóa phần tử tại một <code>index</code> cụ thể hoặc xóa một lát cắt (slice) của list. Cũng có thể dùng để xóa toàn bộ list.</p>
-                <div class="code-block">
-                    <span class="variable">items</span> <span class="operator">=</span> [<span class="string">'x'</span>, <span class="string">'y'</span>, <span class="string">'z'</span>, <span class="string">'w'</span>, <span class="string">'v'</span>]<br>
-                    <span class="function">print</span>(<span class="string">f"Trước del: {items}"</span>)<br>
-                    <span class="keyword">del</span> <span class="variable">items</span>[<span class="number">2</span>] <span class="comment"># Xóa phần tử tại index 2 ('z')</span><br>
-                    <span class="function">print</span>(<span class="string">f"Sau del items[2]: {items}"</span>) <span class="comment"># Output: ['x', 'y', 'w', 'v']</span><br><br>
-                    <span class="keyword">del</span> <span class="variable">items</span>[<span class="number">1</span><span class="operator">:</span><span class="number">3</span>] <span class="comment"># Xóa slice từ index 1 đến trước 3 ('y', 'w')</span><br>
-                    <span class="function">print</span>(<span class="string">f"Sau del items[1:3]: {items}"</span>) <span class="comment"># Output: ['x', 'v']</span>
+                <p class="mb-2 text-lg">Xóa phần tử tại một <code>index</code> cụ thể hoặc xóa một lát cắt (slice) của
+                    list. Cũng có thể dùng để xóa toàn bộ list.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">items</span> <span class="operator">=</span> [<span class="string">'x'</span>, <span class="string">'y'</span>, <span class="string">'z'</span>, <span class="string">'w'</span>, <span class="string">'v'</span>]
+<span class="function">print</span>(<span class="string">f"Trước del: {items}"</span>)
+<span class="keyword">del</span> <span class="variable">items</span>[<span class="number">2</span>] <span class="comment"># Xóa phần tử tại index 2 ('z')</span>
+<span class="function">print</span>(<span class="string">f"Sau del items[2]: {items}"</span>) <span class="comment"># Output: ['x', 'y', 'w', 'v']</span>
+
+<span class="keyword">del</span> <span class="variable">items</span>[<span class="number">1</span><span class="operator">:</span><span class="number">3</span>] <span class="comment"># Xóa slice từ index 1 đến trước 3 ('y', 'w')</span>
+<span class="function">print</span>(<span class="string">f"Sau del items[1:3]: {items}"</span>) <span class="comment"># Output: ['x', 'v']</span></code></pre>
                 </div>
             </div>
         </div>
@@ -591,78 +935,128 @@
         <div id="slide-18" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">5.5. Thao Tác Với List: Cập Nhật Phần Tử</h3>
-                <p class="mb-4 text-lg">Vì list là mutable, bạn có thể dễ dàng thay đổi giá trị của các phần tử hiện có bằng cách gán giá trị mới cho chúng thông qua chỉ số (index).</p>
+                <p class="mb-4 text-lg">Vì list là mutable, bạn có thể dễ dàng thay đổi giá trị của các phần tử hiện có
+                    bằng cách gán giá trị mới cho chúng thông qua chỉ số (index).</p>
                 <p class="mb-2 font-medium">Cú pháp:</p>
-                <div class="code-block">
-                    <span class="variable">ten_list</span>[<span class="variable">chi_so</span>] <span class="operator">=</span> <span class="variable">gia_tri_moi</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code><span class="variable">ten_list</span>[<span class="variable">chi_so</span>] <span class="operator">=</span> <span class="variable">gia_tri_moi</span></code></pre>
                 </div>
                 <p class="mt-4 mb-2 font-medium">Ví dụ:</p>
-                <div class="code-block">
-                    <span class="variable">planets</span> <span class="operator">=</span> [<span class="string">"Sao Thủy"</span>, <span class="string">"Sao Kim"</span>, <span class="string">"Trái Đất"</span>, <span class="string">"Sao Hỏa"</span>]<br>
-                    <span class="function">print</span>(<span class="string">f"List ban đầu: {planets}"</span>)<br><br>
-                    <span class="comment"># Cập nhật phần tử tại index 1</span><br>
-                    <span class="variable">planets</span>[<span class="number">1</span>] <span class="operator">=</span> <span class="string">"Venus"</span> <span class="comment"># Thay "Sao Kim" bằng "Venus"</span><br>
-                    <span class="function">print</span>(<span class="string">f"Sau khi cập nhật index 1: {planets}"</span>)<br>
-                    <span class="comment"># Output: ['Sao Thủy', 'Venus', 'Trái Đất', 'Sao Hỏa']</span><br><br>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">planets</span> <span class="operator">=</span> [<span class="string">"Sao Thủy"</span>, <span class="string">"Sao Kim"</span>, <span class="string">"Trái Đất"</span>, <span class="string">"Sao Hỏa"</span>]
+<span class="function">print</span>(<span class="string">f"List ban đầu: {planets}"</span>)
 
-                    <span class="comment"># Cập nhật phần tử cuối cùng</span><br>
-                    <span class="variable">planets</span>[<span class="operator">-</span><span class="number">1</span>] <span class="operator">=</span> <span class="string">"Mars"</span> <span class="comment"># Thay "Sao Hỏa" bằng "Mars"</span><br>
-                    <span class="function">print</span>(<span class="string">f"Sau khi cập nhật index cuối: {planets}"</span>)<br>
-                    <span class="comment"># Output: ['Sao Thủy', 'Venus', 'Trái Đất', 'Mars']</span>
+<span class="comment"># Cập nhật phần tử tại index 1</span>
+<span class="variable">planets</span>[<span class="number">1</span>] <span class="operator">=</span> <span class="string">"Venus"</span> <span class="comment"># Thay "Sao Kim" bằng "Venus"</span>
+<span class="function">print</span>(<span class="string">f"Sau khi cập nhật index 1: {planets}"</span>)
+<span class="comment"># Output: ['Sao Thủy', 'Venus', 'Trái Đất', 'Sao Hỏa']</span>
+
+<span class="comment"># Cập nhật phần tử cuối cùng</span>
+<span class="variable">planets</span>[<span class="operator">-</span><span class="number">1</span>] <span class="operator">=</span> <span class="string">"Mars"</span> <span class="comment"># Thay "Sao Hỏa" bằng "Mars"</span>
+<span class="function">print</span>(<span class="string">f"Sau khi cập nhật index cuối: {planets}"</span>)
+<span class="comment"># Output: ['Sao Thủy', 'Venus', 'Trái Đất', 'Mars']</span></code></pre>
                 </div>
-                <p class="mt-4 text-lg">Bạn cũng có thể cập nhật một lát cắt (slice) của list, nhưng kích thước của giá trị gán vào có thể khác với kích thước của slice, dẫn đến việc thay đổi kích thước của list.</p>
-                <div class="code-block">
-                    <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]<br>
-                    <span class="function">print</span>(<span class="string">f"Numbers ban đầu: {numbers}"</span>)<br>
-                    <span class="variable">numbers</span>[<span class="number">1</span><span class="operator">:</span><span class="number">3</span>] <span class="operator">=</span> [<span class="number">20</span>, <span class="number">30</span>, <span class="number">35</span>] <span class="comment"># Thay [2, 3] bằng [20, 30, 35]</span><br>
-                    <span class="function">print</span>(<span class="string">f"Numbers sau cập nhật slice: {numbers}"</span>)<br>
-                    <span class="comment"># Output: [1, 20, 30, 35, 4, 5]</span>
+                <p class="mt-4 text-lg">Bạn cũng có thể cập nhật một lát cắt (slice) của list, nhưng kích thước của giá
+                    trị gán vào có thể khác với kích thước của slice, dẫn đến việc thay đổi kích thước của list.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+<span class="function">print</span>(<span class="string">f"Numbers ban đầu: {numbers}"</span>)
+<span class="variable">numbers</span>[<span class="number">1</span><span class="operator">:</span><span class="number">3</span>] <span class="operator">=</span> [<span class="number">20</span>, <span class="number">30</span>, <span class="number">35</span>] <span class="comment"># Thay [2, 3] bằng [20, 30, 35]</span>
+<span class="function">print</span>(<span class="string">f"Numbers sau cập nhật slice: {numbers}"</span>)
+<span class="comment"># Output: [1, 20, 30, 35, 4, 5]</span></code></pre>
                 </div>
             </div>
         </div>
-        
+
         <div id="slide-19" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">5.6. Một Số Phương Thức List Hữu Ích Khác</h3>
                 <ul class="list-disc list-inside space-y-3">
                     <li>
-                        <p class="text-lg"><strong><code>list.sort(reverse=False)</code></strong>: Sắp xếp các phần tử trong list tại chỗ (in-place). Mặc định là tăng dần. Đặt <code>reverse=True</code> để sắp xếp giảm dần.</p>
-                        <div class="code-block">
-                            <span class="variable">nums</span> <span class="operator">=</span> [<span class="number">5</span>, <span class="number">1</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">3</span>]<br>
-                            <span class="variable">nums</span>.<span class="method">sort</span>()<br>
-                            <span class="function">print</span>(<span class="string">f"Sắp xếp tăng dần: {nums}"</span>) <span class="comment"># Output: [1, 2, 3, 5, 8]</span><br>
-                            <span class="variable">nums</span>.<span class="method">sort</span>(<span class="variable">reverse</span><span class="operator">=</span><span class="boolean">True</span>)<br>
-                            <span class="function">print</span>(<span class="string">f"Sắp xếp giảm dần: {nums}"</span>) <span class="comment"># Output: [8, 5, 3, 2, 1]</span>
+                        <p class="text-lg"><strong><code>list.sort(reverse=False)</code></strong>: Sắp xếp các phần tử
+                            trong list tại chỗ (in-place). Mặc định là tăng dần. Đặt <code>reverse=True</code> để sắp
+                            xếp giảm dần.</p>
+                        <div class="code-block-container">
+                            <div class="code-block-header">
+                                <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                                    chép</button>
+                            </div>
+                            <pre
+                                class="code-block"><code><span class="variable">nums</span> <span class="operator">=</span> [<span class="number">5</span>, <span class="number">1</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">3</span>]
+<span class="variable">nums</span>.<span class="method">sort</span>()
+<span class="function">print</span>(<span class="string">f"Sắp xếp tăng dần: {nums}"</span>) <span class="comment"># Output: [1, 2, 3, 5, 8]</span>
+<span class="variable">nums</span>.<span class="method">sort</span>(<span class="variable">reverse</span><span class="operator">=</span><span class="boolean">True</span>)
+<span class="function">print</span>(<span class="string">f"Sắp xếp giảm dần: {nums}"</span>) <span class="comment"># Output: [8, 5, 3, 2, 1]</span></code></pre>
                         </div>
                     </li>
                     <li>
-                        <p class="text-lg"><strong><code>list.reverse()</code></strong>: Đảo ngược thứ tự các phần tử trong list tại chỗ.</p>
-                        <div class="code-block">
-                            <span class="variable">chars</span> <span class="operator">=</span> [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>]<br>
-                            <span class="variable">chars</span>.<span class="method">reverse</span>()<br>
-                            <span class="function">print</span>(<span class="string">f"Sau reverse: {chars}"</span>) <span class="comment"># Output: ['d', 'c', 'b', 'a']</span>
+                        <p class="text-lg"><strong><code>list.reverse()</code></strong>: Đảo ngược thứ tự các phần tử
+                            trong list tại chỗ.</p>
+                        <div class="code-block-container">
+                            <div class="code-block-header">
+                                <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                                    chép</button>
+                            </div>
+                            <pre
+                                class="code-block"><code><span class="variable">chars</span> <span class="operator">=</span> [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>]
+<span class="variable">chars</span>.<span class="method">reverse</span>()
+<span class="function">print</span>(<span class="string">f"Sau reverse: {chars}"</span>) <span class="comment"># Output: ['d', 'c', 'b', 'a']</span></code></pre>
                         </div>
                     </li>
                     <li>
-                        <p class="text-lg"><strong><code>list.count(item)</code></strong>: Trả về số lần xuất hiện của <code>item</code> trong list.</p>
-                        <div class="code-block">
-                            <span class="variable">data</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>]<br>
-                            <span class="function">print</span>(<span class="string">f"Số lần xuất hiện của 2: {data.count(2)}"</span>) <span class="comment"># Output: 3</span>
-                        </div>
-                    </li>
-                     <li>
-                        <p class="text-lg"><strong><code>list.index(item, start, end)</code></strong>: Trả về chỉ số của lần xuất hiện đầu tiên của <code>item</code>. Bạn có thể chỉ định khoảng tìm kiếm <code>start</code> và <code>end</code>. Gây lỗi <code>ValueError</code> nếu không tìm thấy.</p>
-                        <div class="code-block">
-                            <span class="variable">items</span> <span class="operator">=</span> [<span class="string">'apple'</span>, <span class="string">'banana'</span>, <span class="string">'cherry'</span>, <span class="string">'banana'</span>]<br>
-                            <span class="function">print</span>(<span class="string">f"Index của 'banana': {items.index('banana')}"</span>) <span class="comment"># Output: 1</span><br>
-                            <span class="function">print</span>(<span class="string">f"Index của 'banana' từ index 2: {items.index('banana', 2)}"</span>) <span class="comment"># Output: 3</span>
+                        <p class="text-lg"><strong><code>list.count(item)</code></strong>: Trả về số lần xuất hiện của
+                            <code>item</code> trong list.
+                        </p>
+                        <div class="code-block-container">
+                            <div class="code-block-header">
+                                <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                                    chép</button>
+                            </div>
+                            <pre
+                                class="code-block"><code><span class="variable">data</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>]
+<span class="function">print</span>(<span class="string">f"Số lần xuất hiện của 2: {data.count(2)}"</span>) <span class="comment"># Output: 3</span></code></pre>
                         </div>
                     </li>
                     <li>
-                        <p class="text-lg"><strong><code>len(list)</code></strong>: Hàm built-in, trả về số lượng phần tử trong list (không phải phương thức).</p>
-                        <div class="code-block">
-                            <span class="variable">my_list</span> <span class="operator">=</span> [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]<br>
-                            <span class="function">print</span>(<span class="string">f"Độ dài của list: {len(my_list)}"</span>) <span class="comment"># Output: 3</span>
+                        <p class="text-lg"><strong><code>list.index(item, start, end)</code></strong>: Trả về chỉ số của
+                            lần xuất hiện đầu tiên của <code>item</code>. Bạn có thể chỉ định khoảng tìm kiếm
+                            <code>start</code> và <code>end</code>. Gây lỗi <code>ValueError</code> nếu không tìm thấy.
+                        </p>
+                        <div class="code-block-container">
+                            <div class="code-block-header">
+                                <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                                    chép</button>
+                            </div>
+                            <pre
+                                class="code-block"><code><span class="variable">items</span> <span class="operator">=</span> [<span class="string">'apple'</span>, <span class="string">'banana'</span>, <span class="string">'cherry'</span>, <span class="string">'banana'</span>]
+<span class="function">print</span>(<span class="string">f"Index của 'banana': {items.index('banana')}"</span>) <span class="comment"># Output: 1</span>
+<span class="function">print</span>(<span class="string">f"Index của 'banana' từ index 2: {items.index('banana', 2)}"</span>) <span class="comment"># Output: 3</span></code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="text-lg"><strong><code>len(list)</code></strong>: Hàm built-in, trả về số lượng phần
+                            tử trong list (không phải phương thức).</p>
+                        <div class="code-block-container">
+                            <div class="code-block-header">
+                                <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                                    chép</button>
+                            </div>
+                            <pre
+                                class="code-block"><code><span class="variable">my_list</span> <span class="operator">=</span> [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]
+<span class="function">print</span>(<span class="string">f"Độ dài của list: {len(my_list)}"</span>) <span class="comment"># Output: 3</span></code></pre>
                         </div>
                     </li>
                 </ul>
@@ -672,44 +1066,60 @@
         <div id="slide-20" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">5.7. List Lồng Nhau (Nested Lists)</h3>
-                <p class="mb-4 text-lg">Một list có thể chứa các list khác làm phần tử. Đây được gọi là list lồng nhau, thường được sử dụng để biểu diễn dữ liệu dạng bảng hoặc ma trận.</p>
+                <p class="mb-4 text-lg">Một list có thể chứa các list khác làm phần tử. Đây được gọi là list lồng nhau,
+                    thường được sử dụng để biểu diễn dữ liệu dạng bảng hoặc ma trận.</p>
                 <p class="mb-2 font-medium">Ví dụ: Ma trận 2x3</p>
-                <div class="code-block">
-                    <span class="variable">ma_tran</span> <span class="operator">=</span> [<br>
-                    <span class="comment">  # Cột 0, Cột 1, Cột 2</span><br>
-                    <span class="number">  [1, 2, 3], </span> <span class="comment"># Hàng 0</span><br>
-                    <span class="number">  [4, 5, 6]  </span>  <span class="comment"># Hàng 1</span><br>
-                    ]<br><br>
-                    <span class="comment"># Truy cập phần tử</span><br>
-                    <span class="function">print</span>(<span class="string">f"Phần tử ở hàng 0, cột 1: {ma_tran[0][1]}"</span>) <span class="comment"># Output: 2</span><br>
-                    <span class="function">print</span>(<span class="string">f"Phần tử ở hàng 1, cột 2: {ma_tran[1][2]}"</span>) <span class="comment"># Output: 6</span><br><br>
-                    <span class="comment"># Lấy cả hàng</span><br>
-                    <span class="function">print</span>(<span class="string">f"Hàng 1: {ma_tran[1]}"</span>) <span class="comment"># Output: [4, 5, 6]</span><br><br>
-                    <span class="comment"># Duyệt qua ma trận</span><br>
-                    <span class="function">print</span>(<span class="string">"\nCác phần tử trong ma trận:"</span>)<br>
-                    <span class="keyword">for</span> <span class="variable">hang</span> <span class="keyword">in</span> <span class="variable">ma_tran</span><span class="operator">:</span><br>
-                    <span class="keyword">    for</span> <span class="variable">phan_tu</span> <span class="keyword">in</span> <span class="variable">hang</span><span class="operator">:</span><br>
-                    <span class="function">        print</span>(<span class="variable">phan_tu</span>, <span class="variable">end</span><span class="operator">=</span><span class="string">" "</span>)<br>
-                    <span class="function">    print</span>() <span class="comment"># Xuống dòng sau mỗi hàng</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="variable">ma_tran</span> <span class="operator">=</span> [
+  <span class="comment"># Cột 0, Cột 1, Cột 2</span>
+  [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],  <span class="comment"># Hàng 0</span>
+  [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]   <span class="comment"># Hàng 1</span>
+]
+
+<span class="comment"># Truy cập phần tử</span>
+<span class="function">print</span>(<span class="string">f"Phần tử ở hàng 0, cột 1: {ma_tran[0][1]}"</span>) <span class="comment"># Output: 2</span>
+<span class="function">print</span>(<span class="string">f"Phần tử ở hàng 1, cột 2: {ma_tran[1][2]}"</span>) <span class="comment"># Output: 6</span>
+
+<span class="comment"># Lấy cả hàng</span>
+<span class="function">print</span>(<span class="string">f"Hàng 1: {ma_tran[1]}"</span>) <span class="comment"># Output: [4, 5, 6]</span>
+
+<span class="comment"># Duyệt qua ma trận</span>
+<span class="function">print</span>(<span class="string">"\nCác phần tử trong ma trận:"</span>)
+<span class="keyword">for</span> <span class="variable">hang</span> <span class="keyword">in</span> <span class="variable">ma_tran</span><span class="operator">:</span>
+    <span class="keyword">for</span> <span class="variable">phan_tu</span> <span class="keyword">in</span> <span class="variable">hang</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="variable">phan_tu</span>, <span class="variable">end</span><span class="operator">=</span><span class="string">" "</span>)
+    <span class="function">print</span>() <span class="comment"># Xuống dòng sau mỗi hàng</span></code></pre>
                 </div>
-                 <p class="mt-2 text-sm text-gray-600">List lồng nhau rất linh hoạt và có thể có nhiều cấp độ lồng.</p>
+                <p class="mt-2 text-sm text-gray-600">List lồng nhau rất linh hoạt và có thể có nhiều cấp độ lồng.</p>
             </div>
         </div>
-        
+
         <div id="slide-21" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-purple-500 mb-4">6. Bài Tập Thực Hành (Cơ Bản)</h3>
-                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: Tính tổng các số sử dụng <code>while</code></h4>
-                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình yêu cầu người dùng nhập vào các số nguyên liên tục. Chương trình sẽ cộng dồn các số đó lại. Nếu người dùng nhập số <code>0</code>, chương trình dừng việc nhập và in ra tổng đã tính được.</p>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: Tính tổng các số sử dụng <code>while</code>
+                </h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình yêu cầu người dùng nhập vào các số
+                    nguyên liên tục. Chương trình sẽ cộng dồn các số đó lại. Nếu người dùng nhập số <code>0</code>,
+                    chương trình dừng việc nhập và in ra tổng đã tính được.</p>
                 <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
-                <div class="code-block">
-                    <span class="comment">Nhập một số (nhập 0 để dừng): 5</span><br>
-                    <span class="comment">Nhập một số (nhập 0 để dừng): 10</span><br>
-                    <span class="comment">Nhập một số (nhập 0 để dừng): 3</span><br>
-                    <span class="comment">Nhập một số (nhập 0 để dừng): 0</span><br>
-                    <span class="comment">Tổng các số đã nhập là: 18</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="comment">Nhập một số (nhập 0 để dừng): 5</span>
+<span class="comment">Nhập một số (nhập 0 để dừng): 10</span>
+<span class="comment">Nhập một số (nhập 0 để dừng): 3</span>
+<span class="comment">Nhập một số (nhập 0 để dừng): 0</span>
+<span class="comment">Tổng các số đã nhập là: 18</span></code></pre>
                 </div>
-                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng vòng lặp <code>while</code> và một biến để lưu tổng.</p>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng vòng lặp <code>while</code> và một biến để lưu
+                    tổng.</p>
             </div>
         </div>
 
@@ -720,12 +1130,16 @@
                 <p class="mb-2 text-lg"><strong>Yêu cầu:</strong></p>
                 <ol class="list-decimal list-inside mb-2 pl-4 text-gray-700">
                     <li>Tạo một list rỗng tên là <code>danh_sach_ten</code>.</li>
-                    <li>Yêu cầu người dùng nhập 3 tên và thêm lần lượt vào list bằng phương thức <code>append()</code>.</li>
+                    <li>Yêu cầu người dùng nhập 3 tên và thêm lần lượt vào list bằng phương thức <code>append()</code>.
+                    </li>
                     <li>In ra toàn bộ danh sách tên.</li>
-                    <li>Yêu cầu người dùng nhập một tên muốn xóa khỏi danh sách. Sử dụng <code>remove()</code> để xóa. Nếu tên không có, thông báo cho người dùng.</li>
+                    <li>Yêu cầu người dùng nhập một tên muốn xóa khỏi danh sách. Sử dụng <code>remove()</code> để xóa.
+                        Nếu tên không có, thông báo cho người dùng.</li>
                     <li>In lại danh sách tên sau khi xóa.</li>
                 </ol>
-                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng <code>try-except ValueError</code> khi dùng <code>remove()</code> để xử lý trường hợp tên không có trong list.</p>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng <code>try-except ValueError</code> khi dùng
+                    <code>remove()</code> để xử lý trường hợp tên không có trong list.
+                </p>
             </div>
         </div>
 
@@ -735,20 +1149,25 @@
                 <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: Trò chơi đoán số</h4>
                 <p class="mb-2 text-lg"><strong>Yêu cầu:</strong></p>
                 <ol class="list-decimal list-inside mb-2 pl-4 text-gray-700">
-                    <li>Chương trình "nghĩ" ra một số bí mật trong khoảng từ 1 đến 100 (bạn có thể gán cứng hoặc dùng module <code>random</code> - sẽ học sau, tạm thời gán cứng ví dụ: <code>so_bi_mat = 42</code>).</li>
+                    <li>Chương trình "nghĩ" ra một số bí mật trong khoảng từ 1 đến 100 (bạn có thể gán cứng hoặc dùng
+                        module <code>random</code> - sẽ học sau, tạm thời gán cứng ví dụ: <code>so_bi_mat = 42</code>).
+                    </li>
                     <li>Cho người dùng đoán số đó. Sau mỗi lần đoán:
                         <ul>
                             <li>Nếu số đoán nhỏ hơn số bí mật, thông báo "Số bạn đoán nhỏ quá!".</li>
                             <li>Nếu số đoán lớn hơn số bí mật, thông báo "Số bạn đoán lớn quá!".</li>
-                            <li>Nếu đoán đúng, thông báo "Chúc mừng! Bạn đã đoán đúng số bí mật là [số bí mật] sau [số lần đoán] lần thử." và kết thúc trò chơi.</li>
+                            <li>Nếu đoán đúng, thông báo "Chúc mừng! Bạn đã đoán đúng số bí mật là [số bí mật] sau [số
+                                lần đoán] lần thử." và kết thúc trò chơi.</li>
                         </ul>
                     </li>
                     <li>Đếm số lần người dùng đã đoán.</li>
                 </ol>
-                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng vòng lặp <code>while</code>, câu lệnh điều kiện <code>if-elif-else</code> và một biến đếm số lần đoán.</p>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng vòng lặp <code>while</code>, câu lệnh điều kiện
+                    <code>if-elif-else</code> và một biến đếm số lần đoán.
+                </p>
             </div>
         </div>
-        
+
         <div id="slide-24" class="slide">
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-purple-600 mb-4">7. Bài Tập Thực Hành (Nâng Cao)</h3>
@@ -756,7 +1175,10 @@
                 <p class="mb-2 text-lg"><strong>Yêu cầu:</strong></p>
                 <ol class="list-decimal list-inside mb-2 pl-4 text-gray-700">
                     <li>Tạo một list rỗng <code>danh_sach_diem</code>.</li>
-                    <li>Sử dụng vòng lặp <code>while</code>, cho phép người dùng nhập điểm của sinh viên (từ 0 đến 10). Nếu người dùng nhập một số âm, việc nhập kết thúc. Mỗi điểm hợp lệ được thêm vào <code>danh_sach_diem</code>.</li>
+                    <li>Sử dụng vòng lặp <code>while</code>, cho phép người dùng nhập điểm của sinh viên (từ 0 đến 10).
+                        Nếu người dùng nhập một số âm, việc nhập kết thúc. Mỗi điểm hợp lệ được thêm vào
+                        <code>danh_sach_diem</code>.
+                    </li>
                     <li>Sau khi nhập xong, in ra:
                         <ul>
                             <li>Số lượng sinh viên đã nhập điểm (độ dài của list).</li>
@@ -766,7 +1188,10 @@
                         </ul>
                     </li>
                 </ol>
-                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng các hàm/phương thức như <code>len()</code>, <code>max()</code>, <code>min()</code>, <code>sum()</code> (hoặc tự tính tổng bằng vòng lặp) cho list.</p>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Sử dụng các hàm/phương thức như <code>len()</code>,
+                    <code>max()</code>, <code>min()</code>, <code>sum()</code> (hoặc tự tính tổng bằng vòng lặp) cho
+                    list.
+                </p>
             </div>
         </div>
 
@@ -774,7 +1199,8 @@
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-fuchsia-600 mb-4">8. Bài Tập Về Nhà</h3>
                 <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: In các số chia hết cho 3 và 5</h4>
-                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình sử dụng vòng lặp <code>while</code> (hoặc <code>for</code>) để in ra tất cả các số từ 1 đến 100 mà chia hết cho cả 3 và 5.</p>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình sử dụng vòng lặp <code>while</code>
+                    (hoặc <code>for</code>) để in ra tất cả các số từ 1 đến 100 mà chia hết cho cả 3 và 5.</p>
             </div>
         </div>
 
@@ -785,10 +1211,13 @@
                 <p class="mb-2 text-lg"><strong>Yêu cầu:</strong></p>
                 <ol class="list-decimal list-inside mb-2 pl-4 text-gray-700">
                     <li>Cho một list các số bất kỳ (ví dụ: <code>my_numbers = [1, 3, 5, 7, 9, 2, 4, 6, 8]</code>).</li>
-                    <li>Viết chương trình để tạo ra một list mới chứa các phần tử của list ban đầu nhưng theo thứ tự ngược lại MÀ KHÔNG sử dụng phương thức <code>reverse()</code> hoặc slicing <code>[::-1]</code>.</li>
+                    <li>Viết chương trình để tạo ra một list mới chứa các phần tử của list ban đầu nhưng theo thứ tự
+                        ngược lại MÀ KHÔNG sử dụng phương thức <code>reverse()</code> hoặc slicing <code>[::-1]</code>.
+                    </li>
                     <li>In ra list đã đảo ngược.</li>
                 </ol>
-                <p class="mt-4 text-sm text-gray-500">Gợi ý: Duyệt list ban đầu từ cuối về đầu (hoặc từ đầu về cuối và thêm vào đầu list mới).</p>
+                <p class="mt-4 text-sm text-gray-500">Gợi ý: Duyệt list ban đầu từ cuối về đầu (hoặc từ đầu về cuối và
+                    thêm vào đầu list mới).</p>
             </div>
         </div>
 
@@ -798,7 +1227,9 @@
                 <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 3: Lọc các chuỗi có độ dài lớn hơn N</h4>
                 <p class="mb-2 text-lg"><strong>Yêu cầu:</strong></p>
                 <ol class="list-decimal list-inside mb-2 pl-4 text-gray-700">
-                    <li>Cho một list các chuỗi (ví dụ: <code>word_list = ["python", "is", "awesome", "and", "fun", "to", "learn"]</code>).</li>
+                    <li>Cho một list các chuỗi (ví dụ:
+                        <code>word_list = ["python", "is", "awesome", "and", "fun", "to", "learn"]</code>).
+                    </li>
                     <li>Yêu cầu người dùng nhập vào một số nguyên N.</li>
                     <li>Tạo một list mới chỉ chứa các chuỗi từ <code>word_list</code> có độ dài lớn hơn N.</li>
                     <li>In ra list mới đó.</li>
@@ -811,21 +1242,27 @@
                 <h3 class="text-3xl font-semibold text-theme-600 mb-4">9. Tóm Tắt Buổi Học</h3>
                 <p class="mb-4 text-lg">Trong buổi học hôm nay, chúng ta đã đi sâu vào:</p>
                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
-                    <li><strong>Vòng lặp <code>while</code>:</strong> Cú pháp, cách hoạt động, <code>else</code>, <code>break</code>, <code>continue</code>.</li>
+                    <li><strong>Vòng lặp <code>while</code>:</strong> Cú pháp, cách hoạt động, <code>else</code>,
+                        <code>break</code>, <code>continue</code>.
+                    </li>
                     <li><strong>Vòng lặp lồng nhau:</strong> Kết hợp các vòng lặp để giải quyết bài toán phức tạp.</li>
                     <li><strong>Câu lệnh điều kiện và vòng lặp nâng cao:</strong> Các ví dụ thực tế.</li>
                     <li><strong>Danh sách (List):</strong>
                         <ul class="list-circle list-inside ml-6">
                             <li>Khai báo, đặc điểm, truy cập phần tử (indexing, slicing).</li>
                             <li>Thao tác: thêm, xem, xóa, cập nhật phần tử.</li>
-                            <li>Các phương thức hữu ích: <code>sort()</code>, <code>reverse()</code>, <code>count()</code>, <code>index()</code>, và hàm <code>len()</code>.</li>
+                            <li>Các phương thức hữu ích: <code>sort()</code>, <code>reverse()</code>,
+                                <code>count()</code>, <code>index()</code>, và hàm <code>len()</code>.
+                            </li>
                             <li>List lồng nhau.</li>
                         </ul>
                     </li>
                 </ul>
-                <p class="text-lg mb-6">Vòng lặp và List là những công cụ cực kỳ quan trọng và được sử dụng thường xuyên trong lập trình Python. Hãy luyện tập thật nhiều nhé!</p>
+                <p class="text-lg mb-6">Vòng lặp và List là những công cụ cực kỳ quan trọng và được sử dụng thường xuyên
+                    trong lập trình Python. Hãy luyện tập thật nhiều nhé!</p>
                 <div class="flex justify-center mt-8">
-                     <img src="https://placehold.co/350x200/A855F7/FFFFFF?text=Summary+%26+Practice" alt="[Hình ảnh Tóm tắt và Luyện tập]" class="shadow-md">
+                    <img src="https://placehold.co/350x200/A855F7/FFFFFF?text=Summary+%26+Practice"
+                        alt="[Hình ảnh Tóm tắt và Luyện tập]" class="shadow-md">
                 </div>
             </div>
         </div>
@@ -834,9 +1271,12 @@
             <div class="slide-content-wrapper">
                 <h3 class="text-3xl font-semibold text-theme-700 mb-6 text-center">10. Hỏi & Đáp</h3>
                 <div class="flex justify-center mb-8">
-                    <img src="https://placehold.co/300x200/7E22CE/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]" class="shadow-md">
+                    <img src="https://placehold.co/300x200/7E22CE/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md">
                 </div>
-                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào về vòng lặp <code>while</code>, List, hay bất kỳ nội dung nào khác không?</h4>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào về vòng lặp
+                    <code>while</code>, List, hay bất kỳ nội dung nào khác không?
+                </h4>
                 <p class="text-center text-gray-600 mt-4">Đừng ngần ngại đặt câu hỏi nhé!</p>
             </div>
         </div>
@@ -856,40 +1296,39 @@
             totalSlidesNumDisplay.textContent = slides.length;
         }
 
-
         function showSlide(index) {
             slides.forEach((slide, i) => {
                 if (i === index) {
                     slide.style.display = 'flex';
-                    setTimeout(() => { 
+                    setTimeout(() => {
                         slide.classList.add('active');
-                    }, 10); 
+                    }, 10);
                 } else {
                     slide.classList.remove('active');
                     setTimeout(() => {
-                        if (!slide.classList.contains('active')) { 
-                           slide.style.display = 'none';
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
                         }
-                    }, 400); 
+                    }, 400);
                 }
             });
             currentSlideNumDisplay.textContent = index + 1;
             updateNavButtons();
-            
+
             if (navbar) {
-                 window.scrollTo({ top: navbar.offsetHeight, behavior: 'smooth' });
+                window.scrollTo({ top: navbar.offsetHeight, behavior: 'smooth' });
             } else {
-                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
         function updateNavButtons() {
-            if (!prevButton || !nextButton) return; // Guard clause
+            if (!prevButton || !nextButton) return;
             prevButton.disabled = currentSlide === 0;
             nextButton.disabled = currentSlide === slides.length - 1;
         }
 
-        if (prevButton && nextButton) { // Check if buttons exist before adding listeners
+        if (prevButton && nextButton) {
             prevButton.addEventListener('click', () => {
                 if (currentSlide > 0) {
                     slides[currentSlide].classList.remove('active');
@@ -916,15 +1355,45 @@
                 }
             });
         }
-        
-        // Initialize first slide
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block code');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+
+                // Create a temporary textarea element to copy the text
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    // Visual feedback
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    buttonElement.classList.add('copied');
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                        buttonElement.classList.remove('copied');
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                    // Fallback or error message if needed
+                    alert('Lỗi sao chép code. Vui lòng thử lại hoặc sao chép thủ công.');
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
         if (slides.length > 0) {
             showSlide(currentSlide);
         } else {
-            currentSlideNumDisplay.textContent = 0; // Handle case with no slides
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = 0;
             updateNavButtons();
         }
     </script>
 
 </body>
+
 </html>
