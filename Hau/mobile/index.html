@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuyết trình: Xây Dựng Ứng Dụng Mobile Quản Lý Hiệu Sách</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #000;
+        }
+
+        #presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            transform: scale(0.98);
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .slide-content {
+            animation: fadeInContent 1s ease-in-out;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem;
+        }
+
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated-item {
+            animation: fadeInItem 0.5s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInItem {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+            opacity: 1;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.1;
+            cursor: not-allowed;
+        }
+
+        #prevBtn {
+            left: 20px;
+        }
+
+        #nextBtn {
+            right: 20px;
+        }
+
+        #slide-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        #progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: #3b82f6;
+            z-index: 10;
+            transition: width 0.3s ease;
+        }
+
+        .phone-mockup {
+            background: #111;
+            border: 8px solid #000;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            padding-top: 177.77%;
+            /* 9:16 aspect ratio */
+        }
+
+        .phone-mockup-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="presentation-container">
+        <!-- Slide 1: Tiêu đề -->
+        <div
+            class="slide active items-center text-center p-8 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white">
+            <div class="slide-content">
+                <p class="text-2xl md:text-3xl text-blue-300 mb-4 animated-item" style="animation-delay: 0.2s;">Phát
+                    triển ứng dụng cho các thiết bị di động</p>
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-8 animated-item" style="animation-delay: 0.4s;">Xây
+                    Dựng Ứng Dụng Mobile Quản Lý Hiệu Sách</h1>
+                <div class="text-left mx-auto max-w-2xl bg-black bg-opacity-20 p-6 rounded-2xl border border-gray-700 animated-item"
+                    style="animation-delay: 0.6s;">
+                    <p class="text-lg mb-2"><span class="font-semibold text-gray-400">GVHD:</span> Nguyễn Đình Tuấn</p>
+                    <p class="text-lg font-semibold mb-2">Nhóm 5 - 21CN1:</p>
+                    <ul class="grid grid-cols-2 gap-x-8 gap-y-1 text-base text-gray-300">
+                        <li>Nguyễn Duy Đạt - 2155010066</li>
+                        <li>Nguyễn Hữu Tuấn - 2155010236</li>
+                        <li>Vũ Hải Long - 2155010156</li>
+                        <li>Nguyễn Duy Huy - 2155010121</li>
+                        <li>Nguyễn Vũ Minh Long - 2155010151</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Giới thiệu & Bài toán -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Giới Thiệu Bài Toán
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-lg">
+                    <div class="animated-item" style="animation-delay: 0.2s;">
+                        <h3 class="text-3xl font-semibold text-blue-700 mb-4">Bối cảnh</h3>
+                        <p class="text-gray-600 leading-relaxed">Sự phát triển của công nghệ và thương mại điện tử đặt
+                            ra thách thức cho các hiệu sách truyền thống trong việc quản lý kho, theo dõi doanh thu và
+                            tiếp cận khách hàng.</p>
+                    </div>
+                    <div class="animated-item" style="animation-delay: 0.4s;">
+                        <h3 class="text-3xl font-semibold text-blue-700 mb-4">Mục tiêu dự án</h3>
+                        <p class="text-gray-600 leading-relaxed">Xây dựng một nền tảng quản lý hiệu sách toàn diện, hiệu
+                            quả và dễ sử dụng, giúp tối ưu hóa quy trình kinh doanh và nâng cao trải nghiệm khách hàng.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Cơ sở lý thuyết & Công nghệ -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-10 border-l-8 border-blue-600 pl-6">Công Nghệ Sử Dụng
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animated-item"
+                        style="animation-delay: 0.2s;">
+                        <h3 class="text-2xl font-bold text-blue-800">Microservices</h3>
+                        <p class="text-gray-500 mt-2">Kiến trúc hệ thống</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animated-item"
+                        style="animation-delay: 0.3s;">
+                        <h3 class="text-2xl font-bold text-blue-800">Spring Boot</h3>
+                        <p class="text-gray-500 mt-2">Backend Services</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animated-item"
+                        style="animation-delay: 0.4s;">
+                        <h3 class="text-2xl font-bold text-blue-800">React Native</h3>
+                        <p class="text-gray-500 mt-2">Mobile Application</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animated-item"
+                        style="animation-delay: 0.5s;">
+                        <h3 class="text-2xl font-bold text-blue-800">PostgreSQL</h3>
+                        <p class="text-gray-500 mt-2">Cơ sở dữ liệu chính</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animated-item"
+                        style="animation-delay: 0.6s;">
+                        <h3 class="text-2xl font-bold text-blue-800">VNPay & MoMo</h3>
+                        <p class="text-gray-500 mt-2">Tích hợp thanh toán</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animated-item"
+                        style="animation-delay: 0.7s;">
+                        <h3 class="text-2xl font-bold text-blue-800">Firebase</h3>
+                        <p class="text-gray-500 mt-2">Push Notification</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Phân tích yêu cầu - Usecase -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-6 border-l-8 border-blue-600 pl-6">Sơ Đồ Usecase Tổng
+                    Quát</h2>
+                <div class="w-full h-[550px] bg-gray-100 rounded-2xl p-4 flex items-center justify-center animated-item"
+                    style="animation-delay: 0.2s;">
+                    <img src="https://i.imgur.com/G9CwqXU.png" alt="Sơ đồ Usecase tổng quát"
+                        class="max-h-full max-w-full object-contain">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Phân cấp chức năng -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-6 border-l-8 border-blue-600 pl-6">Sơ Đồ Phân Cấp Chức
+                    Năng</h2>
+                <div class="w-full h-[550px] bg-white rounded-2xl p-6 flex items-center justify-center shadow-xl animated-item"
+                    style="animation-delay: 0.2s;">
+                    <img src="https://i.imgur.com/8Qh1nJ1.png" alt="Sơ đồ phân cấp chức năng"
+                        class="max-h-full max-w-full object-contain">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Kiến trúc hệ thống -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Kiến Trúc Hệ Thống
+                    Microservices</h2>
+                <div class="w-full text-sm flex flex-col items-center justify-center text-center animated-item"
+                    style="animation-delay: 0.2s;">
+                    <div class="bg-green-100 text-green-800 py-3 px-6 rounded-xl shadow-md font-semibold text-lg">Mobile
+                        App (React Native)</div>
+                    <div class="h-12 w-1 bg-gray-300 my-2 rounded"></div>
+                    <div class="bg-blue-100 text-blue-800 py-3 px-6 rounded-xl shadow-md font-semibold text-lg">API
+                        Gateway</div>
+                    <div class="h-12 w-1 bg-gray-300 my-2 rounded"></div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 w-full my-4">
+                        <div class="bg-indigo-100 text-indigo-800 p-3 rounded-lg shadow-sm">Identity Service</div>
+                        <div class="bg-indigo-100 text-indigo-800 p-3 rounded-lg shadow-sm">Product Service</div>
+                        <div class="bg-indigo-100 text-indigo-800 p-3 rounded-lg shadow-sm">Order Service</div>
+                        <div class="bg-indigo-100 text-indigo-800 p-3 rounded-lg shadow-sm">Payment Service</div>
+                        <div class="bg-indigo-100 text-indigo-800 p-3 rounded-lg shadow-sm">Notification Service</div>
+                    </div>
+                    <div class="bg-orange-100 text-orange-800 p-3 rounded-lg shadow-sm w-full">...và các services khác
+                        (Category, Blog, Customer, File)</div>
+                    <div class="h-12 w-1 bg-gray-300 my-2 rounded"></div>
+                    <div class="flex space-x-6">
+                        <div class="bg-red-100 text-red-800 p-4 rounded-xl shadow-md font-semibold">External Services
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-800 p-4 rounded-xl shadow-md font-semibold">Databases
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Chức năng chính (Mobile App) -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Chức Năng Phía Khách
+                    Hàng</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-xl">
+                    <ul class="space-y-4 list-none text-gray-700">
+                        <li class="animated-item flex items-start" style="animation-delay: 0.2s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Tìm kiếm, lọc sản phẩm đa tiêu chí.</span>
+                        </li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.3s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Xem chi tiết sản phẩm (hình ảnh, mô
+                                tả).</span></li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.4s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý giỏ hàng.</span></li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.5s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Đặt hàng và theo dõi trạng thái đơn
+                                hàng.</span></li>
+                    </ul>
+                    <ul class="space-y-4 list-none text-gray-700">
+                        <li class="animated-item flex items-start" style="animation-delay: 0.6s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Thanh toán (VNPay, Momo) và COD.</span>
+                        </li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.7s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Đánh giá sản phẩm (rating,
+                                comment).</span></li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.8s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý thông tin cá nhân, địa chỉ.</span>
+                        </li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.9s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Nhận thông báo đẩy (push
+                                notification).</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Chức năng chính (CMS) -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Chức Năng Phía Quản
+                    Trị</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-xl">
+                    <ul class="space-y-4 list-none text-gray-700">
+                        <li class="animated-item flex items-start" style="animation-delay: 0.2s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý sản phẩm (thêm, sửa, xóa,
+                                ẩn).</span></li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.3s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý danh mục.</span></li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.4s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý đơn hàng và trạng thái.</span>
+                        </li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.5s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý người dùng và phân quyền.</span>
+                        </li>
+                    </ul>
+                    <ul class="space-y-4 list-none text-gray-700">
+                        <li class="animated-item flex items-start" style="animation-delay: 0.6s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý bài viết (tin tức, review).</span>
+                        </li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.7s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý các đánh giá sản phẩm.</span></li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.8s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý các yêu cầu tư vấn.</span></li>
+                        <li class="animated-item flex items-start" style="animation-delay: 0.9s;"><span
+                                class="text-blue-500 mr-3 mt-1">✓</span><span>Thống kê, báo cáo doanh thu.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Giao diện Demo -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Giao Diện Ứng Dụng
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
+                    <div class="animated-item" style="animation-delay: 0.2s;">
+                        <div class="phone-mockup">
+                            <div class="phone-mockup-content text-gray-400 p-4 text-center">
+                                [Ảnh chụp màn hình trang chủ]
+                            </div>
+                        </div>
+                        <p class="p-4 text-center text-lg font-semibold text-gray-700">Trang chủ</p>
+                    </div>
+                    <div class="animated-item" style="animation-delay: 0.4s;">
+                        <div class="phone-mockup">
+                            <div class="phone-mockup-content text-gray-400 p-4 text-center">
+                                [Ảnh chụp màn hình chi tiết sản phẩm]
+                            </div>
+                        </div>
+                        <p class="p-4 text-center text-lg font-semibold text-gray-700">Chi tiết sản phẩm</p>
+                    </div>
+                    <div class="animated-item" style="animation-delay: 0.6s;">
+                        <div class="phone-mockup">
+                            <div class="phone-mockup-content text-gray-400 p-4 text-center">
+                                [Ảnh chụp màn hình giỏ hàng & thanh toán]
+                            </div>
+                        </div>
+                        <p class="p-4 text-center text-lg font-semibold text-gray-700">Thanh toán</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Kết luận -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Kết Luận</h2>
+                <div class="space-y-5 text-xl text-gray-700">
+                    <p class="animated-item flex items-start" style="animation-delay: 0.2s;"><span
+                            class="text-green-500 mr-4 mt-1 font-bold">✔</span><span>Xây dựng thành công hệ thống TMĐT
+                            hoàn chỉnh, đáp ứng mục tiêu đề ra.</span></p>
+                    <p class="animated-item flex items-start" style="animation-delay: 0.4s;"><span
+                            class="text-green-500 mr-4 mt-1 font-bold">✔</span><span>Áp dụng thành công kiến trúc
+                            Microservices, đảm bảo tính linh hoạt, dễ bảo trì và mở rộng.</span></p>
+                    <p class="animated-item flex items-start" style="animation-delay: 0.6s;"><span
+                            class="text-green-500 mr-4 mt-1 font-bold">✔</span><span>Tích hợp thành công các dịch vụ
+                            ngoài quan trọng (thanh toán, thông báo), nâng cao trải nghiệm người dùng.</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Hướng phát triển -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Hướng Phát Triển</h2>
+                <ul class="space-y-5 text-xl list-none text-gray-700">
+                    <li class="animated-item flex items-start" style="animation-delay: 0.2s;"><span
+                            class="text-blue-500 mr-4 mt-1">➤</span><span>Mở rộng tích hợp cổng thanh toán & đơn vị vận
+                            chuyển.</span></li>
+                    <li class="animated-item flex items-start" style="animation-delay: 0.4s;"><span
+                            class="text-blue-500 mr-4 mt-1">➤</span><span>Xây dựng các tính năng marketing & CSKH nâng
+                            cao (chatbot, loyalty program).</span></li>
+                    <li class="animated-item flex items-start" style="animation-delay: 0.6s;"><span
+                            class="text-blue-500 mr-4 mt-1">➤</span><span>Ứng dụng AI/Big Data để cá nhân hóa trải
+                            nghiệm và gợi ý sản phẩm thông minh.</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Q&A -->
+        <div
+            class="slide items-center text-center p-8 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white">
+            <div class="slide-content">
+                <h2 class="text-7xl font-extrabold mb-6 animated-item" style="animation-delay: 0.2s;">Q & A</h2>
+                <p class="text-3xl text-gray-300 animated-item" style="animation-delay: 0.4s;">Cảm ơn thầy và các bạn đã
+                    lắng nghe!</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <button id="prevBtn" class="nav-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <button id="nextBtn" class="nav-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        <div id="slide-counter"></div>
+        <div id="progress-bar"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slide-counter');
+            const progressBar = document.getElementById('progress-bar');
+            let currentSlide = 0;
+
+            function showSlide(n) {
+                if (n < 0 || n >= slides.length) return;
+
+                slides[currentSlide].classList.remove('active');
+                currentSlide = n;
+                slides[currentSlide].classList.add('active');
+
+                const animatedItems = slides[currentSlide].querySelectorAll('.animated-item');
+                animatedItems.forEach((item) => {
+                    item.style.animation = 'none';
+                    item.offsetHeight;
+                    item.style.animation = null;
+                });
+
+                updateNav();
+            }
+
+            function updateNav() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+                progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === slides.length - 1;
+            }
+
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    showSlide(currentSlide + 1);
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    showSlide(currentSlide - 1);
+                }
+            }
+
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+
+            showSlide(0);
+        });
+    </script>
+</body>
+
+</html>
