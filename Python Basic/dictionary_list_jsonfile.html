@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi Học: Dictionary, List & JSON</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+            /* Light gray background for the body */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            /* p-8 */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* shadow-lg */
+            margin-bottom: 2rem;
+            display: none;
+            /* Hidden by default */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            /* Ensure slide takes up significant viewport height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            /* Darker background for code container */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            /* Header background */
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            /* Button background */
+            color: #e2e8f0;
+            /* Light text */
+            border: none;
+            padding: 0.375rem 0.75rem;
+            /* py-1.5 px-3 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            cursor: pointer;
+            font-size: 0.875rem;
+            /* text-sm */
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+            /* Lighter on hover */
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+            /* Green check */
+        }
+
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        /* Emerald 300 */
+        .code-block .keyword {
+            color: #93c5fd;
+        }
+
+        /* Blue 300 */
+        .code-block .string {
+            color: #fde047;
+        }
+
+        /* Yellow 300 */
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        /* Orange 300 */
+        .code-block .function {
+            color: #d8b4fe;
+        }
+
+        /* Purple 300 */
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+        /* Rose 300 */
+        .code-block .boolean {
+            color: #fdbb74;
+        }
+
+        /* Orange 300 */
+        .code-block .method {
+            color: #67e8f9;
+        }
+
+        /* Cyan 300 */
+        .code-block .class-name {
+            color: #a5b4fc;
+        }
+
+        /* Indigo 300 */
+
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #718096;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+
+        /* Customizations for Buoi 4 - Blue theme */
+        .text-theme-700 {
+            color: #1d4ed8;
+        }
+
+        .text-theme-600 {
+            color: #2563eb;
+        }
+
+        .bg-theme-500 {
+            background-color: #3b82f6;
+        }
+
+        .hover\:bg-theme-700:hover {
+            background-color: #1d4ed8;
+        }
+
+        .text-blue-500 {
+            color: #3b82f6;
+        }
+
+        .text-blue-600 {
+            color: #2563eb;
+        }
+
+        .text-sky-600 {
+            color: #0284c7;
+        }
+
+        .text-sky-700 {
+            color: #0369a1;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Python Buổi Học: Dictionary, List & JSON</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block mr-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block ml-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi Học: Dictionary, List & JSON</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Kết hợp cấu trúc dữ liệu và làm việc với file JSON
+                    để xây dựng ứng dụng</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/3B82F6/FFFFFF?text=Dict+%26+JSON"
+                        alt="[Hình ảnh Dictionary và JSON]" class="shadow-md">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Hãy cùng xây dựng những ứng dụng thực tế đầu tiên!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Review List and Intro Dictionary -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Ôn Lại & Giới Thiệu</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Ôn tập: Danh sách (List)</h4>
+                <p class="mb-4 text-lg">Ở Buổi Học trước, chúng ta đã học về <strong>List</strong>:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-2">
+                    <li>Là một tập hợp các phần tử <strong>có thứ tự</strong>.</li>
+                    <li><strong>Có thể thay đổi</strong> (thêm, sửa, xóa).</li>
+                    <li>Truy cập bằng <strong>chỉ số (index)</strong> bắt đầu từ 0.</li>
+                    <li>Ví dụ: <code>sinh_vien = ["An", "Bình", "Cúc"]</code></li>
+                </ul>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Chủ đề mới: Từ điển (Dictionary)</h4>
+                <p class="mb-4 text-lg">Nếu List dùng số thứ tự (index) để quản lý dữ liệu, thì
+                    <strong>Dictionary</strong> dùng một thứ khác gọi là <strong>"key" (khóa)</strong>.
+                </p>
+                <p class="mb-4 text-lg">Tưởng tượng một cuốn từ điển thật: bạn tra cứu một "từ" (key) để lấy "nghĩa" của
+                    nó (value).</p>
+                <p class="text-lg font-medium">Dictionary trong Python cũng vậy, nó lưu dữ liệu theo cặp
+                    <strong><code>key: value</code></strong>.
+                </p>
+                <div class="flex justify-center mt-6">
+                    <img src="https://placehold.co/400x200/60A5FA/FFFFFF?text=List+vs+Dictionary"
+                        alt="[Hình ảnh so sánh List và Dictionary]" class="shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Dictionary Intro -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Tìm Hiểu về Dictionary</h3>
+                <p class="mb-4 text-lg">Dictionary là một cấu trúc dữ liệu dùng để lưu các giá trị theo cặp
+                    <code>key: value</code>.
+                </p>
+                <p class="mb-2 font-medium">Đặc điểm của Dictionary:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li><strong>Không có thứ tự (Unordered):</strong> Các cặp key-value không được sắp xếp theo một thứ
+                        tự cụ thể (trong các phiên bản Python cũ). Từ Python 3.7+, dictionary giữ nguyên thứ tự được
+                        chèn vào.</li>
+                    <li><strong>Có thể thay đổi (Mutable):</strong> Bạn có thể thêm, sửa, xóa các cặp key-value.</li>
+                    <li><strong>Key là duy nhất (Unique Keys):</strong> Không thể có hai key trùng nhau trong một
+                        dictionary. Nếu bạn gán giá trị mới cho một key đã tồn tại, giá trị cũ sẽ bị ghi đè.</li>
+                    <li><strong>Key phải là bất biến (Immutable):</strong> Key thường là chuỗi (string), số (number),
+                        hoặc tuple. Bạn không thể dùng list làm key.</li>
+                </ul>
+                <p class="mb-2 font-medium">Cách khai báo Dictionary:</p>
+                <p class="mb-4 text-lg">Sử dụng dấu ngoặc nhọn <code>{}</code> với các cặp <code>key: value</code> cách
+                    nhau bởi dấu phẩy.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="comment"># Dictionary rỗng</span>
+<span class="variable">dict_rong</span> <span class="operator">=</span> {}
+
+<span class="comment"># Một dictionary thông tin sinh viên</span>
+<span class="variable">sinh_vien</span> <span class="operator">=</span> {
+    <span class="string">"ten"</span><span class="operator">:</span> <span class="string">"Nguyễn Văn An"</span>,
+    <span class="string">"ma_sv"</span><span class="operator">:</span> <span class="string">"SV001"</span>,
+    <span class="string">"tuoi"</span><span class="operator">:</span> <span class="number">20</span>,
+    <span class="string">"diem_trung_binh"</span><span class="operator">:</span> <span class="number">8.5</span>,
+    <span class="string">"da_tot_nghiep"</span><span class="operator">:</span> <span class="boolean">False</span>
+}
+
+<span class="function">print</span>(<span class="variable">sinh_vien</span>)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Thao tác cơ bản với Dictionary -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.1. Thao Tác Cơ Bản với Dictionary</h3>
+
+                <p class="mb-2 font-medium"><strong>1. Truy cập giá trị (Accessing Values):</strong></p>
+                <p class="mb-2 text-lg">Dùng key trong cặp ngoặc vuông <code>[]</code>.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">ten_sv</span> <span class="operator">=</span> <span class="variable">sinh_vien</span>[<span class="string">"ten"</span>]
+<span class="function">print</span>(<span class="string">f"Tên sinh viên: {ten_sv}"</span>) <span class="comment"># Output: Tên sinh viên: Nguyễn Văn An</span></code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium"><strong>2. Thêm hoặc cập nhật (Adding/Updating):</strong></p>
+                <p class="mb-2 text-lg">Gán giá trị cho một key. Nếu key chưa có, nó sẽ được thêm vào. Nếu đã có, giá
+                    trị sẽ được cập nhật.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># Cập nhật tuổi</span>
+<span class="variable">sinh_vien</span>[<span class="string">"tuoi"</span>] <span class="operator">=</span> <span class="number">21</span>
+<span class="comment"># Thêm quê quán</span>
+<span class="variable">sinh_vien</span>[<span class="string">"que_quan"</span>] <span class="operator">=</span> <span class="string">"Hà Nội"</span>
+
+<span class="function">print</span>(<span class="variable">sinh_vien</span>)</code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium"><strong>3. Xóa một cặp key-value (Deleting):</strong></p>
+                <p class="mb-2 text-lg">Dùng từ khóa <code>del</code>.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">del</span> <span class="variable">sinh_vien</span>[<span class="string">"da_tot_nghiep"</span>]
+<span class="function">print</span>(<span class="variable">sinh_vien</span>)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: List of Dictionaries -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Sức Mạnh Kết Hợp: List chứa Dictionary</h3>
+                <p class="mb-4 text-lg">Đây là một trong những cấu trúc phổ biến và hữu ích nhất trong Python!</p>
+                <p class="mb-4 text-lg">Tưởng tượng bạn cần quản lý một danh sách lớp. Mỗi sinh viên có nhiều thông tin
+                    (tên, tuổi, điểm...). Thay vì tạo nhiều list riêng lẻ, chúng ta có thể tạo một <strong>list duy
+                        nhất</strong>, trong đó mỗi phần tử là một <strong>dictionary</strong> chứa thông tin của một
+                    sinh viên.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">danh_sach_lop</span> <span class="operator">=</span> [
+    {
+        <span class="string">"ten"</span><span class="operator">:</span> <span class="string">"Nguyễn Văn An"</span>,
+        <span class="string">"ma_sv"</span><span class="operator">:</span> <span class="string">"SV001"</span>,
+        <span class="string">"diem"</span><span class="operator">:</span> <span class="number">8.5</span>
+    },
+    {
+        <span class="string">"ten"</span><span class="operator">:</span> <span class="string">"Trần Thị Bình"</span>,
+        <span class="string">"ma_sv"</span><span class="operator">:</span> <span class="string">"SV002"</span>,
+        <span class="string">"diem"</span><span class="operator">:</span> <span class="number">9.0</span>
+    },
+    {
+        <span class="string">"ten"</span><span class="operator">:</span> <span class="string">"Lê Văn Cúc"</span>,
+        <span class="string">"ma_sv"</span><span class="operator">:</span> <span class="string">"SV003"</span>,
+        <span class="string">"diem"</span><span class="operator">:</span> <span class="number">7.8</span>
+    }
+]
+
+<span class="comment"># In ra tên của sinh viên thứ hai (index 1)</span>
+<span class="function">print</span>(<span class="variable">danh_sach_lop</span>[<span class="number">1</span>][<span class="string">'ten'</span>])  <span class="comment"># Output: Trần Thị Bình</span>
+
+<span class="comment"># In ra điểm của sinh viên thứ ba (index 2)</span>
+<span class="function">print</span>(<span class="variable">danh_sach_lop</span>[<span class="number">2</span>][<span class="string">'diem'</span>]) <span class="comment"># Output: 7.8</span></code></pre>
+                </div>
+                <p class="mt-4 text-lg">Cấu trúc này giúp tổ chức dữ liệu một cách rõ ràng, logic và dễ quản lý.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: CRUD - Adding -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.1. Thao Tác Dữ Liệu: Thêm (Create)</h3>
+                <p class="mb-4 text-lg">Để thêm một sinh viên mới vào danh sách lớp, chúng ta chỉ cần tạo một dictionary
+                    mới cho sinh viên đó và dùng phương thức <code>append()</code> của list.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># danh_sach_lop từ slide trước...</span>
+
+<span class="comment"># Tạo thông tin cho sinh viên mới</span>
+<span class="variable">sinh_vien_moi</span> <span class="operator">=</span> {
+    <span class="string">"ten"</span><span class="operator">:</span> <span class="string">"Phạm Thị Dung"</span>,
+    <span class="string">"ma_sv"</span><span class="operator">:</span> <span class="string">"SV004"</span>,
+    <span class="string">"diem"</span><span class="operator">:</span> <span class="number">8.2</span>
+}
+
+<span class="comment"># Thêm sinh viên mới vào danh sách</span>
+<span class="variable">danh_sach_lop</span>.<span class="method">append</span>(<span class="variable">sinh_vien_moi</span>)
+
+<span class="comment"># In ra toàn bộ danh sách để kiểm tra</span>
+<span class="keyword">for</span> <span class="variable">sv</span> <span class="keyword">in</span> <span class="variable">danh_sach_lop</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="variable">sv</span>)</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Bây giờ, <code>danh_sach_lop</code> đã có 4 sinh viên.</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: CRUD - Updating -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.2. Thao Tác Dữ Liệu: Sửa (Update)</h3>
+                <p class="mb-4 text-lg">Để sửa thông tin của một sinh viên, chúng ta cần:</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
+                    <li>Tìm đúng sinh viên đó trong list (thường là duyệt qua list và kiểm tra một giá trị định danh duy
+                        nhất như <code>ma_sv</code>).</li>
+                    <li>Sau khi tìm thấy dictionary của sinh viên đó, ta truy cập vào key cần sửa và gán giá trị mới.
+                    </li>
+                </ol>
+                <p class="mb-2 font-medium">Ví dụ: Cập nhật điểm cho sinh viên có mã 'SV001' thành 8.8</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># danh_sach_lop từ slide trước...</span>
+
+<span class="keyword">for</span> <span class="variable">sinh_vien</span> <span class="keyword">in</span> <span class="variable">danh_sach_lop</span><span class="operator">:</span>
+    <span class="comment"># Tìm sinh viên có mã SV001</span>
+    <span class="keyword">if</span> <span class="variable">sinh_vien</span>[<span class="string">'ma_sv'</span>] <span class="operator">==</span> <span class="string">'SV001'</span><span class="operator">:</span>
+        <span class="comment"># Cập nhật điểm</span>
+        <span class="variable">sinh_vien</span>[<span class="string">'diem'</span>] <span class="operator">=</span> <span class="number">8.8</span>
+        <span class="keyword">break</span> <span class="comment"># Dừng vòng lặp sau khi cập nhật xong để tối ưu</span>
+
+<span class="comment"># In ra để kiểm tra</span>
+<span class="function">print</span>(<span class="variable">danh_sach_lop</span>[<span class="number">0</span>])
+<span class="comment"># Output: {'ten': 'Nguyễn Văn An', 'ma_sv': 'SV001', 'diem': 8.8}</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: CRUD - Deleting -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.3. Thao Tác Dữ Liệu: Xóa (Delete)</h3>
+                <p class="mb-4 text-lg">Để xóa một sinh viên, chúng ta cũng cần tìm ra sinh viên đó. Sau khi tìm thấy,
+                    ta có thể xóa dictionary tương ứng khỏi list.</p>
+                <p class="mb-2 font-medium">Ví dụ: Xóa sinh viên có mã 'SV002'</p>
+                <p class="mb-2 text-lg"><strong>Cách 1: Dùng <code>remove()</code></strong> (Nếu bạn có chính xác đối
+                    tượng dictionary cần xóa)</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="comment"># danh_sach_lop từ slide trước...</span>
+<span class="variable">sinh_vien_can_xoa</span> <span class="operator">=</span> <span class="boolean">None</span>
+
+<span class="keyword">for</span> <span class="variable">sinh_vien</span> <span class="keyword">in</span> <span class="variable">danh_sach_lop</span><span class="operator">:</span>
+    <span class="keyword">if</span> <span class="variable">sinh_vien</span>[<span class="string">'ma_sv'</span>] <span class="operator">==</span> <span class="string">'SV002'</span><span class="operator">:</span>
+        <span class="variable">sinh_vien_can_xoa</span> <span class="operator">=</span> <span class="variable">sinh_vien</span>
+        <span class="keyword">break</span>
+
+<span class="keyword">if</span> <span class="variable">sinh_vien_can_xoa</span><span class="operator">:</span>
+    <span class="variable">danh_sach_lop</span>.<span class="method">remove</span>(<span class="variable">sinh_vien_can_xoa</span>)
+    <span class="function">print</span>(<span class="string">"Đã xóa sinh viên SV002."</span>)
+
+<span class="function">print</span>(<span class="string">f"Số lượng sinh viên còn lại: {len(danh_sach_lop)}"</span>)</code></pre>
+                </div>
+                <p class="mt-4 mb-2 text-lg"><strong>Lưu ý:</strong> Việc xóa phần tử trong khi đang duyệt list có thể
+                    gây ra lỗi. An toàn hơn là tìm phần tử trước, sau đó mới xóa nó khỏi list.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Intro to JSON -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Làm Việc với File JSON</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">JSON là gì?</h4>
+                <p class="mb-4 text-lg"><strong>JSON</strong> (JavaScript Object Notation) là một định dạng văn bản
+                    (text) rất nhẹ, được sử dụng rộng rãi để lưu trữ và trao đổi dữ liệu.</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Con người có thể đọc và viết dễ dàng.</li>
+                    <li>Máy tính có thể phân tích (parse) và tạo ra dễ dàng.</li>
+                    <li>Nó là tiêu chuẩn mở, độc lập với ngôn ngữ lập trình.</li>
+                </ul>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">JSON và Python Dictionary</h4>
+                <p class="mb-4 text-lg">Cú pháp của JSON rất giống với Dictionary của Python. Điều này làm cho việc
+                    chuyển đổi giữa chúng trở nên cực kỳ đơn giản.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="font-semibold text-center">Python Dictionary</p>
+                        <div class="code-block-container">
+                            <pre class="code-block"><code>{
+    <span class="string">"ten"</span><span class="operator">:</span> <span class="string">"Trà sữa"</span>,
+    <span class="string">"gia"</span><span class="operator">:</span> <span class="number">50000</span>,
+    <span class="string">"con_hang"</span><span class="operator">:</span> <span class="boolean">True</span>
+}</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-center">JSON Object</p>
+                        <div class="code-block-container">
+                            <pre class="code-block"><code>{
+    <span class="string">"ten"</span><span class="operator">:</span> <span class="string">"Trà sữa"</span>,
+    <span class="string">"gia"</span><span class="operator">:</span> <span class="number">50000</span>,
+    <span class="string">"con_hang"</span><span class="operator">:</span> <span class="boolean">true</span>
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">Lưu ý nhỏ: <code>True/False</code> trong Python tương ứng với
+                    <code>true/false</code> (viết thường) trong JSON.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Reading JSON file -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.1. Đọc Dữ Liệu từ File JSON (Import)</h3>
+                <p class="mb-4 text-lg">Python có một thư viện tích hợp sẵn tên là <code>json</code> để làm việc này.
+                    Chúng ta sẽ dùng hàm <code>json.load()</code> để đọc dữ liệu từ một file.</p>
+                <p class="mb-2 font-medium">Giả sử chúng ta có file <code>data.json</code> với nội dung:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>[
+    {
+        "ten_mon": "Cà phê đen",
+        "gia": 25000
+    },
+    {
+        "ten_mon": "Bạc xỉu",
+        "gia": 30000
+    }
+]</code></pre>
+                </div>
+                <p class="mt-4 mb-2 font-medium">Code Python để đọc file này:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">import</span> <span class="variable">json</span>
+
+<span class="comment"># Mở file json ở chế độ đọc ('r')</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'data.json'</span>, <span class="string">'r'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span><span class="operator">:</span>
+    <span class="comment"># Tải dữ liệu từ file và chuyển thành đối tượng Python</span>
+    <span class="variable">thuc_don</span> <span class="operator">=</span> <span class="variable">json</span>.<span class="method">load</span>(<span class="variable">f</span>)
+
+<span class="comment"># Bây giờ, 'thuc_don' là một list các dictionary</span>
+<span class="function">print</span>(<span class="variable">thuc_don</span>)
+<span class="function">print</span>(<span class="string">f"Tên món đầu tiên: {thuc_don[0]['ten_mon']}"</span>)</code></pre>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">Lưu ý: <code>encoding='utf-8'</code> rất quan trọng để đọc file có
+                    chứa tiếng Việt.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Writing JSON file -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.2. Ghi Dữ Liệu ra File JSON (Export)</h3>
+                <p class="mb-4 text-lg">Để lưu một đối tượng Python (như list, dictionary) ra file JSON, ta dùng hàm
+                    <code>json.dump()</code>.
+                </p>
+                <p class="mb-2 font-medium">Ví dụ: Lưu danh sách lớp học của chúng ta ra file
+                    <code>danh_sach_lop.json</code>
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">import</span> <span class="variable">json</span>
+
+<span class="comment"># Giả sử đây là danh sách lớp hiện tại</span>
+<span class="variable">danh_sach_lop</span> <span class="operator">=</span> [
+    {<span class="string">'ten'</span>: <span class="string">'Nguyễn Văn An'</span>, <span class="string">'ma_sv'</span>: <span class="string">'SV001'</span>, <span class="string">'diem'</span>: <span class="number">8.8</span>},
+    {<span class="string">'ten'</span>: <span class="string">'Lê Văn Cúc'</span>, <span class="string">'ma_sv'</span>: <span class="string">'SV003'</span>, <span class="string">'diem'</span>: <span class="number">7.8</span>}
+]
+
+<span class="comment"># Mở file ở chế độ ghi ('w')</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'danh_sach_lop.json'</span>, <span class="string">'w'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span><span class="operator">:</span>
+    <span class="comment"># Ghi đối tượng Python vào file JSON</span>
+    <span class="comment"># indent=4: thụt lề 4 dấu cách để file dễ đọc hơn</span>
+    <span class="comment"># ensure_ascii=False: để lưu tiếng Việt đúng định dạng</span>
+    <span class="variable">json</span>.<span class="method">dump</span>(<span class="variable">danh_sach_lop</span>, <span class="variable">f</span>, <span class="variable">indent</span><span class="operator">=</span><span class="number">4</span>, <span class="variable">ensure_ascii</span><span class="operator">=</span><span class="boolean">False</span>)
+
+<span class="function">print</span>(<span class="string">"Đã lưu danh sách lớp ra file danh_sach_lop.json thành công!"</span>)</code></pre>
+                </div>
+                <p class="mt-2 text-lg">Bây giờ bạn có thể mở file <code>danh_sach_lop.json</code> để xem kết quả.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Application 1 - Student Manager -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-sky-600 mb-4">5. Ứng Dụng: Quản Lý Sinh Viên</h3>
+                <p class="mb-4 text-lg">Hãy cùng nhau phác thảo một chương trình quản lý sinh viên hoàn chỉnh, sử dụng
+                    tất cả kiến thức vừa học.</p>
+                <p class="mb-2 font-medium">Chức năng chính:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Hiển thị danh sách sinh viên.</li>
+                    <li>Thêm một sinh viên mới.</li>
+                    <li>Sửa thông tin một sinh viên (dựa vào mã SV).</li>
+                    <li>Xóa một sinh viên (dựa vào mã SV).</li>
+                    <li>Lưu danh sách hiện tại vào file JSON.</li>
+                    <li>Tải danh sách từ file JSON khi chương trình bắt đầu.</li>
+                    <li>Thoát chương trình.</li>
+                </ul>
+                <p class="mb-2 font-medium">Cấu trúc dữ liệu:</p>
+                <p class="mb-4 text-lg">Một list chứa các dictionary, mỗi dictionary là một sinh viên.</p>
+                <pre
+                    class="bg-gray-100 p-2 rounded"><code>[ {"ma_sv": "...", "ten": "...", "diem": ...}, ... ]</code></pre>
+                <p class="mt-4 mb-2 font-medium">Luồng hoạt động:</p>
+                <p class="mb-4 text-lg">Sử dụng vòng lặp <code>while True</code> để hiển thị menu và nhận lựa chọn của
+                    người dùng. Dùng <code>if-elif-else</code> để gọi các hàm xử lý tương ứng.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Application 2 - Coffee Shop Manager -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-sky-600 mb-4">5. Ứng Dụng: Quản Lý Quán Cafe</h3>
+                <p class="mb-4 text-lg">Một ứng dụng khác là quản lý thực đơn (menu) của một quán cafe.</p>
+                <p class="mb-2 font-medium">Chức năng chính:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Hiển thị toàn bộ thực đơn.</li>
+                    <li>Thêm một món mới vào thực đơn (tên, giá, loại...).</li>
+                    <li>Cập nhật giá của một món.</li>
+                    <li>Xóa một món khỏi thực đơn.</li>
+                    <li>Lưu và tải thực đơn từ file <code>menu.json</code>.</li>
+                </ul>
+                <p class="mb-2 font-medium">Cấu trúc dữ liệu:</p>
+                <p class="mb-4 text-lg">Một list các dictionary, mỗi dictionary là một món đồ uống.</p>
+                <pre
+                    class="bg-gray-100 p-2 rounded"><code>[ {"ten_mon": "...", "gia": ..., "loai": "..."}, ... ]</code></pre>
+                <div class="flex justify-center mt-6">
+                    <img src="https://placehold.co/400x200/0EA5E9/FFFFFF?text=Coffee+Shop+Menu"
+                        alt="[Hình ảnh Menu Quán Cafe]" class="shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Application 3 - Course Manager -->
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-sky-600 mb-4">5. Ứng Dụng: Quản Lý Môn Học</h3>
+                <p class="mb-4 text-lg">Tương tự, ta có thể xây dựng chương trình quản lý các môn học trong một chương
+                    trình đào tạo.</p>
+                <p class="mb-2 font-medium">Chức năng chính:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Hiển thị danh sách các môn học.</li>
+                    <li>Thêm một môn học mới (mã môn, tên môn, số tín chỉ).</li>
+                    <li>Sửa thông tin môn học (dựa vào mã môn).</li>
+                    <li>Xóa một môn học.</li>
+                    <li>Lưu và tải danh sách môn học từ file <code>mon_hoc.json</code>.</li>
+                </ul>
+                <p class="mb-2 font-medium">Cấu trúc dữ liệu:</p>
+                <p class="mb-4 text-lg">Một list các dictionary, mỗi dictionary là một môn học.</p>
+                <pre
+                    class="bg-gray-100 p-2 rounded"><code>[ {"ma_mon": "...", "ten_mon": "...", "tin_chi": ...}, ... ]</code></pre>
+                <p class="mt-4 text-lg">Tất cả các ứng dụng trên đều có chung một logic nền tảng: <strong>CRUD (Create,
+                        Read, Update, Delete)</strong> trên một list các dictionary và kết hợp với việc lưu/tải file
+                    JSON.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Practical Exercise -->
+        <div id="slide-15" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-blue-500 mb-4">6. Bài Tập Thực Hành</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Xây dựng chương trình Quản Lý Sinh Viên</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Dựa trên các slide trước, hãy viết một chương trình
+                    Python hoàn chỉnh cho ứng dụng "Quản Lý Sinh Viên" với các chức năng đã mô tả.</p>
+                <p class="mb-2 font-medium">Gợi ý cấu trúc file:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> <span class="variable">json</span>
+
+<span class="variable">FILE_NAME</span> <span class="operator">=</span> <span class="string">'students.json'</span>
+
+<span class="keyword">def</span> <span class="function">tai_danh_sach</span>():
+    <span class="comment"># ... code để đọc file json, nếu file không tồn tại thì trả về list rỗng</span>
+    <span class="keyword">pass</span>
+
+<span class="keyword">def</span> <span class="function">luu_danh_sach</span>(<span class="variable">danh_sach</span>):
+    <span class="comment"># ... code để ghi danh sách vào file json</span>
+    <span class="keyword">pass</span>
+
+<span class="keyword">def</span> <span class="function">hien_thi_menu</span>():
+    <span class="comment"># ... in ra các lựa chọn</span>
+    <span class="keyword">pass</span>
+    
+<span class="comment"># ... các hàm khác cho: hien_thi_sinh_vien, them_sinh_vien, sua_sinh_vien, xoa_sinh_vien</span>
+
+<span class="keyword">def</span> <span class="function">main</span>():
+    <span class="variable">danh_sach_sv</span> <span class="operator">=</span> <span class="function">tai_danh_sach</span>()
+    <span class="keyword">while</span> <span class="boolean">True</span><span class="operator">:</span>
+        <span class="function">hien_thi_menu</span>()
+        <span class="variable">lua_chon</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập lựa chọn của bạn: "</span>)
+        <span class="keyword">if</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'1'</span><span class="operator">:</span>
+            <span class="comment"># gọi hàm hiển thị</span>
+            <span class="keyword">pass</span>
+        <span class="comment"># ... các elif khác</span>
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'0'</span><span class="operator">:</span>
+            <span class="function">luu_danh_sach</span>(<span class="variable">danh_sach_sv</span>)
+            <span class="function">print</span>(<span class="string">"Tạm biệt!"</span>)
+            <span class="keyword">break</span>
+
+<span class="comment"># Gọi hàm main để chạy chương trình</span>
+<span class="function">main</span>()
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Summary -->
+        <div id="slide-16" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7. Tóm Tắt Buổi Học Học</h3>
+                <p class="mb-4 text-lg">Trong Buổi Học học hôm nay, chúng ta đã học được những kiến thức cốt lõi:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-3">
+                    <li><strong>Dictionary (Từ điển):</strong> Cách lưu dữ liệu theo cặp <code>key: value</code>, các
+                        thao tác cơ bản như thêm, sửa, xóa, truy cập.</li>
+                    <li><strong>List chứa Dictionary:</strong> Cấu trúc dữ liệu cực kỳ mạnh mẽ để quản lý các đối tượng
+                        phức tạp (như sinh viên, sản phẩm...).</li>
+                    <li><strong>Thao tác CRUD trên List of Dictionaries:</strong> Cách thêm (Create), đọc (Read), cập
+                        nhật (Update) và xóa (Delete) dữ liệu trong cấu trúc này.</li>
+                    <li><strong>JSON:</strong> Hiểu được JSON là gì, tại sao nó quan trọng và sự tương đồng với
+                        Dictionary của Python.</li>
+                    <li><strong>Làm việc với file JSON:</strong> Sử dụng thư viện <code>json</code> để <strong>đọc
+                            (import)</strong> dữ liệu từ file vào chương trình và <strong>ghi (export)</strong> dữ liệu
+                        từ chương trình ra file.</li>
+                    <li><strong>Ứng dụng thực tế:</strong> Phác thảo cách xây dựng các chương trình quản lý dựa trên
+                        kiến thức đã học.</li>
+                </ul>
+                <p class="text-lg mb-6">Nắm vững những khái niệm này là một bước tiến lớn để bạn có thể xây dựng các ứng
+                    dụng có ý nghĩa và xử lý dữ liệu thực tế.</p>
+                <div class="flex justify-center mt-8">
+                    <img src="https://placehold.co/350x200/2563EB/FFFFFF?text=Summary+%26+Next+Steps"
+                        alt="[Hình ảnh Tóm tắt và các bước tiếp theo]" class="shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Q&A -->
+        <div id="slide-17" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-700 mb-6 text-center">8. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/1E40AF/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào về Dictionary, JSON,
+                    hay cách xây dựng ứng dụng không?</h4>
+                <p class="text-center text-gray-600 mt-4">Đừng ngần ngại đặt câu hỏi nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        const navbar = document.getElementById('navbar');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                } else {
+                    slide.classList.remove('active');
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            if (navbar) {
+                window.scrollTo({ top: navbar.offsetHeight, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    buttonElement.classList.add('copied');
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                        buttonElement.classList.remove('copied');
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                    alert('Lỗi sao chép code. Vui lòng thử lại hoặc sao chép thủ công.');
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
