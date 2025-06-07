@@ -174,6 +174,8 @@
         <!-- Slide 1: Tiêu đề -->
         <div
             class="slide active items-center text-center p-8 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white">
+            <!-- Logo added in top left corner -->
+            <img src="./hau_logo.png" alt="HAU Logo" class="absolute top-6 left-6 h-[100px] w-[100px] z-10">
             <div class="slide-content">
                 <p class="text-2xl md:text-3xl text-blue-300 mb-4 animated-item" style="animation-delay: 0.2s;">Phát
                     triển ứng dụng cho các thiết bị di động</p>
@@ -182,7 +184,7 @@
                 <div class="text-left mx-auto max-w-2xl bg-black bg-opacity-20 p-6 rounded-2xl border border-gray-700 animated-item"
                     style="animation-delay: 0.6s;">
                     <p class="text-lg mb-2"><span class="font-semibold text-gray-400">GVHD:</span> Nguyễn Đình Tuấn</p>
-                    <p class="text-lg font-semibold mb-2">Nhóm 5 - 21CN1:</p>
+                    <p class="text-lg font-semibold mb-2">Nhóm 1 - 21CN1:</p>
                     <ul class="grid grid-cols-2 gap-x-8 gap-y-1 text-base text-gray-300">
                         <li>Nguyễn Duy Đạt - 2155010066</li>
                         <li>Nguyễn Hữu Tuấn - 2155010236</li>
@@ -247,11 +249,6 @@
                         <h3 class="text-2xl font-bold text-blue-800">VNPay & MoMo</h3>
                         <p class="text-gray-500 mt-2">Tích hợp thanh toán</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animated-item"
-                        style="animation-delay: 0.7s;">
-                        <h3 class="text-2xl font-bold text-blue-800">Firebase</h3>
-                        <p class="text-gray-500 mt-2">Push Notification</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -263,8 +260,8 @@
                     Quát</h2>
                 <div class="w-full h-[550px] bg-gray-100 rounded-2xl p-4 flex items-center justify-center animated-item"
                     style="animation-delay: 0.2s;">
-                    <img src="https://i.imgur.com/G9CwqXU.png" alt="Sơ đồ Usecase tổng quát"
-                        class="max-h-full max-w-full object-contain">
+                    <img src="./so_do_use_case_tong_quat.png"
+                        alt="Sơ đồ Usecase tổng quát" class="max-h-full max-w-full w-full h-full object-contain">
                 </div>
             </div>
         </div>
@@ -276,8 +273,8 @@
                     Năng</h2>
                 <div class="w-full h-[550px] bg-white rounded-2xl p-6 flex items-center justify-center shadow-xl animated-item"
                     style="animation-delay: 0.2s;">
-                    <img src="https://i.imgur.com/8Qh1nJ1.png" alt="Sơ đồ phân cấp chức năng"
-                        class="max-h-full max-w-full object-contain">
+                    <img src="./so_do_phan_cap_chuc_nang.png" alt="Sơ đồ phân cấp chức năng"
+                        class="max-h-full max-w-full w-full h-full object-contain">
                 </div>
             </div>
         </div>
@@ -344,9 +341,6 @@
                         <li class="animated-item flex items-start" style="animation-delay: 0.8s;"><span
                                 class="text-blue-500 mr-3 mt-1">✓</span><span>Quản lý thông tin cá nhân, địa chỉ.</span>
                         </li>
-                        <li class="animated-item flex items-start" style="animation-delay: 0.9s;"><span
-                                class="text-blue-500 mr-3 mt-1">✓</span><span>Nhận thông báo đẩy (push
-                                notification).</span></li>
                     </ul>
                 </div>
             </div>
@@ -393,26 +387,20 @@
                 </h2>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
                     <div class="animated-item" style="animation-delay: 0.2s;">
-                        <div class="phone-mockup">
-                            <div class="phone-mockup-content text-gray-400 p-4 text-center">
-                                [Ảnh chụp màn hình trang chủ]
-                            </div>
+                        <div class="phone-mockup p-0">
+                            <img src="./trang chu.png" alt="">
                         </div>
                         <p class="p-4 text-center text-lg font-semibold text-gray-700">Trang chủ</p>
                     </div>
                     <div class="animated-item" style="animation-delay: 0.4s;">
-                        <div class="phone-mockup">
-                            <div class="phone-mockup-content text-gray-400 p-4 text-center">
-                                [Ảnh chụp màn hình chi tiết sản phẩm]
-                            </div>
+                        <div class="phone-mockup p-0">
+                            <img src="./chitietsp.png" alt="">
                         </div>
                         <p class="p-4 text-center text-lg font-semibold text-gray-700">Chi tiết sản phẩm</p>
                     </div>
                     <div class="animated-item" style="animation-delay: 0.6s;">
-                        <div class="phone-mockup">
-                            <div class="phone-mockup-content text-gray-400 p-4 text-center">
-                                [Ảnh chụp màn hình giỏ hàng & thanh toán]
-                            </div>
+                        <div class="phone-mockup p-0">
+                            <img src="./thanhtoan.png" alt="">
                         </div>
                         <p class="p-4 text-center text-lg font-semibold text-gray-700">Thanh toán</p>
                     </div>
