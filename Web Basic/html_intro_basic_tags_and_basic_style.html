@@ -113,10 +113,6 @@
             overflow-x: auto;
         }
 
-        .code-block .comment {
-            color: #6a9955;
-        }
-
         .code-block .keyword {
             color: #569cd6;
         }
@@ -145,8 +141,83 @@
             color: #ce9178;
         }
 
-        .code-block .selector {
-            color: #d7ba7d;
+        .html-output {
+            border: 1px solid #cbd5e0;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
+        }
+
+        .html-output h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #2c5282;
+        }
+
+        .html-output h2 {
+            font-size: 1.75em;
+            margin-bottom: 0.4em;
+            color: #2c5282;
+        }
+
+        .html-output h3 {
+            font-size: 1.5em;
+            margin-bottom: 0.3em;
+            color: #2c5282;
+        }
+
+        .html-output h4 {
+            font-size: 1.25em;
+            margin-bottom: 0.2em;
+            color: #2c5282;
+        }
+
+        .html-output h5 {
+            font-size: 1em;
+            margin-bottom: 0.2em;
+            color: #2c5282;
+        }
+
+        .html-output h6 {
+            font-size: 0.875em;
+            margin-bottom: 0.2em;
+            color: #2c5282;
+        }
+
+        .html-output p {
+            margin-bottom: 1em;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+
+        .html-output a {
+            color: #3182ce;
+            text-decoration: underline;
+        }
+
+        .html-output img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1em;
+        }
+
+        .html-output button {
+            background-color: #4299e1;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .html-output button:hover {
+            background-color: #2b6cb0;
         }
 
         ::-webkit-scrollbar {
@@ -184,19 +255,11 @@
             <div class="flex items-center mt-2 sm:mt-0">
                 <button id="prevSlide"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5 inline-block mr-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                    Trước
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
                 </button>
                 <button id="nextSlide"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    Sau
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5 inline-block ml-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
                 </button>
             </div>
             <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
@@ -212,7 +275,7 @@
                 <p class="text-3xl text-center text-gray-600 mb-12">HTML & CSS cơ bản - Nền tảng của mọi trang Web!</p>
                 <div class="flex justify-center">
                     <img src="https://placehold.co/500x300/007BFF/FFFFFF?text=HTML+%26+CSS+Foundation"
-                        alt="[Hình ảnh Web Programming HTML CSS]" class="rounded-lg shadow-xl">
+                        alt="Hình ảnh Web Programming HTML CSS" class="rounded-lg shadow-xl">
                 </div>
                 <p class="text-center mt-10 text-xl text-gray-700">Chào mừng bạn đến với buổi học đầu tiên về Lập trình
                     Web!</p>
@@ -248,7 +311,7 @@
                 </div>
                 <div class="mt-8 text-center">
                     <img src="https://placehold.co/450x200/7E3AF2/FFFFFF?text=HTML+(Cấu+trúc)+%2B+CSS+(Trình+bày)+%3D+Trang+Web"
-                        alt="[Sơ đồ HTML + CSS = Web Page]" class="rounded-lg shadow-lg mx-auto">
+                        alt="Sơ đồ HTML + CSS = Web Page" class="rounded-lg shadow-lg mx-auto">
                     <p class="mt-4 text-xl text-gray-800">HTML cung cấp <strong>cấu trúc</strong>, CSS thêm vào
                         <strong>phong cách</strong>, cùng nhau tạo nên một trang web hoàn chỉnh và trực quan.
                     </p>
@@ -277,97 +340,253 @@
 &lt;/<span class="tag">body</span>&gt;
 &lt;/<span class="tag">html</span>&gt;</code></pre>
                 </div>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">Cú pháp thẻ HTML:</h4>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
+                    <li>Hầu hết các thẻ HTML đều có <strong>thẻ mở</strong> (vd: <code>&lt;p&gt;</code>) và <strong>thẻ
+                            đóng</strong> (vd: <code>&lt;/p&gt;</code>).</li>
+                    <li>Nội dung nằm giữa thẻ mở và thẻ đóng.</li>
+                    <li>Một số thẻ là <strong>thẻ tự đóng</strong> (void elements), không có nội dung bên trong và không
+                        cần thẻ đóng riêng (vd: <code>&lt;img src="..."&gt;</code>, <code>&lt;br&gt;</code>).</li>
+                    <li>Thẻ có thể chứa các <strong>thuộc tính</strong> (attributes), cung cấp thông tin bổ sung cho
+                        thẻ. Thuộc tính được viết trong thẻ mở, dạng <code>tên_thuộc_tính="giá_trị"</code>.</li>
+                </ul>
             </div>
         </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Các thẻ cơ bản: Tiêu đề <code>&lt;h1&gt;</code>
+                    - <code>&lt;h6&gt;</code></h3>
+                <p class="mb-4 text-lg text-gray-700">Thẻ tiêu đề dùng để định nghĩa các cấp bậc tiêu đề trong tài liệu
+                    HTML. <code>&lt;h1&gt;</code> là tiêu đề quan trọng nhất (cấp cao nhất), và <code>&lt;h6&gt;</code>
+                    là ít quan trọng nhất.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code>&lt;<span class="tag">h1</span>&gt;Đây là tiêu đề H1 (quan trọng nhất)&lt;/<span class="tag">h1</span>&gt;
+&lt;<span class="tag">h2</span>&gt;Đây là tiêu đề H2&lt;/<span class="tag">h2</span>&gt;
+&lt;<span class="tag">h3</span>&gt;Đây là tiêu đề H3&lt;/<span class="tag">h3</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
+                <div class="html-output">
+                    <h1>Đây là tiêu đề H1 (quan trọng nhất)</h1>
+                    <h2>Đây là tiêu đề H2</h2>
+                    <h3>Đây là tiêu đề H3</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Các thẻ cơ bản: Đoạn văn <code>&lt;p&gt;</code>
+                </h3>
+                <p class="mb-4 text-lg text-gray-700">Thẻ <code>&lt;p&gt;</code> (paragraph) dùng để định nghĩa một đoạn
+                    văn bản.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre
+                        class="code-block"><code>&lt;<span class="tag">p</span>&gt;Đây là đoạn văn đầu tiên. HTML rất thú vị và là nền tảng của web.&lt;/<span class="tag">p</span>&gt;
+&lt;<span class="tag">p</span>&gt;Đây là đoạn văn thứ hai. Mỗi thẻ &lt;p&gt; sẽ tạo ra một khối văn bản riêng biệt.&lt;/<span class="tag">p</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
+                <div class="html-output">
+                    <p>Đây là đoạn văn đầu tiên. HTML rất thú vị và là nền tảng của web.</p>
+                    <p>Đây là đoạn văn thứ hai. Mỗi thẻ &lt;p&gt; sẽ tạo ra một khối văn bản riêng biệt.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Ví dụ: Tạo trang giới thiệu bản thân (HTML)
+                </h3>
+                <p class="mb-4 text-lg text-gray-700">Áp dụng các thẻ đã học để tạo một trang giới thiệu bản thân đơn
+                    giản chỉ bằng HTML.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block" id="personalPageHtmlCode"><code><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span class="attr-value">"vi"</span>&gt;
+&lt;<span class="tag">head</span>&gt;
+    &lt;<span class="tag">title</span>&gt;Trang giới thiệu của tôi&lt;/<span class="tag">title</span>&gt;
+&lt;/<span class="tag">head</span>&gt;
+&lt;<span class="tag">body</span>&gt;
+    &lt;<span class="tag">h1</span>&gt;Xin chào, tôi là John Doe&lt;/<span class="tag">h1</span>&gt;
+    &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span class="attr-name">alt</span>=<span class="attr-value">"Ảnh đại diện của tôi"</span>&gt;
+    &lt;<span class="tag">p</span>&gt;Tôi là một sinh viên đam mê công nghệ thông tin, đặc biệt là phát triển web. Tôi thích học hỏi những điều mới và thử thách bản thân với các dự án thú vị.&lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">p</span>&gt;Sở thích của tôi bao gồm chơi game, đọc sách khoa học viễn tưởng và đi du lịch.&lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">h2</span>&gt;Liên hệ với tôi:&lt;/<span class="tag">h2</span>&gt;
+    &lt;<span class="tag">p</span>&gt;
+      Bạn có thể kết nối với tôi qua &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+      hoặc gửi email cho tôi tại &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"mailto:johndoe@example.com"</span>&gt;johndoe@example.com&lt;/<span class="tag">a</span>&gt;.
+    &lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">button</span>&gt;Nhấn để nhận lời chào!&lt;/<span class="tag">button</span>&gt;
+&lt;/<span class="tag">body</span>&gt;
+&lt;/<span class="tag">html</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (chỉ nội dung body):</h4>
+                <div class="html-output" id="personalPageHtmlOutput"></div>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Ví dụ: Áp dụng CSS cơ bản</h3>
+                <p class="mb-4 text-lg text-gray-700">Bây giờ, hãy thêm một chút inline CSS vào trang giới thiệu cá nhân
+                    để làm cho nó trông hấp dẫn hơn.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block" id="personalPageCssCode"><code><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span class="attr-value">"vi"</span>&gt;
+&lt;<span class="tag">head</span>&gt;
+    &lt;<span class="tag">title</span>&gt;Trang giới thiệu của tôi&lt;/<span class="tag">title</span>&gt;
+&lt;/<span class="tag">head</span>&gt;
+&lt;<span class="tag">body</span> <span class="attr-name">style</span>=<span class="attr-value">"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #e9ecef; color: #343a40;"</span>&gt;
+    &lt;<span class="tag">h1</span> <span class="attr-name">style</span>=<span class="attr-value">"color: #007bff; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px;"</span>&gt;Xin chào, tôi là John Doe&lt;/<span class="tag">h1</span>&gt;
+    &lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span class="attr-value">"text-align: center; margin-bottom: 20px;"</span>&gt;
+        &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span class="attr-name">alt</span>=<span class="attr-value">"Ảnh đại diện của tôi"</span> <span class="attr-name">style</span>=<span class="attr-value">"border-radius: 50%; border: 4px solid #007bff; box-shadow: 0 0 10px rgba(0,0,0,0.1);"</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+    &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"font-size: 1.1em; line-height: 1.7; color: #495057;"</span>&gt;Tôi là một sinh viên đam mê công nghệ thông tin, đặc biệt là phát triển web. Tôi thích học hỏi những điều mới và thử thách bản thân với các dự án thú vị.&lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"font-size: 1.1em; line-height: 1.7; color: #495057;"</span>&gt;Sở thích của tôi bao gồm chơi game, đọc sách khoa học viễn tưởng và đi du lịch.&lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">h2</span> <span class="attr-name">style</span>=<span class="attr-value">"color: #28a745; margin-top: 30px;"</span>&gt;Liên hệ với tôi:&lt;/<span class="tag">h2</span>&gt;
+    &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"font-size: 1.1em;"</span>&gt;
+        Bạn có thể kết nối với tôi qua &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span> <span class="attr-name">style</span>=<span class="attr-value">"color: #007bff; text-decoration: none; font-weight: bold;"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+        hoặc gửi email cho tôi tại &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"mailto:johndoe@example.com"</span> <span class="attr-name">style</span>=<span class="attr-value">"color: #007bff; text-decoration: none; font-weight: bold;"</span>&gt;johndoe@example.com&lt;/<span class="tag">a</span>&gt;.
+    &lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">button</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top: 15px;"</span>&gt;Nhấn để nhận lời chào!&lt;/<span class="tag">button</span>&gt;
+&lt;/<span class="tag">body</span>&gt;
+&lt;/<span class="tag">html</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (chỉ nội dung body):</h4>
+                <div class="html-output" id="personalPageCssOutput"></div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        const slides = Array.from(document.querySelectorAll('.slide'));
-        const prevButton = document.getElementById('prevSlide');
-        const nextButton = document.getElementById('nextSlide');
-        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
-        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
-        const navbar = document.getElementById('navbar');
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+            const navbar = document.getElementById('navbar');
 
-        let currentSlide = 0;
-        if (slides.length > 0) {
-            totalSlidesNumDisplay.textContent = slides.length;
-        }
+            let currentSlide = 0;
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            }
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.style.display = 'flex';
-                    setTimeout(() => {
-                        slide.classList.add('active');
-                    }, 10);
-                } else {
-                    slide.classList.remove('active');
-                    setTimeout(() => {
-                        if (!slide.classList.contains('active')) {
-                            slide.style.display = 'none';
-                        }
-                    }, 400);
-                }
-            });
-            currentSlideNumDisplay.textContent = index + 1;
-            updateNavButtons();
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 400);
+                    }
+                });
+                currentSlideNumDisplay.textContent = index + 1;
+                updateNavButtons();
 
-            if (navbar) {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
                 });
             }
-        }
 
-        function updateNavButtons() {
-            if (!prevButton || !nextButton) return;
-            prevButton.disabled = currentSlide === 0;
-            nextButton.disabled = currentSlide === slides.length - 1;
-        }
-
-        if (prevButton && nextButton) {
-            prevButton.addEventListener('click', () => {
-                if (currentSlide > 0) {
-                    currentSlide--;
-                    showSlide(currentSlide);
+            function copyCode(buttonElement) {
+                const codeBlockContainer = buttonElement.closest('.code-block-container');
+                const codeElement = codeBlockContainer.querySelector('.code-block code, .code-block');
+                if (codeElement) {
+                    const codeToCopy = codeElement.innerText || codeElement.textContent;
+                    const textarea = document.createElement('textarea');
+                    textarea.value = codeToCopy;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        const originalText = buttonElement.innerHTML;
+                        buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                        setTimeout(() => {
+                            buttonElement.innerHTML = originalText;
+                        }, 1500);
+                    } catch (err) {
+                        console.error('Không thể sao chép code: ', err);
+                    }
+                    document.body.removeChild(textarea);
                 }
-            });
-
-            nextButton.addEventListener('click', () => {
-                if (currentSlide < slides.length - 1) {
-                    currentSlide++;
-                    showSlide(currentSlide);
-                }
-            });
-        }
-
-        function copyCode(buttonElement) {
-            const codeBlockContainer = buttonElement.closest('.code-block-container');
-            const codeElement = codeBlockContainer.querySelector('.code-block code, .code-block');
-            if (codeElement) {
-                const codeToCopy = codeElement.innerText || codeElement.textContent;
-
-                const textarea = document.createElement('textarea');
-                textarea.value = codeToCopy;
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    const originalText = buttonElement.innerHTML;
-                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
-                    setTimeout(() => {
-                        buttonElement.innerHTML = originalText;
-                    }, 1500);
-                } catch (err) {
-                    console.error('Không thể sao chép code: ', err);
-                }
-                document.body.removeChild(textarea);
             }
-        }
 
-        document.addEventListener('DOMContentLoaded', () => {
+            window.copyCode = copyCode;
+
+            function renderExample(codeElementId, outputElementId) {
+                const codeEl = document.getElementById(codeElementId);
+                const outputEl = document.getElementById(outputElementId);
+
+                if (codeEl && outputEl) {
+                    const decoder = document.createElement('textarea');
+                    let html = codeEl.innerHTML.replace(/<\/?span[^>]*>/g, "");
+                    decoder.innerHTML = html;
+                    let cleanCode = decoder.value;
+
+                    const bodyStartIndex = cleanCode.toLowerCase().indexOf('<body');
+                    const bodyEndIndex = cleanCode.toLowerCase().lastIndexOf('</body>');
+
+                    if (bodyStartIndex !== -1 && bodyEndIndex !== -1) {
+                        const bodyTagEndIndex = cleanCode.indexOf('>', bodyStartIndex);
+                        const bodyTag = cleanCode.substring(bodyStartIndex, bodyTagEndIndex + 1);
+                        const bodyContent = cleanCode.substring(bodyTagEndIndex + 1, bodyEndIndex);
+
+                        const styleMatch = bodyTag.match(/style\s*=\s*"(.*?)"/i);
+                        if (styleMatch && styleMatch[1]) {
+                            outputEl.setAttribute('style', styleMatch[1]);
+                        } else {
+                            outputEl.removeAttribute('style');
+                        }
+                        outputEl.innerHTML = bodyContent;
+                    }
+                }
+            }
+
+            renderExample('personalPageHtmlCode', 'personalPageHtmlOutput');
+            renderExample('personalPageCssCode', 'personalPageCssOutput');
+
             if (slides.length > 0) {
                 showSlide(currentSlide);
             } else {
@@ -376,7 +595,6 @@
             }
         });
     </script>
-
 </body>
 
 </html>
