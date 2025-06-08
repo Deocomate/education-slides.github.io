@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi Học: List, Vòng Lặp & Xử Lý File</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+            /* Green check */
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        /* Emerald 300 */
+        .code-block .keyword {
+            color: #93c5fd;
+        }
+
+        /* Blue 300 */
+        .code-block .string {
+            color: #fde047;
+        }
+
+        /* Yellow 300 */
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        /* Orange 300 */
+        .code-block .function {
+            color: #d8b4fe;
+        }
+
+        /* Purple 300 */
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+        /* Rose 300 */
+        .code-block .boolean {
+            color: #fdbb74;
+        }
+
+        /* Orange 300 */
+        .code-block .method {
+            color: #67e8f9;
+        }
+
+        /* Cyan 300 */
+        .code-block .class-name {
+            color: #a5b4fc;
+        }
+
+        /* Indigo 300 */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #718096;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+
+        .text-theme-700 {
+            color: #1d4ed8;
+        }
+
+        .text-theme-600 {
+            color: #2563eb;
+        }
+
+        .bg-theme-500 {
+            background-color: #3b82f6;
+        }
+
+        .hover\:bg-theme-700:hover {
+            background-color: #1d4ed8;
+        }
+
+        .text-blue-500 {
+            color: #3b82f6;
+        }
+
+        .text-sky-600 {
+            color: #0284c7;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Python: List, Vòng Lặp & Xử Lý File</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block mr-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 inline-block ml-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi Học: List, Vòng Lặp & Xử Lý File
+                </h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Nền tảng xử lý dữ liệu trong Python</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/3B82F6/FFFFFF?text=Python+%26+Data"
+                        alt="[Hình ảnh Python và Dữ liệu]" class="shadow-md">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Bắt đầu hành trình xử lý dữ liệu một cách chuyên
+                    nghiệp!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Lesson Objectives -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-6">Mục Tiêu Buổi Học</h3>
+                <p class="mb-6 text-lg">Kết thúc buổi học hôm nay, bạn sẽ có khả năng:</p>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-lg text-gray-800">Hiểu rõ và sử dụng thành thạo <strong>List</strong> - một
+                            trong những cấu trúc dữ liệu quan trọng nhất của Python.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-lg text-gray-800">Kết hợp <strong>List</strong> với <strong>vòng lặp</strong>
+                            và <strong>câu lệnh điều kiện</strong> để giải quyết các bài toán thực tế.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-lg text-gray-800">Thực hiện các thao tác <strong>đọc dữ liệu từ file văn bản
+                                (.txt)</strong> để chương trình có thể xử lý dữ liệu từ bên ngoài.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-lg text-gray-800">Áp dụng kiến thức tổng hợp để xây dựng các chương trình nhỏ,
+                            hoàn chỉnh.</span>
+                    </li>
+                </ul>
+                <div class="flex justify-center mt-10">
+                    <img src="https://placehold.co/400x200/60A5FA/FFFFFF?text=Mục+Tiêu"
+                        alt="[Hình ảnh Mục tiêu bài học]" class="shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Introduction to List -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Giới Thiệu về List</h3>
+                <p class="mb-4 text-lg"><strong>List</strong> (danh sách) là một cấu trúc dữ liệu dùng để lưu trữ một
+                    tập hợp nhiều mục (item) trong một biến duy nhất.</p>
+                <p class="mb-2 font-medium">Đặc điểm chính của List:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li><strong>Có thứ tự (Ordered):</strong> Các mục có một thứ tự xác định và không thay đổi.</li>
+                    <li><strong>Có thể thay đổi (Mutable/Changeable):</strong> Chúng ta có thể thêm, sửa, xóa các mục
+                        trong list sau khi nó đã được tạo.</li>
+                    <li><strong>Cho phép các giá trị trùng lặp (Allow Duplicates):</strong> Một list có thể chứa các mục
+                        có cùng giá trị.</li>
+                    <li><strong>Chứa nhiều kiểu dữ liệu:</strong> Các mục trong list có thể thuộc nhiều kiểu dữ liệu
+                        khác nhau (số, chuỗi, boolean...).</li>
+                </ul>
+                <p class="mb-2 font-medium">Cách khai báo List:</p>
+                <p class="mb-4 text-lg">Sử dụng cặp ngoặc vuông <code>[]</code>, các phần tử cách nhau bởi dấu phẩy.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># Một list rỗng</span>
+<span class="variable">danh_sach_rong</span> <span class="operator">=</span> []
+
+<span class="comment"># Một list chứa các chuỗi (tên trái cây)</span>
+<span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Chuối"</span>, <span class="string">"Cam"</span>]
+
+<span class="comment"># Một list chứa các số</span>
+<span class="variable">diem_so</span> <span class="operator">=</span> [<span class="number">10</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">10</span>]
+
+<span class="comment"># Một list chứa nhiều kiểu dữ liệu khác nhau</span>
+<span class="variable">thong_tin</span> <span class="operator">=</span> [<span class="string">"Nguyễn Văn A"</span>, <span class="number">25</span>, <span class="boolean">True</span>]
+
+<span class="function">print</span>(<span class="variable">trai_cay</span>)
+<span class="function">print</span>(<span class="variable">thong_tin</span>)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: List Indexing -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1.1. Truy Cập Phần Tử (Indexing)</h3>
+                <p class="mb-4 text-lg">Mỗi phần tử trong list có một vị trí được gọi là <strong>index</strong> (chỉ
+                    số). Index trong Python bắt đầu từ <strong>0</strong>.</p>
+
+                <div class="flex justify-center mb-6">
+                    <img src="https://placehold.co/600x150/93C5FD/1E293B?text=trai_cay+%3D+%5B%22Táo%22%2C+%22Chuối%22%2C+%22Cam%22%5D%0AIndex%3A++++++0++++++++1++++++++2"
+                        alt="[Hình ảnh minh họa index của list]" class="shadow-md">
+                </div>
+
+                <p class="mb-2 font-medium"><strong>Chỉ số dương (Positive Indexing):</strong></p>
+                <p class="mb-2 text-lg">Bắt đầu từ 0 từ trái sang phải.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Chuối"</span>, <span class="string">"Cam"</span>]
+<span class="function">print</span>(<span class="variable">trai_cay</span>[<span class="number">0</span>])  <span class="comment"># Output: Táo</span>
+<span class="function">print</span>(<span class="variable">trai_cay</span>[<span class="number">1</span>])  <span class="comment"># Output: Chuối</span></code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium"><strong>Chỉ số âm (Negative Indexing):</strong></p>
+                <p class="mb-2 text-lg">Bắt đầu từ -1 từ phải sang trái. <code>-1</code> là phần tử cuối cùng.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Chuối"</span>, <span class="string">"Cam"</span>]
+<span class="function">print</span>(<span class="variable">trai_cay</span>[<span class="operator">-</span><span class="number">1</span>]) <span class="comment"># Output: Cam</span>
+<span class="function">print</span>(<span class="variable">trai_cay</span>[<span class="operator">-</span><span class="number">2</span>]) <span class="comment"># Output: Chuối</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Basic List Operations 1 -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1.2. Các Thao Tác Cơ Bản với List (Phần 1)</h3>
+
+                <p class="mb-2 font-medium"><strong>1. Thêm phần tử vào cuối list: <code>append()</code></strong></p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Chuối"</span>]
+<span class="variable">trai_cay</span>.<span class="method">append</span>(<span class="string">"Cam"</span>)
+<span class="function">print</span>(<span class="variable">trai_cay</span>) <span class="comment"># Output: ['Táo', 'Chuối', 'Cam']</span></code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium"><strong>2. Chèn phần tử vào vị trí cụ thể:
+                        <code>insert()</code></strong></p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Cam"</span>]
+<span class="comment"># Chèn "Chuối" vào vị trí index 1</span>
+<span class="variable">trai_cay</span>.<span class="method">insert</span>(<span class="number">1</span>, <span class="string">"Chuối"</span>)
+<span class="function">print</span>(<span class="variable">trai_cay</span>) <span class="comment"># Output: ['Táo', 'Chuối', 'Cam']</span></code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium"><strong>3. Lấy độ dài của list: <code>len()</code></strong></p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Chuối"</span>, <span class="string">"Cam"</span>]
+<span class="function">print</span>(<span class="function">len</span>(<span class="variable">trai_cay</span>)) <span class="comment"># Output: 3</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Basic List Operations 2 -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1.3. Các Thao Tác Cơ Bản với List (Phần 2)</h3>
+
+                <p class="mb-2 font-medium"><strong>4. Xóa phần tử theo giá trị: <code>remove()</code></strong></p>
+                <p class="mb-2 text-lg">Xóa phần tử đầu tiên trong list có giá trị được chỉ định.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Chuối"</span>, <span class="string">"Cam"</span>]
+<span class="variable">trai_cay</span>.<span class="method">remove</span>(<span class="string">"Chuối"</span>)
+<span class="function">print</span>(<span class="variable">trai_cay</span>) <span class="comment"># Output: ['Táo', 'Cam']</span></code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium"><strong>5. Xóa phần tử theo index: <code>pop()</code> và
+                        <code>del</code></strong></p>
+                <p class="mb-2 text-lg"><code>pop(index)</code> xóa và trả về phần tử tại index. Nếu không có index, nó
+                    xóa phần tử cuối cùng.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">trai_cay</span> <span class="operator">=</span> [<span class="string">"Táo"</span>, <span class="string">"Chuối"</span>, <span class="string">"Cam"</span>]
+<span class="variable">phan_tu_xoa</span> <span class="operator">=</span> <span class="variable">trai_cay</span>.<span class="method">pop</span>(<span class="number">1</span>)
+<span class="function">print</span>(<span class="string">f"Phần tử bị xóa: {phan_tu_xoa}"</span>) <span class="comment"># Output: Phần tử bị xóa: Chuối</span>
+<span class="function">print</span>(<span class="variable">trai_cay</span>) <span class="comment"># Output: ['Táo', 'Cam']</span>
+
+<span class="keyword">del</span> <span class="variable">trai_cay</span>[<span class="number">0</span>]
+<span class="function">print</span>(<span class="variable">trai_cay</span>) <span class="comment"># Output: ['Cam']</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Lists and Loops -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Kết Hợp List và Vòng Lặp</h3>
+                <p class="mb-4 text-lg">Vòng lặp <code>for</code> là công cụ cực kỳ mạnh mẽ để xử lý từng phần tử trong
+                    một list.</p>
+
+                <p class="mb-2 font-medium"><strong>Ví dụ: In tất cả các phần tử trong list</strong></p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">mon_hoc</span> <span class="operator">=</span> [<span class="string">"Toán"</span>, <span class="string">"Lý"</span>, <span class="string">"Hóa"</span>, <span class="string">"Sinh"</span>]
+<span class="keyword">for</span> <span class="variable">mon</span> <span class="keyword">in</span> <span class="variable">mon_hoc</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"Hôm nay học môn: {mon}"</span>)
+</code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium"><strong>Ví dụ: Tính tổng các số trong một list</strong></p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">diem_so</span> <span class="operator">=</span> [<span class="number">8</span>, <span class="number">9</span>, <span class="number">7.5</span>, <span class="number">10</span>]
+<span class="variable">tong_diem</span> <span class="operator">=</span> <span class="number">0</span>
+<span class="keyword">for</span> <span class="variable">diem</span> <span class="keyword">in</span> <span class="variable">diem_so</span><span class="operator">:</span>
+    <span class="variable">tong_diem</span> <span class="operator">+=</span> <span class="variable">diem</span>  <span class="comment"># Tương đương: tong_diem = tong_diem + diem</span>
+<span class="function">print</span>(<span class="string">f"Tổng điểm là: {tong_diem}"</span>) <span class="comment"># Output: Tổng điểm là: 34.5</span>
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Algorithm 1 -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.1. Giải Thuật: Lọc Dữ Liệu</h3>
+                <p class="mb-4 text-lg">Đây là một bài toán rất phổ biến: từ một list ban đầu, tạo ra một list mới chỉ
+                    chứa các phần tử thỏa mãn một điều kiện nào đó.</p>
+
+                <p class="mb-2 font-medium"><strong>Bài toán:</strong> Cho một list các số, hãy tạo một list mới chỉ
+                    chứa các số chẵn.</p>
+                <p class="mb-2 text-lg"><strong>Logic:</strong></p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
+                    <li>Tạo một list rỗng để chứa kết quả (ví dụ: `so_chan`).</li>
+                    <li>Duyệt qua từng số trong list ban đầu.</li>
+                    <li>Với mỗi số, dùng câu lệnh `if` để kiểm tra xem nó có chia hết cho 2 không (`so % 2 == 0`).</li>
+                    <li>Nếu đúng, thêm số đó vào list `so_chan` bằng `append()`.</li>
+                </ol>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">danh_sach_so</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>]
+<span class="variable">so_chan</span> <span class="operator">=</span> []
+
+<span class="keyword">for</span> <span class="variable">so</span> <span class="keyword">in</span> <span class="variable">danh_sach_so</span><span class="operator">:</span>
+    <span class="comment"># Kiểm tra nếu số chia hết cho 2</span>
+    <span class="keyword">if</span> <span class="variable">so</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span>
+        <span class="variable">so_chan</span>.<span class="method">append</span>(<span class="variable">so</span>)
+
+<span class="function">print</span>(<span class="string">"Danh sách ban đầu:"</span>, <span class="variable">danh_sach_so</span>)
+<span class="function">print</span>(<span class="string">"Danh sách số chẵn:"</span>, <span class="variable">so_chan</span>)
+<span class="comment"># Output: Danh sách số chẵn: [2, 4, 6, 8, 10]</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Introduction to File Handling -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Làm Việc với File</h3>
+                <p class="mb-4 text-lg">Trong thực tế, dữ liệu thường được lưu trữ trong các file. Chương trình Python
+                    cần có khả năng đọc dữ liệu từ các file này để xử lý.</p>
+                <p class="mb-2 font-medium"><strong>Tại sao cần xử lý file?</strong></p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li><strong>Lưu trữ dữ liệu lâu dài:</strong> Dữ liệu trong biến sẽ mất khi chương trình kết thúc.
+                        File giúp lưu trữ dữ liệu vĩnh viễn.</li>
+                    <li><strong>Dữ liệu đầu vào:</strong> Cung cấp lượng lớn dữ liệu cho chương trình mà không cần người
+                        dùng nhập tay.</li>
+                    <li><strong>Kết quả đầu ra:</strong> Lưu kết quả xử lý của chương trình ra file.</li>
+                </ul>
+
+                <p class="mt-4 mb-2 font-medium"><strong>Mở và Đọc File với <code>with open()</code></strong></p>
+                <p class="mb-2 text-lg">Cú pháp <code>with open(...)</code> là cách làm việc với file an toàn và được
+                    khuyên dùng nhất. Nó sẽ tự động đóng file sau khi khối lệnh bên trong thực hiện xong, kể cả khi có
+                    lỗi xảy ra.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># 'data.txt' là tên file</span>
+<span class="comment"># 'r' là chế độ (mode) đọc (read)</span>
+<span class="comment"># encoding='utf-8' là để đọc đúng tiếng Việt</span>
+
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'data.txt'</span>, <span class="string">'r'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span><span class="operator">:</span>
+    <span class="comment"># Các thao tác với file (f) được thực hiện ở đây</span>
+    <span class="variable">noi_dung</span> <span class="operator">=</span> <span class="variable">f</span>.<span class="method">read</span>() <span class="comment"># Đọc toàn bộ nội dung file</span>
+    <span class="function">print</span>(<span class="variable">noi_dung</span>)
+
+<span class="comment"># File sẽ tự động được đóng ở đây</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Reading a .txt File -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.1. Đọc Dữ Liệu từ File .txt</h3>
+                <p class="mb-4 text-lg">Một cách phổ biến để đọc file là duyệt qua từng dòng của file bằng vòng lặp
+                    `for`.</p>
+                <p class="mb-2 font-medium">Giả sử chúng ta có file <code>shopping_list.txt</code> với nội dung:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="text-gray-400 px-3 text-sm">shopping_list.txt</span>
+                    </div>
+                    <pre class="code-block"><code>Sữa
+Trứng
+Bánh mì
+Táo
+</code></pre>
+                </div>
+
+                <p class="mt-4 mb-2 font-medium">Code Python để đọc và in ra từng dòng:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">with</span> <span class="function">open</span>(<span class="string">'shopping_list.txt'</span>, <span class="string">'r'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span><span class="operator">:</span>
+    <span class="keyword">for</span> <span class="variable">line</span> <span class="keyword">in</span> <span class="variable">f</span><span class="operator">:</span>
+        <span class="function">print</span>(<span class="variable">line</span>)</code></pre>
+                </div>
+                <p class="mt-4 mb-2 font-medium">Vấn đề: Ký tự xuống dòng <code>\n</code></p>
+                <p class="mb-2 text-lg">Khi đọc file theo dòng, mỗi dòng sẽ chứa cả ký tự xuống dòng ở cuối. Ta cần loại
+                    bỏ nó bằng phương thức <strong><code>.strip()</code></strong>.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">with</span> <span class="function">open</span>(<span class="string">'shopping_list.txt'</span>, <span class="string">'r'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span><span class="operator">:</span>
+    <span class="keyword">for</span> <span class="variable">line</span> <span class="keyword">in</span> <span class="variable">f</span><span class="operator">:</span>
+        <span class="variable">clean_line</span> <span class="operator">=</span> <span class="variable">line</span>.<span class="method">strip</span>() <span class="comment"># Loại bỏ khoảng trắng và ký tự xuống dòng ở hai đầu</span>
+        <span class="function">print</span>(<span class="variable">clean_line</span>)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Processing Data from a File -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.2. Xử Lý Dữ Liệu Số và Chuỗi từ File</h3>
+                <p class="mb-4 text-lg">Thường thì một dòng trong file sẽ chứa nhiều mẩu thông tin. Chúng ta dùng phương
+                    thức <strong><code>.split()</code></strong> để tách chuỗi thành một list các chuỗi con.</p>
+                <p class="mb-2 font-medium">Giả sử có file <code>scores.txt</code>:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="text-gray-400 px-3 text-sm">scores.txt</span></div>
+                    <pre class="code-block"><code>An 9
+Binh 8
+Cuong 10
+</code></pre>
+                </div>
+                <p class="mt-4 mb-2 font-medium"><strong>Bài toán:</strong> Đọc file và tính điểm trung bình.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">diem_list</span> <span class="operator">=</span> []
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'scores.txt'</span>, <span class="string">'r'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span><span class="operator">:</span>
+    <span class="keyword">for</span> <span class="variable">line</span> <span class="keyword">in</span> <span class="variable">f</span><span class="operator">:</span>
+        <span class="variable">parts</span> <span class="operator">=</span> <span class="variable">line</span>.<span class="method">strip</span>().<span class="method">split</span>() <span class="comment"># Tách dòng thành list, ví dụ: ['An', '9']</span>
+        <span class="variable">ten</span> <span class="operator">=</span> <span class="variable">parts</span>[<span class="number">0</span>]
+        <span class="variable">diem_str</span> <span class="operator">=</span> <span class="variable">parts</span>[<span class="number">1</span>]
+        
+        <span class="comment"># Chuyển đổi điểm từ chuỗi sang số</span>
+        <span class="variable">diem_so</span> <span class="operator">=</span> <span class="function">int</span>(<span class="variable">diem_str</span>)
+        <span class="variable">diem_list</span>.<span class="method">append</span>(<span class="variable">diem_so</span>)
+
+<span class="comment"># Tính điểm trung bình</span>
+<span class="keyword">if</span> <span class="function">len</span>(<span class="variable">diem_list</span>) <span class="operator">></span> <span class="number">0</span><span class="operator">:</span>
+    <span class="variable">trung_binh</span> <span class="operator">=</span> <span class="function">sum</span>(<span class="variable">diem_list</span>) <span class="operator">/</span> <span class="function">len</span>(<span class="variable">diem_list</span>)
+    <span class="function">print</span>(<span class="string">f"Điểm trung bình của lớp là: {trung_binh}"</span>)
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Không có dữ liệu điểm."</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Practice Exercise 1 -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-sky-600 mb-4">4. Bài Tập Luyện Tập</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: Tìm Số Lớn Nhất</h4>
+                <p class="mb-4 text-lg"><strong>Yêu cầu:</strong> Viết một chương trình tìm phần tử lớn nhất trong một
+                    list số cho trước mà <strong>không</strong> dùng hàm <code>max()</code> có sẵn.</p>
+                <p class="mb-2 text-lg"><strong>Gợi ý:</strong></p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
+                    <li>Giả sử phần tử đầu tiên là lớn nhất. Lưu nó vào một biến, ví dụ `max_val`.</li>
+                    <li>Duyệt qua các phần tử còn lại của list (từ phần tử thứ hai).</li>
+                    <li>So sánh mỗi phần tử với `max_val`.</li>
+                    <li>Nếu tìm thấy phần tử nào lớn hơn `max_val`, cập nhật `max_val` bằng giá trị của phần tử đó.</li>
+                    <li>Sau khi vòng lặp kết thúc, `max_val` sẽ là giá trị lớn nhất.</li>
+                </ol>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">12</span>, <span class="number">45</span>, <span class="number">6</span>, <span class="number">78</span>, <span class="number">34</span>, <span class="number">99</span>, <span class="number">52</span>]
+<span class="variable">max_val</span> <span class="operator">=</span> <span class="variable">numbers</span>[<span class="number">0</span>]
+
+<span class="comment"># Code của bạn ở đây...</span>
+
+
+<span class="function">print</span>(<span class="string">f"Số lớn nhất trong danh sách là: {max_val}"</span>)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Practice Exercise 2 -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-sky-600 mb-4">4. Bài Tập Luyện Tập</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 2: Đếm Từ Dài</h4>
+                <p class="mb-4 text-lg"><strong>Yêu cầu:</strong> Đọc file <code>words.txt</code>. Đếm xem có bao nhiêu
+                    từ có độ dài lớn hơn 5 ký tự.</p>
+                <p class="mb-2 font-medium">File <code>words.txt</code> mẫu:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="text-gray-400 px-3 text-sm">words.txt</span></div>
+                    <pre class="code-block"><code>Python
+laptrinh
+ngonngu
+code
+chuongtrinh
+hoc
+</code></pre>
+                </div>
+                <p class="mb-2 text-lg"><strong>Gợi ý:</strong></p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
+                    <li>Tạo một biến đếm, ví dụ `count = 0`.</li>
+                    <li>Mở file và duyệt qua từng dòng.</li>
+                    <li>Với mỗi dòng, hãy nhớ dùng `.strip()` để xóa ký tự xuống dòng.</li>
+                    <li>Dùng hàm `len()` để lấy độ dài của từ.</li>
+                    <li>Nếu độ dài lớn hơn 5, tăng biến đếm lên 1.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 14: Challenge Exercise -->
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-sky-600 mb-4">4. Bài Tập Thử Thách</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 3: Tìm Thủ Khoa</h4>
+                <p class="mb-4 text-lg"><strong>Yêu cầu:</strong> Đọc file <code>students.txt</code>. Mỗi dòng chứa
+                    thông tin của một sinh viên theo định dạng `Tên,Điểm1,Điểm2` (ngăn cách bởi dấu phẩy). Hãy tìm ra
+                    sinh viên có điểm trung bình cao nhất.</p>
+                <p class="mb-2 font-medium">File <code>students.txt</code> mẫu:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="text-gray-400 px-3 text-sm">students.txt</span></div>
+                    <pre class="code-block"><code>An,8,9
+Binh,10,7
+Chi,9,9.5
+Dung,7,8
+</code></pre>
+                </div>
+                <p class="mb-2 text-lg"><strong>Gợi ý:</strong></p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
+                    <li>Bạn cần hai biến để lưu lại thông tin của người giỏi nhất hiện tại: `ten_thu_khoa` và
+                        `diem_cao_nhat`. Khởi tạo `diem_cao_nhat = -1`.</li>
+                    <li>Duyệt qua từng dòng trong file.</li>
+                    <li>Với mỗi dòng, dùng `.strip()` và `.split(',')` để tách thông tin.</li>
+                    <li>Chuyển đổi các điểm từ chuỗi sang số (float).</li>
+                    <li>Tính điểm trung bình của sinh viên hiện tại.</li>
+                    <li>So sánh điểm trung bình này với `diem_cao_nhat`. Nếu lớn hơn, cập nhật `diem_cao_nhat` và
+                        `ten_thu_khoa`.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 15: Summary -->
+        <div id="slide-15" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Tóm Tắt Buổi Học</h3>
+                <p class="mb-4 text-lg">Trong buổi học hôm nay, chúng ta đã cùng nhau tìm hiểu những kiến thức nền tảng
+                    quan trọng:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3">
+                    <li><strong>List:</strong> Cách tạo, truy cập phần tử qua index, và các phương thức cơ bản như
+                        <code>append()</code>, <code>remove()</code>, <code>pop()</code>.
+                    </li>
+                    <li><strong>List và Vòng lặp:</strong> Sử dụng vòng lặp <code>for</code> để duyệt và xử lý từng phần
+                        tử trong list, kết hợp với câu lệnh <code>if/else</code> để giải các bài toán lọc, tìm kiếm.
+                    </li>
+                    <li><strong>Xử lý file cơ bản:</strong> Dùng cú pháp <code>with open()</code> để đọc file một cách
+                        an toàn.</li>
+                    <li><strong>Xử lý chuỗi từ file:</strong> Sử dụng <code>.strip()</code> để làm sạch và
+                        <code>.split()</code> để tách dữ liệu, sau đó chuyển đổi kiểu dữ liệu (với <code>int()</code>,
+                        <code>float()</code>) để tính toán.
+                    </li>
+                </ul>
+                <p class="text-lg mb-6">Nắm vững những khái niệm này là bước đệm vững chắc để bạn xây dựng các ứng dụng
+                    phức tạp và xử lý dữ liệu thực tế hiệu quả hơn.</p>
+                <div class="flex justify-center mt-8">
+                    <img src="https://placehold.co/350x200/2563EB/FFFFFF?text=Next+Steps"
+                        alt="[Hình ảnh Tóm tắt và các bước tiếp theo]" class="shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Q&A -->
+        <div id="slide-16" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">6. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/1E40AF/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Đừng ngần ngại đặt câu hỏi nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        const navbar = document.getElementById('navbar');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                } else {
+                    slide.classList.remove('active');
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            // Scroll to the top of the slide container after navigation
+            const slideContainer = document.querySelector('.slide-container');
+            if (slideContainer) {
+                window.scrollTo({ top: slideContainer.offsetTop - navbar.offsetHeight, behavior: 'smooth' });
+            }
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block code');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
