@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 2: Cấu trúc HTML & CSS Selectors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .tag {
+            color: #569cd6;
+        }
+
+        .code-block .attr-name {
+            color: #9cdcfe;
+        }
+
+        .code-block .attr-value {
+            color: #ce9178;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .property {
+            color: #9cdcfe;
+        }
+
+        .code-block .css-value {
+            color: #ce9178;
+        }
+
+        .code-block .selector {
+            color: #d7ba7d;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #4a5568;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #718096;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        .html-output {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-blue-600">Web cơ bản - Buổi 2</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-blue-700 mb-6">Buổi 2: Cấu trúc với &lt;div&gt; & CSS Selectors</h2>
+                <p class="text-2xl text-gray-600 mb-12">Làm chủ layout và lựa chọn phần tử</p>
+                <img src="https://placehold.co/600x350/3498DB/FFFFFF?text=Structure+and+Selectors"
+                    alt="[Hình ảnh về cấu trúc và selector]" class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Hãy cùng xây dựng những layout web phức tạp hơn nhé!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: The <div> tag -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">1. Thẻ &lt;div&gt;: Người hùng thầm lặng của
+                    Layout</h3>
+                <p class="text-lg text-gray-700 mb-4">Thẻ <code>&lt;div&gt;</code> (division) là một "container" hoặc
+                    "hộp chứa" chung. Nó không có ý nghĩa về mặt ngữ nghĩa, vai trò chính của nó là để <strong>nhóm các
+                        phần tử khác lại với nhau</strong> nhằm mục đích tạo kiểu (CSS) hoặc xử lý (JavaScript).</p>
+                <div class="grid md:grid-cols-2 gap-8 mt-6">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow">
+                        <h4 class="text-2xl font-bold text-blue-700 mb-3">Ứng dụng chính:</h4>
+                        <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2">
+                            <li>Tạo ra các khối layout lớn (header, main content, footer, sidebar).</li>
+                            <li>Gom nhóm các nội dung liên quan để áp dụng chung một style.</li>
+                            <li>Chia một trang web thành các phần riêng biệt, dễ quản lý.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow">
+                        <h4 class="text-2xl font-bold text-yellow-800 mb-3">Ví von:</h4>
+                        <p class="text-gray-700">Hãy tưởng tượng <code>&lt;div&gt;</code> như những chiếc hộp carton. Tự
+                            nó không có gì đặc biệt, nhưng bạn dùng chúng để sắp xếp đồ đạc (nội dung web) vào các nhóm
+                            ngăn nắp, giúp ngôi nhà (trang web) của bạn gọn gàng và có cấu trúc.</p>
+                    </div>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ về bố cục trang web dùng
+                    <code>&lt;div&gt;</code>:
+                </h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Sao
+                            chép</button></div>
+                    <pre class="code-block" data-code-id="divLayoutCode"><code><span class="comment">&lt;!-- Toàn bộ trang web được bọc trong một div container --&gt;</span>
+&lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"container"</span>&gt;
+  <span class="comment">&lt;!-- Phần đầu trang --&gt;</span>
+  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"header"</span>&gt; ...Nội dung header... &lt;/<span class="tag">div</span>&gt;
+  
+  <span class="comment">&lt;!-- Phần thân trang --&gt;</span>
+  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"main-content"</span>&gt;
+    <span class="comment">&lt;!-- Nội dung chính --&gt;</span>
+    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"article"</span>&gt; ...Nội dung bài viết... &lt;/<span class="tag">div</span>&gt;
+    <span class="comment">&lt;!-- Thanh bên --&gt;</span>
+    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"sidebar"</span>&gt; ...Nội dung sidebar... &lt;/<span class="tag">div</span>&gt;
+  &lt;/<span class="tag">div</span>&gt;
+  
+  <span class="comment">&lt;!-- Phần chân trang --&gt;</span>
+  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"footer"</span>&gt; ...Nội dung footer... &lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Block vs Inline -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">2. Block vs. Inline: Hiểu cách các phần tử hiển
+                    thị</h3>
+                <p class="text-lg text-gray-700 mb-6">Mỗi phần tử HTML có một kiểu hiển thị mặc định. Hai kiểu phổ biến
+                    nhất là <strong>block</strong> và <strong>inline</strong>.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-red-50 p-6 rounded-lg shadow">
+                        <h4 class="text-2xl font-bold text-red-700 mb-3">Phần tử Block</h4>
+                        <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2">
+                            <li>Luôn <strong>bắt đầu trên một dòng mới</strong>.</li>
+                            <li>Chiếm <strong>toàn bộ chiều rộng</strong> của phần tử cha.</li>
+                            <li>Ví dụ: <code>&lt;div&gt;</code>, <code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>,
+                                <code>&lt;p&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-lg shadow">
+                        <h4 class="text-2xl font-bold text-indigo-700 mb-3">Phần tử Inline</h4>
+                        <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2">
+                            <li><strong>Không</strong> bắt đầu trên một dòng mới.</li>
+                            <li>Chỉ chiếm <strong>chiều rộng cần thiết</strong> cho nội dung của nó.</li>
+                            <li>Ví dụ: <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code>,
+                                <code>&lt;strong&gt;</code>, <code>&lt;button&gt;</code>.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ thực tế:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Sao
+                            chép</button></div>
+                    <pre class="code-block" data-code-id="blockInlineCode"><code><span class="comment">&lt;!-- div và p là các phần tử block, chúng sẽ nằm trên các dòng riêng biệt --&gt;</span>
+&lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #f8d7da; padding: 10px; margin-bottom: 5px;"</span>&gt;Đây là một div (block).&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #d1ecf1; padding: 10px;"</span>&gt;Đây là một đoạn văn (block).&lt;/<span class="tag">p</span>&gt;
+
+<span class="comment">&lt;!-- span và a là các phần tử inline, chúng sẽ nằm trên cùng một dòng --&gt;</span>
+&lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #e2e3e5; padding: 10px; margin-top: 10px;"</span>&gt;
+  Đây là một
+  &lt;<span class="tag">span</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #fff3cd; font-weight: bold; padding: 5px; border-radius: 3px;"</span>&gt;span (inline)&lt;/<span class="tag">span</span>&gt;
+  và đây là một
+  &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #d4edda; padding: 5px; border-radius: 3px;"</span>&gt;liên kết (inline)&lt;/<span class="tag">a</span>&gt;.
+&lt;/<span class="tag">p</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
+                <div class="html-output" id="blockInlineOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 4: <style> tag -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Viết CSS tập trung với thẻ &lt;style&gt;</h3>
+                <p class="text-lg text-gray-700 mb-4"><strong>Internal CSS</strong>: đặt các quy tắc CSS vào trong thẻ
+                    <code>&lt;style&gt;</code>, thường đặt trong phần <code>&lt;head&gt;</code>. Đây là cách làm tốt hơn
+                    Inline CSS ở Buổi 1.
+                </p>
+                <h4 class="text-2xl font-bold text-green-700 my-4">Lợi ích:</h4>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><strong>Tách biệt nội dung (HTML) và trình bày (CSS)</strong>.</li>
+                    <li><strong>Dễ dàng quản lý</strong> và chỉnh sửa tất cả style ở một nơi.</li>
+                    <li>Có thể <strong>tái sử dụng</strong> một style cho nhiều phần tử.</li>
+                </ul>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ: Chuyển từ Inline CSS sang Internal CSS
+                </h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Sao
+                            chép</button></div>
+                    <pre class="code-block" data-code-id="internalCssCode"><code>&lt;<span class="tag">!DOCTYPE html</span>&gt;
+&lt;<span class="tag">html</span>&gt;
+&lt;<span class="tag">head</span>&gt;
+  &lt;<span class="tag">title</span>&gt;Internal CSS&lt;/<span class="tag">title</span>&gt;
+  &lt;<span class="tag">style</span>&gt;
+    <span class="selector">h1</span> {
+      <span class="property">color</span>: <span class="css-value">navy</span>;
+      <span class="property">text-align</span>: <span class="css-value">center</span>;
+    }
+    <span class="selector">p</span> {
+      <span class="property">font-family</span>: <span class="css-value">Verdana</span>;
+      <span class="property">font-size</span>: <span class="css-value">16px</span>;
+    }
+    <span class="selector">button</span> {
+      <span class="property">background-color</span>: <span class="css-value">green</span>;
+      <span class="property">color</span>: <span class="css-value">white</span>;
+      <span class="property">padding</span>: <span class="css-value">10px</span>;
+      <span class="property">border</span>: <span class="css-value">none</span>;
+      <span class="property">border-radius</span>: <span class="css-value">5px</span>;
+    }
+  &lt;/<span class="tag">style</span>&gt;
+&lt;/<span class="tag">head</span>&gt;
+&lt;<span class="tag">body</span>&gt;
+  <span class="comment">&lt;!-- HTML giờ đây trông gọn gàng hơn nhiều! --&gt;</span>
+  &lt;<span class="tag">h1</span>&gt;Đây là Tiêu đề&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">p</span>&gt;Đây là một đoạn văn bản.&lt;/<span class="tag">p</span>&gt;
+  &lt;<span class="tag">button</span>&gt;Bấm vào tôi&lt;/<span class="tag">button</span>&gt;
+&lt;/<span class="tag">body</span>&gt;
+&lt;/<span class="tag">html</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (nội dung body):</h4>
+                <div class="html-output" id="internalCssOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Class selector -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">4. CSS Selector: Lựa chọn hàng loạt với Class</h3>
+                <p class="text-lg text-gray-700 mb-4">Khi bạn muốn áp dụng <strong>cùng một style cho nhiều phần tử khác
+                        nhau</strong>, hãy sử dụng thuộc tính <code>class</code>.</p>
+                <div class="grid md:grid-cols-2 gap-8 text-lg items-center">
+                    <div>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Cách hoạt động:</h4>
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li>Trong CSS, tạo một class với tên bắt đầu bằng dấu chấm (<code>.</code>).</li>
+                            <li>Trong HTML, thêm thuộc tính <code>class="tên-class"</code> vào các phần tử.</li>
+                            <li>Một phần tử có thể có nhiều class, cách nhau bởi dấu cách.</li>
+                        </ol>
+                    </div>
+                    <img src="https://placehold.co/400x200/2ECC71/FFFFFF?text=One+Style,+Many+Elements"
+                        class="rounded-lg shadow-md">
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ: Tạo các nút bấm và cảnh báo</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Sao
+                            chép</button></div>
+                    <pre class="code-block" data-code-id="classSelectorCode"><code>&lt;<span class="tag">style</span>&gt;
+  <span class="selector">.btn</span> {
+    <span class="property">padding</span>: <span class="css-value">10px 15px</span>;
+    <span class="property">border</span>: <span class="css-value">none</span>;
+    <span class="property">border-radius</span>: <span class="css-value">5px</span>;
+    <span class="property">font-weight</span>: <span class="css-value">bold</span>;
+    <span class="property">cursor</span>: <span class="css-value">pointer</span>;
+  }
+  <span class="selector">.btn-primary</span> {
+    <span class="property">background-color</span>: <span class="css-value">#007bff</span>;
+    <span class="property">color</span>: <span class="css-value">white</span>;
+  }
+  <span class="selector">.alert-danger</span> {
+    <span class="property">background-color</span>: <span class="css-value">#f8d7da</span>;
+    <span class="property">color</span>: <span class="css-value">#721c24</span>;
+    <span class="property">padding</span>: <span class="css-value">1rem</span>;
+    <span class="property">border</span>: <span class="css-value">1px solid #f5c6cb</span>;
+    <span class="property">border-radius</span>: <span class="css-value">.25rem</span>;
+    <span class="property">margin-top</span>: <span class="css-value">15px</span>;
+  }
+&lt;/<span class="tag">style</span>&gt;
+<span class="comment">&lt;!-- HTML --&gt;</span>
+&lt;<span class="tag">button</span> <span class="attr-name">class</span>=<span class="attr-value">"btn btn-primary"</span>&gt;Lưu thay đổi&lt;/<span class="tag">button</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"alert-danger"</span>&gt;
+    &lt;<span class="tag">strong</span>&gt;Lỗi!&lt;/<span class="tag">strong</span>&gt; Vui lòng kiểm tra lại thông tin.
+&lt;/<span class="tag">div</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
+                <div class="html-output" id="classSelectorOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 6: ID selector -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. CSS Selector: Lựa chọn duy nhất với ID</h3>
+                <p class="text-lg text-gray-700 mb-4">Khi bạn muốn áp dụng style cho <strong>một và chỉ một phần tử duy
+                        nhất</strong> trên trang, hãy sử dụng thuộc tính <code>id</code>.</p>
+                <div class="grid md:grid-cols-2 gap-8 text-lg items-center">
+                    <div>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Cách hoạt động:</h4>
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li>Trong HTML, thêm thuộc tính <code>id="tên-id-duy-nhất"</code>. <strong>ID phải là duy
+                                    nhất</strong> trên trang.</li>
+                            <li>Trong CSS, chọn phần tử bằng dấu thăng (<code>#</code>) theo sau là tên ID.</li>
+                        </ol>
+                    </div>
+                    <img src="https://placehold.co/400x200/E74C3C/FFFFFF?text=One+Unique+Element"
+                        class="rounded-lg shadow-md">
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ: Tạo kiểu cho Header</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Sao
+                            chép</button></div>
+                    <pre class="code-block" data-code-id="idSelectorCode"><code>&lt;<span class="tag">style</span>&gt;
+  <span class="selector">#main-header</span> {
+    <span class="property">background-color</span>: <span class="css-value">#343a40</span>;
+    <span class="property">color</span>: <span class="css-value">white</span>;
+    <span class="property">padding</span>: <span class="css-value">20px</span>;
+    <span class="property">text-align</span>: <span class="css-value">center</span>;
+    <span class="property">border-radius</span>: <span class="css-value">8px</span>;
+  }
+&lt;/<span class="tag">style</span>&gt;
+<span class="comment">&lt;!-- HTML --&gt;</span>
+&lt;<span class="tag">div</span> <span class="attr-name">id</span>=<span class="attr-value">"main-header"</span>&gt;
+  &lt;<span class="tag">h1</span>&gt;Trang Web Của Tôi&lt;/<span class="tag">h1</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
+                <div class="html-output" id="idSelectorOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Practical Example -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">6. Bài tập: Xây dựng Layout Blog Post</h3>
+                <p class="text-lg text-gray-700 mb-4">Áp dụng kiến thức đã học: <code>&lt;div&gt;</code>,
+                    <code>class</code>, và <code>id</code> để tạo một layout bài viết blog đơn giản.
+                </p>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="code-block-container">
+                        <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Sao
+                                chép</button></div>
+                        <pre class="code-block" data-code-id="blogLayoutCode"><code>&lt;<span class="tag">!DOCTYPE html</span>&gt;
+&lt;<span class="tag">html</span>&gt;
+&lt;<span class="tag">head</span>&gt;
+&lt;<span class="tag">style</span>&gt;
+  <span class="selector">body</span> { <span class="property">background-color</span>: <span class="css-value">#f4f4f4</span>; <span class="property">color</span>: <span class="css-value">#333</span>; <span class="property">font-family</span>: <span class="css-value">sans-serif</span>; }
+  <span class="selector">#blog-container</span> {
+    <span class="property">width</span>: <span class="css-value">100%</span>; <span class="comment">/* Adjusted for output area */</span>
+    <span class="property">margin</span>: <span class="css-value">auto</span>;
+    <span class="property">background-color</span>: <span class="css-value">white</span>;
+    <span class="property">padding</span>: <span class="css-value">20px</span>;
+    <span class="property">box-shadow</span>: <span class="css-value">0 0 10px rgba(0,0,0,0.1)</span>;
+    <span class="property">border-radius</span>: <span class="css-value">8px</span>;
+  }
+  <span class="selector">.post-header</span> { <span class="property">border-bottom</span>: <span class="css-value">2px solid #eee</span>; <span class="property">padding-bottom</span>: <span class="css-value">10px</span>; <span class="property">margin-bottom</span>: <span class="css-value">20px</span>; }
+  <span class="selector">.post-title</span> { <span class="property">color</span>: <span class="css-value">#0056b3</span>; <span class="property">margin</span>: <span class="css-value">0</span>; }
+  <span class="selector">.post-meta</span> { <span class="property">font-size</span>: <span class="css-value">0.9em</span>; <span class="property">color</span>: <span class="css-value">#888</span>; <span class="property">margin-top</span>: <span class="css-value">5px</span>; }
+  <span class="selector">.post-content p</span> { <span class="property">line-height</span>: <span class="css-value">1.6</span>; }
+  <span class="selector">.author-box</span> { <span class="property">background-color</span>: <span class="css-value">#e9ecef</span>; <span class="property">border</span>: <span class="css-value">1px solid #dee2e6</span>; <span class="property">padding</span>: <span class="css-value">15px</span>; <span class="property">margin-top</span>: <span class="css-value">25px</span>; <span class="property">border-radius</span>: <span class="css-value">5px</span>; }
+&lt;/<span class="tag">style</span>&gt;
+&lt;/<span class="tag">head</span>&gt;
+&lt;<span class="tag">body</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr-name">id</span>=<span class="attr-value">"blog-container"</span>&gt;
+    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"post-header"</span>&gt;
+      &lt;<span class="tag">h1</span> <span class="attr-name">class</span>=<span class="attr-value">"post-title"</span>&gt;Hành trình học Lập trình Web&lt;/<span class="tag">h1</span>&gt;
+      &lt;<span class="tag">p</span> <span class="attr-name">class</span>=<span class="attr-value">"post-meta"</span>&gt;Đăng bởi John Doe vào ngày 8 tháng 6, 2025&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"post-content"</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Đây là đoạn văn đầu tiên của bài viết. Chúng ta đang áp dụng các class để tạo kiểu.&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Thẻ div giúp chúng ta nhóm các phần tử lại với nhau.&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"author-box"</span>&gt;
+      &lt;<span class="tag">h4</span>&gt;Về tác giả&lt;/<span class="tag">h4</span>&gt;
+      &lt;<span class="tag">p</span>&gt;John Doe là một nhà phát triển web đầy nhiệt huyết.&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  &lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">body</span>&gt;
+&lt;/<span class="tag">html</span>&gt;</code></pre>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
+                        <div class="html-output h-full" id="blogLayoutOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Summary -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-blue-700 mb-8">Tổng kết Buổi 2</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Thẻ
+                            <code>&lt;div&gt;</code></strong> là công cụ để nhóm các phần tử và xây dựng layout.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Hiểu rõ <strong>Block</strong> (chiếm cả
+                        dòng) và <strong>Inline</strong> (nằm trên dòng) là chìa khóa để kiểm soát bố cục.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Sử dụng
+                        <strong><code>&lt;style&gt;</code></strong> giúp code HTML sạch hơn và CSS dễ quản lý hơn.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Class
+                            (<code>.ten-class</code>)</strong> dùng để áp dụng một style cho NHIỀU phần tử.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>ID (<code>#ten-id</code>)</strong>
+                        dùng để định danh và tạo kiểu cho MỘT phần tử DUY NHẤT.</p>
+                </div>
+                <div
+                    class="mt-12 bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở Buổi 3!</h4>
+                    <p class="text-lg">Chúng ta sẽ khám phá một trong những khái niệm quan trọng nhất của CSS:
+                        <strong>Box Model (Mô hình hộp)</strong>!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 400); // Match CSS transition duration
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            function copyCode(buttonElement) {
+                const codeBlock = buttonElement.closest('.code-block-container').querySelector('pre.code-block code');
+                if (!codeBlock) return;
+
+                const codeToCopy = codeBlock.innerText;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalIcon = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalIcon;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code:', err);
+                    alert('Lỗi sao chép!');
+                }
+                document.body.removeChild(textarea);
+            }
+
+            function renderExample(codeBlockEl, outputEl) {
+                if (!codeBlockEl || !outputEl) return;
+
+                // 1. Get the clean code string from the `<code>` element
+                const codeString = codeBlockEl.querySelector('code').innerText;
+
+                // 2. Extract style and body content
+                let styleContent = '';
+                const styleMatch = codeString.match(/<style>([\s\S]*?)<\/style>/i);
+                if (styleMatch) {
+                    styleContent = styleMatch[1];
+                }
+
+                let bodyContent = '';
+                const bodyMatch = codeString.match(/<body>([\s\S]*?)<\/body>/i);
+                if (bodyMatch) {
+                    bodyContent = bodyMatch[1];
+                } else {
+                    // Fallback for code snippets without a body tag
+                    bodyContent = codeString.replace(/<style>[\s\S]*?<\/style>/i, '').trim();
+                }
+
+                // 3. Use Shadow DOM for perfect encapsulation
+                outputEl.innerHTML = ''; // Clear previous content
+                const shadow = outputEl.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `<style>${styleContent}</style>${bodyContent}`;
+            }
+
+            // Setup navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Setup copy buttons
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
+            });
+
+            // Render all live examples
+            renderExample(document.querySelector('[data-code-id="blockInlineCode"]'), document.getElementById('blockInlineOutput'));
+            renderExample(document.querySelector('[data-code-id="internalCssCode"]'), document.getElementById('internalCssOutput'));
+            renderExample(document.querySelector('[data-code-id="classSelectorCode"]'), document.getElementById('classSelectorOutput'));
+            renderExample(document.querySelector('[data-code-id="idSelectorCode"]'), document.getElementById('idSelectorOutput'));
+            renderExample(document.querySelector('[data-code-id="blogLayoutCode"]'), document.getElementById('blogLayoutOutput'));
+
+            // Initial setup
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -4,269 +4,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buổi 1: Lập Trình Web Cơ Bản - HTML & CSS</title>
+    <title>Session 1: Lập trình Web cơ bản - HTML & CSS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
-            background-color: #f0f4f8;
-            /* Light blue-gray background for the page */
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
         }
 
         .slide {
-            min-height: 85vh;
-            /* Increased min-height for more content */
-            scroll-snap-align: start;
-            scroll-margin-top: 70px;
-            /* Adjusted for navbar height */
             background-color: white;
-            border-radius: 12px;
-            /* More rounded corners */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.04);
-            /* Softer shadow */
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             margin-bottom: 2rem;
-            /* Space between slides */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
         }
 
         .code-block {
-            background-color: #2d3748;
-            /* Dark background for code */
+            background-color: #1e293b;
             color: #e2e8f0;
-            /* Light text color */
-            padding: 1.5rem;
-            /* Increased padding */
-            border-radius: 0.75rem;
-            /* More rounded */
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            /* Common mono fonts */
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 0.9em;
+            font-size: 0.875em;
             line-height: 1.6;
-            /* Improved line spacing */
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+            overflow-x: auto;
         }
 
         .code-block .comment {
             color: #6a9955;
         }
 
-        /* Green for comments */
         .code-block .keyword {
             color: #569cd6;
         }
 
-        /* Blue for keywords like <!DOCTYPE> */
         .code-block .tag {
             color: #569cd6;
         }
 
-        /* Blue for HTML tags */
         .code-block .attr-name {
             color: #9cdcfe;
         }
 
-        /* Light blue for attribute names */
         .code-block .attr-value {
             color: #ce9178;
         }
 
-        /* Orange for attribute values */
         .code-block .string {
             color: #ce9178;
         }
 
-        /* Orange for strings in JS/CSS */
         .code-block .property {
             color: #9cdcfe;
         }
 
-        /* For CSS properties */
         .code-block .css-value {
             color: #ce9178;
         }
 
-        /* For CSS values */
         .code-block .selector {
             color: #d7ba7d;
         }
 
-        /* For CSS selectors */
-
-
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #e0e0e0;
+            background: #4a5568;
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #007bff;
-            /* Blue scrollbar thumb */
+            background: #718096;
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #0056b3;
-            /* Darker blue on hover */
+            background: #a0aec0;
         }
 
-        #navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            /* Ensure navbar is on top */
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            /* Slightly stronger shadow for navbar */
-        }
-
-        .slide-content-wrapper {
-            /* Renamed from .slide-content to avoid conflict if user has that class */
-            display: none;
-            animation: fadeIn 0.6s ease-in-out;
-        }
-
-        .slide-content-wrapper.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .html-output {
-            border: 1px solid #cbd5e0;
-            /* Tailwind gray-300 */
-            padding: 1rem;
-            margin-top: 1rem;
-            border-radius: 0.5rem;
-            background-color: #f7fafc;
-            /* Tailwind gray-100 */
-            min-height: 100px;
-        }
-
-        .html-output h1 {
-            font-size: 2em;
-            margin-bottom: 0.5em;
-            color: #2c5282;
-            /* Tailwind blue-800 */
-        }
-
-        .html-output h2 {
-            font-size: 1.75em;
-            margin-bottom: 0.4em;
-            color: #2c5282;
-        }
-
-        .html-output h3 {
-            font-size: 1.5em;
-            margin-bottom: 0.3em;
-            color: #2c5282;
-        }
-
-        .html-output h4 {
-            font-size: 1.25em;
-            margin-bottom: 0.2em;
-            color: #2c5282;
-        }
-
-        .html-output h5 {
-            font-size: 1em;
-            margin-bottom: 0.2em;
-            color: #2c5282;
-        }
-
-        .html-output h6 {
-            font-size: 0.875em;
-            margin-bottom: 0.2em;
-            color: #2c5282;
-        }
-
-        .html-output p {
-            margin-bottom: 1em;
-            line-height: 1.6;
-            color: #4a5568;
-            /* Tailwind gray-700 */
-        }
-
-        .html-output a {
-            color: #3182ce;
-            /* Tailwind blue-600 */
-            text-decoration: underline;
-        }
-
-        .html-output img {
+        img {
             max-width: 100%;
             height: auto;
-            border-radius: 0.25rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1em;
-        }
-
-        .html-output button {
-            background-color: #4299e1;
-            /* Tailwind blue-500 */
-            color: white;
-            font-weight: bold;
-            padding: 0.5rem 1rem;
             border-radius: 0.375rem;
-            /* Tailwind rounded-md */
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .html-output button:hover {
-            background-color: #2b6cb0;
-            /* Tailwind blue-700 */
-        }
-
-        /* Enhanced button styling for nav */
-        #prevSlide,
-        #nextSlide {
-            background-color: #007bff;
-            /* Primary blue */
-            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
-        }
-
-        #prevSlide:hover,
-        #nextSlide:hover {
-            background-color: #0056b3;
-            /* Darker blue */
-        }
-
-        #prevSlide:disabled,
-        #nextSlide:disabled {
-            background-color: #6c757d;
-            /* Gray for disabled */
-            opacity: 0.7;
-            cursor: not-allowed;
         }
     </style>
 </head>
 
-<body>
+<body class="text-gray-800">
 
     <nav id="navbar" class="p-4">
         <div class="container mx-auto flex flex-wrap justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-600">Web Cơ Bản Buổi 1</h1>
-            <div class="mt-2 sm:mt-0">
+            <h1 class="text-xl font-bold text-blue-600">Web cơ bản - Buổi 1</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
                 <button id="prevSlide"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -284,685 +199,182 @@
                     </svg>
                 </button>
             </div>
-            <div class="text-sm text-gray-600 mt-2 sm:mt-0">
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
                 Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4">
-        <div id="slide-1" class="slide-content-wrapper active slide p-8">
-            <h2 class="text-5xl font-bold text-center text-blue-700 mb-6">Buổi 1: Giới Thiệu Lập Trình Web</h2>
-            <p class="text-3xl text-center text-gray-600 mb-12">HTML & CSS Cơ Bản - Nền tảng của mọi trang web!</p>
-            <div class="flex justify-center">
-                <img src="https://placehold.co/500x300/007BFF/FFFFFF?text=HTML+%26+CSS+Foundation"
-                    alt="[Hình ảnh Lập trình Web HTML CSS]" class="rounded-lg shadow-xl">
-            </div>
-            <p class="text-center mt-10 text-xl text-gray-700">Chào mừng các bạn đến với buổi học đầu tiên về Lập trình
-                Web!</p>
-        </div>
-
-        <div id="slide-2" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">1. Giới Thiệu về HTML và CSS</h3>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
-                    <h4 class="text-2xl font-bold text-blue-700 mb-3">HTML là gì?</h4>
-                    <p class="mb-3 text-lg text-gray-700"><strong>HTML</strong> (HyperText Markup Language - Ngôn ngữ
-                        Đánh dấu Siêu văn bản) là ngôn ngữ tiêu chuẩn để tạo ra các trang web.</p>
-                    <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
-                        <li><strong>Vai trò:</strong> Xây dựng cấu trúc, khung sườn cho nội dung trang web (tiêu đề,
-                            đoạn văn, hình ảnh, liên kết,...).</li>
-                        <li><strong>Ví dụ:</strong> Giống như bộ xương của cơ thể con người, xác định hình dáng và cấu
-                            trúc cơ bản.</li>
-                    </ul>
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper">
+                <h2 class="text-5xl font-bold text-center text-blue-700 mb-6">Buổi 1: Giới thiệu về Lập trình Web</h2>
+                <p class="text-3xl text-center text-gray-600 mb-12">HTML & CSS cơ bản - Nền tảng của mọi trang Web!</p>
+                <div class="flex justify-center">
+                    <img src="https://placehold.co/500x300/007BFF/FFFFFF?text=HTML+%26+CSS+Foundation"
+                        alt="[Hình ảnh Web Programming HTML CSS]" class="rounded-lg shadow-xl">
                 </div>
-                <div class="bg-green-50 p-6 rounded-lg shadow-md">
-                    <h4 class="text-2xl font-bold text-green-700 mb-3">CSS là gì?</h4>
-                    <p class="mb-3 text-lg text-gray-700"><strong>CSS</strong> (Cascading Style Sheets) là ngôn ngữ dùng
-                        để mô tả cách trình bày các phần tử HTML trên màn hình.</p>
-                    <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
-                        <li><strong>Vai trò:</strong> Tạo kiểu dáng, định dạng giao diện cho trang web (màu sắc, font
-                            chữ, bố cục, khoảng cách,...).</li>
-                        <li><strong>Ví dụ:</strong> Giống như quần áo, màu da, kiểu tóc, giúp "cơ thể" (trang web) trở
-                            nên đẹp mắt và hấp dẫn hơn.</li>
-                    </ul>
+                <p class="text-center mt-10 text-xl text-gray-700">Chào mừng bạn đến với buổi học đầu tiên về Lập trình
+                    Web!</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">1. Giới thiệu về HTML và CSS</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-blue-700 mb-3">HTML là gì?</h4>
+                        <p class="mb-3 text-lg text-gray-700"><strong>HTML</strong> (HyperText Markup Language) là ngôn
+                            ngữ tiêu chuẩn để tạo ra các trang web.</p>
+                        <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
+                            <li><strong>Vai trò:</strong> Xây dựng cấu trúc, khung sườn cho nội dung trang web (tiêu đề,
+                                đoạn văn, hình ảnh, liên kết,...).</li>
+                            <li><strong>Ví dụ:</strong> Giống như bộ xương của cơ thể người, định hình và cấu trúc cơ
+                                bản.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-green-700 mb-3">CSS là gì?</h4>
+                        <p class="mb-3 text-lg text-gray-700"><strong>CSS</strong> (Cascading Style Sheets) là ngôn ngữ
+                            dùng để mô tả cách trình bày các phần tử HTML trên màn hình.</p>
+                        <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
+                            <li><strong>Vai trò:</strong> Tạo kiểu dáng và bố cục cho trang web (màu sắc, font chữ,
+                                layout, khoảng cách,...).</li>
+                            <li><strong>Ví dụ:</strong> Giống như quần áo, màu da, kiểu tóc, làm cho "cơ thể" (trang
+                                web) trở nên đẹp mắt.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <img src="https://placehold.co/450x200/7E3AF2/FFFFFF?text=HTML+(Cấu+trúc)+%2B+CSS+(Trình+bày)+%3D+Trang+Web"
+                        alt="[Sơ đồ HTML + CSS = Web Page]" class="rounded-lg shadow-lg mx-auto">
+                    <p class="mt-4 text-xl text-gray-800">HTML cung cấp <strong>cấu trúc</strong>, CSS thêm vào
+                        <strong>phong cách</strong>, cùng nhau tạo nên một trang web hoàn chỉnh và trực quan.
+                    </p>
                 </div>
             </div>
-            <div class="mt-8 text-center">
-                <img src="https://placehold.co/450x200/7E3AF2/FFFFFF?text=HTML+(Cấu+trúc)+%2B+CSS+(Trình+bày)+%3D+Trang+Web"
-                    alt="[Sơ đồ HTML + CSS = Trang Web]" class="rounded-lg shadow-lg mx-auto">
-                <p class="mt-4 text-xl text-gray-800">HTML cung cấp <strong>cấu trúc</strong>, CSS thêm vào
-                    <strong>phong cách</strong>, cùng nhau tạo nên một trang web hoàn chỉnh và trực quan.</p>
-            </div>
         </div>
 
-        <div id="slide-3" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">2. Cú Pháp và File HTML Cơ Bản</h3>
-            <h4 class="text-2xl font-medium text-gray-700 mb-3">Cấu trúc file HTML cơ bản:</h4>
-            <div class="code-block">
-                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
-                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
-                    class="attr-value">"vi"</span>&gt;
-                &lt;<span class="tag">head</span>&gt;
-                &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span
-                    class="attr-value">"UTF-8"</span>&gt;
-                &lt;<span class="tag">meta</span> <span class="attr-name">name</span>=<span
-                    class="attr-value">"viewport"</span> <span class="attr-name">content</span>=<span
-                    class="attr-value">"width=device-width, initial-scale=1.0"</span>&gt;
-                &lt;<span class="tag">title</span>&gt;Tiêu đề trang web&lt;/<span class="tag">title</span>&gt;
-                &lt;/<span class="tag">head</span>&gt;
-                &lt;<span class="tag">body</span>&gt;
-                <span class="comment">&lt;!-- Nội dung chính của trang web sẽ nằm ở đây --&gt;</span>
-                Xin chào thế giới!
-                &lt;/<span class="tag">body</span>&gt;
-                &lt;/<span class="tag">html</span>&gt;
-            </div>
-            <p class="mb-2 font-medium mt-4">Giải thích:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li><code>&lt;!DOCTYPE html&gt;</code>: Khai báo loại tài liệu, giúp trình duyệt hiểu đây là tài liệu
-                    HTML5.</li>
-                <li><code>&lt;html&gt;</code>: Thẻ gốc, bao bọc toàn bộ nội dung trang. Thuộc tính
-                    <code>lang="vi"</code> chỉ định ngôn ngữ của trang là Tiếng Việt.</li>
-                <li><code>&lt;head&gt;</code>: Chứa thông tin meta về trang (không hiển thị trực tiếp), như tiêu đề,
-                    encoding, liên kết CSS, script.</li>
-                <li><code>&lt;title&gt;</code>: Đặt tiêu đề cho trang, hiển thị trên tab trình duyệt.</li>
-                <li><code>&lt;body&gt;</code>: Chứa toàn bộ nội dung hiển thị của trang web (văn bản, hình ảnh, liên
-                    kết,...).</li>
-            </ul>
-
-            <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">Cú pháp thẻ HTML:</h4>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li>Hầu hết các thẻ HTML đều có <strong>thẻ mở</strong> (ví dụ: <code>&lt;p&gt;</code>) và <strong>thẻ
-                        đóng</strong> (ví dụ: <code>&lt;/p&gt;</code>).</li>
-                <li>Nội dung nằm giữa thẻ mở và thẻ đóng.</li>
-                <li>Một số thẻ là <strong>thẻ tự đóng</strong> (void elements), không có nội dung bên trong và không cần
-                    thẻ đóng riêng (ví dụ: <code>&lt;img src="..."&gt;</code>, <code>&lt;br&gt;</code>).</li>
-                <li>Thẻ có thể chứa <strong>thuộc tính</strong> (attributes), cung cấp thêm thông tin cho thẻ. Thuộc
-                    tính được viết trong thẻ mở, có dạng <code>tên_thuộc_tính="giá_trị"</code>.</li>
-            </ul>
-            <div class="code-block">
-                &lt;<span class="tag">p</span> <span class="attr-name">class</span>=<span
-                    class="attr-value">"mo-ta"</span>&gt;Đây là một đoạn văn bản có thuộc tính class.&lt;/<span
-                    class="tag">p</span>&gt;
-                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
-                    class="attr-value">"anh.jpg"</span> <span class="attr-name">alt</span>=<span class="attr-value">"Mô
-                    tả ảnh"</span>&gt; <span class="comment">&lt;!-- Thẻ tự đóng --&gt;</span>
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">2. Cú pháp và cấu trúc file HTML cơ bản</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Cấu trúc file HTML cơ bản:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao
+                            chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span class="attr-value">"vi"</span>&gt;
+&lt;<span class="tag">head</span>&gt;
+  &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span class="attr-value">"UTF-8"</span>&gt;
+  &lt;<span class="tag">meta</span> <span class="attr-name">name</span>=<span class="attr-value">"viewport"</span> <span class="attr-name">content</span>=<span class="attr-value">"width=device-width, initial-scale=1.0"</span>&gt;
+  &lt;<span class="tag">title</span>&gt;Tiêu đề trang&lt;/<span class="tag">title</span>&gt;
+&lt;/<span class="tag">head</span>&gt;
+&lt;<span class="tag">body</span>&gt;
+  Nội dung chính của trang web nằm ở đây
+&lt;/<span class="tag">body</span>&gt;
+&lt;/<span class="tag">html</span>&gt;</code></pre>
+                </div>
             </div>
         </div>
-
-        <div id="slide-4" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Các Thẻ Cơ Bản: Tiêu Đề <code>&lt;h1&gt;</code> -
-                <code>&lt;h6&gt;</code></h3>
-            <p class="mb-4 text-lg text-gray-700">Các thẻ tiêu đề (headings) được sử dụng để định nghĩa các cấp độ tiêu
-                đề trong tài liệu HTML. <code>&lt;h1&gt;</code> là tiêu đề quan trọng nhất (cấp cao nhất), và
-                <code>&lt;h6&gt;</code> là ít quan trọng nhất.</p>
-            <p class="mb-4 text-lg text-gray-700">Sử dụng đúng các thẻ tiêu đề giúp cải thiện cấu trúc trang, tốt cho
-                SEO (Search Engine Optimization) và khả năng tiếp cận (accessibility).</p>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Ví dụ Code:</h4>
-            <div class="code-block">
-                &lt;<span class="tag">h1</span>&gt;Đây là tiêu đề H1 (quan trọng nhất)&lt;/<span
-                    class="tag">h1</span>&gt;
-                &lt;<span class="tag">h2</span>&gt;Đây là tiêu đề H2&lt;/<span class="tag">h2</span>&gt;
-                &lt;<span class="tag">h3</span>&gt;Đây là tiêu đề H3&lt;/<span class="tag">h3</span>&gt;
-                &lt;<span class="tag">h4</span>&gt;Đây là tiêu đề H4&lt;/<span class="tag">h4</span>&gt;
-                &lt;<span class="tag">h5</span>&gt;Đây là tiêu đề H5&lt;/<span class="tag">h5</span>&gt;
-                &lt;<span class="tag">h6</span>&gt;Đây là tiêu đề H6 (ít quan trọng nhất)&lt;/<span
-                    class="tag">h6</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
-            <div class="html-output">
-                <h1>Đây là tiêu đề H1 (quan trọng nhất)</h1>
-                <h2>Đây là tiêu đề H2</h2>
-                <h3>Đây là tiêu đề H3</h3>
-                <h4>Đây là tiêu đề H4</h4>
-                <h5>Đây là tiêu đề H5</h5>
-                <h6>Đây là tiêu đề H6 (ít quan trọng nhất)</h6>
-            </div>
-        </div>
-
-        <div id="slide-5" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Các Thẻ Cơ Bản: Đoạn Văn Bản <code>&lt;p&gt;</code>
-            </h3>
-            <p class="mb-4 text-lg text-gray-700">Thẻ <code>&lt;p&gt;</code> (paragraph) được sử dụng để định nghĩa một
-                đoạn văn bản.</p>
-            <p class="mb-4 text-lg text-gray-700">Trình duyệt tự động thêm một khoảng trắng (margin) trước và sau mỗi
-                phần tử <code>&lt;p&gt;</code>.</p>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Ví dụ Code:</h4>
-            <div class="code-block">
-                &lt;<span class="tag">p</span>&gt;Đây là đoạn văn bản đầu tiên. HTML rất thú vị và là nền tảng của
-                web.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">p</span>&gt;Đây là đoạn văn bản thứ hai. Mỗi thẻ &lt;p&gt; tạo ra một khối văn bản
-                riêng biệt.&lt;/<span class="tag">p</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
-            <div class="html-output">
-                <p>Đây là đoạn văn bản đầu tiên. HTML rất thú vị và là nền tảng của web.</p>
-                <p>Đây là đoạn văn bản thứ hai. Mỗi thẻ &lt;p&gt; tạo ra một khối văn bản riêng biệt.</p>
-            </div>
-        </div>
-
-        <div id="slide-6" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Các Thẻ Cơ Bản: Liên Kết <code>&lt;a&gt;</code>
-            </h3>
-            <p class="mb-4 text-lg text-gray-700">Thẻ <code>&lt;a&gt;</code> (anchor) được sử dụng để tạo siêu liên kết
-                đến các trang web khác, các tệp, địa chỉ email, hoặc các vị trí trong cùng một trang.</p>
-            <p class="mb-2 font-medium text-gray-700">Thuộc tính quan trọng:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li><code>href</code>: (Hypertext Reference) Chỉ định URL (địa chỉ) của trang mà liên kết trỏ tới.</li>
-                <li><code>target="_blank"</code>: Mở liên kết trong một tab hoặc cửa sổ mới của trình duyệt.</li>
-                <li>Nội dung bên trong thẻ <code>&lt;a&gt;...&lt;/a&gt;</code> là phần văn bản hoặc hình ảnh mà người
-                    dùng sẽ nhấp vào.</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Ví dụ Code:</h4>
-            <div class="code-block">
-                &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"https://www.google.com"</span>&gt;Truy cập Google&lt;/<span
-                    class="tag">a</span>&gt;
-                &lt;<span class="tag">br</span>&gt; <span class="comment">&lt;!-- Thẻ ngắt dòng để các liên kết không
-                    dính vào nhau --&gt;</span>
-                &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"https://vnexpress.net"</span> <span class="attr-name">target</span>=<span
-                    class="attr-value">"_blank"</span>&gt;Đọc tin tức trên VnExpress (tab mới)&lt;/<span
-                    class="tag">a</span>&gt;
-                &lt;<span class="tag">br</span>&gt;
-                &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"mailto:info@example.com"</span>&gt;Gửi Email cho chúng tôi&lt;/<span
-                    class="tag">a</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
-            <div class="html-output">
-                <a href="javascript:void(0);" onclick="alert('Bạn đã nhấp vào link Google (giả lập)!')">Truy cập
-                    Google</a>
-                <br>
-                <a href="javascript:void(0);" onclick="alert('Bạn đã nhấp vào link VnExpress (giả lập)!')">Đọc tin tức
-                    trên VnExpress (tab mới)</a>
-                <br>
-                <a href="javascript:void(0);" onclick="alert('Bạn đã nhấp vào link Email (giả lập)!')">Gửi Email cho
-                    chúng tôi</a>
-            </div>
-            <p class="mt-3 text-sm text-gray-600">Lưu ý: Trong ví dụ hiển thị, các liên kết thực tế đã được thay thế
-                bằng hàm JavaScript <code>alert</code> để tránh điều hướng ra khỏi trang này.</p>
-        </div>
-
-        <div id="slide-7" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Các Thẻ Cơ Bản: Hình Ảnh <code>&lt;img&gt;</code>
-            </h3>
-            <p class="mb-4 text-lg text-gray-700">Thẻ <code>&lt;img&gt;</code> (image) được sử dụng để nhúng hình ảnh
-                vào trang web. Đây là một thẻ tự đóng (không có thẻ đóng <code>&lt;/img&gt;</code>).</p>
-            <p class="mb-2 font-medium text-gray-700">Thuộc tính quan trọng:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li><code>src</code>: (Source) Chỉ định đường dẫn (URL) đến tệp hình ảnh.</li>
-                <li><code>alt</code>: (Alternative text) Cung cấp một mô tả văn bản cho hình ảnh. Văn bản này sẽ hiển
-                    thị nếu hình ảnh không tải được và rất quan trọng cho SEO và người dùng khiếm thị.</li>
-                <li><code>width</code>, <code>height</code>: (Tùy chọn) Xác định chiều rộng và chiều cao của hình ảnh
-                    (tính bằng pixel hoặc phần trăm). Nên sử dụng CSS để kiểm soát kích thước ảnh một cách linh hoạt
-                    hơn.</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Ví dụ Code:</h4>
-            <div class="code-block">
-                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
-                    class="attr-value">"https://placehold.co/300x150/3498db/ffffff?text=Ảnh+Minh+Họa+1"</span> <span
-                    class="attr-name">alt</span>=<span class="attr-value">"Ảnh minh họa màu xanh"</span>&gt;
-                &lt;<span class="tag">br</span>&gt;
-                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
-                    class="attr-value">"https://placehold.co/200x200/e74c3c/ffffff?text=Ảnh+Vuông"</span> <span
-                    class="attr-name">alt</span>=<span class="attr-value">"Ảnh vuông màu đỏ"</span> <span
-                    class="attr-name">width</span>=<span class="attr-value">"100"</span> <span
-                    class="attr-name">height</span>=<span class="attr-value">"100"</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
-            <div class="html-output">
-                <img src="https://placehold.co/300x150/3498db/ffffff?text=Ảnh+Minh+Họa+1" alt="Ảnh minh họa màu xanh">
-                <br>
-                <img src="https://placehold.co/200x200/e74c3c/ffffff?text=Ảnh+Vuông" alt="Ảnh vuông màu đỏ" width="100"
-                    height="100">
-            </div>
-        </div>
-
-        <div id="slide-8" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Các Thẻ Cơ Bản: Nút <code>&lt;button&gt;</code>
-            </h3>
-            <p class="mb-4 text-lg text-gray-700">Thẻ <code>&lt;button&gt;</code> được sử dụng để tạo một nút có thể
-                nhấp chuột. Nút thường được dùng để kích hoạt một hành động nào đó, thường thông qua JavaScript (ví dụ:
-                gửi biểu mẫu, mở hộp thoại).</p>
-            <p class="mb-2 font-medium text-gray-700">Thuộc tính cơ bản:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li><code>type</code>: Xác định loại nút. Các giá trị phổ biến:
-                    <ul>
-                        <li><code>"button"</code>: Nút có thể nhấp (mặc định).</li>
-                        <li><code>"submit"</code>: Nút gửi dữ liệu biểu mẫu.</li>
-                        <li><code>"reset"</code>: Nút đặt lại các trường trong biểu mẫu về giá trị ban đầu.</li>
-                    </ul>
-                </li>
-                <li>Nội dung bên trong thẻ <code>&lt;button&gt;...&lt;/button&gt;</code> là văn bản hoặc HTML sẽ hiển
-                    thị trên nút.</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Ví dụ Code:</h4>
-            <div class="code-block">
-                &lt;<span class="tag">button</span> <span class="attr-name">type</span>=<span
-                    class="attr-value">"button"</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Bạn đã nhấn nút thường!')"</span>&gt;Nhấn vào tôi&lt;/<span
-                    class="tag">button</span>&gt;
-                &lt;<span class="tag">br</span>&gt;&lt;<span class="tag">br</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr-name">type</span>=<span
-                    class="attr-value">"submit"</span>&gt;Gửi Dữ Liệu&lt;/<span class="tag">button</span>&gt;
-                &lt;<span class="tag">br</span>&gt;&lt;<span class="tag">br</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr-name">type</span>=<span
-                    class="attr-value">"reset"</span>&gt;Làm Mới&lt;/<span class="tag">button</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
-            <div class="html-output">
-                <button type="button" onclick="alert('Bạn đã nhấn nút thường!')">Nhấn vào tôi</button>
-                <br><br>
-                <button type="submit"
-                    onclick="event.preventDefault(); alert('Bạn đã nhấn nút Gửi Dữ Liệu (giả lập)!')">Gửi Dữ
-                    Liệu</button>
-                <br><br>
-                <button type="reset" onclick="event.preventDefault(); alert('Bạn đã nhấn nút Làm Mới (giả lập)!')">Làm
-                    Mới</button>
-            </div>
-            <p class="mt-3 text-sm text-gray-600">Lưu ý: Thuộc tính <code>onclick</code> với <code>alert()</code> được
-                thêm vào để minh họa hành động khi nhấp nút.</p>
-        </div>
-
-        <div id="slide-9" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">4. CSS Cơ Bản cho Thẻ Text (Thuộc tính
-                <code>style</code>)</h3>
-            <p class="mb-4 text-lg text-gray-700">CSS (Cascading Style Sheets) dùng để định dạng giao diện cho HTML. Một
-                cách đơn giản để thêm CSS là sử dụng <strong>CSS nội tuyến (inline CSS)</strong> thông qua thuộc tính
-                <code>style</code> trực tiếp trên thẻ HTML.</p>
-            <p class="mb-2 font-medium text-gray-700">Một số thuộc tính CSS cơ bản cho văn bản:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
-                <li><code><span class="property">color</span>: <span class="css-value">màu_sắc</span>;</code>: Đặt màu
-                    cho chữ. Ví dụ: <code>color: blue;</code>, <code>color: #FF0000;</code> (mã hex),
-                    <code>color: rgb(0, 255, 0);</code>.</li>
-                <li><code><span class="property">font-size</span>: <span class="css-value">kích_thước</span>;</code>:
-                    Đặt kích thước chữ. Ví dụ: <code>font-size: 20px;</code>, <code>font-size: 1.5em;</code>,
-                    <code>font-size: 120%;</code>.</li>
-                <li><code><span class="property">font-family</span>: <span class="css-value">tên_font</span>;</code>:
-                    Đặt loại font chữ. Ví dụ: <code>font-family: Arial, sans-serif;</code> (nếu Arial không có, dùng
-                    font sans-serif mặc định).</li>
-                <li><code><span class="property">text-align</span>: <span class="css-value">vị_trí</span>;</code>: Căn
-                    lề văn bản. Ví dụ: <code>text-align: center;</code>, <code>text-align: left;</code>,
-                    <code>text-align: right;</code>.</li>
-                <li><code><span class="property">font-weight</span>: <span class="css-value">độ_đậm</span>;</code>: Đặt
-                    độ đậm của chữ. Ví dụ: <code>font-weight: bold;</code>, <code>font-weight: normal;</code>,
-                    <code>font-weight: 700;</code>.</li>
-                <li><code><span class="property">background-color</span>: <span class="css-value">màu_nền</span>;</code>:
-                    Đặt màu nền cho phần tử.</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Ví dụ Code:</h4>
-            <div class="code-block">
-                &lt;<span class="tag">h1</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">color</span>: <span class="css-value">green</span>; <span
-                        class="property">text-align</span>: <span class="css-value">center</span>;"</span>&gt;Tiêu đề
-                này màu xanh lá và căn giữa.&lt;/<span class="tag">h1</span>&gt;
-                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">font-size</span>: <span class="css-value">18px</span>; <span
-                        class="property">color</span>: <span class="css-value">#555555</span>; <span
-                        class="property">font-family</span>: <span class="css-value">'Courier New', monospace</span>;
-                    <span class="property">background-color</span>: <span class="css-value">#f0f0f0</span>; <span
-                        class="property">padding</span>: <span class="css-value">10px</span>;"</span>&gt;
-                Đoạn văn này có kích thước 18px, màu xám đậm, font Courier New, nền xám nhạt và có padding 10px.
-                &lt;/<span class="tag">p</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
-            <div class="html-output">
-                <h1 style="color: green; text-align: center;">Tiêu đề này màu xanh lá và căn giữa.</h1>
-                <p
-                    style="font-size: 18px; color: #555555; font-family: 'Courier New', monospace; background-color: #f0f0f0; padding:10px;">
-                    Đoạn văn này có kích thước 18px, màu xám đậm, font Courier New, nền xám nhạt và có padding 10px.
-                </p>
-            </div>
-            <p class="mt-4 text-lg text-gray-700"><strong>Lưu ý:</strong> CSS nội tuyến tiện lợi cho các thay đổi nhỏ,
-                nhưng đối với các dự án lớn, nên sử dụng CSS trong thẻ <code>&lt;style&gt;</code> hoặc file CSS riêng để
-                dễ quản lý và tái sử dụng hơn (sẽ học ở các buổi sau).</p>
-        </div>
-
-        <div id="slide-10" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Ví dụ: Tạo Trang Giới Thiệu Bản Thân (HTML)</h3>
-            <p class="mb-4 text-lg text-gray-700">Hãy cùng áp dụng các thẻ đã học để tạo một trang giới thiệu bản thân
-                đơn giản chỉ bằng HTML.</p>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Yêu cầu:</h4>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li>Sử dụng <code>&lt;h1&gt;</code> cho tên của bạn.</li>
-                <li>Sử dụng <code>&lt;img&gt;</code> để hiển thị ảnh đại diện (dùng ảnh placeholder).</li>
-                <li>Sử dụng <code>&lt;p&gt;</code> để viết một vài dòng giới thiệu về bản thân, sở thích.</li>
-                <li>Sử dụng <code>&lt;h2&gt;</code> cho phần "Liên hệ".</li>
-                <li>Sử dụng <code>&lt;a&gt;</code> để tạo liên kết đến email hoặc mạng xã hội (giả định).</li>
-                <li>Thêm một nút <code>&lt;button&gt;</code> với một lời chào đơn giản khi nhấp vào.</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Mã HTML mẫu:</h4>
-            <div class="code-block" id="personalPageHtmlCode">
-                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
-                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
-                    class="attr-value">"vi"</span>&gt;
-                &lt;<span class="tag">head</span>&gt;
-                &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span
-                    class="attr-value">"UTF-8"</span>&gt;
-                &lt;<span class="tag">meta</span> <span class="attr-name">name</span>=<span
-                    class="attr-value">"viewport"</span> <span class="attr-name">content</span>=<span
-                    class="attr-value">"width=device-width, initial-scale=1.0"</span>&gt;
-                &lt;<span class="tag">title</span>&gt;Trang Giới Thiệu Của Tôi&lt;/<span class="tag">title</span>&gt;
-                &lt;/<span class="tag">head</span>&gt;
-                &lt;<span class="tag">body</span>&gt;
-                &lt;<span class="tag">h1</span>&gt;Xin chào, tôi là Nguyễn Văn A&lt;/<span class="tag">h1</span>&gt;
-                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
-                    class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Ảnh+Cá+Nhân"</span> <span
-                    class="attr-name">alt</span>=<span class="attr-value">"Ảnh đại diện của tôi"</span>&gt;
-                &lt;<span class="tag">p</span>&gt;Tôi là một sinh viên đam mê công nghệ thông tin, đặc biệt là lĩnh vực
-                phát triển web. Tôi thích học hỏi những điều mới mẻ và thử thách bản thân với các dự án thú
-                vị.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">p</span>&gt;Sở thích của tôi bao gồm chơi game, đọc sách khoa học viễn tưởng và đi
-                phượt.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">h2</span>&gt;Liên hệ với tôi:&lt;/<span class="tag">h2</span>&gt;
-                &lt;<span class="tag">p</span>&gt;
-                Bạn có thể kết nối với tôi qua &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"#"</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Đây là link Facebook giả định!')"</span>&gt;Facebook&lt;/<span
-                    class="tag">a</span>&gt;
-                hoặc gửi email cho tôi tại &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"mailto:nguyenvana@example.com"</span>&gt;nguyenvana@example.com&lt;/<span
-                    class="tag">a</span>&gt;.
-                &lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Cảm ơn bạn đã ghé thăm trang của tôi!')"</span>&gt;Nhấn để xem lời
-                chào!&lt;/<span class="tag">button</span>&gt;
-                &lt;/<span class="tag">body</span>&gt;
-                &lt;/<span class="tag">html</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (chỉ phần body):</h4>
-            <div class="html-output" id="personalPageHtmlOutput">
-            </div>
-        </div>
-
-        <div id="slide-11" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Ví dụ: Áp Dụng CSS Cơ Bản (Thuộc tính
-                <code>style</code>)</h3>
-            <p class="mb-4 text-lg text-gray-700">Bây giờ, hãy thêm một chút CSS nội tuyến vào trang giới thiệu bản thân
-                để làm cho nó trông hấp dẫn hơn.</p>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Yêu cầu:</h4>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li>Thay đổi font chữ cho toàn bộ trang.</li>
-                <li>Căn giữa tiêu đề chính (tên của bạn) và đổi màu chữ.</li>
-                <li>Bo tròn ảnh đại diện và thêm viền.</li>
-                <li>Thay đổi màu chữ, kích thước chữ cho các đoạn văn.</li>
-                <li>Tạo kiểu cho nút bấm (màu nền, màu chữ, bo tròn).</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Mã HTML với CSS nội tuyến:</h4>
-            <div class="code-block" id="personalPageCssCode">
-                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
-                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
-                    class="attr-value">"vi"</span>&gt;
-                &lt;<span class="tag">head</span>&gt;
-                &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span
-                    class="attr-value">"UTF-8"</span>&gt;
-                &lt;<span class="tag">meta</span> <span class="attr-name">name</span>=<span
-                    class="attr-value">"viewport"</span> <span class="attr-name">content</span>=<span
-                    class="attr-value">"width=device-width, initial-scale=1.0"</span>&gt;
-                &lt;<span class="tag">title</span>&gt;Trang Giới Thiệu Của Tôi&lt;/<span class="tag">title</span>&gt;
-                &lt;/<span class="tag">head</span>&gt;
-                &lt;<span class="tag">body</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">font-family</span>: <span class="css-value">'Segoe UI', Tahoma, Geneva,
-                        Verdana, sans-serif</span>; <span class="property">margin</span>: <span
-                        class="css-value">20px</span>; <span class="property">background-color</span>: <span
-                        class="css-value">#e9ecef</span>; <span class="property">color</span>: <span
-                        class="css-value">#343a40</span>;"</span>&gt;
-                &lt;<span class="tag">h1</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">color</span>: <span class="css-value">#007bff</span>; <span
-                        class="property">text-align</span>: <span class="css-value">center</span>; <span
-                        class="property">border-bottom</span>: <span class="css-value">2px solid #007bff</span>; <span
-                        class="property">padding-bottom</span>: <span class="css-value">10px</span>;"</span>&gt;Xin
-                chào, tôi là Nguyễn Văn A&lt;/<span class="tag">h1</span>&gt;
-                &lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">text-align</span>: <span class="css-value">center</span>; <span
-                        class="property">margin-bottom</span>: <span class="css-value">20px</span>;"</span>&gt;
-                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
-                    class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Ảnh+Cá+Nhân"</span> <span
-                    class="attr-name">alt</span>=<span class="attr-value">"Ảnh đại diện của tôi"</span> <span
-                    class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">border-radius</span>: <span class="css-value">50%</span>; <span
-                        class="property">border</span>: <span class="css-value">4px solid #007bff</span>; <span
-                        class="property">box-shadow</span>: <span class="css-value">0 0 10px
-                        rgba(0,0,0,0.1)</span>;"</span>&gt;
-                &lt;/<span class="tag">div</span>&gt;
-                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">font-size</span>: <span class="css-value">1.1em</span>; <span
-                        class="property">line-height</span>: <span class="css-value">1.7</span>; <span
-                        class="property">color</span>: <span class="css-value">#495057</span>;"</span>&gt;Tôi là một
-                sinh viên đam mê công nghệ thông tin, đặc biệt là lĩnh vực phát triển web. Tôi thích học hỏi những điều
-                mới mẻ và thử thách bản thân với các dự án thú vị.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">font-size</span>: <span class="css-value">1.1em</span>; <span
-                        class="property">line-height</span>: <span class="css-value">1.7</span>; <span
-                        class="property">color</span>: <span class="css-value">#495057</span>;"</span>&gt;Sở thích của
-                tôi bao gồm chơi game, đọc sách khoa học viễn tưởng và đi phượt.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">h2</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">color</span>: <span class="css-value">#28a745</span>; <span
-                        class="property">margin-top</span>: <span class="css-value">30px</span>;"</span>&gt;Liên hệ với
-                tôi:&lt;/<span class="tag">h2</span>&gt;
-                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">font-size</span>: <span class="css-value">1.1em</span>;"</span>&gt;
-                Bạn có thể kết nối với tôi qua &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"#"</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Đây là link Facebook giả định!')"</span> <span
-                    class="attr-name">style</span>=<span class="attr-value">"<span class="property">color</span>: <span
-                        class="css-value">#007bff</span>; <span class="property">text-decoration</span>: <span
-                        class="css-value">none</span>; <span class="property">font-weight</span>: <span
-                        class="css-value">bold</span>;"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
-                hoặc gửi email cho tôi tại &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"mailto:nguyenvana@example.com"</span> <span class="attr-name">style</span>=<span
-                    class="attr-value">"<span class="property">color</span>: <span class="css-value">#007bff</span>;
-                    <span class="property">text-decoration</span>: <span class="css-value">none</span>; <span
-                        class="property">font-weight</span>: <span
-                        class="css-value">bold</span>;"</span>&gt;nguyenvana@example.com&lt;/<span
-                    class="tag">a</span>&gt;.
-                &lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Cảm ơn bạn đã ghé thăm trang của tôi!')"</span> <span
-                    class="attr-name">style</span>=<span class="attr-value">"<span
-                        class="property">background-color</span>: <span class="css-value">#28a745</span>; <span
-                        class="property">color</span>: <span class="css-value">white</span>; <span
-                        class="property">padding</span>: <span class="css-value">12px 20px</span>; <span
-                        class="property">border</span>: <span class="css-value">none</span>; <span
-                        class="property">border-radius</span>: <span class="css-value">5px</span>; <span
-                        class="property">cursor</span>: <span class="css-value">pointer</span>; <span
-                        class="property">font-size</span>: <span class="css-value">1em</span>; <span
-                        class="property">margin-top</span>: <span class="css-value">15px</span>;"</span>&gt;Nhấn để xem
-                lời chào!&lt;/<span class="tag">button</span>&gt;
-                &lt;/<span class="tag">body</span>&gt;
-                &lt;/<span class="tag">html</span>&gt;
-            </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (chỉ phần body):</h4>
-            <div class="html-output" id="personalPageCssOutput">
-            </div>
-        </div>
-
-        <div id="slide-12" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-green-600 mb-6">6. Bài Tập Thực Hành</h3>
-            <p class="mb-4 text-lg text-gray-700">Đến lượt bạn thực hành! Hãy vận dụng những kiến thức đã học để tạo một
-                trang web đơn giản theo chủ đề bạn yêu thích.</p>
-            <h4 class="text-2xl font-medium text-gray-700 mb-3">Yêu cầu:</h4>
-            <ol class="list-decimal list-inside mb-6 pl-4 text-gray-700 space-y-2 text-lg">
-                <li>Chọn một chủ đề bạn thích (ví dụ: món ăn, bộ phim, cuốn sách, đội thể thao, địa điểm du lịch,...).
-                </li>
-                <li>Tạo một file HTML mới (ví dụ: <code>my_page.html</code>).</li>
-                <li>Sử dụng thẻ <code>&lt;h1&gt;</code> cho tiêu đề chính của trang (tên chủ đề).</li>
-                <li>Viết một vài đoạn mô tả về chủ đề đó bằng thẻ <code>&lt;p&gt;</code>.</li>
-                <li>Chèn ít nhất một hình ảnh liên quan đến chủ đề bằng thẻ <code>&lt;img&gt;</code>. Đừng quên thuộc
-                    tính <code>alt</code>!</li>
-                <li>Thêm một liên kết <code>&lt;a&gt;</code> đến một trang web bên ngoài có thông tin thêm về chủ đề đó
-                    (mở trong tab mới).</li>
-                <li>Tạo một nút <code>&lt;button&gt;</code> với một thông điệp đơn giản (ví dụ: "Tìm hiểu thêm").</li>
-                <li>Sử dụng thuộc tính <code>style</code> để áp dụng CSS nội tuyến:
-                    <ul class="list-disc list-inside pl-6 mt-1">
-                        <li>Thay đổi màu sắc và căn lề cho tiêu đề <code>&lt;h1&gt;</code>.</li>
-                        <li>Thay đổi font chữ và kích thước chữ cho các đoạn <code>&lt;p&gt;</code>.</li>
-                        <li>Tạo kiểu cho nút bấm (màu nền, màu chữ).</li>
-                    </ul>
-                </li>
-            </ol>
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow" role="alert">
-                <p class="font-bold">Gợi ý:</p>
-                <p>Hãy sáng tạo và thử nghiệm với các thuộc tính CSS khác nhau! Bạn có thể tìm kiếm "CSS color picker"
-                    để chọn mã màu, hoặc "CSS font list" để xem các font chữ phổ biến.</p>
-            </div>
-            <div class="mt-6 flex justify-center">
-                <img src="https://placehold.co/400x250/28A745/FFFFFF?text=Thực+Hành+Ngay!"
-                    alt="[Hình ảnh Thực hành HTML CSS]" class="rounded-lg shadow-lg">
-            </div>
-        </div>
-
-        <div id="slide-13" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">7. Tóm Tắt và Câu Hỏi</h3>
-            <p class="mb-4 text-xl text-gray-700">Trong buổi học hôm nay, chúng ta đã cùng nhau tìm hiểu những kiến thức
-                nền tảng về HTML và CSS:</p>
-            <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
-                <li><strong>HTML là gì?</strong> Ngôn ngữ đánh dấu siêu văn bản, dùng để xây dựng cấu trúc (khung sườn)
-                    cho trang web.</li>
-                <li><strong>CSS là gì?</strong> Cascading Style Sheets, dùng để định dạng, tạo kiểu dáng (giao diện) cho
-                    các phần tử HTML.</li>
-                <li><strong>Cấu trúc file HTML cơ bản</strong> và ý nghĩa của các thẻ <code>&lt;!DOCTYPE&gt;</code>,
-                    <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>,
-                    <code>&lt;title&gt;</code>.</li>
-                <li><strong>Các thẻ HTML cơ bản:</strong>
-                    <ul class="list-circle list-inside pl-6 mt-1">
-                        <li>Tiêu đề: <code>&lt;h1&gt;</code> đến <code>&lt;h6&gt;</code></li>
-                        <li>Đoạn văn: <code>&lt;p&gt;</code></li>
-                        <li>Liên kết: <code>&lt;a&gt;</code> (với thuộc tính <code>href</code>, <code>target</code>)
-                        </li>
-                        <li>Hình ảnh: <code>&lt;img&gt;</code> (với thuộc tính <code>src</code>, <code>alt</code>)</li>
-                        <li>Nút bấm: <code>&lt;button&gt;</code></li>
-                    </ul>
-                </li>
-                <li><strong>CSS nội tuyến (Inline CSS):</strong> Sử dụng thuộc tính <code>style</code> để áp dụng các
-                    quy tắc CSS trực tiếp lên thẻ HTML (ví dụ: <code>color</code>, <code>font-size</code>,
-                    <code>text-align</code>, <code>background-color</code>).</li>
-            </ul>
-            <p class="text-xl text-gray-800 mb-8">Đây là những viên gạch đầu tiên và vô cùng quan trọng trên con đường
-                chinh phục lập trình web. Hãy kiên trì luyện tập để nắm vững kiến thức nhé!</p>
-            <div class="flex justify-center mb-8">
-                <img src="https://placehold.co/350x200/17A2B8/FFFFFF?text=Bạn+Có+Câu+Hỏi%3F" alt="[Hình ảnh Hỏi và Đáp]"
-                    class="rounded-lg shadow-xl">
-            </div>
-            <h4 class="text-3xl font-semibold text-center text-green-600">Cảm ơn các bạn đã tham gia! Bạn có câu hỏi nào
-                không?</h4>
-        </div>
-
     </div>
 
     <script>
-        const slides = document.querySelectorAll('.slide-content-wrapper');
+        const slides = Array.from(document.querySelectorAll('.slide'));
         const prevButton = document.getElementById('prevSlide');
         const nextButton = document.getElementById('nextSlide');
         const currentSlideNumDisplay = document.getElementById('currentSlideNum');
         const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        const navbar = document.getElementById('navbar');
 
         let currentSlide = 0;
-        totalSlidesNumDisplay.textContent = slides.length;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
 
         function showSlide(index) {
             slides.forEach((slide, i) => {
                 if (i === index) {
-                    slide.classList.add('active');
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
                 } else {
                     slide.classList.remove('active');
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
                 }
             });
             currentSlideNumDisplay.textContent = index + 1;
             updateNavButtons();
-            // Scroll to the top of the slide
-            if (slides[index]) {
-                slides[index].parentElement.scrollTop = slides[index].offsetTop - document.getElementById('navbar').offsetHeight - 20; // Adjust for navbar and some padding
+
+            if (navbar) {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
         }
 
         function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
             prevButton.disabled = currentSlide === 0;
             nextButton.disabled = currentSlide === slides.length - 1;
         }
 
-        prevButton.addEventListener('click', () => {
-            if (currentSlide > 0) {
-                currentSlide--;
-                showSlide(currentSlide);
-            }
-        });
-
-        nextButton.addEventListener('click', () => {
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                showSlide(currentSlide);
-            }
-        });
-
-        // Function to render HTML content from code block to output div
-        function renderHtmlExample(codeBlockId, outputDivId) {
-            const codeBlock = document.getElementById(codeBlockId);
-            const outputDiv = document.getElementById(outputDivId);
-            if (codeBlock && outputDiv) {
-                // Extract content within <body> tags for rendering
-                // This is a simplified extraction, might need refinement for complex HTML
-                let htmlContent = codeBlock.innerText || codeBlock.textContent;
-                const bodyStart = htmlContent.toLowerCase().indexOf('<body>');
-                const bodyEnd = htmlContent.toLowerCase().lastIndexOf('</body>');
-
-                if (bodyStart !== -1 && bodyEnd !== -1) {
-                    outputDiv.innerHTML = htmlContent.substring(bodyStart + 6, bodyEnd);
-                } else {
-                    // If no body tag, try to render the whole thing (might be partial snippet)
-                    outputDiv.innerHTML = htmlContent
-                        .replace(/&lt;/g, '<')
-                        .replace(/&gt;/g, '>')
-                        .replace(/&amp;/g, '&'); // Handle other entities if needed
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
                 }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block code, .code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
             }
         }
 
-        // Render examples when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
-            // For Slide 10
-            const personalPageHtmlCodeEl = document.getElementById('personalPageHtmlCode');
-            const personalPageHtmlOutputEl = document.getElementById('personalPageHtmlOutput');
-            if (personalPageHtmlCodeEl && personalPageHtmlOutputEl) {
-                let htmlToRender = personalPageHtmlCodeEl.textContent || personalPageHtmlCodeEl.innerText;
-                const bodyStartIndex = htmlToRender.toLowerCase().indexOf('<body>');
-                const bodyEndIndex = htmlToRender.toLowerCase().lastIndexOf('</body>');
-                if (bodyStartIndex !== -1 && bodyEndIndex !== -1) {
-                    personalPageHtmlOutputEl.innerHTML = htmlToRender.substring(bodyStartIndex + 6, bodyEndIndex);
-                }
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                updateNavButtons();
             }
-
-            // For Slide 11
-            const personalPageCssCodeEl = document.getElementById('personalPageCssCode');
-            const personalPageCssOutputEl = document.getElementById('personalPageCssOutput');
-            if (personalPageCssCodeEl && personalPageCssOutputEl) {
-                let cssHtmlToRender = personalPageCssCodeEl.textContent || personalPageCssCodeEl.innerText;
-                const cssBodyStartIndex = cssHtmlToRender.toLowerCase().indexOf('<body>');
-                const cssBodyEndIndex = cssHtmlToRender.toLowerCase().lastIndexOf('</body>');
-                if (cssBodyStartIndex !== -1 && cssBodyEndIndex !== -1) {
-                    // Extract only the content of the body tag
-                    let bodyContent = cssHtmlToRender.substring(cssBodyStartIndex + cssHtmlToRender.substring(cssBodyStartIndex).indexOf('>') + 1, cssBodyEndIndex);
-
-                    // Extract the style attribute from the body tag itself
-                    const bodyTagMatch = cssHtmlToRender.substring(cssBodyStartIndex).match(/<body(.*?)>/i);
-                    let bodyStyle = "";
-                    if (bodyTagMatch && bodyTagMatch[1]) {
-                        const styleMatch = bodyTagMatch[1].match(/style\s*=\s*"(.*?)"/i);
-                        if (styleMatch && styleMatch[1]) {
-                            bodyStyle = styleMatch[1];
-                        }
-                    }
-
-                    // Apply body style to the output div and set its innerHTML
-                    personalPageCssOutputEl.setAttribute('style', bodyStyle);
-                    personalPageCssOutputEl.innerHTML = bodyContent;
-                }
-            }
-            showSlide(currentSlide); // Initialize first slide
         });
-
-
     </script>
 
 </body>
