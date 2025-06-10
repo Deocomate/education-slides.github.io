@@ -1,54 +1,120 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session 1: Lập trình Web cơ bản - HTML & CSS</title>
+    <title>Session 1: Basic Web Development - HTML & CSS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
-            background-color: #f0f4f8;
-            /* Light blue-gray background for the page */
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
         }
 
         .slide {
-            min-height: 85vh;
-            /* Increased min-height for more content */
-            scroll-snap-align: start;
-            scroll-margin-top: 80px;
-            /* Adjusted for navbar height + extra space */
             background-color: white;
-            border-radius: 12px;
-            /* More rounded corners */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.04);
-            /* Softer shadow */
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             margin-bottom: 2rem;
-            /* Space between slides */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
         }
 
         .code-block {
-            background-color: #2d3748;
-            /* Dark background for code */
+            background-color: #1e293b;
             color: #e2e8f0;
-            /* Light text color */
             padding: 1.5rem;
-            /* Increased padding */
-            border-radius: 0.75rem;
-            /* More rounded */
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            /* Common mono fonts */
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 0.9em;
+            font-size: 0.875em;
             line-height: 1.6;
-            /* Improved line spacing */
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-            text-align: left;
+            overflow-x: auto;
         }
 
         .code-block .comment {
@@ -71,470 +137,396 @@
             color: #ce9178;
         }
 
-        .code-block .string {
-            color: #ce9178;
-        }
-
-        .code-block .property {
-            color: #9cdcfe;
-        }
-
-        .code-block .css-value {
-            color: #ce9178;
-        }
-
-        .code-block .selector {
-            color: #d7ba7d;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #e0e0e0;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #007bff;
-            /* Blue scrollbar thumb */
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #0056b3;
-            /* Darker blue on hover */
-        }
-
-        #navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            /* Ensure navbar is on top */
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            /* Slightly stronger shadow for navbar */
-        }
-
-        .slide-content-wrapper {
-            display: none;
-            animation: fadeIn 0.6s ease-in-out;
-        }
-
-        .slide-content-wrapper.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .html-output {
-            border: 1px solid #cbd5e0;
-            /* Tailwind gray-300 */
-            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
             margin-top: 1rem;
             border-radius: 0.5rem;
             background-color: #f7fafc;
-            /* Tailwind gray-100 */
             min-height: 100px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
         }
 
-        /* Styles for content inside the rendered examples */
-        .html-output h1 {
-            font-size: 2em;
-            margin-bottom: 0.5em;
-            color: #2c5282;
-        }
-
-        .html-output h2 {
-            font-size: 1.75em;
-            margin-bottom: 0.4em;
-            color: #2c5282;
-        }
-
-        .html-output h3 {
-            font-size: 1.5em;
-            margin-bottom: 0.3em;
-            color: #2c5282;
-        }
-
-        .html-output h4 {
-            font-size: 1.25em;
-            margin-bottom: 0.2em;
-            color: #2c5282;
-        }
-
-        .html-output h5 {
-            font-size: 1em;
-            margin-bottom: 0.2em;
-            color: #2c5282;
-        }
-
-        .html-output h6 {
-            font-size: 0.875em;
-            margin-bottom: 0.2em;
-            color: #2c5282;
-        }
-
-        .html-output p {
-            margin-bottom: 1em;
-            line-height: 1.6;
-            color: #4a5568;
-        }
-
-        .html-output a {
-            color: #3182ce;
-            text-decoration: underline;
-        }
-
-        .html-output img {
+        img {
             max-width: 100%;
             height: auto;
-            border-radius: 0.25rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1em;
-        }
-
-        .html-output button {
-            background-color: #4299e1;
-            color: white;
-            font-weight: bold;
-            padding: 0.5rem 1rem;
             border-radius: 0.375rem;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .html-output button:hover {
-            background-color: #2b6cb0;
         }
     </style>
 </head>
 
-<body>
+<body class="text-gray-800">
 
     <nav id="navbar" class="p-4">
         <div class="container mx-auto flex flex-wrap justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-600">Web cơ bản - Buổi 1</h1>
-            <div class="mt-2 sm:mt-0">
+            <h1 class="text-xl font-bold text-blue-600">Web Basics - Session 1</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
                 <button id="prevSlide"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5 inline-block mr-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                    Trước
+                    <i class="fas fa-arrow-left mr-1"></i> Prev
                 </button>
                 <button id="nextSlide"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    Sau
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5 inline-block ml-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
+                    Next <i class="fas fa-arrow-right ml-1"></i>
                 </button>
             </div>
-            <div class="text-sm text-gray-600 mt-2 sm:mt-0">
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
                 Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4">
-        <div id="slide-1" class="slide-content-wrapper active slide p-8">
-            <h2 class="text-5xl font-bold text-center text-blue-700 mb-6">Buổi 1: Giới thiệu về Lập trình Web</h2>
-            <p class="text-3xl text-center text-gray-600 mb-12">HTML & CSS cơ bản - Nền tảng của mọi trang Web!</p>
-            <div class="flex justify-center">
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Welcome -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <h2 class="text-5xl font-bold text-blue-700 mb-6">Session 1: Introduction to Web Development</h2>
+                <p class="text-3xl text-gray-600 mb-12">Basic HTML & CSS - The Foundation of Every Website!</p>
                 <img src="https://placehold.co/500x300/007BFF/FFFFFF?text=HTML+%26+CSS+Foundation"
-                    alt="[Hình ảnh Web Programming HTML CSS]" class="rounded-lg shadow-xl">
+                    alt="[Image of Web Programming HTML CSS]" class="rounded-lg shadow-xl mx-auto">
+                <p class="mt-10 text-xl text-gray-700">Welcome to the first session on Web Development!</p>
             </div>
-            <p class="text-center mt-10 text-xl text-gray-700">Chào mừng bạn đến với buổi học đầu tiên về Lập trình Web!
-            </p>
         </div>
 
-        <div id="slide-2" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">1. Giới thiệu về HTML và CSS</h3>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
-                    <h4 class="text-2xl font-bold text-blue-700 mb-3">HTML là gì?</h4>
-                    <p class="mb-3 text-lg text-gray-700"><strong>HTML</strong> (HyperText Markup Language) là ngôn ngữ
-                        tiêu chuẩn để tạo ra các trang web.</p>
-                    <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
-                        <li><strong>Vai trò:</strong> Xây dựng cấu trúc, khung sườn cho nội dung trang web (tiêu đề,
-                            đoạn văn, hình ảnh, liên kết,...).</li>
-                        <li><strong>Ví dụ:</strong> Giống như bộ xương của cơ thể người, định hình và cấu trúc cơ bản.
-                        </li>
-                    </ul>
+        <!-- Slide 2: Intro HTML/CSS -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6 text-center">1. Introduction to HTML and CSS</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-blue-700 mb-3">What is HTML?</h4>
+                        <p class="mb-3 text-lg text-gray-700"><strong>HTML</strong> (HyperText Markup Language) is the
+                            standard language for creating web pages.</p>
+                        <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
+                            <li><strong>Role:</strong> Builds the structure for web content.</li>
+                            <li><strong>Analogy:</strong> Like the skeleton of a human body.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-green-700 mb-3">What is CSS?</h4>
+                        <p class="mb-3 text-lg text-gray-700"><strong>CSS</strong> (Cascading Style Sheets) is the
+                            language used to style a webpage.</p>
+                        <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
+                            <li><strong>Role:</strong> Adds colors, layouts, fonts...</li>
+                            <li><strong>Analogy:</strong> Like clothes and skin, making the website look good.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="bg-green-50 p-6 rounded-lg shadow-md">
-                    <h4 class="text-2xl font-bold text-green-700 mb-3">CSS là gì?</h4>
-                    <p class="mb-3 text-lg text-gray-700"><strong>CSS</strong> (Cascading Style Sheets) là ngôn ngữ dùng
-                        để mô tả cách trình bày các phần tử HTML trên màn hình.</p>
-                    <ul class="list-disc list-inside pl-4 text-gray-700 space-y-1">
-                        <li><strong>Vai trò:</strong> Tạo kiểu dáng và bố cục cho trang web (màu sắc, font chữ, layout,
-                            khoảng cách,...).</li>
-                        <li><strong>Ví dụ:</strong> Giống như quần áo, màu da, kiểu tóc, làm cho "cơ thể" (trang web)
-                            trở nên đẹp mắt.</li>
-                    </ul>
+                <div class="mt-8 text-center">
+                    <img src="https://placehold.co/450x200/7E3AF2/FFFFFF?text=HTML+(Structure)+%2B+CSS+(Presentation)+%3D+Website"
+                        alt="[Diagram of HTML + CSS = Web Page]" class="rounded-lg shadow-lg mx-auto">
                 </div>
             </div>
-            <div class="mt-8 text-center">
-                <img src="https://placehold.co/450x200/7E3AF2/FFFFFF?text=HTML+(Cấu+trúc)+%2B+CSS+(Trình+bày)+%3D+Trang+Web"
-                    alt="[Sơ đồ HTML + CSS = Web Page]" class="rounded-lg shadow-lg mx-auto">
-                <p class="mt-4 text-xl text-gray-800">HTML cung cấp <strong>cấu trúc</strong>, CSS thêm vào
-                    <strong>phong cách</strong>, cùng nhau tạo nên một trang web hoàn chỉnh và trực quan.
+        </div>
+
+        <!-- Slide 3: HTML Syntax -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">2. Basic HTML File Structure</h3>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="htmlStructure"><code><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span class="attr-value">"en"</span>&gt;
+&lt;<span class="tag">head</span>&gt;
+    &lt;<span class="tag">meta</span> <span class="attr-name">charset</span>=<span class="attr-value">"UTF-8"</span>&gt;
+    &lt;<span class="tag">title</span>&gt;Page Title&lt;/<span class="tag">title</span>&gt;
+&lt;/<span class="tag">head</span>&gt;
+&lt;<span class="tag">body</span>&gt;
+    The main content of the website goes here
+&lt;/<span class="tag">body</span>&gt;
+&lt;/<span class="tag">html</span>&gt;</code></pre>
+                </div>
+                <ul class="list-disc list-inside mt-6 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><code>&lt;!DOCTYPE html&gt;</code>: Declares this is an HTML5 document.</li>
+                    <li><code>&lt;html&gt;</code>: The root element of an HTML page.</li>
+                    <li><code>&lt;head&gt;</code>: Contains meta information about the page (title, styles, scripts...).
+                    </li>
+                    <li><code>&lt;body&gt;</code>: Contains the visible content of the webpage.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Heading Tags -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Headings <code>&lt;h1&gt;</code> -
+                    <code>&lt;h6&gt;</code>
+                </h3>
+                <p class="mb-4 text-lg text-gray-700">Used to define heading levels. <code>&lt;h1&gt;</code> is the most
+                    important.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="headingsExample"><code>&lt;<span class="tag">h1</span>&gt;This is an H1 heading&lt;/<span class="tag">h1</span>&gt;
+&lt;<span class="tag">h2</span>&gt;This is an H2 heading&lt;/<span class="tag">h2</span>&gt;
+&lt;<span class="tag">h3</span>&gt;This is an H3 heading&lt;/<span class="tag">h3</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <div class="html-output" id="headingsOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Paragraph Tag -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Paragraphs <code>&lt;p&gt;</code>
+                </h3>
+                <p class="mb-4 text-lg text-gray-700">The <code>&lt;p&gt;</code> (paragraph) tag is used to define a
+                    paragraph of text.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="paragraphExample"><code>&lt;<span class="tag">p</span>&gt;This is the first paragraph. HTML is very interesting.&lt;/<span class="tag">p</span>&gt;
+&lt;<span class="tag">p</span>&gt;This is the second paragraph.&lt;/<span class="tag">p</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <div class="html-output" id="paragraphOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Link Tag -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Links <code>&lt;a&gt;</code></h3>
+                <p class="mb-4 text-lg text-gray-700">The <code>&lt;a&gt;</code> (anchor) tag creates a hyperlink to
+                    another page or a location on the same page. The most important attribute is <code>href</code>
+                    (hypertext reference), which specifies the destination URL.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="linkExample"><code>&lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"https://www.google.com"</span>&gt;Go to Google&lt;/<span class="tag">a</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <div class="html-output" id="linkOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Image Tag -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Images <code>&lt;img&gt;</code>
+                </h3>
+                <p class="mb-4 text-lg text-gray-700">The <code>&lt;img&gt;</code> tag embeds an image into the page.
+                    It's a self-closing tag, meaning there's no <code>&lt;/img&gt;</code> tag. Important attributes are
+                    <code>src</code> (source) and <code>alt</code> (alternative text).
                 </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="imageExample"><code>&lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/400x200/007BFF/FFFFFF?text=Example+Image"</span> <span class="attr-name">alt</span>=<span class="attr-value">"A nice example image"</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <div class="html-output" id="imageOutput"></div>
             </div>
         </div>
 
-        <!-- Các slide còn lại tương tự, đã được dịch và chỉnh sửa -->
-
-        <div id="slide-10" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Ví dụ: Tạo trang giới thiệu bản thân (HTML)</h3>
-            <p class="mb-4 text-lg text-gray-700">Áp dụng các thẻ đã học để tạo một trang giới thiệu bản thân đơn giản
-                chỉ bằng HTML.</p>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Yêu cầu:</h4>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li>Dùng <code>&lt;h1&gt;</code> cho tên của bạn.</li>
-                <li>Dùng <code>&lt;img&gt;</code> để hiển thị ảnh đại diện (dùng ảnh placeholder).</li>
-                <li>Dùng <code>&lt;p&gt;</code> để viết vài dòng về bản thân, sở thích.</li>
-                <li>Dùng <code>&lt;h2&gt;</code> cho mục "Liên hệ".</li>
-                <li>Dùng <code>&lt;a&gt;</code> để tạo link đến email hoặc mạng xã hội (mô phỏng).</li>
-                <li>Thêm một <code>&lt;button&gt;</code> với lời chào đơn giản khi click.</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Mã HTML mẫu:</h4>
-            <div class="code-block" id="personalPageHtmlCode">
-                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
-                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
-                    class="attr-value">"vi"</span>&gt;
-                &lt;<span class="tag">head</span>&gt;
-                &lt;<span class="tag">title</span>&gt;Trang giới thiệu của tôi&lt;/<span class="tag">title</span>&gt;
-                &lt;/<span class="tag">head</span>&gt;
-                &lt;<span class="tag">body</span>&gt;
-                &lt;<span class="tag">h1</span>&gt;Xin chào, tôi là John Doe&lt;/<span class="tag">h1</span>&gt;
-                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
-                    class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span
-                    class="attr-name">alt</span>=<span class="attr-value">"Ảnh đại diện của tôi"</span>&gt;
-                &lt;<span class="tag">p</span>&gt;Tôi là một sinh viên đam mê công nghệ thông tin, đặc biệt là phát
-                triển web. Tôi thích học hỏi những điều mới và thử thách bản thân với các dự án thú vị.&lt;/<span
-                    class="tag">p</span>&gt;
-                &lt;<span class="tag">p</span>&gt;Sở thích của tôi bao gồm chơi game, đọc sách khoa học viễn tưởng và đi
-                du lịch.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">h2</span>&gt;Liên hệ với tôi:&lt;/<span class="tag">h2</span>&gt;
-                &lt;<span class="tag">p</span>&gt;
-                Bạn có thể kết nối với tôi qua &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"#"</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Đây là link Facebook mô phỏng!')"</span>&gt;Facebook&lt;/<span
-                    class="tag">a</span>&gt;
-                hoặc gửi email cho tôi tại &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"mailto:johndoe@example.com"</span>&gt;johndoe@example.com&lt;/<span
-                    class="tag">a</span>&gt;.
-                &lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Cảm ơn đã ghé thăm trang của tôi!')"</span>&gt;Nhấn để nhận lời
-                chào!&lt;/<span class="tag">button</span>&gt;
-                &lt;/<span class="tag">body</span>&gt;
-                &lt;/<span class="tag">html</span>&gt;
+        <!-- Slide 8: Button Tag -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Basic Tags: Buttons <code>&lt;button&gt;</code>
+                </h3>
+                <p class="mb-4 text-lg text-gray-700">The <code>&lt;button&gt;</code> tag defines a clickable button.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="buttonExample"><code>&lt;<span class="tag">button</span>&gt;Click me&lt;/<span class="tag">button</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <div class="html-output" id="buttonOutput"></div>
             </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (chỉ nội dung body):</h4>
-            <div class="html-output" id="personalPageHtmlOutput"></div>
         </div>
 
-        <div id="slide-11" class="slide-content-wrapper slide p-8">
-            <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Ví dụ: Áp dụng CSS cơ bản (thuộc tính
-                <code>style</code>)
-            </h3>
-            <p class="mb-4 text-lg text-gray-700">Bây giờ, hãy thêm một chút inline CSS vào trang giới thiệu cá nhân để
-                làm cho nó trông hấp dẫn hơn.</p>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Yêu cầu:</h4>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-1">
-                <li>Thay đổi font chữ cho toàn bộ trang.</li>
-                <li>Căn giữa tiêu đề chính (tên của bạn) và thay đổi màu chữ.</li>
-                <li>Bo tròn ảnh đại diện và thêm đường viền.</li>
-                <li>Thay đổi màu chữ và kích thước font cho các đoạn văn.</li>
-                <li>Tạo kiểu cho nút bấm (màu nền, màu chữ, bo góc).</li>
-            </ul>
-            <h4 class="text-xl font-medium text-gray-700 mb-2">Mã HTML với Inline CSS:</h4>
-            <div class="code-block" id="personalPageCssCode">
-                <span class="keyword">&lt;!DOCTYPE html&gt;</span>
-                &lt;<span class="tag">html</span> <span class="attr-name">lang</span>=<span
-                    class="attr-value">"vi"</span>&gt;
-                &lt;<span class="tag">head</span>&gt;
-                &lt;<span class="tag">title</span>&gt;Trang giới thiệu của tôi&lt;/<span class="tag">title</span>&gt;
-                &lt;/<span class="tag">head</span>&gt;
-                &lt;<span class="tag">body</span> <span class="attr-name">style</span>=<span
-                    class="attr-value">"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px;
-                    background-color: #e9ecef; color: #343a40;"</span>&gt;
-                &lt;<span class="tag">h1</span> <span class="attr-name">style</span>=<span class="attr-value">"color:
-                    #007bff; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px;"</span>&gt;Xin
-                chào, tôi là John Doe&lt;/<span class="tag">h1</span>&gt;
-                &lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span
-                    class="attr-value">"text-align: center; margin-bottom: 20px;"</span>&gt;
-                &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span
-                    class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span
-                    class="attr-name">alt</span>=<span class="attr-value">"Ảnh đại diện của tôi"</span> <span
-                    class="attr-name">style</span>=<span class="attr-value">"border-radius: 50%; border: 4px solid
-                    #007bff; box-shadow: 0 0 10px rgba(0,0,0,0.1);"</span>&gt;
-                &lt;/<span class="tag">div</span>&gt;
-                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"font-size:
-                    1.1em; line-height: 1.7; color: #495057;"</span>&gt;Tôi là một sinh viên đam mê công nghệ thông tin,
-                đặc biệt là phát triển web. Tôi thích học hỏi những điều mới và thử thách bản thân với các dự án thú
-                vị.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"font-size:
-                    1.1em; line-height: 1.7; color: #495057;"</span>&gt;Sở thích của tôi bao gồm chơi game, đọc sách
-                khoa học viễn tưởng và đi du lịch.&lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">h2</span> <span class="attr-name">style</span>=<span class="attr-value">"color:
-                    #28a745; margin-top: 30px;"</span>&gt;Liên hệ với tôi:&lt;/<span class="tag">h2</span>&gt;
-                &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"font-size:
-                    1.1em;"</span>&gt;
-                Bạn có thể kết nối với tôi qua &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"#"</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Đây là link Facebook mô phỏng!')"</span> <span
-                    class="attr-name">style</span>=<span class="attr-value">"color: #007bff; text-decoration: none;
-                    font-weight: bold;"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
-                hoặc gửi email cho tôi tại &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span
-                    class="attr-value">"mailto:johndoe@example.com"</span> <span class="attr-name">style</span>=<span
-                    class="attr-value">"color: #007bff; text-decoration: none; font-weight:
-                    bold;"</span>&gt;johndoe@example.com&lt;/<span class="tag">a</span>&gt;.
-                &lt;/<span class="tag">p</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr-name">onclick</span>=<span
-                    class="attr-value">"alert('Cảm ơn đã ghé thăm trang của tôi!')"</span> <span
-                    class="attr-name">style</span>=<span class="attr-value">"background-color: #28a745; color: white;
-                    padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top:
-                    15px;"</span>&gt;Nhấn để nhận lời chào!&lt;/<span class="tag">button</span>&gt;
-                &lt;/<span class="tag">body</span>&gt;
-                &lt;/<span class="tag">html</span>&gt;
+        <!-- Slide 9: HTML Example -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">4. Example: Creating a Profile Page (HTML)</h3>
+                <p class="mb-4 text-lg text-gray-700">Apply the learned tags to create a simple profile page.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="personalPageHtmlCode"><code>&lt;<span class="tag">h1</span>&gt;Hello, I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+&lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span class="attr-name">alt</span>=<span class="attr-value">"My profile picture"</span>&gt;
+&lt;<span class="tag">p</span>&gt;I am a student passionate about web development. My hobbies include reading and playing games.&lt;/<span class="tag">p</span>&gt;
+&lt;<span class="tag">h2</span>&gt;Contact Me:&lt;/<span class="tag">h2</span>&gt;
+&lt;<span class="tag">p</span>&gt;
+    You can connect with me via &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;.
+&lt;/<span class="tag">p</span>&gt;
+&lt;<span class="tag">button</span>&gt;Press for a greeting!&lt;/<span class="tag">button</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <div class="html-output" id="personalPageHtmlOutput"></div>
             </div>
-            <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (chỉ nội dung body):</h4>
-            <div class="html-output" id="personalPageCssOutput"></div>
         </div>
 
-        <!-- Các slide khác được giữ nguyên -->
+        <!-- Slide 10: CSS Example -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Example: Applying CSS (Inline)</h3>
+                <p class="mb-4 text-lg text-gray-700">Add some "inline CSS" to the profile page to make it more
+                    attractive.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="personalPageCssCode"><code>&lt;<span class="tag">body</span> <span class="attr-name">style</span>=<span class="attr-value">"font-family: sans-serif; background-color: #e9ecef; color: #343a40;"</span>&gt;
+    &lt;<span class="tag">h1</span> <span class="attr-name">style</span>=<span class="attr-value">"color: #007bff; text-align: center;"</span>&gt;Hello, I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+    &lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span class="attr-value">"text-align: center; margin-bottom: 20px;"</span>&gt;
+        &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150/007BFF/FFFFFF?text=Profile+Pic"</span> <span class="attr-name">alt</span>=<span class="attr-value">"Profile Picture"</span> <span class="attr-name">style</span>=<span class="attr-value">"border-radius: 50%; border: 4px solid #007bff;"</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+    &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"font-size: 1.1em; line-height: 1.7;"</span>&gt;I am a student passionate about web development. My hobbies include reading and playing games.&lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">h2</span> <span class="attr-name">style</span>=<span class="attr-value">"color: #28a745;"</span>&gt;Contact Me:&lt;/<span class="tag">h2</span>&gt;
+    &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span> <span class="attr-name">style</span>=<span class="attr-value">"color: #007bff; text-decoration: none;"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+&lt;/<span class="tag">body</span>&gt;</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <div class="html-output" id="personalPageCssOutput"></div>
+            </div>
+        </div>
 
+        <!-- Slide 11: Summary -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-blue-700 mb-8">Session 1 Summary</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You learned about <strong>HTML</strong>
+                        (structure) and <strong>CSS</strong> (style).</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You know the basic tags:
+                        <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;a&gt;</code>,
+                        <code>&lt;img&gt;</code>, <code>&lt;button&gt;</code>.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You tried applying <strong>inline
+                            CSS</strong> to change the look of the webpage.</p>
+                </div>
+                <div
+                    class="mt-12 bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
+                    <h4 class="text-2xl font-bold mb-2">See you in Session 2!</h4>
+                    <p class="text-lg">We will explore more important concepts in CSS!</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        const slides = document.querySelectorAll('.slide-content-wrapper');
-        const prevButton = document.getElementById('prevSlide');
-        const nextButton = document.getElementById('nextSlide');
-        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
-        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
 
-        let currentSlide = 0;
-        if (slides.length > 0) {
-            totalSlidesNumDisplay.textContent = slides.length;
-        }
+            let currentSlide = 0;
 
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            }
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.add('active');
-                } else {
-                    slide.classList.remove('active');
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 400); // Must match the transition duration in CSS
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
                 }
-            });
-            currentSlideNumDisplay.textContent = index + 1;
-            updateNavButtons();
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
 
-            // ***FIXED***: Improved scroll logic
-            // This is the modern way to scroll to an element.
-            // The 'start' block alignment combined with the 'scroll-margin-top'
-            // CSS property on the .slide element ensures it aligns correctly
-            // below your sticky navbar without manual calculations.
-            if (slides[index]) {
-                slides[index].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            function copyCode(buttonElement) {
+                const codeBlockContainer = buttonElement.closest('.code-block-container');
+                const codeElement = codeBlockContainer.querySelector('pre.code-block');
+                if (!codeElement) return;
+
+                const codeToCopy = codeElement.innerText;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalContent = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalContent;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Could not copy code:', err);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            function renderExample(codeBlockId, outputId) {
+                const codeBlockEl = document.querySelector(`[data-code-id="${codeBlockId}"]`);
+                const outputEl = document.getElementById(outputId);
+                if (!codeBlockEl || !outputEl) return;
+
+                const codeString = codeBlockEl.innerText;
+
+                // Use Shadow DOM to render the code, preventing style conflicts
+                outputEl.innerHTML = ''; // Clear previous content
+                const shadow = outputEl.attachShadow({ mode: 'open' });
+                shadow.innerHTML = codeString;
+            }
+
+            // Setup navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
                 });
             }
-        }
 
-        function updateNavButtons() {
-            prevButton.disabled = currentSlide === 0;
-            nextButton.disabled = currentSlide === slides.length - 1;
-        }
+            // Setup copy buttons
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
+            });
 
-        prevButton.addEventListener('click', () => {
-            if (currentSlide > 0) {
-                currentSlide--;
+            // Render all examples
+            renderExample('headingsExample', 'headingsOutput');
+            renderExample('paragraphExample', 'paragraphOutput');
+            renderExample('linkExample', 'linkOutput');
+            renderExample('imageExample', 'imageOutput');
+            renderExample('buttonExample', 'buttonOutput');
+            renderExample('personalPageHtmlCode', 'personalPageHtmlOutput');
+            renderExample('personalPageCssCode', 'personalPageCssOutput');
+
+            // Initial setup
+            if (slides.length > 0) {
                 showSlide(currentSlide);
             }
-        });
-
-        nextButton.addEventListener('click', () => {
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                showSlide(currentSlide);
-            }
-        });
-
-        // ***FIXED***: Robust logic to render code examples
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // Helper function to safely get clean HTML code from an element
-            // containing syntax-highlighted code.
-            function getCleanCodeFromElement(element) {
-                if (!element) return "";
-                // Use a temporary element to decode HTML entities like &lt; into <
-                const decoder = document.createElement('textarea');
-
-                // Get the innerHTML and strip the syntax-highlighting <span> tags
-                let html = element.innerHTML.replace(/<\/?span[^>]*>/g, "");
-
-                decoder.innerHTML = html;
-                return decoder.value;
-            }
-
-            // Render example for Slide 10
-            const personalPageHtmlCodeEl = document.getElementById('personalPageHtmlCode');
-            const personalPageHtmlOutputEl = document.getElementById('personalPageHtmlOutput');
-            if (personalPageHtmlCodeEl && personalPageHtmlOutputEl) {
-                let htmlToRender = getCleanCodeFromElement(personalPageHtmlCodeEl);
-                const bodyStartIndex = htmlToRender.toLowerCase().indexOf('<body>');
-                const bodyEndIndex = htmlToRender.toLowerCase().lastIndexOf('</body>');
-                if (bodyStartIndex !== -1 && bodyEndIndex !== -1) {
-                    personalPageHtmlOutputEl.innerHTML = htmlToRender.substring(bodyStartIndex + 6, bodyEndIndex);
-                }
-            }
-
-            // Render example for Slide 11
-            const personalPageCssCodeEl = document.getElementById('personalPageCssCode');
-            const personalPageCssOutputEl = document.getElementById('personalPageCssOutput');
-            if (personalPageCssCodeEl && personalPageCssOutputEl) {
-                let cssHtmlToRender = getCleanCodeFromElement(personalPageCssCodeEl);
-                const cssBodyStartIndex = cssHtmlToRender.toLowerCase().indexOf('<body');
-                const cssBodyEndIndex = cssHtmlToRender.toLowerCase().lastIndexOf('</body>');
-
-                if (cssBodyStartIndex !== -1 && cssBodyEndIndex !== -1) {
-                    const bodyTagEndIndex = cssHtmlToRender.indexOf('>', cssBodyStartIndex);
-                    const bodyTag = cssHtmlToRender.substring(cssBodyStartIndex, bodyTagEndIndex + 1);
-                    const bodyContent = cssHtmlToRender.substring(bodyTagEndIndex + 1, cssBodyEndIndex);
-
-                    const styleMatch = bodyTag.match(/style\s*=\s*"(.*?)"/i);
-                    if (styleMatch && styleMatch[1]) {
-                        personalPageCssOutputEl.setAttribute('style', styleMatch[1]);
-                    }
-                    personalPageCssOutputEl.innerHTML = bodyContent;
-                }
-            }
-
-            showSlide(currentSlide); // Initialize first slide
         });
     </script>
-
 </body>
 
 </html>
