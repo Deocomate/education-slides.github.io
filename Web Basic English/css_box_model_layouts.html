@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 3: CSS Box Model & Layouts (Detailed)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .tag {
+            color: #569cd6;
+        }
+
+        .code-block .attr-name {
+            color: #9cdcfe;
+        }
+
+        .code-block .attr-value {
+            color: #ce9178;
+        }
+
+        .code-block .property {
+            color: #9cdcfe;
+        }
+
+        .code-block .css-value {
+            color: #ce9178;
+        }
+
+        .code-block .selector {
+            color: #d7ba7d;
+        }
+
+        .html-output {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .box-model-diagram {
+            background-color: #f0f9ff;
+            border: 2px dashed #0ea5e9;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0369a1;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        .box-model-diagram .border-box {
+            background-color: #ecfdf5;
+            border: 2px solid #22c55e;
+            padding: 20px;
+            color: #15803d;
+        }
+
+        .box-model-diagram .padding-box {
+            background-color: #fefce8;
+            border: 2px dotted #eab308;
+            padding: 20px;
+            color: #a16207;
+        }
+
+        .box-model-diagram .content-box {
+            background-color: #fff;
+            padding: 20px;
+            border: 2px solid #ccc;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-teal-600">Web Basics - Session 3</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Prev
+                </button>
+                <button id="nextSlide"
+                    class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-teal-700 mb-6">Session 3: CSS Box Model & Layout</h2>
+                <p class="text-2xl text-gray-600 mb-12">The Foundation for Building Any Web Interface</p>
+                <img src="https://placehold.co/600x350/14B8A6/FFFFFF?text=CSS+Box+Model"
+                    alt="[Image of CSS Box Model Diagram]" class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Let's learn how elements take up space on a webpage!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Box Model? -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">1. What is the CSS Box Model?</h3>
+                <p class="text-lg text-gray-700 mb-4">In CSS, every HTML element can be considered a box. The
+                    <strong>Box Model</strong> is a concept that describes how these boxes are displayed and take up
+                    space on the page.
+                </p>
+                <p class="text-lg text-gray-700 mb-6">Each box consists of 4 areas, from the outside in:</p>
+                <div class="box-model-diagram">
+                    Margin
+                    <div class="border-box">
+                        Border
+                        <div class="padding-box">
+                            Padding
+                            <div class="content-box">
+                                Content
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="list-disc list-inside mt-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><strong>Content:</strong> The area containing the actual content (text, images, ...).</li>
+                    <li><strong>Padding:</strong> A transparent area around the content, <strong>inside</strong> the
+                        border.</li>
+                    <li><strong>Border:</strong> A border that goes around the padding and content.</li>
+                    <li><strong>Margin:</strong> A transparent area <strong>outside</strong> the border, creating space
+                        between elements.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Margin -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">2. Margin</h3>
+                <p class="text-lg text-gray-700 mb-4"><code>margin</code> is used to create space
+                    <strong>outside</strong> an element's border, pushing other elements away.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="marginCode"><code>&lt;<span class="tag">style</span>&gt;
+.box1 {
+    background-color: #fecaca;
+    border: 2px solid #b91c1c;
+    width: 200px;
+    padding: 10px;
+    <span class="comment">/* Pushes the second box 50px away from the bottom */</span>
+    margin-bottom: 50px;
+}
+.box2 {
+    background-color: #dbeafe;
+    border: 2px solid #1d4ed8;
+    width: 200px;
+    padding: 10px;
+    <span class="comment">/* Automatically centers the box horizontally */</span>
+    margin-left: auto;
+    margin-right: auto;
+}
+&lt;/<span class="tag">style</span>&gt;
+&lt;<span class="tag">div</span> class="box1"&gt;Box 1&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> class="box2"&gt;Box 2 (centered)&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result:</h4>
+                <div class="html-output" id="marginOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Padding -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">3. Padding</h3>
+                <p class="text-lg text-gray-700 mb-4"><code>padding</code> is used to create space
+                    <strong>inside</strong> the border, between the border and the content.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="paddingCode"><code>&lt;<span class="tag">style</span>&gt;
+.button-no-padding {
+    background-color: #6ee7b7;
+    border: 2px solid #047857;
+}
+.button-with-padding {
+    background-color: #6ee7b7;
+    border: 2px solid #047857;
+    <span class="comment">/* Add 15px of padding around the text */</span>
+    padding: 15px;
+}
+&lt;/<span class="tag">style</span>&gt;
+&lt;<span class="tag">button</span> class="button-no-padding"&gt;Button without Padding&lt;/<span class="tag">button</span>&gt;
+&lt;<span class="tag">br</span>&gt;&lt;<span class="tag">br</span>&gt;
+&lt;<span class="tag">button</span> class="button-with-padding"&gt;Button with Padding&lt;/<span class="tag">button</span>&gt;
+</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result:</h4>
+                <div class="html-output" id="paddingOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Margin/Padding Shorthand -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">4. Shorthand for Margin & Padding</h3>
+                <p class="text-lg text-gray-700 mb-4">You can set values for all four sides at once to make your code
+                    more concise.</p>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-4 text-lg bg-gray-50 p-6 rounded-lg">
+                    <li><strong>4 values:</strong> <code>margin: 10px 20px 30px 40px;</code> (top, right, bottom, left)
+                    </li>
+                    <li><strong>3 values:</strong> <code>margin: 10px 20px 30px;</code> (top, left/right, bottom)</li>
+                    <li><strong>2 values:</strong> <code>margin: 10px 20px;</code> (top/bottom, left/right)</li>
+                    <li><strong>1 value:</strong> <code>margin: 10px;</code> (all 4 sides)</li>
+                </ul>
+                <p class="text-lg text-gray-700 mt-4"><em>The same rules apply to <code>padding</code>.</em></p>
+                <div class="code-block-container mt-6">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="shorthandCode"><code>&lt;<span class="tag">style</span>&gt;
+.shorthand-box {
+    background-color: #f5d0fe;
+    border: 2px solid #86198f;
+    <span class="comment">/* top/bottom: 20px, left/right: 40px */</span>
+    padding: 20px 40px;
+}
+&lt;/<span class="tag">style</span>&gt;
+&lt;<span class="tag">div</span> class="shorthand-box"&gt;This box uses padding shorthand.&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <div class="html-output" id="shorthandOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Border -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">5. Border</h3>
+                <p class="text-lg text-gray-700 mb-4">The <code>border</code> property allows you to specify the style,
+                    width, and color of an element's border.</p>
+                <h4 class="text-2xl font-bold text-gray-800 my-4">Shorthand:</h4>
+                <p class="text-lg text-gray-700 mb-4"><code>border: [width] [style] [color];</code></p>
+                <ul class="list-disc list-inside mt-6 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><code>border-style</code>: The style of the border (<code>solid</code>, <code>dashed</code>,
+                        <code>dotted</code>, <code>double</code>, <code>groove</code>, ...).
+                    </li>
+                    <li><code>border-radius</code>: Used to round the corners of an element.</li>
+                </ul>
+                <div class="code-block-container mt-4">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="borderCode"><code>&lt;<span class="tag">style</span>&gt;
+  .box-border { padding: 20px; margin-bottom: 15px; background-color: #f1f5f9; }
+  .solid-border { border: 2px solid #2563eb; }
+  .dashed-border { border: 3px dashed #dc2626; }
+  .rounded-border { border: 2px solid #16a34a; border-radius: 15px; }
+&lt;/<span class="tag">style</span>&gt;
+&lt;<span class="tag">div</span> class="box-border solid-border"&gt;Solid border.&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> class="box-border dashed-border"&gt;Dashed border.&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> class="box-border rounded-border"&gt;Rounded border (border-radius).&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result:</h4>
+                <div class="html-output" id="borderOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Width, Height, box-sizing -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">6. Sizing & Box-sizing</h3>
+                <p class="text-lg text-gray-700 mb-4"><code>width</code> and <code>height</code> set the size for the
+                    <strong>content</strong> area.
+                </p>
+                <p class="text-lg text-gray-700 mb-4">This can cause issues: <code>width: 100px</code> +
+                    <code>padding: 20px</code> => actual width becomes 140px!
+                </p>
+                <h4 class="text-2xl font-bold text-red-700 my-4">Solution: `box-sizing: border-box;`</h4>
+                <p class="text-lg text-gray-700 mb-6">With this property, <code>padding</code> and <code>border</code>
+                    are calculated <strong>inside</strong> the given <code>width</code> and <code>height</code>, not
+                    added to it.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="boxSizingCode"><code>&lt;<span class="tag">style</span>&gt;
+  .box-sizing {
+    width: 200px;
+    padding: 20px;
+    border: 10px solid #fb923c;
+    margin-bottom: 10px;
+    color: white;
+  }
+  .content-box {
+    background-color: #1e40af;
+    <span class="comment">/* Actual width: 200 + 20*2 + 10*2 = 260px */</span>
+    box-sizing: content-box; <span class="comment">/* Default */</span>
+  }
+  .border-box {
+    background-color: #b91c1c;
+    <span class="comment">/* Actual width: 200px */</span>
+    box-sizing: border-box;
+  }
+&lt;/<span class="tag">style</span>&gt;
+&lt;<span class="tag">div</span> class="box-sizing content-box"&gt;content-box (260px)&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> class="box-sizing border-box"&gt;border-box (200px)&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result:</h4>
+                <div class="html-output" id="boxSizingOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 8: max-width -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">7. `max-width` for Responsive Design</h3>
+                <p class="text-lg text-gray-700 mb-6"><code>max-width</code> is a crucial property for building
+                    responsive layouts.</p>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-3 text-lg">
+                    <li>It ensures an element never gets wider than the given value.</li>
+                    <li>But it will automatically shrink on smaller screens.</li>
+                    <li>Combining <code>max-width</code> with <code>margin: auto</code> is a common way to create and
+                        center a page's main container.</li>
+                </ul>
+                <div class="code-block-container mt-6">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="maxWidthCode"><code>&lt;<span class="tag">style</span>&gt;
+.container {
+    max-width: 600px; <span class="comment">/* Max width of 600px */</span>
+    margin: 20px auto; <span class="comment">/* Center the container */</span>
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+&lt;/<span class="tag">style</span>&gt;
+&lt;<span class="tag">div</span> class="container"&gt;
+  &lt;h3&gt;Responsive Container&lt;/<span class="tag">h3</span>&gt;
+  &lt;p&gt;Try resizing the browser window. This content will never be wider than 600px, but it will shrink if the window is smaller.&lt;/<span class="tag">p</span>&gt;
+&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <div class="html-output" id="maxWidthOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Exercise Intro -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-teal-600 mb-6">8. Exercise: Upgrading the Profile Page</h3>
+                <p class="text-lg text-gray-700 mb-4">Now, let's apply what we've learned to give the Profile page from
+                    Session 1 a "makeover".</p>
+                <div class="grid lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h4 class="text-2xl font-medium text-gray-700 mb-2">Original HTML from Session 1:</h4>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                    Copy</button></div>
+                            <pre class="code-block" data-code-id="profileOriginalHtml"><code><span class="comment">&lt;!-- We will start with this code --&gt;</span>
+&lt;<span class="tag">h1</span>&gt;Hello, I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+&lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150"</span> <span class="attr-name">alt</span>=<span class="attr-value">"My profile picture"</span>&gt;
+&lt;<span class="tag">p</span>&gt;I am a student passionate about web development. My hobbies include reading and playing games.&lt;/<span class="tag">p</span>&gt;
+&lt;<span class="tag">h2</span>&gt;Contact Me:&lt;/<span class="tag">h2</span>&gt;
+&lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-medium text-gray-700 mb-2">Desired Result:</h4>
+                        <div class="html-output" id="profileFinalPreview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Exercise Step 1 -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-teal-600 mb-4">Exercise - Step 1: Create the Container</h3>
+                <p class="text-lg text-gray-700 mb-4">First, wrap the entire HTML code in a <code>&lt;div&gt;</code>
+                    with the class <code>profile-container</code>. Then, use CSS to create a "card" and center it on the
+                    screen.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="profileStep1"><code><span class="comment">&lt;!-- CSS --&gt;</span>
+&lt;<span class="tag">style</span>&gt;
+  <span class="selector">body</span> {
+    <span class="property">background-color</span>: <span class="css-value">#f3f4f6</span>; <span class="comment">/* Add a nice background color */</span>
+    <span class="property">font-family</span>: <span class="css-value">'Inter', sans-serif</span>;
+  }
+  <span class="selector">.profile-container</span> {
+    <span class="property">max-width</span>: <span class="css-value">600px</span>;
+    <span class="property">margin</span>: <span class="css-value">40px auto</span>; <span class="comment">/* 40px top/bottom, auto left/right to center */</span>
+    <span class="property">background-color</span>: <span class="css-value">white</span>;
+    <span class="property">border-radius</span>: <span class="css-value">15px</span>;
+    <span class="property">box-shadow</span>: <span class="css-value">0 5px 15px rgba(0,0,0,0.05)</span>;
+  }
+&lt;/<span class="tag">style</span>&gt;
+
+<span class="comment">&lt;!-- HTML --&gt;</span>
+&lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-container"</span>&gt;
+    &lt;<span class="tag">h1</span>&gt;Hello, I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+    &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150"</span> <span class="attr-name">alt</span>=<span class="attr-value">"My profile picture"</span>&gt;
+    &lt;<span class="tag">p</span>&gt;I am a student passionate about web development...&lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">h2</span>&gt;Contact Me:&lt;/<span class="tag">h2</span>&gt;
+    &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <div class="html-output" id="profileStep1Output"></div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Exercise Step 2 -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-teal-600 mb-4">Exercise - Step 2: Add Padding & Align Content
+                </h3>
+                <p class="text-lg text-gray-700 mb-4">The content is currently stuck to the card's edges. Let's add
+                    <code>padding</code> to the container. Also, center all the content using
+                    <code>text-align: center</code>.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="profileStep2"><code><span class="comment">&lt;!-- Full code for Step 2 --&gt;</span>
+&lt;<span class="tag">style</span>&gt;
+  <span class="selector">body</span> { 
+    <span class="property">background-color</span>: <span class="css-value">#f3f4f6</span>; 
+    <span class="property">font-family</span>: <span class="css-value">'Inter'</span>, <span class="css-value">sans-serif</span>; 
+  }
+  <span class="selector">.profile-container</span> {
+    <span class="property">max-width</span>: <span class="css-value">600px</span>;
+    <span class="property">margin</span>: <span class="css-value">40px auto</span>;
+    <span class="property">background-color</span>: <span class="css-value">white</span>;
+    <span class="property">border-radius</span>: <span class="css-value">15px</span>;
+    <span class="property">box-shadow</span>: <span class="css-value">0 5px 15px rgba(0,0,0,0.05)</span>;
+    <span class="comment">/* -- ADD NEW -- */</span>
+    <span class="property">padding</span>: <span class="css-value">40px</span>;
+    <span class="property">text-align</span>: <span class="css-value">center</span>;
+    <span class="property">box-sizing</span>: <span class="css-value">border-box</span>; <span class="comment">/* Ensures padding doesn't increase the width */</span>
+  }
+&lt;/<span class="tag">style</span>&gt;
+
+<span class="comment">&lt;!-- HTML --&gt;</span>
+&lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-container"</span>&gt;
+    &lt;<span class="tag">h1</span>&gt;Hello, I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+    &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150"</span> <span class="attr-name">alt</span>=<span class="attr-value">"My profile picture"</span>&gt;
+    &lt;<span class="tag">p</span>&gt;I am a student passionate about web development. My hobbies include reading and playing games.&lt;/<span class="tag">p</span>&gt;
+    &lt;<span class="tag">h2</span>&gt;Contact Me:&lt;/<span class="tag">h2</span>&gt;
+    &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <div class="html-output" id="profileStep2Output"></div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Exercise Step 3 -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-teal-600 mb-4">Exercise - Step 3: Style the Image & Text</h3>
+                <p class="text-lg text-gray-700 mb-4">Now, let's style the individual elements inside: make the profile
+                    picture circular and create proper spacing for the text.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="profileStep3"><code><span class="comment">&lt;!-- Full code for Step 3 --&gt;</span>
+&lt;<span class="tag">style</span>&gt;
+  <span class="selector">body</span> { <span class="property">background-color</span>:<span class="css-value">#f3f4f6</span>; <span class="property">font-family</span>:<span class="css-value">'Inter', sans-serif</span>; }
+  <span class="selector">.profile-container</span> {
+    <span class="property">max-width</span>: <span class="css-value">600px</span>; <span class="property">margin</span>:<span class="css-value">40px auto</span>;
+    <span class="property">background</span>:<span class="css-value">white</span>; <span class="property">border-radius</span>:<span class="css-value">15px</span>;
+    <span class="property">box-shadow</span>:<span class="css-value">0 5px 15px rgba(0,0,0,0.05)</span>;
+    <span class="property">padding</span>:<span class="css-value">40px</span>; <span class="property">text-align</span>:<span class="css-value">center</span>;
+    <span class="property">box-sizing</span>:<span class="css-value">border-box</span>;
+  }
+  <span class="comment">/* -- ADD NEW -- */</span>
+  <span class="selector">.profile-picture</span> {
+    <span class="property">width</span>: <span class="css-value">150px</span>; <span class="property">height</span>:<span class="css-value">150px</span>;
+    <span class="property">border-radius</span>: <span class="css-value">50%</span>; <span class="comment">/* This is the key to creating a circular image */</span>
+    <span class="property">border</span>: <span class="css-value">5px solid #4f46e5</span>;
+    <span class="property">object-fit</span>: <span class="css-value">cover</span>; <span class="property">margin-bottom</span>:<span class="css-value">20px</span>;
+  }
+  <span class="selector">.profile-name</span> {
+    <span class="property">font-size</span>: <span class="css-value">2rem</span>; <span class="property">margin</span>:<span class="css-value">0 0 10px 0</span>;
+  }
+  <span class="selector">.profile-bio</span> {
+    <span class="property">color</span>: <span class="css-value">#4b5563</span>; <span class="property">margin-bottom</span>:<span class="css-value">25px</span>;
+  }
+&lt;/<span class="tag">style</span>&gt;
+
+<span class="comment">&lt;!-- HTML with classes added --&gt;</span>
+&lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-container"</span>&gt;
+  &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150"</span> <span class="attr-name">alt</span>=<span class="attr-value">"Profile"</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-picture"</span>&gt;
+  &lt;<span class="tag">h1</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-name"</span>&gt;Hello, I'm John Doe&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">p</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-bio"</span>&gt;I am a student passionate about web development. My hobbies include reading and playing games.&lt;/<span class="tag">p</span>&gt;
+  &lt;<span class="tag">h2</span>&gt;Contact Me:&lt;/<span class="tag">h2</span>&gt;
+  &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;Facebook&lt;/<span class="tag">a</span>&gt;
+&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                </div>
+                <div class="html-output" id="profileStep3Output"></div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Final Exercise & Code -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-teal-600 mb-4">Exercise - Step 4: Final Touches (Full Code)</h3>
+                <p class="text-lg text-gray-700 mb-4">Finally, replace the text links with social media icons from Font
+                    Awesome to make the profile look more professional.</p>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="code-block-container">
+                        <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                Copy</button></div>
+                        <pre class="code-block" data-code-id="profileFinalCode"><code>&lt;<span class="tag">style</span>&gt;
+  <span class="selector">body</span> { <span class="property">background</span>:<span class="css-value">#f3f4f6</span>; <span class="property">font-family</span>:<span class="css-value">'Inter'</span>, <span class="css-value">sans-serif</span>; }
+  <span class="selector">.profile-container</span> {
+    <span class="property">max-width</span>: <span class="css-value">600px</span>; <span class="property">margin</span>: <span class="css-value">40px auto</span>;
+    <span class="property">background</span>: <span class="css-value">white</span>; <span class="property">border-radius</span>: <span class="css-value">15px</span>;
+    <span class="property">box-shadow</span>: <span class="css-value">0 5px 15px rgba(0,0,0,0.05)</span>;
+    <span class="property">padding</span>: <span class="css-value">40px</span>; <span class="property">text-align</span>: <span class="css-value">center</span>;
+    <span class="property">box-sizing</span>: <span class="css-value">border-box</span>;
+  }
+  <span class="selector">.profile-picture</span> {
+    <span class="property">width</span>: <span class="css-value">150px</span>; <span class="property">height</span>: <span class="css-value">150px</span>;
+    <span class="property">border-radius</span>: <span class="css-value">50%</span>; <span class="property">border</span>: <span class="css-value">5px solid #4f46e5</span>;
+    <span class="property">object-fit</span>: <span class="css-value">cover</span>; <span class="property">margin-bottom</span>: <span class="css-value">20px</span>;
+  }
+  <span class="selector">.profile-name</span> { <span class="property">font-size</span>: <span class="css-value">2rem</span>; <span class="property">margin</span>: <span class="css-value">0 0 10px</span>; }
+  <span class="selector">.profile-bio</span> { <span class="property">color</span>: <span class="css-value">#4b5563</span>; <span class="property">margin-bottom</span>: <span class="css-value">25px</span>; }
+  <span class="selector">.social-links a</span> {
+    <span class="property">color</span>: <span class="css-value">#4f46e5</span>; <span class="property">text-decoration</span>: <span class="css-value">none</span>;
+    <span class="property">margin</span>: <span class="css-value">0 15px</span>; <span class="property">font-size</span>: <span class="css-value">1.5rem</span>;
+  }
+&lt;/<span class="tag">style</span>&gt;
+
+&lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-container"</span>&gt;
+  &lt;<span class="tag">img</span> <span class="attr-name">src</span>=<span class="attr-value">"https://placehold.co/150"</span> <span class="attr-name">alt</span>=<span class="attr-value">"Profile"</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-picture"</span>&gt;
+  &lt;<span class="tag">h1</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-name"</span>&gt;John Doe&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">p</span> <span class="attr-name">class</span>=<span class="attr-value">"profile-bio"</span>&gt;A passionate Web Developer who loves learning new technologies and building useful web applications.&lt;/<span class="tag">p</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"social-links"</span>&gt;
+    &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;&lt;<span class="tag">i</span> <span class="attr-name">class</span>=<span class="attr-value">"fab fa-github"</span>&gt;&lt;/<span class="tag">i</span>&gt;&lt;/<span class="tag">a</span>&gt;
+    &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;&lt;<span class="tag">i</span> <span class="attr-name">class</span>=<span class="attr-value">"fab fa-linkedin"</span>&gt;&lt;/<span class="tag">i</span>&gt;&lt;/<span class="tag">a</span>&gt;
+    &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span>&gt;&lt;<span class="tag">i</span> <span class="attr-name">class</span>=<span class="attr-value">"fab fa-facebook"</span>&gt;&lt;/<span class="tag">i</span>&gt;&lt;/<span class="tag">a</span>&gt;
+  &lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">div</span>&gt;
+</code></pre>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Final Result:</h4>
+                        <div class="html-output" id="profileFinalOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Summary -->
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-teal-700 mb-8">Session 3 Summary</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-4xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You now understand the <strong>CSS Box
+                            Model</strong> (Content, Padding, Border, Margin).</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You know how to use and write shorthand
+                        for <code>padding</code> and <code>margin</code>.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You understand the importance of
+                        <strong>`box-sizing: border-box;`</strong> for size calculations.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You know how to use <code>max-width</code>
+                        to create responsive containers.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You have applied all this knowledge to
+                        build real UI components.</p>
+                </div>
+                <div
+                    class="mt-12 bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-r-lg shadow-lg w-full max-w-4xl">
+                    <h4 class="text-2xl font-bold mb-2">See you in Session 4!</h4>
+                    <p class="text-lg">We will explore more modern and powerful layout techniques with
+                        <strong>Flexbox</strong>!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM variable declarations
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+            if (totalSlidesNumDisplay) {
+                totalSlidesNumDisplay.textContent = slides.length || '0';
+            }
+
+            // Function to show the current slide and hide others
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        // Add a small delay for the transition effect
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        // Delay hiding the slide to allow the fade-out effect
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) slide.style.display = 'none';
+                        }, 400);
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Function to update the state of navigation buttons
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            // Function to copy code, using an older method for better compatibility
+            function copyCode(buttonElement) {
+                const codeBlock = buttonElement.closest('.code-block-container').querySelector('pre.code-block');
+                if (!codeBlock) return;
+
+                const codeToCopy = codeBlock.innerText;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalIcon = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalIcon;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Could not copy text: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            // Function to render example code into an output area
+            function renderHtml(codeString, outputEl) {
+                if (!outputEl) return;
+                let styleContent = '';
+                const styleMatch = codeString.match(/<style>([\s\S]*?)<\/style>/i);
+                if (styleMatch) styleContent = styleMatch[1];
+
+                let bodyContent = codeString.replace(/<style>([\s\S]*?)<\/style>/i, '').trim();
+                let fontAwesome = bodyContent.includes('fab fa-') ? `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">` : '';
+
+                outputEl.innerHTML = '';
+                const shadow = outputEl.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `<style>${styleContent}</style>${fontAwesome}<div style="font-family: 'Inter', sans-serif;">${bodyContent}</div>`;
+            }
+
+            // Helper function to render an example from a code block
+            function renderExample(codeBlockId, outputId) {
+                const codeBlockEl = document.querySelector(`[data-code-id="${codeBlockId}"]`);
+                const outputEl = document.getElementById(outputId);
+                if (!codeBlockEl || !outputEl) return;
+
+                renderHtml(codeBlockEl.innerText, outputEl);
+            }
+
+            // --- START RENDERING EXAMPLES ---
+            // Wrap all render calls in a try...catch block to ensure that if one fails,
+            // the navigation buttons still work.
+            try {
+                // Render basic examples
+                renderExample('marginCode', 'marginOutput');
+                renderExample('paddingCode', 'paddingOutput');
+                renderExample('shorthandCode', 'shorthandOutput');
+                renderExample('borderCode', 'borderOutput');
+                renderExample('boxSizingCode', 'boxSizingOutput');
+                renderExample('maxWidthCode', 'maxWidthOutput');
+
+                // Render steps of the Profile exercise
+                renderExample('profileFinalCode', 'profileFinalPreview');
+                renderExample('profileStep1', 'profileStep1Output');
+                renderExample('profileStep2', 'profileStep2Output');
+                renderExample('profileStep3', 'profileStep3Output');
+                renderExample('profileFinalCode', 'profileFinalOutput');
+            } catch (e) {
+                console.error("A critical error occurred while rendering examples, navigation might be affected:", e);
+            }
+            // --- END RENDERING EXAMPLES ---
+
+
+            // Assign events to navigation buttons
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Assign events to copy buttons
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
+            });
+
+            // Show the first slide on page load
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
