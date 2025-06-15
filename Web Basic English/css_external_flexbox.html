@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 4: CSS Flexbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .file-name {
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .html-output {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .flex-demo-container {
+            display: flex;
+            background-color: #f0f9ff;
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 150px;
+            border: 2px dashed #0ea5e9;
+        }
+
+        .flex-demo-container>div {
+            background-color: #0ea5e9;
+            color: white;
+            padding: 1rem;
+            margin: 0.5rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">Web Development - Session 4</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Prev Slide
+                </button>
+                <button id="nextSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next Slide <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-6">Session 4: CSS Flexbox</h2>
+                <p class="text-2xl text-gray-600 mb-12">Mastering Modern Layout Techniques</p>
+                <img src="https://placehold.co/600x350/6366F1/FFFFFF?text=Flexbox" alt="[Image of CSS Flexbox]"
+                    class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Let's learn how to structure web page layouts flexibly!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: External CSS -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">1. External CSS - Using a Separate CSS File</h3>
+                <p class="text-lg text-gray-700 mb-4">Instead of writing CSS directly in a <code>&lt;style&gt;</code>
+                    tag, we should create a separate CSS file (e.g., <code>styles.css</code>) and link it to our HTML
+                    file.</p>
+                <h4 class="text-2xl font-medium text-gray-800 mb-3 mt-5">Benefits:</h4>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><strong>Easier Maintenance:</strong> Manage CSS code centrally in one place.</li>
+                    <li><strong>Reusability:</strong> One CSS file can be used for multiple HTML pages.</li>
+                    <li><strong>Faster Page Load:</strong> The browser can cache the CSS file.</li>
+                </ul>
+                <h4 class="text-2xl font-medium text-gray-800 mb-3 mt-6">How to do it:</h4>
+                <p class="text-lg text-gray-700 mb-4">In the HTML file, place the <code>&lt;link&gt;</code> tag inside
+                    the <code>&lt;head&gt;</code> section.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="file-name">index.html</span><button
+                            class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                    <pre class="code-block" data-code-id="externalCssHtml"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello World!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="file-name">styles.css</span><button
+                            class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                    <pre class="code-block" data-code-id="externalCssCss"><code>body {
+  background-color: #f0f4f8;
+  font-family: sans-serif;
+}
+
+h1 {
+  color: #3b82f6;
+  text-align: center;
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Intro to Flexbox -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">2. Introduction to Flexbox</h3>
+                <p class="text-lg text-gray-700 mb-4">Flexbox (Flexible Box Layout) is a CSS layout model that allows
+                    items in a container to be dynamically arranged and distributed, even when their size is unknown or
+                    dynamic.</p>
+                <p class="text-lg text-gray-700 mb-6">Flexbox is based on two main components:</p>
+                <div class="grid md:grid-cols-2 gap-8 text-lg">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                        <h4 class="text-2xl font-bold text-blue-800 mb-2">Flex Container</h4>
+                        <p>The "parent" element that wraps the items. You enable Flexbox by setting its
+                            <code>display: flex;</code> property.
+                        </p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                        <h4 class="text-2xl font-bold text-purple-800 mb-2">Flex Items</h4>
+                        <p>The direct "child" elements inside the flex container. They will be arranged according to
+                            Flexbox rules.</p>
+                    </div>
+                </div>
+                <div class="mt-8 p-4 bg-gray-100 rounded-lg text-center">
+                    <img src="https://placehold.co/700x250/E0E7FF/4F46E5?text=Flex+Container+%26+Items"
+                        alt="[Diagram of Flex Container and Flex Items]" class="mx-auto rounded-md shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Flex Container - display & flex-direction -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">3. Flex Container Properties</h3>
+                <h4 class="text-2xl font-medium text-gray-800 mb-3">display: flex</h4>
+                <p class="text-lg text-gray-700 mb-6">This is the most important property to get started. It turns an
+                    element into a flex container.</p>
+
+                <h4 class="text-2xl font-medium text-gray-800 mb-3">flex-direction: Defining the Flow Direction</h4>
+                <p class="text-lg text-gray-700 mb-4">This property establishes the main axis, thus defining the
+                    direction flex items are placed in the flex container.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="flexDirectionCode"><code>.container {
+  display: flex;
+  /* Possible values: */
+  flex-direction: row; /* (default) Items are placed from left to right */
+  /* flex-direction: row-reverse; */ /* From right to left */
+  /* flex-direction: column; */      /* From top to bottom */
+  /* flex-direction: column-reverse; */ /* From bottom to top */
+}</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Example: <code>flex-direction: row;</code>
+                    (default)</h4>
+                <div class="html-output" id="flexDirectionRowOutput"></div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Example: <code>flex-direction: column;</code>
+                </h4>
+                <div class="html-output" id="flexDirectionColumnOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 5: justify-content -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">4. `justify-content`: Aligning on the Main Axis
+                </h3>
+                <p class="text-lg text-gray-700 mb-6">This property is used to align flex items along the <strong>main
+                        axis</strong> of the flex container. The main axis is defined by <code>flex-direction</code>.
+                </p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="justifyContentCode"><code>.container {
+  display: flex;
+  /* flex-direction: row; (default) */
+
+  /* Align items */
+  justify-content: flex-start; /* (default) Items are packed toward the start */
+  /* justify-content: flex-end; */   /* Items are packed toward the end */
+  /* justify-content: center; */    /* Items are centered along the line */
+  /* justify-content: space-between; */ /* Items are evenly distributed; first item is on the start line, last item on the end line */
+  /* justify-content: space-around; */  /* Items are evenly distributed with equal space around them */
+  /* justify-content: space-evenly; */  /* Items are distributed so that the spacing between any two items is equal */
+}</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Interactive Example:</h4>
+                <div class="flex items-center space-x-2 mb-4">
+                    <label for="justifyContentSelect">Choose <code>justify-content</code> value:</label>
+                    <select id="justifyContentSelect" class="p-2 border rounded-md bg-white">
+                        <option value="flex-start">flex-start</option>
+                        <option value="flex-end">flex-end</option>
+                        <option value="center">center</option>
+                        <option value="space-between">space-between</option>
+                        <option value="space-around">space-around</option>
+                        <option value="space-evenly">space-evenly</option>
+                    </select>
+                </div>
+                <div id="justifyContentDemoContainer" class="flex-demo-container" style="transition: all 0.3s ease;">
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: align-items -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">5. `align-items`: Aligning on the Cross Axis
+                </h3>
+                <p class="text-lg text-gray-700 mb-6">This property is used to align flex items along the <strong>cross
+                        axis</strong>, which is the axis perpendicular to the main axis.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="alignItemsCode"><code>.container {
+  display: flex;
+  height: 200px; /* Height is needed to see the effect */
+
+  /* Align items */
+  align-items: stretch; /* (default) Stretch to fill the container */
+  /* align-items: flex-start; */ /* Placed at the start of the cross axis */
+  /* align-items: flex-end; */   /* Placed at the end of the cross axis */
+  /* align-items: center; */    /* Centered in the cross axis */
+  /* align-items: baseline; */  /* Align based on the items' text baseline */
+}</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Interactive Example:</h4>
+                <div class="flex items-center space-x-2 mb-4">
+                    <label for="alignItemsSelect">Choose <code>align-items</code> value:</label>
+                    <select id="alignItemsSelect" class="p-2 border rounded-md bg-white">
+                        <option value="stretch">stretch</option>
+                        <option value="flex-start">flex-start</option>
+                        <option value="flex-end">flex-end</option>
+                        <option value="center">center</option>
+                        <option value="baseline">baseline</option>
+                    </select>
+                </div>
+                <div id="alignItemsDemoContainer" class="flex-demo-container"
+                    style="height: 200px; transition: all 0.3s ease;">
+                    <div style="padding-top: 1rem; padding-bottom: 1rem;">1</div>
+                    <div style="padding-top: 2rem; padding-bottom: 2rem; font-size: 1.5rem;">2</div>
+                    <div style="padding-top: 0.5rem; padding-bottom: 0.5rem;">3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Example 1 - Navigation Bar -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">6. Example 1: Building a Navigation Bar</h3>
+                <p class="text-lg text-gray-700 mb-4">Flexbox is perfect for creating a simple navigation bar, with a
+                    logo on the left and links on the right.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">HTML</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="navHtml"><code>&lt;nav class="navbar"&gt;
+  &lt;div class="logo"&gt;Logo&lt;/div&gt;
+  &lt;ul class="nav-links"&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Products&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+                        </div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">CSS</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="navCss"><code>.navbar {
+  display: flex;
+  justify-content: space-between; /* Pushes logo and nav-links to opposite ends */
+  align-items: center; /* Vertically centers the items */
+  background-color: #4338ca;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  color: white;
+}
+.logo { font-size: 1.5rem; font-weight: bold; }
+.nav-links {
+  display: flex;
+  list-style: none; /* Removes bullet points */
+  padding: 0;
+  margin: 0;
+}
+.nav-links li { margin-left: 1.5rem; }
+.nav-links a { color: white; text-decoration: none; }</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result:</h4>
+                        <div class="html-output" id="navOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Example 2 - Card Layout -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">7. Example 2: Card Layout</h3>
+                <p class="text-lg text-gray-700 mb-4">Use <code>flex-wrap: wrap;</code> to allow items to wrap onto the
+                    next line when there isn't enough space, creating a responsive layout.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">HTML</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="cardHtml"><code>&lt;div class="card-container"&gt;
+  &lt;div class="card"&gt;Card 1&lt;/div&gt;
+  &lt;div class="card"&gt;Card 2&lt;/div&gt;
+  &lt;div class="card"&gt;Card 3&lt;/div&gt;
+  &lt;div class="card"&gt;Card 4&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">CSS</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="cardCss"><code>.card-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next line */
+  gap: 1rem; /* Creates space between cards */
+}
+.card {
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  /* flex: 1 1 200px; */ /* Shorthand for flex-grow, flex-shrink, flex-basis */
+  flex-grow: 1; /* Allows the card to grow to fill available space */
+  min-width: 200px; /* Minimum width for each card */
+}</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result (try resizing the window):</h4>
+                        <div class="html-output" id="cardOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Flexbox Froggy -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-4xl font-bold text-emerald-600 mb-6">8. Practice with Flexbox Froggy!</h2>
+                <p class="text-2xl text-gray-600 mb-8 max-w-3xl">The best way to master Flexbox is by practicing. Play
+                    the Flexbox Froggy game to reinforce your knowledge in a fun way!</p>
+                <a href="https://flexboxfroggy.com/" target="_blank" class="mb-8 block">
+                    <img src="https://placehold.co/700x400/22C55E/FFFFFF?text=Flexbox+Froggy"
+                        alt="[Screenshot of the Flexbox Froggy game]"
+                        class="rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                </a>
+                <a href="https://flexboxfroggy.com/" target="_blank"
+                    class="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg text-2xl transition duration-150 ease-in-out">
+                    Play Now <i class="fas fa-gamepad ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 10: Summary -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-8">Session 4 Summary</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-4xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You now know how to organize code with an
+                        <strong>External CSS file</strong>.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You understand the core concepts of
+                        Flexbox: <strong>Flex Container</strong> and <strong>Flex Items</strong>.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You have learned the key properties for
+                        layout: <code>display: flex</code>, <code>flex-direction</code>, <code>justify-content</code>,
+                        and <code>align-items</code>.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You know how to use <code>flex-wrap</code>
+                        to create responsive layouts.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You have applied this knowledge to build
+                        real UI components.</p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-4xl">
+                    <h4 class="text-2xl font-bold mb-2">See you in Session 5!</h4>
+                    <p class="text-lg">We will explore another powerful layout tool: <strong>CSS Grid</strong>!</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+            if (totalSlidesNumDisplay) {
+                totalSlidesNumDisplay.textContent = slides.length || '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) slide.style.display = 'none';
+                        }, 400);
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            function copyCode(buttonElement) {
+                const codeBlock = buttonElement.closest('.code-block-container').querySelector('pre.code-block');
+                if (!codeBlock) return;
+
+                const codeToCopy = codeBlock.innerText;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalIcon = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalIcon;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Could not copy text: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            function renderHtml(htmlContent, cssContent, outputEl) {
+                if (!outputEl) return;
+
+                outputEl.innerHTML = ''; // Clear previous content
+                const shadow = outputEl.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `<style>${cssContent}</style><div style="font-family: 'Inter', sans-serif;">${htmlContent}</div>`;
+            }
+
+            function renderExample(htmlCodeId, cssCodeId, outputId) {
+                const htmlBlockEl = document.querySelector(`[data-code-id="${htmlCodeId}"]`);
+                const cssBlockEl = document.querySelector(`[data-code-id="${cssCodeId}"]`);
+                const outputEl = document.getElementById(outputId);
+                if (!htmlBlockEl || !cssBlockEl || !outputEl) return;
+                renderHtml(htmlBlockEl.innerText, cssBlockEl.innerText, outputEl);
+            }
+
+            // --- RENDER EXAMPLES ---
+            try {
+                // Nav Bar Example
+                renderExample('navHtml', 'navCss', 'navOutput');
+
+                // Card Layout Example
+                renderExample('cardHtml', 'cardCss', 'cardOutput');
+
+                // Flex Direction examples
+                const flexDirectionBaseHtml = `<div class="container-demo"><div>1</div><div>2</div><div>3</div></div>`;
+                const flexDirectionBaseCss = `.container-demo { display: flex; background-color: #e0f2fe; padding: 0.5rem; border-radius: 8px;} .container-demo > div { background-color: #0ea5e9; color: white; margin: 0.5rem; padding: 1rem; border-radius: 6px; }`;
+
+                renderHtml(flexDirectionBaseHtml, `${flexDirectionBaseCss} .container-demo { flex-direction: row; }`, document.getElementById('flexDirectionRowOutput'));
+                renderHtml(flexDirectionBaseHtml, `${flexDirectionBaseCss} .container-demo { flex-direction: column; }`, document.getElementById('flexDirectionColumnOutput'));
+
+                // Interactive examples
+                const justifyContentSelect = document.getElementById('justifyContentSelect');
+                const justifyContentContainer = document.getElementById('justifyContentDemoContainer');
+                if (justifyContentSelect && justifyContentContainer) {
+                    justifyContentSelect.addEventListener('change', (e) => {
+                        justifyContentContainer.style.justifyContent = e.target.value;
+                    });
+                }
+
+                const alignItemsSelect = document.getElementById('alignItemsSelect');
+                const alignItemsContainer = document.getElementById('alignItemsDemoContainer');
+                if (alignItemsSelect && alignItemsContainer) {
+                    alignItemsSelect.addEventListener('change', (e) => {
+                        // Reset height for stretch to work correctly
+                        Array.from(alignItemsContainer.children).forEach(child => {
+                            child.style.height = (e.target.value === 'stretch') ? '' : 'auto';
+                        });
+                        alignItemsContainer.style.alignItems = e.target.value;
+                    });
+                    // Initial state trigger
+                    alignItemsSelect.dispatchEvent(new Event('change'));
+                }
+
+
+            } catch (e) {
+                console.error("Error rendering examples:", e);
+            }
+            // --- END RENDERING EXAMPLES ---
+
+            // Assign events to navigation buttons
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Assign events to copy buttons
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
+            });
+
+            // Show the first slide on page load
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>

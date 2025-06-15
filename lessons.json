@@ -1,0 +1,86 @@
+[
+    {
+        "category": "Python Basic",
+        "icon": "fab fa-python",
+        "color": "blue",
+        "lessons": [
+            {
+                "title": "Biển, kiểu dữ liệu, toán tử và input, output trong Python",
+                "url": "./Python Basic/variable_datatype_operator_input.html"
+            },
+            {
+                "title": "Câu lệnh điều kiện cơ bản",
+                "url": "./Python Basic/if_else_statement.html"
+            },
+            {
+                "title": "Vòng lặp nâng cao và giới thiệu về list trong python",
+                "url": "./Python Basic/loop_and_list.html"
+            },
+            {
+                "title": "Dictionary, List & JSON",
+                "url": "./Python Basic/dictionary_list_jsonfile.html"
+            },
+            {
+                "title": "Làm việc với list và txt file",
+                "url": "./Python Basic/list_txtfile.html"
+            }
+        ]
+    },
+    {
+        "category": "Web Basic (VN)",
+        "icon": "fas fa-code",
+        "color": "green",
+        "lessons": [
+            {
+                "title": "Lesson 1: Giới thiệu về HTML, cú pháp HTML cơ bản",
+                "url": "./Web Basic/html_intro_basic_tags_and_basic_style.html"
+            },
+            {
+                "title": "Lesson 2: Cú pháp inline và block",
+                "url": "./Web Basic/html_inline_block_style.html"
+            },
+            {
+                "title": "Lesson 3: CSS Box Model và Layouts",
+                "url": "./Web Basic/css_box_model_layouts.html"
+            },
+            {
+                "title": "Lesson 4: CSS External, Flexbox and Layouts",
+                "url": "./Web Basic/css_external_flexbox.html"
+            }
+        ]
+    },
+    {
+        "category": "Web Basic (English)",
+        "icon": "fas fa-globe",
+        "color": "indigo",
+        "lessons": [
+            {
+                "title": "Lesson 1: HTML Introduction, basic syntax and basic styling",
+                "url": "./Web Basic English/html_intro_basic_tags_and_basic_style.html"
+            },
+            {
+                "title": "Lesson 2: HTML Inline and Block Style",
+                "url": "./Web Basic English/html_inline_block_style.html"
+            },
+            {
+                "title": "Lesson 3: CSS Box Model and Layouts",
+                "url": "./Web Basic English/css_box_model_layouts.html"
+            },
+            {
+                "title": "Lesson 4: CSS External, Flexbox and Layouts",
+                "url": "./Web Basic English/css_external_flexbox.html"
+            }
+        ]
+    },
+    {
+        "category": "Hau Mobile App",
+        "icon": "fas fa-mobile-alt",
+        "color": "purple",
+        "lessons": [
+            {
+                "title": "Slide cuối môn",
+                "url": "./Hau/mobile/index.html"
+            }
+        ]
+    }
+]

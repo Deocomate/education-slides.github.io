@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 4: CSS Flexbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .file-name {
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .html-output {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .flex-demo-container {
+            display: flex;
+            background-color: #f0f9ff;
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 150px;
+            border: 2px dashed #0ea5e9;
+        }
+
+        .flex-demo-container>div {
+            background-color: #0ea5e9;
+            color: white;
+            padding: 1rem;
+            margin: 0.5rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">Lập Trình Web - Buổi 4</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Slide Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Slide Kế <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-6">Buổi 4: CSS Flexbox</h2>
+                <p class="text-2xl text-gray-600 mb-12">Làm chủ kỹ thuật sắp xếp layout hiện đại</p>
+                <img src="https://placehold.co/600x350/6366F1/FFFFFF?text=Flexbox" alt="[Hình ảnh về CSS Flexbox]"
+                    class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Hãy cùng tìm hiểu cách phân chia bố cục trang web một cách linh
+                    hoạt!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: External CSS -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">1. External CSS - Sử dụng file CSS riêng</h3>
+                <p class="text-lg text-gray-700 mb-4">Thay vì viết CSS trực tiếp trong thẻ <code>&lt;style&gt;</code>,
+                    chúng ta nên tạo một file CSS riêng (ví dụ: <code>styles.css</code>) và liên kết nó với file HTML.
+                </p>
+                <h4 class="text-2xl font-medium text-gray-800 mb-3 mt-5">Lợi ích:</h4>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><strong>Dễ bảo trì:</strong> Quản lý code CSS tập trung tại một nơi.</li>
+                    <li><strong>Tái sử dụng:</strong> Một file CSS có thể được dùng cho nhiều trang HTML.</li>
+                    <li><strong>Tăng tốc độ tải trang:</strong> Trình duyệt có thể lưu file CSS vào bộ nhớ đệm (cache).
+                    </li>
+                </ul>
+                <h4 class="text-2xl font-medium text-gray-800 mb-3 mt-6">Cách thực hiện:</h4>
+                <p class="text-lg text-gray-700 mb-4">Trong file HTML, đặt thẻ <code>&lt;link&gt;</code> bên trong thẻ
+                    <code>&lt;head&gt;</code>.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="file-name">index.html</span><button
+                            class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                    <pre class="code-block" data-code-id="externalCssHtml"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Trang của tôi&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Xin chào thế giới!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+                <div class="code-block-container">
+                    <div class="code-block-header"><span class="file-name">styles.css</span><button
+                            class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                    <pre class="code-block" data-code-id="externalCssCss"><code>body {
+  background-color: #f0f4f8;
+  font-family: sans-serif;
+}
+
+h1 {
+  color: #3b82f6;
+  text-align: center;
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Intro to Flexbox -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">2. Giới thiệu về Flexbox</h3>
+                <p class="text-lg text-gray-700 mb-4">Flexbox (Flexible Box Layout) là một mô hình layout trong CSS cho
+                    phép các item trong một container được sắp xếp và phân phối không gian một cách linh hoạt, ngay cả
+                    khi kích thước của chúng không xác định hoặc thay đổi.</p>
+                <p class="text-lg text-gray-700 mb-6">Flexbox hoạt động dựa trên hai thành phần chính:</p>
+                <div class="grid md:grid-cols-2 gap-8 text-lg">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                        <h4 class="text-2xl font-bold text-blue-800 mb-2">Flex Container</h4>
+                        <p>Là phần tử "cha" bao bọc các item. Bạn kích hoạt Flexbox bằng cách đặt thuộc tính
+                            <code>display: flex;</code> cho container này.
+                        </p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                        <h4 class="text-2xl font-bold text-purple-800 mb-2">Flex Items</h4>
+                        <p>Là các phần tử "con" nằm trực tiếp bên trong flex container. Chúng sẽ được sắp xếp theo các
+                            quy tắc của Flexbox.</p>
+                    </div>
+                </div>
+                <div class="mt-8 p-4 bg-gray-100 rounded-lg text-center">
+                    <img src="https://placehold.co/700x250/E0E7FF/4F46E5?text=Flex+Container+%26+Items"
+                        alt="[Sơ đồ Flex Container và Flex Items]" class="mx-auto rounded-md shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Flex Container - display & flex-direction -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">3. Thuộc tính của Flex Container</h3>
+                <h4 class="text-2xl font-medium text-gray-800 mb-3">display: flex</h4>
+                <p class="text-lg text-gray-700 mb-6">Đây là thuộc tính quan trọng nhất để bắt đầu. Nó biến một phần tử
+                    thành flex container.</p>
+
+                <h4 class="text-2xl font-medium text-gray-800 mb-3">flex-direction: Xác định hướng sắp xếp</h4>
+                <p class="text-lg text-gray-700 mb-4">Thuộc tính này thiết lập trục chính (main axis), xác định hướng
+                    các flex item được xếp vào trong flex container.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="flexDirectionCode"><code>.container {
+  display: flex;
+  /* Các giá trị có thể có: */
+  flex-direction: row; /* (mặc định) Sắp xếp từ trái sang phải */
+  /* flex-direction: row-reverse; */ /* Từ phải sang trái */
+  /* flex-direction: column; */      /* Từ trên xuống dưới */
+  /* flex-direction: column-reverse; */ /* Từ dưới lên trên */
+}</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ: <code>flex-direction: row;</code> (mặc
+                    định)</h4>
+                <div class="html-output" id="flexDirectionRowOutput"></div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ: <code>flex-direction: column;</code></h4>
+                <div class="html-output" id="flexDirectionColumnOutput"></div>
+            </div>
+        </div>
+
+        <!-- Slide 5: justify-content -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">4. `justify-content`: Căn chỉnh theo trục chính
+                </h3>
+                <p class="text-lg text-gray-700 mb-6">Thuộc tính này dùng để căn chỉnh các flex item dọc theo
+                    <strong>trục chính</strong> (main axis) của flex container. Trục chính được xác định bởi
+                    <code>flex-direction</code>.
+                </p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="justifyContentCode"><code>.container {
+  display: flex;
+  /* flex-direction: row; (mặc định) */
+
+  /* Căn lề các item */
+  justify-content: flex-start; /* (mặc định) Dồn về đầu */
+  /* justify-content: flex-end; */   /* Dồn về cuối */
+  /* justify-content: center; */    /* Căn giữa */
+  /* justify-content: space-between; */ /* Căn đều 2 bên, item đầu và cuối sát lề */
+  /* justify-content: space-around; */  /* Căn đều, khoảng cách 2 bên mỗi item bằng nhau */
+  /* justify-content: space-evenly; */  /* Căn đều, tất cả khoảng cách bằng nhau */
+}</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ tương tác:</h4>
+                <div class="flex items-center space-x-2 mb-4">
+                    <label for="justifyContentSelect">Chọn giá trị <code>justify-content</code>:</label>
+                    <select id="justifyContentSelect" class="p-2 border rounded-md bg-white">
+                        <option value="flex-start">flex-start</option>
+                        <option value="flex-end">flex-end</option>
+                        <option value="center">center</option>
+                        <option value="space-between">space-between</option>
+                        <option value="space-around">space-around</option>
+                        <option value="space-evenly">space-evenly</option>
+                    </select>
+                </div>
+                <div id="justifyContentDemoContainer" class="flex-demo-container" style="transition: all 0.3s ease;">
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: align-items -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">5. `align-items`: Căn chỉnh theo trục phụ</h3>
+                <p class="text-lg text-gray-700 mb-6">Thuộc tính này dùng để căn chỉnh các flex item dọc theo
+                    <strong>trục phụ</strong> (cross axis), là trục vuông góc với trục chính.
+                </p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="alignItemsCode"><code>.container {
+  display: flex;
+  height: 200px; /* Cần có chiều cao để thấy hiệu ứng */
+
+  /* Căn lề các item */
+  align-items: stretch; /* (mặc định) Kéo dài để lấp đầy container */
+  /* align-items: flex-start; */ /* Dồn về phía trên */
+  /* align-items: flex-end; */   /* Dồn về phía dưới */
+  /* align-items: center; */    /* Căn giữa theo chiều dọc */
+  /* align-items: baseline; */  /* Căn theo đường baseline của văn bản */
+}</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ tương tác:</h4>
+                <div class="flex items-center space-x-2 mb-4">
+                    <label for="alignItemsSelect">Chọn giá trị <code>align-items</code>:</label>
+                    <select id="alignItemsSelect" class="p-2 border rounded-md bg-white">
+                        <option value="stretch">stretch</option>
+                        <option value="flex-start">flex-start</option>
+                        <option value="flex-end">flex-end</option>
+                        <option value="center">center</option>
+                        <option value="baseline">baseline</option>
+                    </select>
+                </div>
+                <div id="alignItemsDemoContainer" class="flex-demo-container"
+                    style="height: 200px; transition: all 0.3s ease;">
+                    <div style="padding-top: 1rem; padding-bottom: 1rem;">1</div>
+                    <div style="padding-top: 2rem; padding-bottom: 2rem; font-size: 1.5rem;">2</div>
+                    <div style="padding-top: 0.5rem; padding-bottom: 0.5rem;">3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Example 1 - Navigation Bar -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">6. Ví dụ 1: Xây dựng thanh điều hướng (Navbar)
+                </h3>
+                <p class="text-lg text-gray-700 mb-4">Flexbox là công cụ hoàn hảo để tạo một thanh điều hướng đơn giản,
+                    với logo bên trái và các liên kết bên phải.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">HTML</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="navHtml"><code>&lt;nav class="navbar"&gt;
+  &lt;div class="logo"&gt;Logo&lt;/div&gt;
+  &lt;ul class="nav-links"&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Trang chủ&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Sản phẩm&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Liên hệ&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+                        </div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">CSS</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="navCss"><code>.navbar {
+  display: flex;
+  justify-content: space-between; /* Đẩy logo và nav-links ra 2 phía */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  background-color: #4338ca;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  color: white;
+}
+.logo { font-size: 1.5rem; font-weight: bold; }
+.nav-links {
+  display: flex;
+  list-style: none; /* Bỏ dấu chấm của li */
+  padding: 0;
+  margin: 0;
+}
+.nav-links li { margin-left: 1.5rem; }
+.nav-links a { color: white; text-decoration: none; }</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả:</h4>
+                        <div class="html-output" id="navOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Example 2 - Card Layout -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">7. Ví dụ 2: Dàn trang các thẻ (Card Layout)</h3>
+                <p class="text-lg text-gray-700 mb-4">Sử dụng <code>flex-wrap: wrap;</code> để các item tự động xuống
+                    hàng khi không đủ không gian, tạo ra một layout responsive.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">HTML</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="cardHtml"><code>&lt;div class="card-container"&gt;
+  &lt;div class="card"&gt;Thẻ 1&lt;/div&gt;
+  &lt;div class="card"&gt;Thẻ 2&lt;/div&gt;
+  &lt;div class="card"&gt;Thẻ 3&lt;/div&gt;
+  &lt;div class="card"&gt;Thẻ 4&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><span class="file-name">CSS</span><button
+                                    class="copy-button"><i class="far fa-copy"></i> Copy</button></div>
+                            <pre class="code-block" data-code-id="cardCss"><code>.card-container {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các item xuống hàng */
+  gap: 1rem; /* Tạo khoảng cách giữa các card */
+}
+.card {
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  /* flex: 1 1 200px; */ /* Viết tắt cho flex-grow, flex-shrink, flex-basis */
+  flex-grow: 1; /* Cho phép thẻ co giãn để lấp đầy không gian */
+  min-width: 200px; /* Chiều rộng tối thiểu của mỗi thẻ */
+}</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả (thử thay đổi kích thước cửa
+                            sổ):</h4>
+                        <div class="html-output" id="cardOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Flexbox Froggy -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-4xl font-bold text-emerald-600 mb-6">8. Luyện tập với Flexbox Froggy!</h2>
+                <p class="text-2xl text-gray-600 mb-8 max-w-3xl">Cách tốt nhất để thành thạo Flexbox là thực hành. Hãy
+                    chơi trò chơi Flexbox Froggy để củng cố kiến thức một cách vui nhộn!</p>
+                <a href="https://flexboxfroggy.com/" target="_blank" class="mb-8 block">
+                    <img src="https://placehold.co/700x400/22C55E/FFFFFF?text=Flexbox+Froggy"
+                        alt="[Screenshot của trò chơi Flexbox Froggy]"
+                        class="rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                </a>
+                <a href="https://flexboxfroggy.com/" target="_blank"
+                    class="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg text-2xl transition duration-150 ease-in-out">
+                    Bắt đầu chơi ngay <i class="fas fa-gamepad ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 10: Summary -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-8">Tổng kết Buổi 4</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-4xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn đã biết cách tổ chức code với
+                        <strong>file CSS riêng (External CSS)</strong>.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn đã hiểu khái niệm cốt lõi của Flexbox:
+                        <strong>Flex Container</strong> và <strong>Flex Items</strong>.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn đã học các thuộc tính quan trọng để
+                        sắp xếp layout: <code>display: flex</code>, <code>flex-direction</code>,
+                        <code>justify-content</code>, và <code>align-items</code>.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn biết cách dùng <code>flex-wrap</code>
+                        để tạo layout responsive.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn đã áp dụng kiến thức để xây dựng các
+                        thành phần UI thực tế.</p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-4xl">
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở Buổi 5!</h4>
+                    <p class="text-lg">Chúng ta sẽ khám phá một công cụ layout mạnh mẽ khác: <strong>CSS Grid</strong>!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+            if (totalSlidesNumDisplay) {
+                totalSlidesNumDisplay.textContent = slides.length || '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) slide.style.display = 'none';
+                        }, 400);
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            function copyCode(buttonElement) {
+                const codeBlock = buttonElement.closest('.code-block-container').querySelector('pre.code-block');
+                if (!codeBlock) return;
+
+                const codeToCopy = codeBlock.innerText;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalIcon = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalIcon;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            function renderHtml(htmlContent, cssContent, outputEl) {
+                if (!outputEl) return;
+
+                outputEl.innerHTML = ''; // Clear previous content
+                const shadow = outputEl.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `<style>${cssContent}</style><div style="font-family: 'Inter', sans-serif;">${htmlContent}</div>`;
+            }
+
+            function renderExample(htmlCodeId, cssCodeId, outputId) {
+                const htmlBlockEl = document.querySelector(`[data-code-id="${htmlCodeId}"]`);
+                const cssBlockEl = document.querySelector(`[data-code-id="${cssCodeId}"]`);
+                const outputEl = document.getElementById(outputId);
+                if (!htmlBlockEl || !cssBlockEl || !outputEl) return;
+                renderHtml(htmlBlockEl.innerText, cssBlockEl.innerText, outputEl);
+            }
+
+            // --- RENDER EXAMPLES ---
+            try {
+                // Nav Bar Example
+                renderExample('navHtml', 'navCss', 'navOutput');
+
+                // Card Layout Example
+                renderExample('cardHtml', 'cardCss', 'cardOutput');
+
+                // Flex Direction examples
+                const flexDirectionBaseHtml = `<div class="container-demo"><div>1</div><div>2</div><div>3</div></div>`;
+                const flexDirectionBaseCss = `.container-demo { display: flex; background-color: #e0f2fe; padding: 0.5rem; border-radius: 8px;} .container-demo > div { background-color: #0ea5e9; color: white; margin: 0.5rem; padding: 1rem; border-radius: 6px; }`;
+
+                renderHtml(flexDirectionBaseHtml, `${flexDirectionBaseCss} .container-demo { flex-direction: row; }`, document.getElementById('flexDirectionRowOutput'));
+                renderHtml(flexDirectionBaseHtml, `${flexDirectionBaseCss} .container-demo { flex-direction: column; }`, document.getElementById('flexDirectionColumnOutput'));
+
+                // Interactive examples
+                const justifyContentSelect = document.getElementById('justifyContentSelect');
+                const justifyContentContainer = document.getElementById('justifyContentDemoContainer');
+                if (justifyContentSelect && justifyContentContainer) {
+                    justifyContentSelect.addEventListener('change', (e) => {
+                        justifyContentContainer.style.justifyContent = e.target.value;
+                    });
+                }
+
+                const alignItemsSelect = document.getElementById('alignItemsSelect');
+                const alignItemsContainer = document.getElementById('alignItemsDemoContainer');
+                if (alignItemsSelect && alignItemsContainer) {
+                    alignItemsSelect.addEventListener('change', (e) => {
+                        // Reset height for stretch to work correctly
+                        Array.from(alignItemsContainer.children).forEach(child => {
+                            child.style.height = (e.target.value === 'stretch') ? '' : 'auto';
+                        });
+                        alignItemsContainer.style.alignItems = e.target.value;
+                    });
+                    // Initial state trigger
+                    alignItemsSelect.dispatchEvent(new Event('change'));
+                }
+
+
+            } catch (e) {
+                console.error("Lỗi khi render ví dụ:", e);
+            }
+            // --- END RENDERING EXAMPLES ---
+
+            // Assign events to navigation buttons
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Assign events to copy buttons
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
+            });
+
+            // Show the first slide on page load
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
