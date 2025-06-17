@@ -88,13 +88,17 @@
         ]
     },
     {
-        "category": "Hau Mobile App",
+        "category": "Hau",
         "icon": "fas fa-mobile-alt",
         "color": "purple",
         "lessons": [
             {
-                "title": "Slide cuối môn",
+                "title": "Slide cuối môn mobile",
                 "url": "./Hau/mobile/index.html"
+            },
+            {
+                "title": "Slide cuối môn KHMT và CNPM",
+                "url": "./Hau/khmt/index.html"
             }
         ]
     }

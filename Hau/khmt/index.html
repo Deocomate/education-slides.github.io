@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuyết trình: Nghiên cứu công nghệ Fine-tuning và thuật toán Transformer trong Xử lý Ngôn ngữ Tự nhiên
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f8fafc;
+            /* gray-50 */
+        }
+
+        #presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            transform: scale(0.98);
+            pointer-events: none;
+            padding: 4rem;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .slide-content {
+            animation: fadeInContent 1s ease-in-out;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated-item {
+            animation: fadeInItem 0.5s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInItem {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+            opacity: 1;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.1;
+            cursor: not-allowed;
+        }
+
+        #prevBtn {
+            left: 20px;
+        }
+
+        #nextBtn {
+            right: 20px;
+        }
+
+        #slide-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        #progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: #3b82f6;
+            z-index: 10;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="presentation-container">
+        <!-- Slide 1: Tiêu đề -->
+        <div
+            class="slide active items-center text-center bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white">
+            <img src="https://placehold.co/100x100/ffffff/000000?text=HAU" alt="HAU Logo"
+                class="absolute top-6 left-6 h-[70px] w-[70px] z-10 rounded-full"
+                onerror="this.onerror=null; this.src='https://placehold.co/100x100/ffffff/000000?text=HAU';">
+            <div class="slide-content">
+                <p class="text-2xl md:text-3xl text-blue-300 mb-4 animated-item" style="animation-delay: 0.2s;">
+                    Khoa học máy tính và Công nghệ phần mềm</p>
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-8 animated-item" style="animation-delay: 0.4s;">
+                    Nghiên cứu công nghệ Fine-tuning và thuật toán Transformer trong Xử lý Ngôn ngữ Tự nhiên</h1>
+                <div class="text-left mx-auto max-w-2xl bg-black bg-opacity-20 p-6 rounded-2xl border border-gray-700 animated-item"
+                    style="animation-delay: 0.6s;">
+                    <p class="text-lg mb-2"><span class="font-semibold text-gray-400">GVHD:</span> Th.s Nguyễn Quốc Huy
+                    </p>
+                    <p class="text-lg font-semibold mb-2 text-gray-300">Nhóm 1 thực hiện:</p>
+                    <ul class="grid grid-cols-2 gap-x-8 gap-y-1 text-base text-gray-300">
+                        <li>Nguyễn Vũ Minh Long - 2155010151</li>
+                        <li>Nguyễn Duy Đạt - 2155010066</li>
+                        <li>Nguyễn Hữu Tuấn - 2155010236</li>
+                        <li>Nguyễn Duy Huy - 2155010121</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Bố cục -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-12 border-l-8 border-blue-600 pl-6">Nội dung trình bày
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xl">
+                    <div class="animated-item bg-white p-6 rounded-lg shadow-md flex items-center"
+                        style="animation-delay: 0.2s;">
+                        <i data-lucide="book-open" class="w-10 h-10 text-blue-600 mr-5"></i>
+                        <div>
+                            <h3 class="font-semibold text-2xl text-gray-800">Chương 1: Cơ sở lý thuyết</h3>
+                            <p class="text-gray-600">NLP, Transformer, T5 và Fine-tuning.</p>
+                        </div>
+                    </div>
+                    <div class="animated-item bg-white p-6 rounded-lg shadow-md flex items-center"
+                        style="animation-delay: 0.3s;">
+                        <i data-lucide="cog" class="w-10 h-10 text-blue-600 mr-5"></i>
+                        <div>
+                            <h3 class="font-semibold text-2xl text-gray-800">Chương 2: Phân tích & Huấn luyện</h3>
+                            <p class="text-gray-600">Bài toán, dữ liệu và quy trình Fine-tuning.</p>
+                        </div>
+                    </div>
+                    <div class="animated-item bg-white p-6 rounded-lg shadow-md flex items-center"
+                        style="animation-delay: 0.4s;">
+                        <i data-lucide="bar-chart-3" class="w-10 h-10 text-blue-600 mr-5"></i>
+                        <div>
+                            <h3 class="font-semibold text-2xl text-gray-800">Chương 3: Thực nghiệm & Đánh giá</h3>
+                            <p class="text-gray-600">Kết quả, ví dụ thành công và hạn chế.</p>
+                        </div>
+                    </div>
+                    <div class="animated-item bg-white p-6 rounded-lg shadow-md flex items-center"
+                        style="animation-delay: 0.5s;">
+                        <i data-lucide="flag" class="w-10 h-10 text-blue-600 mr-5"></i>
+                        <div>
+                            <h3 class="font-semibold text-2xl text-gray-800">Kết luận & Hướng phát triển</h3>
+                            <p class="text-gray-600">Tổng kết và các bước đi tiếp theo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Giới thiệu NLP -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Chương 1: Cơ Sở Lý
+                    Thuyết</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="animated-item" style="animation-delay: 0.2s;">
+                        <h3 class="text-3xl font-semibold text-blue-700 mb-4">Xử lý Ngôn ngữ Tự nhiên (NLP) là gì?</h3>
+                        <p class="text-gray-600 leading-relaxed text-lg">Là lĩnh vực của AI giúp máy tính có khả năng
+                            <span class="font-semibold text-blue-600">hiểu, diễn giải và tạo ra</span> ngôn ngữ của con
+                            người, thu hẹp khoảng cách giao tiếp giữa người và máy.
+                        </p>
+                        <div class="mt-6 space-y-3">
+                            <div class="flex items-center"><i data-lucide="bot"
+                                    class="w-6 h-6 mr-3 text-green-500"></i><span class="text-gray-700">Chatbots & Trợ
+                                    lý ảo</span></div>
+                            <div class="flex items-center"><i data-lucide="languages"
+                                    class="w-6 h-6 mr-3 text-green-500"></i><span class="text-gray-700">Dịch máy (Google
+                                    Translate)</span></div>
+                            <div class="flex items-center"><i data-lucide="spell-check-2"
+                                    class="w-6 h-6 mr-3 text-green-500"></i><span class="text-gray-700">Sửa lỗi chính tả
+                                    & Ngữ pháp</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Bối cảnh ra đời Transformer -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Bối cảnh ra đời
+                    Transformer</h2>
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div class="animated-item" style="animation-delay: 0.2s;">
+                        <h3 class="text-3xl font-semibold text-red-700 mb-4">Hạn chế của mô hình tuần tự (RNN/LSTM)</h3>
+                        <ul class="space-y-3 text-lg text-gray-600 list-disc list-inside">
+                            <li><strong>Xử lý tuần tự:</strong> Không thể xử lý song song, gây chậm chạp khi huấn luyện
+                                trên các chuỗi dài.</li>
+                            <li><strong>Phụ thuộc xa:</strong> Khó nắm bắt mối quan hệ giữa các từ ở cách xa nhau do vấn
+                                đề "biến mất gradient".</li>
+                            <li><strong>Nút thắt cổ chai thông tin:</strong> Toàn bộ câu đầu vào bị nén vào một vector
+                                ngữ cảnh duy nhất.</li>
+                        </ul>
+                    </div>
+                    <div class="animated-item" style="animation-delay: 0.4s;">
+                        <h3 class="text-3xl font-semibold text-green-700 mb-4">Giải pháp đột phá từ Google Brain</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-green-500">
+                            <p class="text-lg text-gray-700">Năm 2017, bài báo <strong class="text-green-800">"Attention
+                                    Is All You Need"</strong> đã giới thiệu kiến trúc Transformer.</p>
+                            <p class="text-lg text-gray-600 mt-3">Hoàn toàn loại bỏ cơ chế tuần tự và chỉ dựa vào
+                                <strong class="text-green-800">Self-Attention</strong>, mở ra kỷ nguyên mới cho các mô
+                                hình ngôn ngữ lớn.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Kiến trúc Transformer & Self-Attention -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Cơ chế Self-Attention
+                </h2>
+                <p class="text-xl text-gray-600 max-w-4xl mb-8 animated-item" style="animation-delay: 0.2s;">
+                    Self-Attention cho phép mỗi từ trong câu tính toán mức độ liên quan với TẤT CẢ các từ khác, tạo ra
+                    một biểu diễn ngữ cảnh phong phú hơn.
+                </p>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-lg animated-item" style="animation-delay: 0.4s;">
+                    <div
+                        class="flex flex-col md:flex-row items-center justify-around space-y-4 md:space-y-0 md:space-x-4 text-center">
+                        <div class="font-mono p-3 bg-white rounded shadow w-full md:w-auto">Input: "mèo"</div>
+                        <i data-lucide="arrow-right" class="transform rotate-90 md:rotate-0"></i>
+                        <div class="flex space-x-2 w-full md:w-auto">
+                            <div class="flex-1 p-3 bg-blue-100 text-blue-800 rounded shadow">Query (Q)<br /><span
+                                    class="text-xs">Tôi đang tìm gì?</span></div>
+                            <div class="flex-1 p-3 bg-yellow-100 text-yellow-800 rounded shadow">Key (K)<br /><span
+                                    class="text-xs">Tôi có thông tin gì?</span></div>
+                            <div class="flex-1 p-3 bg-green-100 text-green-800 rounded shadow">Value (V)<br /><span
+                                    class="text-xs">Tôi mang giá trị gì?</span></div>
+                        </div>
+                    </div>
+                    <div class="text-center my-4">
+                        <i data-lucide="arrow-down" class="text-gray-400 w-8 h-8"></i>
+                        <p class="text-gray-600 font-semibold">Attention Score = softmax( (Q * Kᵀ) / √dₖ ) * V</p>
+                        <i data-lucide="arrow-down" class="text-gray-400 w-8 h-8"></i>
+                    </div>
+                    <div class="p-4 bg-indigo-100 text-indigo-800 rounded shadow text-center">
+                        <p class="font-bold text-lg">Output: Vector "mèo" đã được làm giàu ngữ cảnh</p>
+                        <p class="text-sm">(Ví dụ: Hiểu rằng "mèo" trong "con mèo đen" liên quan đến "đen" hơn "con")
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Mô hình T5 -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Mô hình T5: Một cho
+                    tất cả</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mb-10 animated-item" style="animation-delay: 0.2s;">
+                    T5 (Text-to-Text Transfer Transformer) đề xuất một ý tưởng đột phá: thống nhất mọi bài toán NLP về
+                    một định dạng duy nhất: <span class="font-semibold text-blue-600">nhận vào một chuỗi văn bản và sinh
+                        ra một chuỗi văn bản</span>.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md animated-item" style="animation-delay: 0.4s;">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Dịch máy</h4>
+                        <p class="font-mono bg-gray-200 p-2 rounded text-sm text-gray-700">
+                            <span class="text-red-600">dịch Anh sang Việt:</span> a cat
+                        </p>
+                        <i data-lucide="arrow-right" class="my-2 text-blue-500"></i>
+                        <p class="font-mono bg-blue-100 p-2 rounded text-sm text-blue-800">một con mèo</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md animated-item" style="animation-delay: 0.5s;">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Tóm tắt</h4>
+                        <p class="font-mono bg-gray-200 p-2 rounded text-sm text-gray-700">
+                            <span class="text-red-600">tóm tắt:</span> Hà Nội là thủ đô của Việt Nam...
+                        </p>
+                        <i data-lucide="arrow-right" class="my-2 text-blue-500"></i>
+                        <p class="font-mono bg-blue-100 p-2 rounded text-sm text-blue-800">Hà Nội là thủ đô Việt Nam.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md animated-item" style="animation-delay: 0.6s;">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Sửa lỗi chính tả (Đề tài)</h4>
+                        <p class="font-mono bg-gray-200 p-2 rounded text-sm text-gray-700">
+                            <span class="text-red-600">sửa lỗi chính tả:</span> bầu chời hôm nay
+                        </p>
+                        <i data-lucide="arrow-right" class="my-2 text-blue-500"></i>
+                        <p class="font-mono bg-blue-100 p-2 rounded text-sm text-blue-800">bầu trời hôm nay</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Fine-tuning vs. Training from Scratch -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Fine-tuning vs.
+                    Training from Scratch</h2>
+                <div class="overflow-x-auto animated-item" style="animation-delay: 0.2s;">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="py-4 px-6 bg-gray-50 font-bold uppercase text-sm text-gray-600 border-b">Tiêu
+                                    chí</th>
+                                <th class="py-4 px-6 bg-red-50 font-bold uppercase text-sm text-red-700 border-b">
+                                    Training from Scratch</th>
+                                <th class="py-4 px-6 bg-green-50 font-bold uppercase text-sm text-green-700 border-b">
+                                    Fine-tuning</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr>
+                                <td class="py-4 px-6 border-b font-semibold">Dữ liệu cần thiết</td>
+                                <td class="py-4 px-6 border-b">Rất lớn (Hàng Terabytes)</td>
+                                <td class="py-4 px-6 border-b">Nhỏ, chuyên biệt cho tác vụ</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 border-b font-semibold">Tài nguyên tính toán</td>
+                                <td class="py-4 px-6 border-b">Cực lớn (Hàng trăm GPU, nhiều tuần/tháng)</td>
+                                <td class="py-4 px-6 border-b">Thấp hơn nhiều (1 GPU, vài giờ/ngày)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 border-b font-semibold">Thời gian phát triển</td>
+                                <td class="py-4 px-6 border-b">Rất dài</td>
+                                <td class="py-4 px-6 border-b">Ngắn</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 border-b font-semibold">Hiệu suất</td>
+                                <td class="py-4 px-6 border-b">Thấp nếu dữ liệu giới hạn</td>
+                                <td class="py-4 px-6 border-b">Thường cao hơn trong thực tế</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Vai trò của Fine-tuning -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Vai trò của
+                    Fine-tuning</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mb-8 animated-item" style="animation-delay: 0.2s;">
+                    Fine-tuning giúp chuyển đổi một mô hình ngôn ngữ lớn tổng quát thành một "chuyên gia" cho một lĩnh
+                    vực hoặc nhiệm vụ cụ thể.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md animated-item" style="animation-delay: 0.3s;">
+                        <h4 class="text-xl font-bold text-blue-700 mb-2 flex items-center"><i data-lucide="target"
+                                class="mr-3"></i>Chuyên biệt hóa nhiệm vụ</h4>
+                        <p class="text-gray-600">Dạy mô hình cách áp dụng kiến thức rộng lớn vào một định dạng
+                            input/output cụ thể (ví dụ: sửa lỗi, phân tích cảm xúc).</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md animated-item" style="animation-delay: 0.4s;">
+                        <h4 class="text-xl font-bold text-blue-700 mb-2 flex items-center"><i data-lucide="microscope"
+                                class="mr-3"></i>Thích nghi miền dữ liệu</h4>
+                        <p class="text-gray-600">Giúp mô hình học các thuật ngữ, sắc thái, phong cách của một lĩnh vực
+                            chuyên ngành (y tế, luật, tài chính).</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md animated-item" style="animation-delay: 0.5s;">
+                        <h4 class="text-xl font-bold text-blue-700 mb-2 flex items-center"><i data-lucide="trending-up"
+                                class="mr-3"></i>Cải thiện hiệu suất</h4>
+                        <p class="text-gray-600">Đạt độ chính xác cao hơn đáng kể so với việc chỉ sử dụng mô hình gốc
+                            với các câu lệnh (prompting).</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md animated-item" style="animation-delay: 0.6s;">
+                        <h4 class="text-xl font-bold text-blue-700 mb-2 flex items-center"><i
+                                data-lucide="sliders-horizontal" class="mr-3"></i>Định hướng hành vi</h4>
+                        <p class="text-gray-600">Huấn luyện mô hình để tạo ra các câu trả lời tuân thủ một định dạng,
+                            văn phong hoặc quy tắc an toàn nhất định.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Phân tích bài toán -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Chương 2: Phân tích &
+                    Huấn luyện</h2>
+                <h3 class="text-3xl font-semibold text-blue-700 mb-6 animated-item" style="animation-delay: 0.2s;">Bài
+                    toán: Sửa lỗi chính tả Tiếng Việt</h3>
+                <p class="text-xl text-gray-600 max-w-4xl mb-8 animated-item" style="animation-delay: 0.3s;">
+                    Tiếng Việt có hệ thống thanh điệu và phương ngữ phức tạp, dẫn đến nhiều loại lỗi chính tả đặc thù.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="bg-gray-50 p-6 rounded-lg animated-item" style="animation-delay: 0.4s;">
+                        <p class="text-lg line-through text-red-500">sản suất</p>
+                        <i data-lucide="arrow-down" class="my-2 mx-auto text-gray-400"></i>
+                        <p class="text-lg font-semibold text-green-600">sản xuất</p>
+                        <h4 class="mt-3 font-bold text-gray-700">Lỗi phát âm (s/x, ch/tr)</h4>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg animated-item" style="animation-delay: 0.5s;">
+                        <p class="text-lg line-through text-red-500">chia sẽ</p>
+                        <i data-lucide="arrow-down" class="my-2 mx-auto text-gray-400"></i>
+                        <p class="text-lg font-semibold text-green-600">chia sẻ</p>
+                        <h4 class="mt-3 font-bold text-gray-700">Lỗi dấu thanh (?/~)</h4>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg animated-item" style="animation-delay: 0.6s;">
+                        <p class="text-lg line-through text-red-500">suy ngĩ</p>
+                        <i data-lucide="arrow-down" class="my-2 mx-auto text-gray-400"></i>
+                        <p class="text-lg font-semibold text-green-600">suy nghĩ</p>
+                        <h4 class="mt-3 font-bold text-gray-700">Lỗi quy tắc (ng/ngh)</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Hướng tiếp cận và dữ liệu -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Hướng tiếp cận & Dữ
+                    liệu</h2>
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="animated-item" style="animation-delay: 0.2s;">
+                        <h3 class="text-3xl font-semibold text-blue-700 mb-4">Mô hình: VietAI/vit5-base</h3>
+                        <p class="text-lg text-gray-600">Sử dụng mô hình T5 đã được tiền huấn luyện trên
+                            <strong>30GB</strong> dữ liệu Tiếng Việt bởi VietAI. Đây là nền tảng vững chắc, am hiểu sâu
+                            sắc ngôn ngữ Việt.
+                        </p>
+                        <div class="mt-6 bg-white p-4 rounded-lg shadow">
+                            <h4 class="font-bold text-lg text-gray-700">Luồng hoạt động:</h4>
+                            <div class="flex items-center justify-between text-center mt-2 text-sm">
+                                <span class="bg-red-100 text-red-800 p-2 rounded">Câu lỗi</span>
+                                <i data-lucide="arrow-right" class="text-gray-400 flex-shrink-0 mx-2"></i>
+                                <span class="bg-blue-100 text-blue-800 p-2 rounded flex-1">Mô hình ViT5 <br />
+                                    (Fine-tuned)</span>
+                                <i data-lucide="arrow-right" class="text-gray-400 flex-shrink-0 mx-2"></i>
+                                <span class="bg-green-100 text-green-800 p-2 rounded">Câu đúng</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animated-item" style="animation-delay: 0.4s;">
+                        <h3 class="text-3xl font-semibold text-blue-700 mb-4">Dữ liệu: VSEC Corpus</h3>
+                        <p class="text-lg text-gray-600">Fine-tuning trên bộ dữ liệu <strong>VSEC</strong> (Vietnamese
+                            Spelling Error Corpus) - bộ dữ liệu công khai lớn nhất cho bài toán này, chứa hơn 9.000 câu
+                            được gán nhãn lỗi và sửa lỗi thủ công.</p>
+                        <div class="mt-6 bg-white p-4 rounded-lg shadow">
+                            <h4 class="font-bold text-lg text-gray-700">Quy trình xử lý dữ liệu:</h4>
+                            <div class="flex items-center space-x-2 text-sm mt-2">
+                                <div class="flex-1 text-center bg-gray-100 p-2 rounded">Đọc file .jsonl</div>
+                                <i data-lucide="chevron-right" class="text-gray-400"></i>
+                                <div class="flex-1 text-center bg-gray-100 p-2 rounded">Tạo cặp (câu lỗi, câu đúng)
+                                </div>
+                                <i data-lucide="chevron-right" class="text-gray-400"></i>
+                                <div class="flex-1 text-center bg-gray-100 p-2 rounded">Tokenize</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Kết quả đánh giá -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Chương 3: Thực nghiệm
+                    & Đánh giá</h2>
+                <h3 class="text-3xl font-semibold text-blue-700 mb-8 animated-item" style="animation-delay: 0.2s;">Kết
+                    quả trên tập kiểm thử</h3>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform animated-item"
+                        style="animation-delay: 0.4s;">
+                        <p class="text-5xl font-bold text-blue-600">48.52</p>
+                        <p class="text-xl font-semibold text-gray-700 mt-2">BLEU Score</p>
+                        <p class="text-sm text-gray-500">Độ tương đồng cấu trúc và trôi chảy</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform animated-item"
+                        style="animation-delay: 0.5s;">
+                        <p class="text-5xl font-bold text-blue-600">0.968</p>
+                        <p class="text-xl font-semibold text-gray-700 mt-2">ROUGE-L</p>
+                        <p class="text-sm text-gray-500">Độ tương đồng về nội dung</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform animated-item"
+                        style="animation-delay: 0.6s;">
+                        <p class="text-5xl font-bold text-green-600">4.7%</p>
+                        <p class="text-xl font-semibold text-gray-700 mt-2">Word Error Rate (WER)</p>
+                        <p class="text-sm text-gray-500">Tỷ lệ lỗi từ (càng thấp càng tốt)</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform animated-item"
+                        style="animation-delay: 0.7s;">
+                        <p class="text-5xl font-bold text-green-600">1.2%</p>
+                        <p class="text-xl font-semibold text-gray-700 mt-2">Char Error Rate (CER)</p>
+                        <p class="text-sm text-gray-500">Tỷ lệ lỗi ký tự (càng thấp càng tốt)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Ví dụ thực tế -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Ví dụ thực tế</h2>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md animated-item" style="animation-delay: 0.2s;">
+                        <p class="text-gray-500 text-sm">Câu gốc</p>
+                        <p class="text-xl text-red-600">Mô hình nàyy rất thong minh.</p>
+                        <hr class="my-3">
+                        <p class="text-gray-500 text-sm">Mô hình sửa</p>
+                        <p class="text-xl text-green-600">Mô hình <span class="bg-green-100 px-1 rounded">này</span> rất
+                            <span class="bg-green-100 px-1 rounded">thông minh</span>.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md animated-item" style="animation-delay: 0.4s;">
+                        <p class="text-gray-500 text-sm">Câu gốc</p>
+                        <p class="text-xl text-red-600">Chúng ta cần suy ngĩ thật kỹ và chia sẽ cho mọi người.</p>
+                        <hr class="my-3">
+                        <p class="text-gray-500 text-sm">Mô hình sửa</p>
+                        <p class="text-xl text-green-600">Chúng ta cần suy <span
+                                class="bg-green-100 px-1 rounded">nghĩ</span> thật kỹ và chia <span
+                                class="bg-green-100 px-1 rounded">sẻ</span> cho mọi người.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Hạn chế -->
+        <div class="slide bg-white">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Phân tích hạn chế</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mb-8 animated-item" style="animation-delay: 0.2s;">
+                    Mặc dù hiệu suất cao, mô hình vẫn có một số hạn chế do sự phức tạp của ngôn ngữ và giới hạn của dữ
+                    liệu huấn luyện.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md animated-item" style="animation-delay: 0.5s;">
+                        <div class="flex items-start">
+                            <i data-lucide="help-circle" class="w-8 h-8 text-orange-500 mr-4 flex-shrink-0"></i>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-2">Mơ hồ về ngữ cảnh</h4>
+                                <p class="text-gray-600">Với các từ đồng âm khác nghĩa, mô hình có thể chọn phương án
+                                    phổ biến hơn thay vì phương án đúng theo ngữ nghĩa. <br><span
+                                        class="font-mono text-sm">Vd: "gia bài tập" -> "ra bài tập" (đáng lẽ là
+                                        "giao")</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Kết luận và Hướng phát triển -->
+        <div class="slide bg-gray-50">
+            <div class="slide-content">
+                <h2 class="text-5xl font-bold text-gray-800 mb-8 border-l-8 border-blue-600 pl-6">Kết luận & Hướng phát
+                    triển</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="animated-item" style="animation-delay: 0.2s;">
+                        <h3 class="text-3xl font-semibold text-blue-700 mb-4 flex items-center"><i
+                                data-lucide="check-circle-2" class="w-8 h-8 mr-3 text-green-500"></i>Kết luận</h3>
+                        <ul class="space-y-3 list-disc list-inside text-lg text-gray-700">
+                            <li>Nghiên cứu thành công cơ sở lý thuyết về Transformer và Fine-tuning.</li>
+                            <li>Áp dụng hiệu quả kỹ thuật Fine-tuning, xây dựng được mô hình sửa lỗi chính tả chất lượng
+                                cao.</li>
+                            <li>Mô hình đạt hiệu suất ấn tượng trên tập kiểm thử (CER chỉ 1.2%).</li>
+                        </ul>
+                    </div>
+                    <div class="animated-item" style="animation-delay: 0.4s;">
+                        <h3 class="text-3xl font-semibold text-blue-700 mb-4 flex items-center"><i
+                                data-lucide="arrow-up-right" class="w-8 h-8 mr-3 text-indigo-500"></i>Hướng phát triển
+                        </h3>
+                        <ul class="space-y-3 list-disc list-inside text-lg text-gray-700">
+                            <li>Làm giàu dữ liệu huấn luyện (từ mạng xã hội, báo chí...).</li>
+                            <li>Cải thiện khả năng xử lý các trường hợp mơ hồ, từ lóng.</li>
+                            <li>Tối ưu hóa mô hình (lượng tử hóa, chưng cất) để triển khai trên các thiết bị yếu.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Q&A -->
+        <div
+            class="slide items-center text-center bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white">
+            <div class="slide-content">
+                <h2 class="text-8xl font-extrabold mb-6 animated-item" style="animation-delay: 0.2s;">Q & A</h2>
+                <p class="text-3xl text-gray-300 animated-item" style="animation-delay: 0.4s;">Cảm ơn thầy và các bạn đã
+                    lắng nghe!</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <button id="prevBtn" class="nav-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <button id="nextBtn" class="nav-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        <div id="slide-counter"></div>
+        <div id="progress-bar"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slide-counter');
+            const progressBar = document.getElementById('progress-bar');
+            let currentSlide = 0;
+
+            // Function to re-trigger animations on active slide
+            function triggerAnimations(slide) {
+                const animatedItems = slide.querySelectorAll('.animated-item');
+                animatedItems.forEach((item) => {
+                    item.style.animation = 'none';
+                    item.offsetHeight; /* trigger reflow */
+                    item.style.animation = null;
+                });
+            }
+
+            function showSlide(n) {
+                if (n < 0 || n >= slides.length) return;
+
+                slides[currentSlide].classList.remove('active');
+                currentSlide = n;
+                slides[currentSlide].classList.add('active');
+
+                triggerAnimations(slides[currentSlide]);
+
+                // Render icons for the current slide
+                lucide.createIcons();
+
+                updateNav();
+            }
+
+            function updateNav() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+                progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === slides.length - 1;
+            }
+
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    showSlide(currentSlide + 1);
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    showSlide(currentSlide - 1);
+                }
+            }
+
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault(); // Prevent space from scrolling
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevSlide();
+                }
+            });
+
+            // Initial setup
+            showSlide(0);
+        });
+    </script>
+</body>
+
+</html>
