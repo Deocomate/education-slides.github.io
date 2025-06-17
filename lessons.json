@@ -73,6 +73,17 @@
         ]
     },
     {
+        "category": "Khoá học AI",
+        "icon": "fas fa-robot",
+        "color": "purple",
+        "lessons": [
+            {
+                "title": "Lesson 1: Làm quen với AI, học cách sử dụng Chat GPT",
+                "url": "./AI Course For Student/lesson1.html"
+            }
+        ]
+    },
+    {
         "category": "Hau Mobile App",
         "icon": "fas fa-mobile-alt",
         "color": "purple",

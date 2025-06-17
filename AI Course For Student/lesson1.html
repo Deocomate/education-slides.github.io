@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 1: Khám Phá Ứng Dụng Trí Tuệ Nhân Tạo (AI)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .prompt-block {
+            background-color: #f3f4f6;
+            border-left: 4px solid #4f46e5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .response-block {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .prompt-block p,
+        .response-block p {
+            margin: 0;
+        }
+
+        img.slide-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">Bài 1: Khám Phá AI</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Slide Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Slide Tiếp <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 w-full sm:w-auto text-center sm:text-left sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Welcome -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-4">Bài 1: Khám Phá Ứng Dụng</h2>
+                <p class="text-6xl font-bold text-indigo-500 mb-8">Trí Tuệ Nhân Tạo (AI)</p>
+                <img src="https://placehold.co/600x350/6366f1/ffffff?text=AI+Learning" alt=""
+                    class="slide-image mx-auto">
+                <p class="mt-10 text-xl text-gray-700">Chào mừng các bạn đến với buổi học đầu tiên đầy thú vị!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Mục tiêu -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">🎯 Mục Tiêu Buổi Học</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-lg">
+                    <div class="bg-indigo-50 p-6 rounded-lg shadow-md flex items-center">
+                        <i class="fas fa-brain text-3xl text-indigo-500 mr-4"></i>
+                        <span>Hiểu khái niệm cơ bản về AI.</span>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg shadow-md flex items-center">
+                        <i class="fas fa-mobile-alt text-3xl text-green-500 mr-4"></i>
+                        <span>Nhận biết các ứng dụng của AI trong đời sống.</span>
+                    </div>
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow-md flex items-center">
+                        <i class="fas fa-rocket text-3xl text-yellow-500 mr-4"></i>
+                        <span>Biết cách bắt đầu học AI.</span>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md flex items-center">
+                        <i class="fas fa-tools text-3xl text-blue-500 mr-4"></i>
+                        <span>Làm quen với các công cụ AI đơn giản.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: AI là gì? -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">AI là gì?</h3>
+                <div class="text-center mb-8">
+                    <p class="text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">Trong lớp mình có bạn nào biết
+                        AI là gì và để làm gì không nhỉ?</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <img src="https://placehold.co/400x300/a5b4fc/1e1b4b?text=Thinking+Machine" alt=""
+                            class="slide-image">
+                    </div>
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <p class="text-xl leading-relaxed">
+                            <strong>AI</strong>, hay <strong>Trí tuệ nhân tạo</strong>, là một công nghệ cho phép máy
+                            tính hoặc máy móc có khả năng <strong>"suy nghĩ"</strong> và <strong>"học hỏi"</strong>
+                            giống như con người.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Các khái niệm chính -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">Các Thành Phần Cốt Lõi của AI</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-blue-700 mb-3">Machine Learning (Học máy)</h4>
+                        <p class="mb-3 text-lg text-gray-700">Là một nhánh của AI cho phép máy tính <strong>tự học hỏi
+                                từ dữ liệu</strong> mà không cần lập trình cụ thể cho từng nhiệm vụ.</p>
+                        <p class="text-md text-gray-600"><strong>Ví dụ:</strong> Tính năng nhận diện khuôn mặt để mở
+                            khóa điện thoại.</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-green-700 mb-3">NLP (Xử lý ngôn ngữ tự nhiên)</h4>
+                        <p class="mb-3 text-lg text-gray-700">Là lĩnh vực của AI giúp máy tính <strong>hiểu và tương
+                                tác</strong> với ngôn ngữ của con người.</p>
+                        <p class="text-md text-gray-600"><strong>Ví dụ:</strong> Trợ lý ảo Siri hay Google Assistant
+                            hiểu câu hỏi và trả lời bạn.</p>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <img src="https://placehold.co/450x250/7e3af2/FFFFFF?text=Data+%C4%90i+v%C3%A0o+%E2%86%92+AI+H%E1%BB%8Dc+%E2%86%92+K%E1%BA%BFt+qu%E1%BA%A3"
+                        alt="" class="slide-image mx-auto">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Ứng dụng AI -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">Ứng dụng AI trong đời sống</h3>
+                <div class="text-center mb-6">
+                    <p class="text-xl text-gray-600">Có ai đã từng sử dụng một ứng dụng AI nào chưa? Cảm nhận của bạn ra
+                        sao?</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="text-center">
+                        <img src="https://placehold.co/400x250/3b82f6/ffffff?text=Tr%E1%BB%A3+l%C3%BD+%E1%BA%A3o" alt=""
+                            class="slide-image mx-auto mb-4">
+                        <h4 class="text-xl font-semibold">Trợ lý ảo</h4>
+                        <p>Siri, Google Assistant, Alexa giúp đặt lịch hẹn, tìm thông tin, điều khiển thiết bị.</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://placehold.co/400x250/ef4444/ffffff?text=G%E1%BB%A3i+%C3%BD+n%E1%BB%99i+dung"
+                            alt="" class="slide-image mx-auto mb-4">
+                        <h4 class="text-xl font-semibold">Gợi ý nội dung</h4>
+                        <p>Netflix, YouTube, Spotify gợi ý phim, video, bài hát dựa trên sở thích của bạn.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Giới thiệu ChatGPT -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">Làm quen với công cụ AI: ChatGPT</h3>
+                <p class="text-xl text-gray-700 mb-6 max-w-3xl mx-auto">ChatGPT là một mô hình ngôn ngữ mạnh mẽ, có thể
+                    trò chuyện, trả lời câu hỏi, viết văn, và làm nhiều hơn thế nữa!</p>
+                <img src="https://placehold.co/600x350/10b981/ffffff?text=ChatGPT+Interface" alt=""
+                    class="slide-image mx-auto">
+                <p class="mt-6 text-lg text-gray-600">Bây giờ, chúng ta hãy cùng nhau truy cập vào ChatGPT nhé!</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Thực hành ChatGPT 1 -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-2 text-center">Thực hành cùng ChatGPT</h3>
+                <p class="text-2xl text-center text-gray-600 mb-6">Dùng AI để học Tiếng Anh</p>
+
+                <h4 class="text-xl font-bold text-gray-800 mb-2">💡 Tình huống 1: Dịch và giải thích văn bản</h4>
+                <p class="text-gray-700 mb-4">Bạn có một đoạn văn Tiếng Anh khó hiểu? Hãy nhờ ChatGPT!</p>
+
+                <div class="prompt-block">
+                    <p class="font-semibold text-indigo-800"><i class="fas fa-user mr-2"></i>Bạn hỏi AI:</p>
+                    <p class="mt-2">"Hãy dịch đoạn văn sau sang tiếng Việt và giải thích các từ khó: 'Artificial
+                        intelligence is the simulation of human intelligence in machines programmed to think like humans
+                        and mimic their actions.'"</p>
+                </div>
+
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i>AI trả lời:</p>
+                    <p class="mt-2"><strong>Bản dịch:</strong> "Trí tuệ nhân tạo là sự mô phỏng trí thông minh của con
+                        người trong các máy móc được lập trình để suy nghĩ giống con người và bắt chước hành động của
+                        họ."</p>
+                    <p class="mt-2"><strong>Giải thích:</strong><br>
+                        - <strong>simulation:</strong> sự mô phỏng, bắt chước.<br>
+                        - <strong>mimic:</strong> bắt chước, nhại lại.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Thực hành ChatGPT 2 -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-2 text-center">Thực hành cùng ChatGPT</h3>
+                <p class="text-2xl text-center text-gray-600 mb-6">Dùng AI để học Tiếng Anh</p>
+
+                <h4 class="text-xl font-bold text-gray-800 mb-2">💡 Tình huống 2: Lên dàn ý cho bài viết</h4>
+                <p class="text-gray-700 mb-4">Bạn đang bí ý tưởng cho bài văn? AI có thể giúp bạn!</p>
+
+                <div class="prompt-block">
+                    <p class="font-semibold text-indigo-800"><i class="fas fa-user mr-2"></i>Bạn hỏi AI:</p>
+                    <p class="mt-2">"Lập dàn ý cho một đoạn văn tiếng Anh về chủ đề 'my favorite hobby'."</p>
+                </div>
+
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i>AI trả lời:</p>
+                    <p class="mt-2">
+                        <strong>Dàn ý cho chủ đề "My Favorite Hobby":</strong><br>
+                        <strong>1. Mở bài:</strong> Giới thiệu sở thích của bạn là gì (ví dụ: reading books).<br>
+                        <strong>2. Thân bài:</strong><br>
+                        &nbsp;&nbsp;&nbsp;- Tại sao bạn thích nó? (Nó giúp thư giãn, học kiến thức mới,...).<br>
+                        &nbsp;&nbsp;&nbsp;- Bạn thường thực hiện sở thích này khi nào, ở đâu?<br>
+                        &nbsp;&nbsp;&nbsp;- Kể về một cuốn sách/trải nghiệm đáng nhớ.<br>
+                        <strong>3. Kết bài:</strong> Tóm tắt lại tình yêu của bạn dành cho sở thích đó.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Thực hành ChatGPT 3 -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-2 text-center">Thực hành cùng ChatGPT</h3>
+                <p class="text-2xl text-center text-gray-600 mb-6">Dùng AI để học Tiếng Anh</p>
+
+                <h4 class="text-xl font-bold text-gray-800 mb-2">💡 Tình huống 3: Luyện giao tiếp và sửa lỗi</h4>
+                <p class="text-gray-700 mb-4">Bạn muốn có một người bạn để luyện nói và sửa lỗi sai 24/7?</p>
+
+                <div class="prompt-block">
+                    <p class="font-semibold text-indigo-800"><i class="fas fa-user mr-2"></i>Bạn nói với AI:</p>
+                    <p class="mt-2">"Let's have a small talk about shopping. Please correct my mistakes."</p>
+                </div>
+
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i>AI trả lời:</p>
+                    <p class="mt-2">
+                        "Of course! I'd love to chat about shopping. What have you bought recently?"
+                    </p>
+                </div>
+
+                <div class="prompt-block mt-4">
+                    <p class="font-semibold text-indigo-800"><i class="fas fa-user mr-2"></i>Bạn trả lời:</p>
+                    <p class="mt-2">"I buyed a new T-shirt yesterday. It have a blue color."</p>
+                </div>
+
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i>AI sửa lỗi:</p>
+                    <p class="mt-2">
+                        Great! Here's a small correction: <br>
+                        "I <strong>bought</strong> a new T-shirt yesterday. It <strong>has</strong> a blue color." (or
+                        "It's blue.")<br>
+                        'Buy' is an irregular verb, so the past tense is 'bought'. Keep going! What else?
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Challenge -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-trophy text-6xl text-yellow-400 mb-6"></i>
+                <h2 class="text-5xl font-bold text-indigo-700 mb-6">Thử Thách Sáng Tạo!</h2>
+                <p class="text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">Hãy vận dụng kiến thức vừa học và sự trợ giúp
+                    của AI để <strong>tạo ra một câu chuyện ngắn</strong>. Câu chuyện cần có nhân vật, bối cảnh và một
+                    cốt truyện đơn giản.</p>
+                <img src="https://placehold.co/500x300/f59e0b/ffffff?text=Create+A+Story" alt=""
+                    class="slide-image mx-auto">
+            </div>
+        </div>
+
+        <!-- Slide 11: Summary -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-8">Tổng Kết Buổi Học</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Chúng ta đã hiểu <strong>AI là gì</strong>
+                        và các khái niệm cốt lõi (Học máy, NLP).</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Chúng ta đã biết các <strong>ứng dụng của
+                            AI</strong> trong cuộc sống (trợ lý ảo, gợi ý phim).</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Chúng ta đã thực hành sử dụng
+                        <strong>ChatGPT</strong> để học tiếng Anh và sáng tạo.
+                    </p>
+                </div>
+                <div
+                    class="mt-12 bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở Buổi 2!</h4>
+                    <p class="text-lg">Chúng ta sẽ khám phá nhiều điều thú vị hơn nữa!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 500); // Must match the transition duration in CSS
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            // Setup navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Initial setup
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
