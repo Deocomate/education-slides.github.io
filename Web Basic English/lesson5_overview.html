@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 5: Building UI Components with Hover & Transitions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .html-output {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-violet-600">Web Development - Session 5</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Prev Slide
+                </button>
+                <button id="nextSlide"
+                    class="bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next Slide <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-violet-700 mb-6">Session 5: Building UI Components</h2>
+                <p class="text-2xl text-gray-600 mb-12">Adding Life with Hover & Transition Effects</p>
+                <img src="https://placehold.co/600x350/8B5CF6/FFFFFF?text=UI+Components" alt=""
+                    class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Let's build beautiful and interactive elements!</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">1. Review and Today's Goal</h3>
+                <p class="text-lg text-gray-700 mb-4">In the previous sessions, we have learned the fundamentals:</p>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-3 text-lg bg-gray-50 p-6 rounded-lg mb-8">
+                    <li>Structuring content with <strong>HTML tags</strong>.</li>
+                    <li>Managing space and size with the <strong>CSS Box Model</strong>.</li>
+                    <li>Creating layouts with <strong>CSS Flexbox</strong>.</li>
+                </ul>
+                <h4 class="text-3xl font-bold text-gray-800 mb-3 text-center">Today's Goal</h4>
+                <p class="text-xl text-gray-700 mb-4 text-center max-w-3xl mx-auto">
+                    We will combine these skills to build professional UI components (Buttons, Cards, Alerts). More
+                    importantly, we'll learn how to make them <strong>interactive</strong> and <strong>feel
+                        alive</strong> using new CSS concepts.
+                </p>
+                <img src="https://placehold.co/700x250/C4B5FD/4C1D95?text=HTML+%2B+Box+Model+%2B+Flexbox+%2B+Effects+%3D+Awesome+UI"
+                    alt="[Diagram of skills leading to UI]" class="mx-auto rounded-md shadow-md mt-6">
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">2. Interaction with `:hover`</h3>
+                <p class="text-lg text-gray-700 mb-4">The <code>:hover</code> pseudo-class in CSS is used to apply
+                    styles to an element when the user's mouse pointer is over it.</p>
+                <p class="text-lg text-gray-700 mb-6">It's one of the simplest ways to create interactivity.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="hoverExampleCode"><code>&lt;style&gt;
+  .hover-link {
+    color: #8b5cf6; /* Initial color */
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  /* This style applies ONLY when the mouse is over the element */
+  .hover-link:hover {
+    color: #6d28d9; /* Color changes on hover */
+    text-decoration: underline;
+  }
+&lt;/style&gt;
+&lt;a href="#" class="hover-link"&gt;Hover over me!&lt;/a&gt;
+</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Live Example:</h4>
+                <div class="html-output" id="hoverExampleOutput"></div>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">3. Smooth Effects with `transition`</h3>
+                <p class="text-lg text-gray-700 mb-4">The change with <code>:hover</code> is instant and jarring. The
+                    <code>transition</code> property allows you to control the speed of property changes, creating
+                    smooth animations.
+                </p>
+
+                <p class="text-lg text-gray-700 mb-6"><strong>Key to remember:</strong> Apply the `transition` property
+                    to the base selector (e.g., `.my-button`), not the `:hover` selector.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block" data-code-id="transitionExampleCode"><code>&lt;style&gt;
+  .box {
+    width: 100px;
+    height: 100px;
+    background-color: #a78bfa;
+    /* Defines the transition:
+      - all: apply to all properties that change
+      - 0.3s: duration of 0.3 seconds
+      - ease: timing function (starts slow, fast, ends slow)
+    */
+    transition: all 0.3s ease;
+  }
+
+  .box:hover {
+    background-color: #6d28d9;
+    border-radius: 50%; /* Will also be animated */
+    transform: scale(1.1); /* Let's add a size change */
+  }
+&lt;/style&gt;
+&lt;div class="box"&gt;&lt;/div&gt;
+</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Live Example (Hover over the box):</h4>
+                <div class="html-output flex justify-center items-center" id="transitionExampleOutput"></div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">4. Practice: Building an Interactive Button
+                </h3>
+                <p class="text-lg text-gray-700 mb-4">Let's build a common UI element: a button. We will apply base
+                    styles, then add hover and transition effects.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                    Copy</button></div>
+                            <pre class="code-block" data-code-id="buttonCode"><code>&lt;style&gt;
+.my-button {
+  /* Basic Styling */
+  background-color: #8b5cf6;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  
+  /* Add the transition for smooth effects */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.my-button:hover {
+  /* Styles for when the mouse is over the button */
+  background-color: #7c3aed;
+  transform: translateY(-3px); /* Moves the button up slightly */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+&lt;/style&gt;
+
+&lt;button class="my-button"&gt;Click Me!&lt;/button&gt;
+</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result (Hover to see the effect):</h4>
+                        <div class="html-output flex justify-center items-center" id="buttonOutput"></div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-8">Key Steps:</h4>
+                        <ol class="list-decimal list-inside pl-4 text-gray-700 space-y-2">
+                            <li>Define the base look (padding, color, border-radius).</li>
+                            <li>Add `transition` to the base class.</li>
+                            <li>Define the `:hover` state (change background, add transform).</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">5. Practice: Building an Interactive Card</h3>
+                <p class="text-lg text-gray-700 mb-4">Cards are used everywhere to display content like products, blog
+                    posts, or profiles. Let's make one that "lifts up" on hover.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                    Copy</button></div>
+                            <pre class="code-block" data-code-id="cardCode"><code>&lt;style&gt;
+.product-card {
+  width: 280px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  overflow: hidden; /* Ensures image corners are rounded */
+  font-family: 'Inter', sans-serif;
+  
+  /* Transition for shadow and transform */
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 1.25rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.card-button {
+  display: block;
+  width: 100%;
+  background-color: #8b5cf6;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.card-button:hover {
+  background-color: #7c3aed;
+}
+&lt;/style&gt;
+
+&lt;div class="product-card"&gt;
+  &lt;img src="https://placehold.co/280x180/C4B5FD/4C1D95?text=Product" alt="Product Image" class="card-image"&gt;
+  &lt;div class="card-content"&gt;
+    &lt;h4 class="card-title"&gt;Awesome Gadget&lt;/h4&gt;
+    &lt;p class="card-text"&gt;The perfect tool for your everyday needs. High quality and durable.&lt;/p&gt;
+    &lt;a href="#" class="card-button"&gt;View Details&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result (Hover to see the effect):</h4>
+                        <div class="html-output flex justify-center items-center py-8" id="cardOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">6. Practice: Building an Alert Component</h3>
+                <p class="text-lg text-gray-700 mb-4">Alerts provide contextual feedback messages. Let's create a
+                    "success" alert using Flexbox and add a subtle hover effect.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                    Copy</button></div>
+                            <pre class="code-block" data-code-id="alertCode"><code>&lt;style&gt;
+.alert {
+  display: flex; /* Use Flexbox to align icon and text */
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  max-width: 500px;
+  margin: 0 auto;
+
+  /* Subtle transition */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.alert:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+}
+
+.alert-success {
+  background-color: #dcfce7;
+  border-color: #4ade80;
+  color: #15803d;
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0; /* Prevents icon from shrinking */
+}
+
+.alert-message {
+  font-weight: 500;
+}
+&lt;/style&gt;
+
+&lt;div class="alert alert-success"&gt;
+  &lt;i class="fas fa-check-circle alert-icon"&gt;&lt;/i&gt;
+  &lt;span class="alert-message"&gt;Your profile was updated successfully!&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Result (Hover to see the effect):</h4>
+                        <div class="html-output flex justify-center items-center" id="alertOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-violet-700 mb-8">Session 5 Summary</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-4xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You can now create interactive effects
+                        using the <strong><code>:hover</code></strong> pseudo-class.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You know how to make these effects smooth
+                        and beautiful using the <strong><code>transition</code></strong> property.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You have combined previous knowledge
+                        (Flexbox, Box Model) with new concepts to build real-world UI components like <strong>Buttons,
+                            Cards, and Alerts</strong>.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You understand how subtle animations with
+                        <code>transform</code> can greatly improve the user experience.
+                    </p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-4xl">
+                    <h4 class="text-2xl font-bold mb-2">See you in Session 6!</h4>
+                    <p class="text-lg">We will explore another powerful layout system: <strong>CSS Grid</strong>! It's
+                        perfect for complex, two-dimensional page layouts.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+            if (totalSlidesNumDisplay) {
+                totalSlidesNumDisplay.textContent = slides.length || '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) slide.style.display = 'none';
+                        }, 400);
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            function copyCode(buttonElement) {
+                const codeBlock = buttonElement.closest('.code-block-container').querySelector('pre.code-block');
+                if (!codeBlock) return;
+                const codeToCopy = codeBlock.innerText;
+                navigator.clipboard.writeText(codeToCopy).then(() => {
+                    const originalIcon = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalIcon;
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+
+            function renderHtml(codeString, outputEl) {
+                if (!outputEl) return;
+                let styleContent = '';
+                const styleMatch = codeString.match(/<style>([\s\S]*?)<\/style>/i);
+                if (styleMatch) styleContent = styleMatch[1];
+
+                let bodyContent = codeString.replace(/<style>([\s\S]*?)<\/style>/i, '').trim();
+                let fontAwesome = bodyContent.includes('fas fa-') ? `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">` : '';
+
+                outputEl.innerHTML = '';
+                const shadow = outputEl.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `<style>${styleContent}</style>${fontAwesome}<div style="font-family: 'Inter', sans-serif;">${bodyContent}</div>`;
+            }
+
+            function renderExample(codeBlockId, outputId) {
+                const codeBlockEl = document.querySelector(`[data-code-id="${codeBlockId}"]`);
+                const outputEl = document.getElementById(outputId);
+                if (!codeBlockEl || !outputEl) return;
+                renderHtml(codeBlockEl.innerText, outputEl);
+            }
+
+            // --- RENDER EXAMPLES ---
+            try {
+                renderExample('hoverExampleCode', 'hoverExampleOutput');
+                renderExample('transitionExampleCode', 'transitionExampleOutput');
+                renderExample('buttonCode', 'buttonOutput');
+                renderExample('cardCode', 'cardOutput');
+                renderExample('alertCode', 'alertOutput');
+            } catch (e) {
+                console.error("Error rendering examples:", e);
+            }
+            // --- END RENDERING EXAMPLES ---
+
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
+            });
+
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
