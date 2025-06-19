@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2: Tổng hợp và Chắt lọc Thông tin với AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .prompt-block {
+            background-color: #f3f4f6;
+            border-left: 4px solid #4f46e5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .response-block {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .note-block {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .prompt-block p,
+        .response-block p,
+        .note-block p {
+            margin: 0;
+        }
+
+        img.slide-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">Bài 2: Tổng hợp & Chắt lọc Thông tin với AI</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Slide Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Slide Tiếp <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 w-full sm:w-auto text-center sm:text-left sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Welcome -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-4">Bài 2: Tổng hợp và Chắt lọc</h2>
+                <p class="text-6xl font-bold text-indigo-500 mb-8">Thông tin với AI</p>
+                <img src="https://placehold.co/600x350/6366f1/ffffff?text=H%E1%BB%8Dc+T%E1%BA%ADp+Th%C3%B4ng+Minh"
+                    alt="Học tập thông minh với AI" class="slide-image mx-auto">
+                <p class="mt-10 text-xl text-gray-700">Cùng khám phá cách biến AI thành trợ thủ học tập đắc lực!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Mục tiêu buổi học -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">🎯 Mục Tiêu Buổi Học</h3>
+                <div class="space-y-4 text-lg max-w-2xl mx-auto">
+                    <div class="bg-indigo-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-search text-2xl text-indigo-500 mr-4 mt-1"></i>
+                        <span>Biết cách <strong>tìm kiếm, chắt lọc, và xác minh</strong> thông tin từ AI.</span>
+                    </div>
+                    <div class="bg-green-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-tasks text-2xl text-green-500 mr-4 mt-1"></i>
+                        <span>Biết sử dụng AI để <strong>luyện tập, tổng hợp, lên kế hoạch</strong> học tập hiệu
+                            quả.</span>
+                    </div>
+                    <div class="bg-yellow-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-pen-to-square text-2xl text-yellow-500 mr-4 mt-1"></i>
+                        <span>Biết <strong>biên soạn lại</strong> nội dung do AI cung cấp theo ngôn ngữ và ý hiểu của
+                            riêng mình.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Khởi động -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-question-circle text-6xl text-indigo-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-8">Câu hỏi khởi động</h3>
+                <p class="text-3xl text-gray-700 leading-relaxed max-w-3xl mx-auto">Trong lớp mình, có bạn nào đã từng
+                    áp dụng AI vào việc học tập chưa?</p>
+                <p class="text-xl text-gray-500 mt-4">(Ví dụ: hỏi bài, dịch thuật, tìm ý tưởng,...)</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Giới thiệu Prompt -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">Yêu cầu AI hỗ trợ học tập</h3>
+                <p class="text-center text-xl mb-6">Chúng ta "ra lệnh" cho AI bằng một thứ gọi là
+                    <strong>Prompt</strong>.
+                </p>
+                <div class="prompt-block">
+                    <p class="font-semibold text-indigo-800"><i class="fas fa-user mr-2"></i> Bạn yêu cầu (Prompt):</p>
+                    <p class="mt-2">"Tôi sắp thi cuối kỳ môn Sinh học lớp 10, chương trình gồm các bài về Tế bào và Phân
+                        bào. Hãy lập cho tôi một kế hoạch ôn tập trong 3 ngày."</p>
+                </div>
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i> AI có thể trả lời:</p>
+                    <p class="mt-2"><strong>Kế hoạch ôn tập Sinh học 10 trong 3 ngày:</strong><br>
+                        <strong>Ngày 1: Lý thuyết Tế bào</strong><br>
+                        - Sáng: Ôn tập cấu trúc tế bào nhân sơ và nhân thực.<br>
+                        - Chiều: So sánh 2 loại tế bào, vai trò các bào quan.<br>
+                        <strong>Ngày 2: Lý thuyết Phân bào</strong><br>
+                        - Sáng: Ôn tập nguyên phân.<br>
+                        - Chiều: Ôn tập giảm phân và ý nghĩa.<br>
+                        <strong>Ngày 3: Luyện tập</strong><br>
+                        - Sáng: Làm bài tập trắc nghiệm về nhận biết.<br>
+                        - Chiều: Giải các bài tập tự luận về cơ chế.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Prompt là gì? -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">Vậy... Prompt AI là gì?</h3>
+                <div class="bg-gray-100 p-8 rounded-lg text-center">
+                    <p class="text-2xl leading-relaxed">
+                        <strong>Prompt</strong> là <strong>câu lệnh, yêu cầu, hoặc chỉ dẫn</strong> bạn nhập vào để AI
+                        hiểu và thực hiện một nhiệm vụ.
+                    </p>
+                    <p class="mt-4 text-xl text-gray-600">Nói đơn giản: <strong>Prompt là cách bạn "giao tiếp" với
+                            AI.</strong></p>
+                </div>
+                <div class="prompt-block mt-8">
+                    <p class="font-semibold text-indigo-800"><i class="fas fa-user mr-2"></i> Ví dụ Prompt:</p>
+                    <p class="mt-2">"Giải phương trình bậc hai: x² - 5x + 6 = 0 và giải thích từng bước."</p>
+                </div>
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i> AI sẽ phản hồi:</p>
+                    <p class="mt-2">Tuyệt vời! Dưới đây là cách giải phương trình x² - 5x + 6 = 0:...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Tại sao prompt lại quan trọng? -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">Tại sao phải viết Prompt "chuẩn"?
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6 text-lg">
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">✅ Giao tiếp chính xác</h4>
+                        <p>Prompt rõ ràng → AI hiểu đúng ý bạn.</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-green-800 mb-2">✅ Kết quả chất lượng hơn</h4>
+                        <p>Prompt tốt → Câu trả lời sâu sắc, đúng nhu cầu.</p>
+                    </div>
+                    <div class="bg-yellow-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-yellow-800 mb-2">✅ Tiết kiệm thời gian</h4>
+                        <p>Không cần hỏi đi hỏi lại nhiều lần để có câu trả lời ưng ý.</p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-purple-800 mb-2">✅ Kỹ năng của tương lai</h4>
+                        <p>Prompt Engineering (kỹ thuật ra lệnh) là một kỹ năng số quan trọng.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Prompt tốt vs Prompt chưa tốt -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">So sánh: Prompt tốt và chưa tốt</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+                        <h4 class="text-2xl font-bold text-red-700 mb-4 text-center">❌ Prompt chưa tốt</h4>
+                        <p class="text-gray-700 italic border-l-4 border-red-300 pl-4 py-2">“Giải bài này giúp tôi”</p>
+                        <p class="text-gray-700 italic border-l-4 border-red-300 pl-4 py-2 mt-4">“Giúp tôi ôn Hóa”</p>
+                        <p class="text-gray-700 italic border-l-4 border-red-300 pl-4 py-2 mt-4">"Tóm tắt Lịch sử Việt
+                            Nam"</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                        <h4 class="text-2xl font-bold text-green-700 mb-4 text-center">✅ Prompt tốt</h4>
+                        <p class="text-gray-700 border-l-4 border-green-300 pl-4 py-2">“Tôi là học sinh lớp 11. Hãy giải
+                            phương trình đạo hàm: y = 3x² + 2x - 1 và giải thích từng bước.”</p>
+                        <p class="text-gray-700 border-l-4 border-green-300 pl-4 py-2 mt-2">“Tôi đang ôn thi Hóa lớp 10.
+                            Hãy tóm tắt bảng so sánh giữa liên kết ion và cộng hóa trị, có ví dụ.”</p>
+                        <p class="text-gray-700 border-l-4 border-green-300 pl-4 py-2 mt-2">"Tóm tắt lịch sử Việt Nam
+                            giai đoạn 1945-1954 cho học sinh lớp 12, tập trung vào các sự kiện chính."</p>
+                    </div>
+                </div>
+                <p class="text-center mt-8 text-xl font-semibold text-indigo-700">👉 Prompt càng chi tiết, càng nhiều
+                    bối cảnh → Câu trả lời càng chính xác!</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Công thức prompt hiệu quả -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-magic-wand-sparkles text-6xl text-yellow-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6">Công thức Prompt "Thần kỳ" cho học tập</h3>
+                <div class="note-block text-left text-lg p-6">
+                    <p><strong>[Vai trò của bạn]</strong>. Hãy giúp tôi <strong>[Mục tiêu cần đạt]</strong> về
+                        <strong>[Chủ đề/Vấn đề]</strong> bằng cách <strong>[Hành động của AI]</strong>. Cuối cùng
+                        <strong>[Yêu cầu bổ sung]</strong>.
+                    </p>
+                </div>
+                <div class="text-left mt-6 space-y-2 text-md">
+                    <p><strong class="text-indigo-600">Vai trò:</strong> Tôi là học sinh lớp mấy, đang gặp khó khăn
+                        gì...</p>
+                    <p><strong class="text-indigo-600">Mục tiêu:</strong> hiểu bài, giải bài tập, lên dàn ý...</p>
+                    <p><strong class="text-indigo-600">Chủ đề:</strong> công thức, khái niệm cụ thể...</p>
+                    <p><strong class="text-indigo-600">Hành động:</strong> giải thích dễ hiểu, cho ví dụ, tạo bảng so
+                        sánh...</p>
+                    <p><strong class="text-indigo-600">Yêu cầu bổ sung:</strong> cho thêm bài tập, tạo câu hỏi trắc
+                        nghiệm...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Ví dụ Công thức -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">Áp dụng công thức</h3>
+                <div class="prompt-block">
+                    <p class="font-semibold text-indigo-800"><i class="fas fa-user mr-2"></i> Prompt mẫu:</p>
+                    <p class="mt-2">
+                        <span class="bg-yellow-200 px-1 rounded">[Tôi là học sinh lớp 12 đang ôn thi môn Vật Lý, phần
+                            Sóng cơ]</span>.
+                        Hãy giúp tôi <span class="bg-green-200 px-1 rounded">[hiểu rõ bản chất của hiện tượng giao thoa
+                            sóng]</span>.
+                        Hãy <span class="bg-blue-200 px-1 rounded">[giải thích điều kiện để có giao thoa, đưa ra công
+                            thức tính vị trí cực đại, cực tiểu và cho 2 ví dụ minh họa dễ hiểu]</span>.
+                        Cuối cùng, <span class="bg-purple-200 px-1 rounded">[hãy cho tôi 3 bài tập trắc nghiệm về dạng
+                            này để luyện tập]</span>.
+                    </p>
+                </div>
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i> AI sẽ trả lời một cách chi
+                        tiết và đầy đủ:</p>
+                    <p class="mt-2">Chào bạn, rất vui được giúp bạn ôn tập phần giao thoa sóng. Dưới đây là giải thích
+                        chi tiết...</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li>Giải thích hiện tượng.</li>
+                        <li>Điều kiện (2 nguồn kết hợp).</li>
+                        <li>Công thức cực đại, cực tiểu.</li>
+                        <li>Ví dụ minh họa (giao thoa sóng nước).</li>
+                        <li>3 câu hỏi trắc nghiệm.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Tối ưu hóa ghi chú -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-2 text-center">Ứng dụng 1: Tối ưu hóa ghi chú</h3>
+                <p class="text-2xl text-center text-gray-600 mb-8">Biến ghi chú lộn xộn thành tài liệu dễ học</p>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Vấn đề thường gặp:</h4>
+                        <ul class="list-disc list-inside space-y-2 text-lg">
+                            <li>Ghi chú vội, chữ xấu, khó đọc lại.</li>
+                            <li>Thiếu cấu trúc, không hệ thống.</li>
+                            <li>Tốn thời gian để chép lại, sắp xếp.</li>
+                        </ul>
+                        <img src="https://placehold.co/400x250/fca5a5/7f1d1d?text=Ghi+ch%C3%BA+l%E1%BB%99n+x%E1%BB%99n"
+                            alt="Ghi chú lộn xộn" class="slide-image mt-4">
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-green-700 mb-2">Giải pháp với AI:</h4>
+                        <ul class="list-disc list-inside space-y-2 text-lg">
+                            <li>AI tự động sắp xếp lại ghi chú.</li>
+                            <li>Tạo bảng biểu, dàn ý rõ ràng.</li>
+                            <li>Bổ sung các phần còn thiếu (nếu cần).</li>
+                        </ul>
+                        <img src="https://placehold.co/400x250/86efac/14532d?text=Ghi+ch%C3%BA+c%C3%B3+c%E1%BA%A5u+tr%C3%BAc"
+                            alt="Ghi chú có cấu trúc" class="slide-image mt-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Cách làm - Tối ưu ghi chú -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">Cách làm: Tối ưu ghi chú</h3>
+                <h4 class="text-xl font-bold mb-2">Bước 1: Chuẩn bị ghi chú thô</h4>
+                <div class="note-block">
+                    <p>Nội dung bài: Tế bào. tế bào là đơn vị cơ bản. có màng, chất tế bào, nhân. tế bào nhân thực khác
+                        tế bào nhân sơ. ty thể tạo ra năng lượng. lục lạp ở tv, qhợp</p>
+                </div>
+                <h4 class="text-xl font-bold mb-2 mt-6">Bước 2: Ra lệnh cho AI</h4>
+                <div class="prompt-block">
+                    <p>"Giúp tôi sắp xếp lại các ghi chú sau về bài 'Tế bào' thành một bảng gồm 3 cột: Khái niệm, Đặc
+                        điểm chính, và Chức năng. Nếu thấy phần nào còn thiếu, hãy bổ sung ngắn gọn."</p>
+                </div>
+                <h4 class="text-xl font-bold mb-2 mt-6">Bước 3: Nhận kết quả</h4>
+                <div class="response-block overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-green-100">
+                            <tr>
+                                <th class="p-2">Khái niệm</th>
+                                <th class="p-2">Đặc điểm chính</th>
+                                <th class="p-2">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2 font-semibold">Tế bào</td>
+                                <td class="p-2">Đơn vị cơ bản của sự sống</td>
+                                <td class="p-2">Cấu tạo, duy trì và phát triển cơ thể</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-semibold">Tế bào nhân thực</td>
+                                <td class="p-2">Có màng nhân, hệ thống nội màng phức tạp</td>
+                                <td class="p-2">Cấu tạo nên ĐV, TV, Nấm</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-semibold">Ty thể</td>
+                                <td class="p-2">Bào quan có màng kép</td>
+                                <td class="p-2">"Nhà máy năng lượng" - tạo ATP</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-semibold">Lục lạp</td>
+                                <td class="p-2">(Bổ sung) Chứa diệp lục, chỉ có ở TV</td>
+                                <td class="p-2">(Bổ sung) Thực hiện quang hợp</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Tạo câu hỏi ôn tập -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-2 text-center">Ứng dụng 2: Tạo câu hỏi ôn tập</h3>
+                <p class="text-2xl text-center text-gray-600 mb-8">Học chủ động bằng cách tự kiểm tra kiến thức</p>
+                <div class="text-center mb-6">
+                    <p class="text-xl text-gray-700"><strong>Tại sao cần luyện tập bằng câu hỏi?</strong></p>
+                    <p class="text-lg text-gray-600">Học bằng cách trả lời câu hỏi (Active Recall) giúp bạn ghi nhớ lâu
+                        và sâu hơn nhiều so với việc chỉ đọc lại (Passive Review).</p>
+                </div>
+                <img src="https://placehold.co/700x300/a5b4fc/1e1b4b?text=Active+Recall+%3E+Passive+Review"
+                    alt="Active Recall is better than Passive Review" class="slide-image mx-auto">
+            </div>
+        </div>
+
+        <!-- Slide 13: Cách làm - Tạo câu hỏi -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">Cách làm: Tạo câu hỏi ôn tập</h3>
+                <h4 class="text-xl font-bold mb-2">Cách 1: Tạo từ ghi chú có sẵn</h4>
+                <div class="prompt-block">
+                    <p>"Dựa trên ghi chú sau, hãy tạo cho tôi 3 câu hỏi trắc nghiệm và 1 câu hỏi tự luận ngắn: [dán ghi
+                        chú về bài Tế bào vào đây]"</p>
+                </div>
+                <h4 class="text-xl font-bold mb-2 mt-6">Cách 2: Tạo từ mục tiêu học tập</h4>
+                <p class="text-gray-600 mb-2">Khi bạn chưa có ghi chú, hãy dùng chính đề cương hoặc mục tiêu trong sách
+                    giáo khoa.</p>
+                <div class="prompt-block">
+                    <p>"Tôi đang học bài 'Quang hợp ở thực vật'. Mục tiêu cần nắm là: 'Trình bày được khái niệm quang
+                        hợp, viết phương trình tổng quát, nêu vai trò của quang hợp'. Hãy tạo 5 câu hỏi ôn tập (cả trắc
+                        nghiệm và tự luận) bao quát các mục tiêu này."</p>
+                </div>
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i> Kết quả từ AI:</p>
+                    <p class="mt-2"><strong>Câu 1 (TN):</strong> Đâu là sản phẩm của quá trình quang hợp?<br>
+                        A. O₂ và H₂O &nbsp;&nbsp; B. CO₂ và Năng lượng &nbsp;&nbsp; C. C₆H₁₂O₆ và O₂ ...</p>
+                    <p class="mt-2"><strong>Câu 2 (TL):</strong> Nêu vai trò của quang hợp đối với sinh giới.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Lưu ý quan trọng -->
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-exclamation-triangle text-6xl text-amber-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-8">Lưu Ý Cực Kỳ Quan Trọng!</h3>
+                <div class="text-left max-w-2xl mx-auto space-y-5 text-xl">
+                    <div class="bg-gray-100 p-5 rounded-lg flex items-start">
+                        <i class="fas fa-user-check text-blue-500 mr-4 mt-1"></i>
+                        <p><strong>Luôn kiểm tra lại thông tin.</strong> AI có thể sai hoặc đưa ra thông tin không phù
+                            hợp. Hãy đối chiếu với sách giáo khoa và tài liệu chính thống.</p>
+                    </div>
+                    <div class="bg-gray-100 p-5 rounded-lg flex items-start">
+                        <i class="fas fa-brain text-green-500 mr-4 mt-1"></i>
+                        <p><strong>AI là công cụ, không phải bộ não thay thế.</strong> Bạn vẫn phải là người chủ động tư
+                            duy, hiểu và ghi nhớ kiến thức.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Bài tập thực hành -->
+        <div id="slide-15" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-laptop-code text-6xl text-indigo-500 mb-6"></i>
+                <h2 class="text-5xl font-bold text-indigo-700 mb-6">Bài Tập Thực Hành</h2>
+                <p class="text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">Bây giờ, hãy cùng áp dụng những gì đã học để
+                    giải quyết một tình huống thực tế!</p>
+                <img src="https://placehold.co/500x300/818cf8/ffffff?text=Let's+Practice!" alt="Thực hành"
+                    class="slide-image mx-auto">
+            </div>
+        </div>
+
+        <!-- Slide 16: Thực hành - Task 1 -->
+        <div id="slide-16" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-4 text-center">Thực hành - Nhiệm vụ 1</h3>
+                <p class="text-2xl text-center text-gray-600 mb-6">Sắp xếp lại ghi chú lộn xộn</p>
+                <h4 class="font-bold text-lg">Tình huống:</h4>
+                <p class="mb-4">Bạn vừa học xong bài "Các tác phẩm chính của Nguyễn Du" và có một mớ ghi chú như sau:
+                </p>
+                <div class="note-block">
+                    <p>Nguyễn Du, đại thi hào. có truyện kiều đỉnh nhất, tên chữ là thanh tâm tài nhân. viết bằng chữ
+                        nôm. còn có văn chiêu hồn nữa, thơ chữ hán thì có thanh hiên thi tập, nam trung tạp ngâm, bắc
+                        hành tạp lục. truyện kiều còn gọi là đoạn trường tân thanh. nội dung về số phận phụ nữ. giá trị
+                        nhân đạo.</p>
+                </div>
+                <h4 class="font-bold text-lg mt-6">Yêu cầu:</h4>
+                <p>Hãy viết một prompt để yêu cầu AI sắp xếp lại các thông tin trên thành một bảng rõ ràng, phân loại
+                    theo <strong>Tác phẩm chữ Nôm</strong> và <strong>Tác phẩm chữ Hán</strong>, có cột ghi chú thêm về
+                    nội dung hoặc đặc điểm nổi bật.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Thực hành - Task 2 -->
+        <div id="slide-17" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-4 text-center">Thực hành - Nhiệm vụ 2</h3>
+                <p class="text-2xl text-center text-gray-600 mb-6">Tạo câu hỏi ôn tập</p>
+                <h4 class="font-bold text-lg">Tình huống:</h4>
+                <p class="mb-4">Bạn đã có bảng thông tin gọn gàng về các tác phẩm của Nguyễn Du từ Nhiệm vụ 1.</p>
+                <h4 class="font-bold text-lg mt-6">Yêu cầu:</h4>
+                <p>Hãy viết một prompt để yêu cầu AI tạo ra:</p>
+                <ul class="list-disc list-inside mt-2 space-y-2 text-lg">
+                    <li><strong>3 câu hỏi trắc nghiệm</strong> để kiểm tra việc ghi nhớ tên tác phẩm.</li>
+                    <li><strong>2 câu hỏi tự luận ngắn</strong> để kiểm tra hiểu biết về nội dung và giá trị của Truyện
+                        Kiều.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 18: Tổng kết -->
+        <div id="slide-18" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-8">Tổng Kết Buổi Học</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Chúng ta đã hiểu <strong>Prompt là
+                            gì</strong> và tại sao nó quan trọng.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Nắm được <strong>công thức viết prompt
+                            hiệu quả</strong> để AI hiểu đúng ý.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Biết cách dùng AI để <strong>hệ thống hóa
+                            ghi chú</strong> và <strong>tạo câu hỏi ôn tập</strong>.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Luôn nhớ phải <strong>kiểm chứng thông
+                            tin</strong> và xem AI như một công cụ hỗ trợ.</p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở Buổi 3!</h4>
+                    <p class="text-lg">Chúng ta sẽ tiếp tục khám phá những ứng dụng sáng tạo khác của AI!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 500); // Must match the transition duration in CSS
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            // Setup navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Initial setup
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
