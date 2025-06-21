@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề Thi Cuối Khóa Python Cơ Bản</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            /* Light gray background */
+        }
+
+        .question-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1rem;
+            /* Reduced margin for single column */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid transparent;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        .level-easy {
+            border-color: #34d399;
+        }
+
+        /* Emerald 400 */
+        .level-medium {
+            border-color: #f59e0b;
+        }
+
+        /* Amber 500 */
+        .level-hard {
+            border-color: #ef4444;
+        }
+
+        /* Red 500 */
+
+        .terminal {
+            background-color: #1f2937;
+            /* Gray 800 */
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #374151;
+            /* Gray 700 */
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background-color: #374151;
+            /* Gray 700 */
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-header span {
+            display: block;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+        }
+
+        .terminal-header .red {
+            background-color: #f87171;
+        }
+
+        /* Red 400 */
+        .terminal-header .yellow {
+            background-color: #fbbd23;
+        }
+
+        /* Amber 400 */
+        .terminal-header .green {
+            background-color: #34d399;
+        }
+
+        /* Emerald 400 */
+
+        .terminal-body {
+            color: #e5e7eb;
+            /* Gray 200 */
+            padding: 1rem 1.25rem;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .terminal-body .comment {
+            color: #9ca3af;
+        }
+
+        /* Gray 400 */
+
+        .timer-container {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        #timer.ticking {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.95;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <div class="timer-container bg-gray-800 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">
+                <i class="fa-brands fa-python mr-2"></i>
+                Đề Thi Python Cơ Bản
+            </h1>
+            <div id="timer" class="ticking text-2xl font-bold bg-indigo-500 px-4 py-2 rounded-lg">
+                <i class="fa-regular fa-clock mr-2"></i>
+                <span id="time">02:00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto p-4 md:p-8">
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-700 mb-2">Thông tin bài thi</h2>
+            <p class="text-gray-600"><strong class="font-semibold">Thời gian làm bài:</strong> 120 phút</p>
+            <p class="text-gray-600"><strong class="font-semibold">Nội dung:</strong> 10 câu hỏi lập trình Python từ dễ
+                đến khó.</p>
+            <p class="text-gray-600"><strong class="font-semibold">Hướng dẫn:</strong> Học viên đọc kỹ đề bài và viết
+                code Python để giải quyết vấn đề. Chương trình cần xử lý đúng các trường hợp ví dụ và có thể các trường
+                hợp khác tương tự.</p>
+        </div>
+
+        <!-- PHẦN CÂU HỎI -->
+        <div class="space-y-8">
+            <!-- Câu 1 -->
+            <div class="question-card level-easy">
+                <h3 class="text-xl font-bold text-gray-800">Câu 1: Tính Tiền Taxi (Dễ)</h3>
+                <p class="mt-2 text-gray-600">Viết chương trình tính tiền taxi dựa trên số km di chuyển. Người dùng nhập
+                    vào số km, chương trình sẽ in ra tổng số tiền phải trả, biết rằng:</p>
+                <ul class="list-disc list-inside mt-2 text-gray-600">
+                    <li>Giá mở cửa (cho 1km đầu tiên) là: 15,000đ.</li>
+                    <li>Từ km thứ 2 đến km thứ 10: 12,000đ/km.</li>
+                    <li>Từ km thứ 11 trở đi: 10,000đ/km.</li>
+                </ul>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Ví dụ 1:</span><br>
+                        &gt; Nhập số km: 0.5<br>
+                        Tổng tiền: 15000.0 đồng<br>
+                        <span class="comment"># Ví dụ 2:</span><br>
+                        &gt; Nhập số km: 9<br>
+                        Tổng tiền: 111000.0 đồng <span class="comment"># (15000 + 8*12000)</span><br>
+                        <span class="comment"># Ví dụ 3:</span><br>
+                        &gt; Nhập số km: 15<br>
+                        Tổng tiền: 171000.0 đồng <span class="comment"># (15000 + 9*12000 + 5*10000)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 2 -->
+            <div class="question-card level-easy">
+                <h3 class="text-xl font-bold text-gray-800">Câu 2: Kiểm Tra Nguyên Âm (Dễ)</h3>
+                <p class="mt-2 text-gray-600">Viết chương trình yêu cầu người dùng nhập một chuỗi ký tự. Đếm và in ra số
+                    lượng nguyên âm có trong chuỗi đó. Các nguyên âm là 'a', 'e', 'i', 'o', 'u' (không phân biệt hoa
+                    thường).</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Ví dụ:</span><br>
+                        &gt; Nhập chuỗi: Xin Chao Cac Ban<br>
+                        Số lượng nguyên âm: 5
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 3 -->
+            <div class="question-card level-easy">
+                <h3 class="text-xl font-bold text-gray-800">Câu 3: Tạo Danh Sách Số Lẻ (Dễ)</h3>
+                <p class="mt-2 text-gray-600">Viết chương trình yêu cầu người dùng nhập vào một số nguyên dương N. Tạo
+                    và in ra một danh sách (list) chứa tất cả các số lẻ từ 1 đến N.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Ví dụ:</span><br>
+                        &gt; Nhập N: 10<br>
+                        Danh sách số lẻ: [1, 3, 5, 7, 9]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 4 -->
+            <div class="question-card level-medium">
+                <h3 class="text-xl font-bold text-gray-800">Câu 4: Tìm Từ Dài Nhất (Trung Bình)</h3>
+                <p class="mt-2 text-gray-600">Viết chương trình yêu cầu người dùng nhập vào một câu. Tìm và in ra từ dài
+                    nhất trong câu đó. Nếu có nhiều từ có cùng độ dài lớn nhất, chỉ cần in ra từ đầu tiên tìm thấy.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Ví dụ 1:</span><br>
+                        &gt; Nhập một câu: Lap trinh Python rat thu vi<br>
+                        Từ dài nhất là: Laptrinh<br>
+                        <span class="comment"># Ví dụ 2:</span><br>
+                        &gt; Nhập một câu: hoc vien cham chi<br>
+                        Từ dài nhất là: hocvien
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 5 -->
+            <div class="question-card level-medium">
+                <h3 class="text-xl font-bold text-gray-800">Câu 5: Trò Chơi Đoán Số (Trung Bình)</h3>
+                <p class="mt-2 text-gray-600">Viết một chương trình trò chơi đoán số. Chương trình sẽ "nghĩ" ra một số
+                    bí mật (bạn có thể gán cứng, ví dụ `so_bi_mat = 42`).</p>
+                <p class="mt-2 text-gray-600">Sử dụng vòng lặp <code>while</code> để cho phép người dùng đoán số liên
+                    tục cho đến khi đúng. Sau mỗi lần đoán, cho biết số người dùng đoán là "lớn hơn" hay "nhỏ hơn" số bí
+                    mật. Khi đoán đúng, in ra số lần đã đoán và kết thúc.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Luồng chạy ví dụ (so_bi_mat = 42):</span><br>
+                        &gt; Đoán một số: 50<br>
+                        Lớn hơn số bí mật!<br>
+                        &gt; Đoán một số: 30<br>
+                        Nhỏ hơn số bí mật!<br>
+                        &gt; Đoán một số: 42<br>
+                        Chúc mừng! Bạn đã đoán đúng sau 3 lần.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 6 -->
+            <div class="question-card level-medium">
+                <h3 class="text-xl font-bold text-gray-800">Câu 6: Thống Kê Điểm Thi (Trung Bình)</h3>
+                <p class="mt-2 text-gray-600">Giả sử bạn có một file tên là <code>diem_thi.txt</code> với nội dung là
+                    điểm số của các sinh viên, mỗi điểm trên một dòng. Viết chương trình đọc file này, sau đó tính và in
+                    ra:</p>
+                <ul class="list-disc list-inside mt-2 text-gray-600">
+                    <li>Tổng số sinh viên có điểm.</li>
+                    <li>Điểm trung bình.</li>
+                    <li>Số lượng sinh viên có điểm >= 5.</li>
+                </ul>
+                <p class="mt-2 text-gray-600">Tạo file <code>diem_thi.txt</code> với nội dung sau để chạy thử:</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Nội dung file diem_thi.txt</span><br>
+                        8<br>
+                        4<br>
+                        9.5<br>
+                        10<br>
+                        3<br>
+                        7.5<br>
+                        <span class="comment"># Output mong muốn:</span><br>
+                        Tổng số sinh viên: 6<br>
+                        Điểm trung bình: 7.0<br>
+                        Số sinh viên qua môn: 4
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 7 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 7: Tần Suất Từ (Khó)</h3>
+                <p class="mt-2 text-gray-600">Viết chương trình yêu cầu người dùng nhập vào một đoạn văn bản. Chương
+                    trình sẽ thống kê tần suất xuất hiện của mỗi từ trong đoạn văn đó và lưu vào một dictionary.</p>
+                <p class="mt-2 text-gray-600">Sau đó, in dictionary ra màn hình. (Lưu ý: chuyển tất cả các từ về chữ
+                    thường để thống kê cho chính xác, ví dụ "Python" và "python" được tính là một).</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Ví dụ:</span><br>
+                        &gt; Nhập đoạn văn: Hoc Python rat vui hoc python cung de<br>
+                        <span class="comment"># Output mong muốn (thứ tự có thể khác):</span><br>
+                        {'hoc': 2, 'python': 2, 'rat': 1, 'vui': 1, 'cung': 1, 'de': 1}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 8 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 8: Quản Lý Sản Phẩm (Khó)</h3>
+                <p class="mt-2 text-gray-600">Bạn được cung cấp một danh sách các sản phẩm, mỗi sản phẩm là một
+                    dictionary. Viết một chương trình cho phép người dùng:</p>
+                <ol class="list-decimal list-inside mt-2 text-gray-600">
+                    <li>Tìm một sản phẩm dựa trên tên.</li>
+                    <li>Nếu tìm thấy, cho phép cập nhật lại giá của sản phẩm đó.</li>
+                    <li>Nếu không tìm thấy, thông báo "Sản phẩm không tồn tại".</li>
+                    <li>In ra danh sách sản phẩm sau khi đã cập nhật (nếu có).</li>
+                </ol>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Dữ liệu ban đầu (khai báo trong code):</span><br>
+                        san_phams = [<br>
+                        {'ten': 'iPhone 15', 'gia': 25000000},<br>
+                        {'ten': 'Samsung S24', 'gia': 22000000},<br>
+                        {'ten': 'Oppo Reno10', 'gia': 12000000}<br>
+                        ]<br>
+                        <span class="comment"># Ví dụ luồng chạy:</span><br>
+                        &gt; Nhập tên sản phẩm cần cập nhật: Samsung S24<br>
+                        &gt; Nhập giá mới: 21500000<br>
+                        <span class="comment"># Output mong muốn:</span><br>
+                        [<br>
+                        {'ten': 'iPhone 15', 'gia': 25000000},<br>
+                        {'ten': 'Samsung S24', 'gia': 21500000},<br>
+                        {'ten': 'Oppo Reno10', 'gia': 12000000}<br>
+                        ]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 9 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 9: Tổng Hợp Doanh Thu (Khó)</h3>
+                <p class="mt-2 text-gray-600">Bạn có một file <code>doanh_thu.txt</code> ghi lại lịch sử bán hàng. Mỗi
+                    dòng có định dạng <code>Ten_San_Pham,So_Luong_Ban,Don_Gia</code>. Hãy viết chương trình đọc file này
+                    và tính tổng doanh thu cho mỗi sản phẩm.</p>
+                <p class="mt-2 text-gray-600">Tạo file <code>doanh_thu.txt</code> với nội dung sau để chạy thử:</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Nội dung file doanh_thu.txt</span><br>
+                        BanhMi,10,15000<br>
+                        SuaChua,20,5000<br>
+                        BanhMi,5,15000<br>
+                        KeoMut,15,2000<br>
+                        SuaChua,10,5000<br>
+                        <span class="comment"># Output mong muốn (Doanh thu cho từng sản phẩm):</span><br>
+                        BanhMi: 225000<br>
+                        SuaChua: 150000<br>
+                        KeoMut: 30000
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 10 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 10: Cập Nhật Dữ Liệu JSON (Rất Khó)</h3>
+                <p class="mt-2 text-gray-600">Bạn có một file <code>nhan_vien.json</code> chứa danh sách các nhân viên.
+                    Viết chương trình thực hiện các việc sau:</p>
+                <ol class="list-decimal list-inside mt-2 text-gray-600">
+                    <li>Đọc dữ liệu từ file <code>nhan_vien.json</code>.</li>
+                    <li>Hiển thị danh sách nhân viên hiện có.</li>
+                    <li>Yêu cầu người dùng nhập thông tin cho một nhân viên mới (tên, mã NV, chức vụ).</li>
+                    <li>Thêm nhân viên mới này vào danh sách.</li>
+                    <li>Ghi lại (lưu đè) toàn bộ danh sách đã cập nhật vào lại file <code>nhan_vien.json</code> một cách
+                        đẹp mắt (thụt lề).</li>
+                </ol>
+                <p class="mt-2 text-gray-600">Tạo file <code>nhan_vien.json</code> với nội dung sau để chạy thử:</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                            class="green"></span></div>
+                    <div class="terminal-body">
+                        <span class="comment"># Nội dung file nhan_vien.json ban đầu</span><br>
+                        [<br>
+                        &nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"ten": "Lê An",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"ma_nv": "NV01",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"chuc_vu": "Lập trình viên"<br>
+                        &nbsp;&nbsp;}<br>
+                        ]
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Set countdown timer for 120 minutes (120 * 60 seconds)
+        const startingMinutes = 120;
+        let time = startingMinutes * 60;
+
+        const countdownEl = document.getElementById('time');
+        const timerDiv = document.getElementById('timer');
+
+        function updateCountdown() {
+            const hours = Math.floor(time / 3600);
+            let minutes = Math.floor((time % 3600) / 60);
+            let seconds = time % 60;
+
+            // Add leading zero if needed
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            let displayHours = hours < 10 ? '0' + hours : hours;
+
+            countdownEl.innerHTML = `${displayHours}:${minutes}:${seconds}`;
+
+            if (time > 0) {
+                time--;
+            } else {
+                countdownEl.innerHTML = "HẾT GIỜ!";
+                timerDiv.classList.remove('ticking');
+                clearInterval(timerInterval);
+                // Optionally disable the page or show a popup
+                alert("Đã hết thời gian làm bài!");
+            }
+        }
+
+        const timerInterval = setInterval(updateCountdown, 1000);
+
+        // Initial call to display time immediately
+        updateCountdown();
+    </script>
+</body>
+
+</html>
