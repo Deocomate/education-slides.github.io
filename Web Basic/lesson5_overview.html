@@ -1,127 +1,77 @@
+Tất nhiên rồi, tôi sẽ tiếp tục hỗ trợ bạn. Dưới đây là toàn bộ nội dung của slide "Session 5" đã được chuyển ngữ sang
+tiếng Việt một cách chuyên nghiệp, trong khi vẫn giữ nguyên các đoạn mã nguồn.
+
+```html
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial Tương Tác: Xây Dựng Website Profile</title>
+    <title>Buổi 5: Xây dựng Thành phần Giao diện với Hover & Transition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* CSS cho chính trang tutorial */
-        :root {
-            --primary-color: #4f46e5;
-            --primary-light: #eef2ff;
-            --dark-color: #111827;
-            --gray-color: #6b7280;
-            --light-gray-color: #f3f4f6;
-            --white-color: #ffffff;
-            --border-color: #e5e7eb;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: 'Be Vietnam Pro', sans-serif;
-            background-color: var(--light-gray-color);
-            color: var(--dark-color);
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
         }
 
-        .tutorial-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 2rem 1.5rem;
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .step {
-            background: var(--white-color);
-            border-radius: 12px;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
+        .slide-container {
+            padding-top: 1rem;
         }
 
-        .step-header {
-            padding: 1rem 1.5rem;
-            background-color: rgba(79, 70, 229, 0.05);
-            border-bottom: 1px solid var(--border-color);
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
         }
 
-        .step-header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 0;
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .step-header h2 span {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--gray-color);
-        }
-
-        /* UPDATED: Chuyển sang layout 2 cột */
-        .step-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            padding: 1.5rem;
-        }
-
-        /* Responsive cho màn hình nhỏ */
-        @media (max-width: 1024px) {
-            .step-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .explanation h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 0.75rem;
-        }
-
-        .explanation p,
-        .explanation li {
-            line-height: 1.7;
-            color: #374151;
-        }
-
-        .explanation ul {
-            padding-left: 20px;
+        .slide-content-wrapper {
+            flex-grow: 1;
         }
 
         .code-block-container {
             position: relative;
-            background-color: #282c34;
-            border-radius: 8px;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
             margin-top: 1rem;
             margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .code-block-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            padding: 0.5rem 1rem;
-            background-color: #21252b;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        .file-name {
-            color: #abb2bf;
-            font-size: 0.875rem;
-            font-family: monospace;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
         }
 
         .copy-button {
@@ -129,7 +79,7 @@
             color: #e2e8f0;
             border: none;
             padding: 0.375rem 0.75rem;
-            border-radius: 5px;
+            border-radius: 0.375rem;
             cursor: pointer;
             font-size: 0.875rem;
             transition: background-color 0.2s;
@@ -139,401 +89,399 @@
             background-color: #718096;
         }
 
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
         .code-block {
-            color: #abb2bf;
+            background-color: #1e293b;
+            color: #e2e8f0;
             padding: 1.5rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.875em;
-            line-height: 1.6;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
             white-space: pre-wrap;
             word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
             overflow-x: auto;
         }
 
-        .preview-box {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: #f9fafb;
-            padding: 1rem;
+        .html-output {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
             box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-            height: 100%;
-            min-height: 650px;
-            display: flex;
-        }
-
-        .preview-box iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 6px;
-        }
-
-        #final-challenge ul {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary-color);
-            padding: 1rem 1rem 1rem 2rem;
-            list-style-type: '✅ ';
-        }
-
-        #final-challenge li {
-            padding-left: 0.5rem;
-            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 
-<body>
+<body class="text-gray-800">
 
-    <div class="tutorial-container">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900">Bài Thi Cuối Khoá: Xây Dựng Website Profile</h1>
-            <p class="text-lg text-gray-600 mt-2">Hướng dẫn chi tiết để tạo trang giới thiệu bản thân từ A-Z</p>
-        </div>
-
-        <!-- Step 0: Giới thiệu -->
-        <div class="step">
-            <div class="step-header">
-                <h2>Bước 0: Giới Thiệu & Tiêu Chí Chấm Điểm</h2>
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-violet-600">Phát triển Web - Buổi 5</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Tiếp <i class="fas fa-arrow-right ml-1"></i>
+                </button>
             </div>
-            <div class="step-content" style="grid-template-columns: 1fr;"> <!-- Step 0 layout 1 cột -->
-                <div class="explanation" id="final-challenge">
-                    <h3>Mục tiêu của bài thi</h3>
-                    <p>Trong bài thi này, chúng ta sẽ vận dụng toàn bộ kiến thức đã học để xây dựng một sản phẩm thực
-                        tế: một trang web giới thiệu bản thân (Portfolio). Đây là "tấm danh thiếp" của bạn trong thế
-                        giới số, vì vậy hãy thật chăm chút cho nó nhé!</p>
-
-                    <h3>Tiêu chí chấm điểm</h3>
-                    <ul>
-                        <li><b>Hoàn Thiện Yêu Cầu Cơ Bản (7 điểm):</b> Xây dựng trang web theo đúng các bước hướng dẫn,
-                            đảm bảo đầy đủ các thành phần và chức năng cơ bản.</li>
-                        <li><b>Sáng Tạo (3 điểm+):</b> Đây là phần để bạn thể hiện cá tính. Điểm cộng sẽ được trao cho
-                            những bạn thay đổi layout, màu sắc, font chữ, thêm hiệu ứng, bổ sung các thành phần mới,
-                            hoặc tự thiết kế một layout hoàn toàn mới.</li>
-                    </ul>
-                </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
             </div>
         </div>
+    </nav>
 
-        <!-- Step 1: HTML Structure -->
-        <div class="step" id="step1">
-            <div class="step-header">
-                <h2>Bước 1: Xây Dựng "Bộ Xương" <span>- Cấu Trúc HTML</span></h2>
-            </div>
-            <div class="step-content">
-                <!-- Cột 1: Hướng dẫn và Code -->
-                <div>
-                    <div class="explanation">
-                        <h3>Khởi tạo dự án</h3>
-                        <p>Việc đầu tiên là tạo một thư mục cho dự án. Bên trong, hãy tạo 2 file:</p>
-                        <ul>
-                            <li><code>index.html</code> (chứa nội dung trang web)</li>
-                            <li><code>style.css</code> (chứa code CSS để trang trí)</li>
-                        </ul>
-                        <h3>Soạn cấu trúc HTML</h3>
-                        <p>Mở file <code>index.html</code> và sao chép đoạn code bên dưới. Đây là cấu trúc cơ bản cho
-                            trang profile của chúng ta, sử dụng các thẻ đã học như <code>&lt;div&gt;</code>,
-                            <code>&lt;img&gt;</code>, <code>&lt;h1&gt;</code>, và <code>&lt;a&gt;</code>.
-                        </p>
-                        <p>Đừng quên thay thế các thông tin mẫu bằng thông tin cá nhân của bạn!</p>
-                    </div>
-                    <div class="code-block-container">
-                        <div class="code-block-header">
-                            <span class="file-name">index.html</span>
-                            <button class="copy-button" data-target="code-step1">Copy</button>
-                        </div>
-                        <pre class="code-block"><code id="code-step1">&lt;!DOCTYPE html&gt;
-&lt;html lang="vi"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;Trang Cá Nhân Của [Tên Của Bạn]&lt;/title&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
-    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="profile-card"&gt;
-        &lt;div class="info-section"&gt;
-            &lt;img class="profile-pic" src="https://placehold.co/150x150/4f46e5/FFFFFF?text=Avatar" alt="Ảnh đại diện"&gt;
-            &lt;h1 class="name"&gt;Nguyễn Văn A&lt;/h1&gt;
-            &lt;p class="title"&gt;Lập Trình Viên Web&lt;/p&gt;
-            &lt;p class="bio"&gt;Tôi là một người đam mê công nghệ và lập trình, luôn tìm tòi học hỏi những kiến thức mới.&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class="social-links"&gt;
-            &lt;a href="#"&gt;&lt;i class="fab fa-facebook"&gt;&lt;/i&gt;&lt;/a&gt;
-            &lt;a href="#"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;/a&gt;
-            &lt;a href="#"&gt;&lt;i class="fab fa-linkedin"&gt;&lt;/i&gt;&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-                    </div>
-                </div>
-                <!-- Cột 2: Preview -->
-                <div class="preview-area">
-                    <h4 class="font-semibold mb-2">Xem trước kết quả:</h4>
-                    <div class="preview-box">
-                        <iframe id="preview-step1"></iframe>
-                    </div>
-                </div>
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-violet-700 mb-6">Buổi 5: Xây dựng Thành phần Giao diện</h2>
+                <p class="text-2xl text-gray-600 mb-12">Thêm sức sống với Hiệu ứng Hover & Transition</p>
+                <img src="https://placehold.co/600x350/8B5CF6/FFFFFF?text=UI+Components"
+                    alt="Thành phần giao diện người dùng" class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Hãy cùng xây dựng các phần tử đẹp mắt và có tính tương tác!</p>
             </div>
         </div>
 
-        <!-- Step 2: CSS Box Model -->
-        <div class="step" id="step2">
-            <div class="step-header">
-                <h2>Bước 2: "Trang Điểm" Cho Card <span>- Box Model & Layout</span></h2>
-            </div>
-            <div class="step-content">
-                <div>
-                    <div class="explanation">
-                        <h3>Tạo style cho trang</h3>
-                        <p>Mở file <code>style.css</code>. Chúng ta sẽ bắt đầu bằng việc định dạng cho
-                            <code>&lt;body&gt;</code> để có một nền đẹp và căn giữa nội dung bằng Flexbox.
-                        </p>
-                        <h3>Định hình thẻ Profile</h3>
-                        <p>Tiếp theo, ta sẽ style cho class <code>.profile-card</code>. Đây là lúc vận dụng kiến thức về
-                            <b>Box Model</b>.
-                        </p>
-                    </div>
-                    <div class="code-block-container">
-                        <div class="code-block-header">
-                            <span class="file-name">style.css</span>
-                            <button class="copy-button" data-target="code-step2">Copy</button>
-                        </div>
-                        <pre class="code-block"><code id="code-step2">/* Reset cơ bản và font chữ */
-body {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    background-color: #f3f4f6;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-}
-
-/* Style cho card chính */
-.profile-card {
-    background-color: white;
-    max-width: 450px;
-    width: 100%;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    box-sizing: border-box;
-}</code></pre>
-                    </div>
-                </div>
-                <div class="preview-area">
-                    <h4 class="font-semibold mb-2">Xem trước kết quả:</h4>
-                    <div class="preview-box">
-                        <iframe id="preview-step2"></iframe>
-                    </div>
-                </div>
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">1. Ôn tập và Mục tiêu hôm nay</h3>
+                <p class="text-lg text-gray-700 mb-4">Trong các buổi trước, chúng ta đã học các kiến thức nền tảng:</p>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-3 text-lg bg-gray-50 p-6 rounded-lg mb-8">
+                    <li>Xây dựng cấu trúc nội dung với <strong>thẻ HTML</strong>.</li>
+                    <li>Quản lý không gian và kích thước với <strong>Mô hình Hộp CSS (Box Model)</strong>.</li>
+                    <li>Tạo bố cục với <strong>CSS Flexbox</strong>.</li>
+                </ul>
+                <h4 class="text-3xl font-bold text-gray-800 mb-3 text-center">Mục tiêu hôm nay</h4>
+                <p class="text-xl text-gray-700 mb-4 text-center max-w-3xl mx-auto">
+                    Chúng ta sẽ kết hợp những kỹ năng này để xây dựng các thành phần UI chuyên nghiệp (Nút, Thẻ, Thông
+                    báo). Quan trọng hơn, chúng ta sẽ học cách làm cho chúng <strong>tương tác</strong> và
+                    <strong>cảm giác sống động</strong> bằng các khái niệm CSS mới.
+                </p>
+                <img src="https://placehold.co/700x250/C4B5FD/4C1D95?text=HTML+%2B+Box+Model+%2B+Flexbox+%2B+Effects+%3D+Awesome+UI"
+                    alt="[Sơ đồ các kỹ năng tạo nên UI]" class="mx-auto rounded-md shadow-md mt-6">
             </div>
         </div>
 
-        <!-- Step 3: Styling Content -->
-        <div class="step" id="step3">
-            <div class="step-header">
-                <h2>Bước 3: Hoàn Thiện Giao Diện <span>- Định Dạng Nội Dung</span></h2>
-            </div>
-            <div class="step-content">
-                <div>
-                    <div class="explanation">
-                        <h3>Làm đẹp cho ảnh và chữ</h3>
-                        <p>Bây giờ chúng ta sẽ đi sâu vào từng chi tiết bên trong card.</p>
-                        <h3>Style cho icon mạng xã hội</h3>
-                        <p>Cuối cùng, chúng ta sẽ định dạng cho các icon, chỉ cần tăng cỡ chữ và bỏ gạch chân mặc định
-                            của thẻ <code>&lt;a&gt;</code>.</p>
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">2. Tương tác với `:hover`</h3>
+                <p class="text-lg text-gray-700 mb-4">Lớp giả (pseudo-class) <code>:hover</code> trong CSS được sử dụng
+                    để áp dụng các kiểu cho một phần tử khi con trỏ chuột của người dùng ở trên nó.</p>
+                <p class="text-lg text-gray-700 mb-6">Đây là một trong những cách đơn giản nhất để tạo ra sự tương tác.
+                </p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                            Sao chép</button>
                     </div>
-                    <div class="code-block-container">
-                        <div class="code-block-header">
-                            <span class="file-name">style.css (viết tiếp)</span>
-                            <button class="copy-button" data-target="code-step3">Copy</button>
-                        </div>
-                        <pre class="code-block"><code id="code-step3">
-/* Style ảnh đại diện */
-.profile-pic {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 5px solid #4f46e5;
-    object-fit: cover;
-    margin-bottom: 20px;
+                    <pre class="code-block" data-code-id="hoverExampleCode"><code>&lt;style&gt;
+.hover-link {
+  color: #8b5cf6; /* Màu ban đầu */
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
 }
-
-/* Style cho các phần text */
-.name {
-    margin: 0;
-    font-size: 2.25rem;
-    font-weight: 700;
+ 
+/* Kiểu này CHỈ áp dụng khi chuột di chuyển qua phần tử */
+.hover-link:hover {
+  color: #6d28d9; /* Màu thay đổi khi hover */
+  text-decoration: underline;
 }
-
-.title {
-    margin: 5px 0 15px 0;
-    font-size: 1.1rem;
-    color: #6b7280;
-    font-weight: 500;
-}
-
-.bio {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #4b5563;
-    margin-bottom: 30px;
-}
-
-/* Style cho các liên kết MXH */
-.social-links a {
-    color: #4f46e5;
-    font-size: 1.75rem;
-    margin: 0 15px;
-    text-decoration: none;
-}
+&lt;/style&gt;
+&lt;a href="#" class="hover-link"&gt;Di chuột qua tôi!&lt;/a&gt;
 </code></pre>
-                    </div>
                 </div>
-                <div class="preview-area">
-                    <h4 class="font-semibold mb-2">Xem trước kết quả:</h4>
-                    <div class="preview-box">
-                        <iframe id="preview-step3"></iframe>
-                    </div>
-                </div>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ trực tiếp:</h4>
+                <div class="html-output" id="hoverExampleOutput"></div>
             </div>
         </div>
 
-        <!-- Step 4: Interactivity -->
-        <div class="step" id="step4">
-            <div class="step-header">
-                <h2>Bước 4: Thêm "Sự Sống" <span>- Hiệu Ứng Hover & Transition</span></h2>
-            </div>
-            <div class="step-content">
-                <div>
-                    <div class="explanation">
-                        <h3>Tạo hiệu ứng mượt mà</h3>
-                        <p>Một trang web tĩnh thì khá nhàm chán. Chúng ta sẽ thêm "sự sống" bằng cách sử dụng
-                            <code>transition</code> và <code>:hover</code>.
-                        </p>
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">3. Hiệu ứng mượt mà với `transition`</h3>
+                <p class="text-lg text-gray-700 mb-4">Sự thay đổi với <code>:hover</code> diễn ra tức thì và đột ngột.
+                    Thuộc tính <code>transition</code> cho phép bạn kiểm soát tốc độ thay đổi của thuộc tính, tạo ra
+                    các hoạt ảnh mượt mà.
+                </p>
+
+                <p class="text-lg text-gray-700 mb-6"><strong>Điều cần nhớ:</strong> Áp dụng thuộc tính `transition`
+                    cho bộ chọn cơ sở (ví dụ: `.my-button`), không phải bộ chọn `:hover`.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                            Sao chép</button>
                     </div>
-                    <div class="code-block-container">
-                        <div class="code-block-header">
-                            <span class="file-name">style.css (viết tiếp)</span>
-                            <button class="copy-button" data-target="code-step4">Copy</button>
-                        </div>
-                        <pre class="code-block"><code id="code-step4">
-/* Áp dụng transition cho card ở trạng thái gốc */
-.profile-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    <pre class="code-block" data-code-id="transitionExampleCode"><code>&lt;style&gt;
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: #a78bfa;
+  /* Định nghĩa transition:
+   - all: áp dụng cho tất cả các thuộc tính thay đổi
+   - 0.3s: thời gian kéo dài 0.3 giây
+   - ease: hàm thời gian (bắt đầu chậm, nhanh, kết thúc chậm)
+  */
+  transition: all 0.3s ease;
 }
 
-/* Style KHI di chuột vào card */
-.profile-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+.box:hover {
+  background-color: #6d28d9;
+  border-radius: 50%; /* Cũng sẽ được tạo hoạt ảnh */
+  transform: scale(1.1); /* Thêm hiệu ứng thay đổi kích thước */
 }
-
-/* Áp dụng transition cho các icon */
-.social-links a {
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-/* Style KHI di chuột vào icon */
-.social-links a:hover {
-    transform: scale(1.2);
-    color: #3730a3;
-}
+&lt;/style&gt;
+&lt;div class="box"&gt;&lt;/div&gt;
 </code></pre>
-                    </div>
                 </div>
-                <div class="preview-area">
-                    <h4 class="font-semibold mb-2">Xem trước kết quả (Hãy di chuột vào card và các icon):</h4>
-                    <div class="preview-box">
-                        <iframe id="preview-step4"></iframe>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ trực tiếp (Di chuột qua hộp):</h4>
+                <div class="html-output flex justify-center items-center" id="transitionExampleOutput"></div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">4. Thực hành: Xây dựng một Nút tương tác
+                </h3>
+                <p class="text-lg text-gray-700 mb-4">Hãy xây dựng một thành phần UI phổ biến: nút bấm. Chúng ta sẽ áp
+                    dụng các kiểu cơ bản, sau đó thêm hiệu ứng hover và transition.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                    Sao chép</button></div>
+                            <pre class="code-block" data-code-id="buttonCode"><code>&lt;style&gt;
+.my-button {
+  /* Định dạng cơ bản */
+  background-color: #8b5cf6;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  
+  /* Thêm transition để có hiệu ứng mượt mà */
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.my-button:hover {
+  /* Các kiểu khi chuột ở trên nút */
+  background-color: #7c3aed;
+  transform: translateY(-3px); /* Di chuyển nút lên một chút */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+&lt;/style&gt;
+
+&lt;button class="my-button"&gt;Nhấn vào tôi!&lt;/button&gt;
+</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả (Di chuột để xem hiệu ứng):
+                        </h4>
+                        <div class="html-output flex justify-center items-center" id="buttonOutput"></div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-8">Các bước chính:</h4>
+                        <ol class="list-decimal list-inside pl-4 text-gray-700 space-y-2">
+                            <li>Định nghĩa giao diện cơ bản (padding, color, border-radius).</li>
+                            <li>Thêm `transition` vào class cơ sở.</li>
+                            <li>Định nghĩa trạng thái `:hover` (thay đổi nền, thêm transform).</li>
+                        </ol>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Step 5: Creative Challenge -->
-        <div class="step" id="step5">
-            <div class="step-header">
-                <h2>Bước 5: Thử Thách Sáng Tạo <span>- Thể Hiện Cá Tính Của Bạn</span></h2>
-            </div>
-            <div class="step-content">
-                <div>
-                    <div class="explanation">
-                        <h3>Thêm khu vực "Kỹ năng"</h3>
-                        <p>Đây là phần quan trọng nhất để bạn giành điểm cộng! Hãy thử thêm một khu vực hiển thị các kỹ
-                            năng của bạn.</p>
-                    </div>
-                    <div class="code-block-container">
-                        <div class="code-block-header">
-                            <span class="file-name">index.html (thêm vào)</span>
-                            <button class="copy-button" data-target="code-step5-html">Copy</button>
-                        </div>
-                        <pre class="code-block"><code id="code-step5-html">&lt;!-- Đặt đoạn code này dưới div.social-links --&gt;
-&lt;div class="skills-section"&gt;
-&lt;h3 class="skills-title"&gt;Kỹ Năng Của Tôi&lt;/h3&gt;
-&lt;div class="skills-list"&gt;
-    &lt;div class="skill-item"&gt;HTML5&lt;/div&gt;
-    &lt;div class="skill-item"&gt;CSS3&lt;/div&gt;
-    &lt;div class="skill-item"&gt;Flexbox&lt;/div&gt;
-    &lt;div class="skill-item"&gt;JavaScript&lt;/div&gt;
-&lt;/div&gt;
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">5. Thực hành: Xây dựng một Thẻ (Card) tương
+                    tác</h3>
+                <p class="text-lg text-gray-700 mb-4">Thẻ được sử dụng ở khắp mọi nơi để hiển thị nội dung như sản
+                    phẩm, bài đăng trên blog hoặc hồ sơ. Hãy tạo một thẻ có thể "nâng lên" khi di chuột qua.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                    Sao chép</button></div>
+                            <pre class="code-block" data-code-id="cardCode"><code>&lt;style&gt;
+.product-card {
+  width: 280px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  overflow: hidden; /* Đảm bảo các góc ảnh được bo tròn */
+  font-family: 'Inter', sans-serif;
+  
+  /* Transition cho bóng đổ và biến đổi */
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 1.25rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.card-button {
+  display: block;
+  width: 100%;
+  background-color: #8b5cf6;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.card-button:hover {
+  background-color: #7c3aed;
+}
+&lt;/style&gt;
+
+&lt;div class="product-card"&gt;
+  &lt;img src="https://placehold.co/280x180/C4B5FD/4C1D95?text=Product" alt="Product Image" class="card-image"&gt;
+  &lt;div class="card-content"&gt;
+    &lt;h4 class="card-title"&gt;Tiện ích tuyệt vời&lt;/h4&gt;
+    &lt;p class="card-text"&gt;Công cụ hoàn hảo cho nhu cầu hàng ngày của bạn. Chất lượng cao và bền bỉ.&lt;/p&gt;
+    &lt;a href="#" class="card-button"&gt;Xem chi tiết&lt;/a&gt;
+  &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
-                    </div>
-                    <div class="code-block-container">
-                        <div class="code-block-header">
-                            <span class="file-name">style.css (viết tiếp)</span>
-                            <button class="copy-button" data-target="code-step5-css">Copy</button>
                         </div>
-                        <pre class="code-block"><code id="code-step5-css">
-.skills-section {
-    margin-top: 30px;
-    padding-top: 30px;
-    border-top: 1px solid #e5e7eb;
-}
-
-.skills-title {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    color: #374151;
-}
-
-.skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-}
-
-.skill-item {
-    background-color: #eef2ff;
-    color: #4338ca;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.skill-item:hover {
-    background-color: #c7d2fe;
-    transform: scale(1.05);
-}
-</code></pre>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả (Di chuột để xem hiệu ứng):
+                        </h4>
+                        <div class="html-output flex justify-center items-center py-8" id="cardOutput"></div>
                     </div>
                 </div>
-                <div class="preview-area">
-                    <h4 class="font-semibold mb-2">Xem trước kết quả cuối cùng:</h4>
-                    <div class="preview-box">
-                        <iframe id="preview-step5"></iframe>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-violet-600 mb-6">6. Thực hành: Xây dựng một Thành phần Thông
+                    báo (Alert)</h3>
+                <p class="text-lg text-gray-700 mb-4">Thông báo cung cấp các thông điệp phản hồi theo ngữ cảnh. Hãy
+                    tạo một thông báo "thành công" bằng Flexbox và thêm hiệu ứng hover tinh tế.</p>
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="code-block-container">
+                            <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                                    Sao chép</button></div>
+                            <pre class="code-block" data-code-id="alertCode"><code>&lt;style&gt;
+.alert {
+  display: flex; /* Dùng Flexbox để căn chỉnh icon và văn bản */
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  max-width: 500px;
+  margin: 0 auto;
+
+  /* Transition tinh tế */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.alert:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+}
+
+.alert-success {
+  background-color: #dcfce7;
+  border-color: #4ade80;
+  color: #15803d;
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0; /* Ngăn không cho icon bị co lại */
+}
+
+.alert-message {
+  font-weight: 500;
+}
+&lt;/style&gt;
+
+&lt;div class="alert alert-success"&gt;
+  &lt;i class="fas fa-check-circle alert-icon"&gt;&lt;/i&gt;
+  &lt;span class="alert-message"&gt;Hồ sơ của bạn đã được cập nhật thành công!&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
                     </div>
+                    <div>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả (Di chuột để xem hiệu ứng):
+                        </h4>
+                        <div class="html-output flex justify-center items-center" id="alertOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-violet-700 mb-8">Tổng kết Buổi 5</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-4xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bây giờ bạn có thể tạo các hiệu ứng
+                        tương tác bằng cách sử dụng lớp giả <strong><code>:hover</code></strong>.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn biết cách làm cho các hiệu ứng này
+                        trở nên mượt mà và đẹp mắt bằng thuộc tính <strong><code>transition</code></strong>.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn đã kết hợp kiến thức cũ (Flexbox,
+                        Box Model) với các khái niệm mới để xây dựng các thành phần UI thực tế như
+                        <strong>Nút, Thẻ và Thông báo</strong>.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Bạn hiểu cách các hoạt ảnh tinh tế với
+                        <code>transform</code> có thể cải thiện đáng kể trải nghiệm người dùng.
+                    </p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-4xl">
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở Buổi 6!</h4>
+                    <p class="text-lg">Chúng ta sẽ khám phá một hệ thống bố cục mạnh mẽ khác: <strong>CSS
+                            Grid</strong>! Nó hoàn hảo cho các bố cục trang hai chiều phức tạp.</p>
                 </div>
             </div>
         </div>
@@ -542,86 +490,116 @@ body {
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const allCodeSnippets = {
-                step1: {
-                    html: document.getElementById('code-step1').textContent,
-                    css: ''
-                },
-                step2: {
-                    html: document.getElementById('code-step1').textContent,
-                    css: document.getElementById('code-step2').textContent
-                },
-                step3: {
-                    html: document.getElementById('code-step1').textContent,
-                    css: document.getElementById('code-step2').textContent + document.getElementById('code-step3').textContent
-                },
-                step4: {
-                    html: document.getElementById('code-step1').textContent,
-                    css: document.getElementById('code-step2').textContent + document.getElementById('code-step3').textContent + document.getElementById('code-step4').textContent
-                },
-                step5: {
-                    html: document.getElementById('code-step1').textContent.replace('</div>\n</body>', document.getElementById('code-step5-html').textContent + '</div>\n</body>'),
-                    css: document.getElementById('code-step2').textContent + document.getElementById('code-step3').textContent + document.getElementById('code-step4').textContent + document.getElementById('code-step5-css').textContent
-                }
-            };
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
 
-            function renderPreview(step) {
-                const previewFrame = document.getElementById(`preview-step${step}`);
-                const code = allCodeSnippets[`step${step}`];
-                if (!previewFrame || !code) return;
-
-                let bodyContent = code.html || '';
-                const bodyMatch = bodyContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-                if (bodyMatch && bodyMatch[1]) {
-                    bodyContent = bodyMatch[1];
-                }
-
-                const fullHtml = `
-                    <!DOCTYPE html>
-                    <html lang="vi">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-                        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-                        <style>
-                            /* Thêm CSS của các bước trước để hiển thị đúng */
-                            ${code.css || ''}
-                        </style>
-                    </head>
-                    <body>
-                        ${bodyContent}
-                    </body>
-                    </html>
-                `;
-                previewFrame.srcdoc = fullHtml;
+            let currentSlide = 0;
+            if (totalSlidesNumDisplay) {
+                totalSlidesNumDisplay.textContent = slides.length || '0';
             }
 
-            // Render tất cả các preview khi trang tải xong
-            for (let i = 1; i <= 5; i++) {
-                renderPreview(i);
-            }
-
-            // Thiết lập nút copy
-            document.querySelectorAll('.copy-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetId = button.dataset.target;
-                    const codeElement = document.getElementById(targetId);
-                    if (codeElement) {
-                        navigator.clipboard.writeText(codeElement.textContent).then(() => {
-                            const originalText = button.textContent;
-                            button.textContent = 'Đã chép!';
-                            setTimeout(() => {
-                                button.textContent = originalText;
-                            }, 1500);
-                        }).catch(err => {
-                            console.error('Không thể sao chép: ', err);
-                        });
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) slide.style.display = 'none';
+                        }, 400);
                     }
                 });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            function copyCode(buttonElement) {
+                const codeBlock = buttonElement.closest('.code-block-container').querySelector('pre.code-block');
+                if (!codeBlock) return;
+                const codeToCopy = codeBlock.innerText;
+                navigator.clipboard.writeText(codeToCopy).then(() => {
+                    const originalIcon = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã sao chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalIcon;
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Không thể sao chép văn bản: ', err);
+                });
+            }
+
+            function renderHtml(codeString, outputEl) {
+                if (!outputEl) return;
+                let styleContent = '';
+                const styleMatch = codeString.match(/<style>([\s\S]*?)<\/style>/i);
+                if (styleMatch) styleContent = styleMatch[1];
+
+                let bodyContent = codeString.replace(/<style>([\s\S]*?)<\/style>/i, '').trim();
+                let fontAwesome = bodyContent.includes('fas fa-') ? `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">` : '';
+
+                outputEl.innerHTML = '';
+                const shadow = outputEl.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `<style>${styleContent}</style>${fontAwesome}<div style="font-family: 'Inter', sans-serif;">${bodyContent}</div>`;
+            }
+
+            function renderExample(codeBlockId, outputId) {
+                const codeBlockEl = document.querySelector(`[data-code-id="${codeBlockId}"]`);
+                const outputEl = document.getElementById(outputId);
+                if (!codeBlockEl || !outputEl) return;
+                renderHtml(codeBlockEl.innerText, outputEl);
+            }
+
+            // --- HIỂN THỊ VÍ DỤ ---
+            try {
+                renderExample('hoverExampleCode', 'hoverExampleOutput');
+                renderExample('transitionExampleCode', 'transitionExampleOutput');
+                renderExample('buttonCode', 'buttonOutput');
+                renderExample('cardCode', 'cardOutput');
+                renderExample('alertCode', 'alertOutput');
+            } catch (e) {
+                console.error("Lỗi khi hiển thị ví dụ:", e);
+            }
+            // --- KẾT THÚC HIỂN THỊ VÍ DỤ ---
+
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
             });
+
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
         });
     </script>
 </body>
 
 </html>
+```
