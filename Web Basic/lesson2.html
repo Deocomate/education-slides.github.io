@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session 2: HTML Structure & CSS Selectors</title>
+    <title>Buổi 2: Cấu trúc HTML & Các bộ chọn CSS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -189,15 +189,15 @@
 
     <nav id="navbar" class="p-4">
         <div class="container mx-auto flex flex-wrap justify-between items-center">
-            <h1 class="text-xl font-bold text-blue-600">Web Basics - Session 2</h1>
+            <h1 class="text-xl font-bold text-blue-600">Web cơ bản - Buổi 2</h1>
             <div class="flex items-center mt-2 sm:mt-0">
                 <button id="prevSlide"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-arrow-left mr-1"></i> Prev
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
                 </button>
                 <button id="nextSlide"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    Next <i class="fas fa-arrow-right ml-1"></i>
+                    Tiếp <i class="fas fa-arrow-right ml-1"></i>
                 </button>
             </div>
             <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
@@ -207,137 +207,143 @@
     </nav>
 
     <div class="container mx-auto p-4 slide-container">
-        <!-- Slide 1: Title -->
         <div id="slide-1" class="slide">
             <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
-                <h2 class="text-5xl font-bold text-blue-700 mb-6">Session 2: Structuring with &lt;div&gt; & CSS
-                    Selectors</h2>
-                <p class="text-2xl text-gray-600 mb-12">Mastering Layout and Element Selection</p>
+                <h2 class="text-5xl font-bold text-blue-700 mb-6">Buổi 2: Xây dựng cấu trúc với &lt;div&gt; & Các bộ
+                    chọn CSS
+                </h2>
+                <p class="text-2xl text-gray-600 mb-12">Làm chủ bố cục và lựa chọn phần tử</p>
                 <img src="https://placehold.co/600x350/3498DB/FFFFFF?text=Structure+and+Selectors"
-                    alt="[Image of structure and selectors]" class="rounded-lg shadow-xl max-w-2xl">
-                <p class="mt-10 text-xl text-gray-700">Let's build more complex web layouts!</p>
+                    alt="[Hình ảnh về cấu trúc và các bộ chọn]" class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Hãy cùng xây dựng các bố cục web phức tạp hơn!</p>
             </div>
         </div>
 
-        <!-- Slide 2: The <div> tag -->
         <div id="slide-2" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-4xl font-semibold text-blue-600 mb-6">1. The &lt;div&gt; Tag: The Unsung Hero of Layout
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">1. Thẻ &lt;div&gt;: Người hùng thầm lặng của bố
+                    cục
                 </h3>
-                <p class="text-lg text-gray-700 mb-4">The <code>&lt;div&gt;</code> (division) tag is a generic
-                    "container". It has no semantic meaning; its main role is to <strong>group other elements
-                        together</strong> for styling (CSS) or manipulation (JavaScript).</p>
+                <p class="text-lg text-gray-700 mb-4">Thẻ <code>&lt;div&gt;</code> (viết tắt của division - sự phân
+                    chia)
+                    là một "thùng chứa" chung. Nó không có ý nghĩa về mặt ngữ nghĩa; vai trò chính của nó là
+                    <strong>nhóm các phần tử khác lại với nhau</strong> để định dạng (CSS) hoặc xử lý (JavaScript).
+                </p>
                 <div class="grid md:grid-cols-2 gap-8 mt-6">
                     <div class="bg-blue-50 p-6 rounded-lg shadow">
-                        <h4 class="text-2xl font-bold text-blue-700 mb-3">Key Uses:</h4>
+                        <h4 class="text-2xl font-bold text-blue-700 mb-3">Công dụng chính:</h4>
                         <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2">
-                            <li>Creating large layout blocks (header, main content, footer, sidebar).</li>
-                            <li>Grouping related content to apply a common style.</li>
-                            <li>Dividing a webpage into distinct, manageable sections.</li>
+                            <li>Tạo các khối bố cục lớn (header, main content, footer, sidebar).</li>
+                            <li>Nhóm các nội dung liên quan để áp dụng một kiểu chung.</li>
+                            <li>Chia một trang web thành các phần riêng biệt, dễ quản lý.</li>
                         </ul>
                     </div>
                     <div class="bg-yellow-50 p-6 rounded-lg shadow">
-                        <h4 class="text-2xl font-bold text-yellow-800 mb-3">Analogy:</h4>
-                        <p class="text-gray-700">Imagine <code>&lt;div&gt;</code> tags are like cardboard boxes. By
-                            themselves, they aren't special, but you use them to organize your belongings (web content)
-                            into neat groups, making your house (webpage) tidy and structured.</p>
+                        <h4 class="text-2xl font-bold text-yellow-800 mb-3">Phép ví von:</h4>
+                        <p class="text-gray-700">Hãy tưởng tượng thẻ <code>&lt;div&gt;</code> giống như những chiếc hộp
+                            carton. Bản thân chúng không có gì đặc biệt, nhưng bạn dùng chúng để sắp xếp đồ đạc (nội
+                            dung web) thành các nhóm gọn gàng, giúp ngôi nhà (trang web) của bạn ngăn nắp và có cấu
+                            trúc.</p>
                     </div>
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Example of a webpage layout using
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ về bố cục trang web sử dụng
                     <code>&lt;div&gt;</code>:
                 </h4>
                 <div class="code-block-container">
-                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                            Sao chép</button>
                     </div>
-                    <pre class="code-block" data-code-id="divLayoutCode"><code><span class="comment">&lt;!-- The entire webpage is wrapped in a container div --&gt;</span>
+                    <pre class="code-block" data-code-id="divLayoutCode"><code><span class="comment">&lt;!-- Toàn bộ trang web được bọc trong một div container --&gt;</span>
 &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"container"</span>&gt;
-  <span class="comment">&lt;!-- Header section --&gt;</span>
-  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"header"</span>&gt; ...Header content... &lt;/<span class="tag">div</span>&gt;
+  <span class="comment">&lt;!-- Phần đầu trang (header) --&gt;</span>
+  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"header"</span>&gt; ...Nội dung header... &lt;/<span class="tag">div</span>&gt;
   
-  <span class="comment">&lt;!-- Main page section --&gt;</span>
+  <span class="comment">&lt;!-- Phần nội dung chính của trang --&gt;</span>
   &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"main-content"</span>&gt;
-    <span class="comment">&lt;!-- Main content --&gt;</span>
-    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"article"</span>&gt; ...Article content... &lt;/<span class="tag">div</span>&gt;
-    <span class="comment">&lt;!-- Sidebar --&gt;</span>
-    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"sidebar"</span>&gt; ...Sidebar content... &lt;/<span class="tag">div</span>&gt;
+    <span class="comment">&lt;!-- Nội dung chính --&gt;</span>
+    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"article"</span>&gt; ...Nội dung bài viết... &lt;/<span class="tag">div</span>&gt;
+    <span class="comment">&lt;!-- Thanh bên (sidebar) --&gt;</span>
+    &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"sidebar"</span>&gt; ...Nội dung sidebar... &lt;/<span class="tag">div</span>&gt;
   &lt;/<span class="tag">div</span>&gt;
   
-  <span class="comment">&lt;!-- Footer section --&gt;</span>
-  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"footer"</span>&gt; ...Footer content... &lt;/<span class="tag">div</span>&gt;
+  <span class="comment">&lt;!-- Phần chân trang (footer) --&gt;</span>
+  &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"footer"</span>&gt; ...Nội dung footer... &lt;/<span class="tag">div</span>&gt;
 &lt;/<span class="tag">div</span>&gt;</code></pre>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 3: Block vs Inline -->
         <div id="slide-3" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-4xl font-semibold text-blue-600 mb-6">2. Block vs. Inline: Understanding How Elements
-                    Display</h3>
-                <p class="text-lg text-gray-700 mb-6">Every HTML element has a default display type. The two most common
-                    are <strong>block</strong> and <strong>inline</strong>.</p>
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">2. Block và Inline: Hiểu cách các phần tử hiển thị
+                </h3>
+                <p class="text-lg text-gray-700 mb-6">Mỗi phần tử HTML đều có một kiểu hiển thị mặc định. Hai loại phổ
+                    biến nhất là <strong>block</strong> và <strong>inline</strong>.</p>
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="bg-red-50 p-6 rounded-lg shadow">
-                        <h4 class="text-2xl font-bold text-red-700 mb-3">Block Elements</h4>
+                        <h4 class="text-2xl font-bold text-red-700 mb-3">Phần tử Block</h4>
                         <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2">
-                            <li>Always <strong>starts on a new line</strong>.</li>
-                            <li>Takes up the <strong>full width</strong> of its parent element.</li>
-                            <li>Examples: <code>&lt;div&gt;</code>, <code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>,
+                            <li>Luôn <strong>bắt đầu trên một dòng mới</strong>.</li>
+                            <li>Chiếm <strong>toàn bộ chiều rộng</strong> của phần tử cha.</li>
+                            <li>Ví dụ: <code>&lt;div&gt;</code>, <code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>,
                                 <code>&lt;p&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>.
                             </li>
                         </ul>
                     </div>
                     <div class="bg-indigo-50 p-6 rounded-lg shadow">
-                        <h4 class="text-2xl font-bold text-indigo-700 mb-3">Inline Elements</h4>
+                        <h4 class="text-2xl font-bold text-indigo-700 mb-3">Phần tử Inline</h4>
                         <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2">
-                            <li><strong>Does not</strong> start on a new line.</li>
-                            <li>Only takes up as <strong>much width as necessary</strong> for its content.</li>
-                            <li>Examples: <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code>,
+                            <li><strong>Không</strong> bắt đầu trên một dòng mới.</li>
+                            <li>Chỉ chiếm <strong>vừa đủ chiều rộng cần thiết</strong> cho nội dung của nó.</li>
+                            <li>Ví dụ: <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code>,
                                 <code>&lt;strong&gt;</code>, <code>&lt;button&gt;</code>.
                             </li>
                         </ul>
                     </div>
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Practical Example:</h4>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ thực tế:</h4>
                 <div class="code-block-container">
-                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                            Sao chép</button>
                     </div>
-                    <pre class="code-block" data-code-id="blockInlineCode"><code><span class="comment">&lt;!-- div and p are block elements, they will be on separate lines --&gt;</span>
-&lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #f8d7da; padding: 10px; margin-bottom: 5px;"</span>&gt;This is a div (block).&lt;/<span class="tag">div</span>&gt;
-&lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #d1ecf1; padding: 10px;"</span>&gt;This is a paragraph (block).&lt;/<span class="tag">p</span>&gt;
+                    <pre class="code-block" data-code-id="blockInlineCode"><code><span class="comment">&lt;!-- div và p là các phần tử block, chúng sẽ nằm trên các dòng riêng biệt --&gt;</span>
+&lt;<span class="tag">div</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #f8d7da; padding: 10px; margin-bottom: 5px;"</span>&gt;Đây là một thẻ div (block).&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #d1ecf1; padding: 10px;"</span>&gt;Đây là một đoạn văn (block).&lt;/<span class="tag">p</span>&gt;
 
-<span class="comment">&lt;!-- span and a are inline elements, they will be on the same line --&gt;</span>
+<span class="comment">&lt;!-- span và a là các phần tử inline, chúng sẽ nằm trên cùng một dòng --&gt;</span>
 &lt;<span class="tag">p</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #e2e3e5; padding: 10px; margin-top: 10px;"</span>&gt;
-  This is a
+  Đây là một
   &lt;<span class="tag">span</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #fff3cd; font-weight: bold; padding: 5px; border-radius: 3px;"</span>&gt;span (inline)&lt;/<span class="tag">span</span>&gt;
-  and this is a
-  &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #d4edda; padding: 5px; border-radius: 3px;"</span>&gt;link (inline)&lt;/<span class="tag">a</span>&gt;.
+  và đây là một
+  &lt;<span class="tag">a</span> <span class="attr-name">href</span>=<span class="attr-value">"#"</span> <span class="attr-name">style</span>=<span class="attr-value">"background-color: #d4edda; padding: 5px; border-radius: 3px;"</span>&gt;liên kết (inline)&lt;/<span class="tag">a</span>&gt;.
 &lt;/<span class="tag">p</span>&gt;</code></pre>
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
                 <div class="html-output" id="blockInlineOutput"></div>
             </div>
         </div>
 
-        <!-- Slide 4: <style> tag -->
         <div id="slide-4" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Centralizing CSS with the &lt;style&gt; Tag
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">3. Tập trung CSS với thẻ &lt;style&gt;
                 </h3>
-                <p class="text-lg text-gray-700 mb-4"><strong>Internal CSS</strong>: Place CSS rules inside a
-                    <code>&lt;style&gt;</code> tag, usually located in the <code>&lt;head&gt;</code> section. This is a
-                    better approach than the Inline CSS from Session 1.
+                <p class="text-lg text-gray-700 mb-4"><strong>CSS nội bộ (Internal CSS)</strong>: Đặt các quy tắc CSS
+                    bên trong một thẻ
+                    <code>&lt;style&gt;</code>, thường được đặt trong phần <code>&lt;head&gt;</code>. Đây là cách tiếp
+                    cận tốt hơn so với CSS Inline từ Buổi 1.
                 </p>
-                <h4 class="text-2xl font-bold text-green-700 my-4">Benefits:</h4>
+                <h4 class="text-2xl font-bold text-green-700 my-4">Lợi ích:</h4>
                 <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2 text-lg">
-                    <li><strong>Separates content (HTML) from presentation (CSS)</strong>.</li>
-                    <li><strong>Easy to manage</strong> and edit all styles in one place.</li>
-                    <li>Allows you to <strong>reuse</strong> a style for multiple elements.</li>
+                    <li><strong>Tách biệt nội dung (HTML) và trình bày (CSS)</strong>.</li>
+                    <li><strong>Dễ dàng quản lý</strong> và chỉnh sửa tất cả các kiểu ở một nơi.</li>
+                    <li>Cho phép bạn <strong>tái sử dụng</strong> một kiểu định dạng cho nhiều phần tử.</li>
                 </ul>
-                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Example: Converting from Inline CSS to Internal
-                    CSS</h4>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ: Chuyển đổi từ CSS Inline sang CSS
+                    Internal
+                </h4>
                 <div class="code-block-container">
-                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                            Sao chép</button>
                     </div>
                     <pre class="code-block" data-code-id="internalCssCode"><code>&lt;<span class="tag">!DOCTYPE html</span>&gt;
 &lt;<span class="tag">html</span>&gt;
@@ -362,39 +368,40 @@
   &lt;/<span class="tag">style</span>&gt;
 &lt;/<span class="tag">head</span>&gt;
 &lt;<span class="tag">body</span>&gt;
-  <span class="comment">&lt;!-- The HTML is now much cleaner! --&gt;</span>
-  &lt;<span class="tag">h1</span>&gt;This is a Heading&lt;/<span class="tag">h1</span>&gt;
-  &lt;<span class="tag">p</span>&gt;This is a paragraph.&lt;/<span class="tag">p</span>&gt;
-  &lt;<span class="tag">button</span>&gt;Click Me&lt;/<span class="tag">button</span>&gt;
+  <span class="comment">&lt;!-- Mã HTML giờ đây đã gọn gàng hơn nhiều! --&gt;</span>
+  &lt;<span class="tag">h1</span>&gt;Đây là một tiêu đề&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">p</span>&gt;Đây là một đoạn văn.&lt;/<span class="tag">p</span>&gt;
+  &lt;<span class="tag">button</span>&gt;Nhấn vào tôi&lt;/<span class="tag">button</span>&gt;
 &lt;/<span class="tag">body</span>&gt;
 &lt;/<span class="tag">html</span>&gt;</code></pre>
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output (body content):</h4>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị (nội dung phần body):</h4>
                 <div class="html-output" id="internalCssOutput"></div>
             </div>
         </div>
 
-        <!-- Slide 5: Class selector -->
         <div id="slide-5" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-4xl font-semibold text-blue-600 mb-6">4. CSS Selectors: Bulk Selection with Classes</h3>
-                <p class="text-lg text-gray-700 mb-4">When you want to apply the <strong>same style to many different
-                        elements</strong>, use the <code>class</code> attribute.</p>
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">4. Bộ chọn CSS: Chọn hàng loạt với Class</h3>
+                <p class="text-lg text-gray-700 mb-4">Khi bạn muốn áp dụng <strong>cùng một kiểu định dạng cho nhiều
+                        phần tử khác nhau</strong>, hãy sử dụng thuộc tính <code>class</code>.</p>
                 <div class="grid md:grid-cols-2 gap-8 text-lg items-center">
                     <div>
-                        <h4 class="text-2xl font-bold text-gray-800 mb-3">How it works:</h4>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Cách hoạt động:</h4>
                         <ol class="list-decimal list-inside space-y-2">
-                            <li>In CSS, create a class with a name starting with a period (<code>.</code>).</li>
-                            <li>In HTML, add the <code>class="class-name"</code> attribute to the elements.</li>
-                            <li>An element can have multiple classes, separated by spaces.</li>
+                            <li>Trong CSS, tạo một class với tên bắt đầu bằng dấu chấm (<code>.</code>).</li>
+                            <li>Trong HTML, thêm thuộc tính <code>class="ten-class"</code> vào các phần tử.</li>
+                            <li>Một phần tử có thể có nhiều class, cách nhau bởi dấu cách.</li>
                         </ol>
                     </div>
                     <img src="https://placehold.co/400x200/2ECC71/FFFFFF?text=One+Style,+Many+Elements"
                         class="rounded-lg shadow-md">
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Example: Creating Buttons and Alerts</h4>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ: Tạo các nút bấm (Button) và thông báo
+                    (Alert)</h4>
                 <div class="code-block-container">
-                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                            Sao chép</button>
                     </div>
                     <pre class="code-block" data-code-id="classSelectorCode"><code>&lt;<span class="tag">style</span>&gt;
   <span class="selector">.btn</span> {
@@ -418,38 +425,39 @@
   }
 &lt;/<span class="tag">style</span>&gt;
 <span class="comment">&lt;!-- HTML --&gt;</span>
-&lt;<span class="tag">button</span> <span class="attr-name">class</span>=<span class="attr-value">"btn btn-primary"</span>&gt;Save Changes&lt;/<span class="tag">button</span>&gt;
+&lt;<span class="tag">button</span> <span class="attr-name">class</span>=<span class="attr-value">"btn btn-primary"</span>&gt;Lưu thay đổi&lt;/<span class="tag">button</span>&gt;
 &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"alert-danger"</span>&gt;
-    &lt;<span class="tag">strong</span>&gt;Error!&lt;/<span class="tag">strong</span>&gt; Please check the information again.
+    &lt;<span class="tag">strong</span>&gt;Lỗi!&lt;/<span class="tag">strong</span>&gt; Vui lòng kiểm tra lại thông tin.
 &lt;/<span class="tag">div</span>&gt;</code></pre>
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
                 <div class="html-output" id="classSelectorOutput"></div>
             </div>
         </div>
 
-        <!-- Slide 6: ID selector -->
         <div id="slide-6" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. CSS Selectors: Unique Selection with IDs</h3>
-                <p class="text-lg text-gray-700 mb-4">When you want to apply a style to <strong>one and only one unique
-                        element</strong> on the page, use the <code>id</code> attribute.</p>
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">5. Bộ chọn CSS: Chọn duy nhất với ID</h3>
+                <p class="text-lg text-gray-700 mb-4">Khi bạn muốn áp dụng một kiểu cho <strong>một và chỉ một phần tử
+                        duy nhất</strong> trên trang, hãy sử dụng thuộc tính <code>id</code>.</p>
                 <div class="grid md:grid-cols-2 gap-8 text-lg items-center">
                     <div>
-                        <h4 class="text-2xl font-bold text-gray-800 mb-3">How it works:</h4>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Cách hoạt động:</h4>
                         <ol class="list-decimal list-inside space-y-2">
-                            <li>In HTML, add the attribute <code>id="unique-id-name"</code>. <strong>The ID must be
-                                    unique</strong> on the page.</li>
-                            <li>In CSS, select the element using a hash symbol (<code>#</code>) followed by the ID name.
+                            <li>Trong HTML, thêm thuộc tính <code>id="ten-id-duy-nhat"</code>. <strong>ID phải là duy
+                                    nhất</strong> trên trang.</li>
+                            <li>Trong CSS, chọn phần tử bằng cách sử dụng ký hiệu thăng (<code>#</code>) theo sau là tên
+                                ID.
                             </li>
                         </ol>
                     </div>
                     <img src="https://placehold.co/400x200/E74C3C/FFFFFF?text=One+Unique+Element"
                         class="rounded-lg shadow-md">
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Example: Styling a Header</h4>
+                <h4 class="text-xl font-medium text-gray-700 mt-8 mb-2">Ví dụ: Định dạng cho phần Header</h4>
                 <div class="code-block-container">
-                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
+                            Sao chép</button>
                     </div>
                     <pre class="code-block" data-code-id="idSelectorCode"><code>&lt;<span class="tag">style</span>&gt;
   <span class="selector">#main-header</span> {
@@ -462,32 +470,31 @@
 &lt;/<span class="tag">style</span>&gt;
 <span class="comment">&lt;!-- HTML --&gt;</span>
 &lt;<span class="tag">div</span> <span class="attr-name">id</span>=<span class="attr-value">"main-header"</span>&gt;
-  &lt;<span class="tag">h1</span>&gt;My Website&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">h1</span>&gt;Trang web của tôi&lt;/<span class="tag">h1</span>&gt;
 &lt;/<span class="tag">div</span>&gt;</code></pre>
                 </div>
-                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
                 <div class="html-output" id="idSelectorOutput"></div>
             </div>
         </div>
 
-        <!-- Slide 7: Practical Example -->
         <div id="slide-7" class="slide">
             <div class="slide-content-wrapper">
-                <h3 class="text-4xl font-semibold text-blue-600 mb-6">6. Exercise: Building a Blog Post Layout</h3>
-                <p class="text-lg text-gray-700 mb-4">Apply what you've learned: <code>&lt;div&gt;</code>,
-                    <code>class</code>, and <code>id</code> to create a simple blog post layout.
+                <h3 class="text-4xl font-semibold text-blue-600 mb-6">6. Bài tập: Xây dựng bố cục bài đăng Blog</h3>
+                <p class="text-lg text-gray-700 mb-4">Áp dụng những gì bạn đã học: <code>&lt;div&gt;</code>,
+                    <code>class</code>, và <code>id</code> để tạo một bố cục bài đăng blog đơn giản.
                 </p>
                 <div class="grid lg:grid-cols-2 gap-8">
                     <div class="code-block-container">
                         <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i>
-                                Copy</button></div>
+                                Sao chép</button></div>
                         <pre class="code-block" data-code-id="blogLayoutCode"><code>&lt;<span class="tag">!DOCTYPE html</span>&gt;
 &lt;<span class="tag">html</span>&gt;
 &lt;<span class="tag">head</span>&gt;
 &lt;<span class="tag">style</span>&gt;
   <span class="selector">body</span> { <span class="property">background-color</span>: <span class="css-value">#f4f4f4</span>; <span class="property">color</span>: <span class="css-value">#333</span>; <span class="property">font-family</span>: <span class="css-value">sans-serif</span>; }
   <span class="selector">#blog-container</span> {
-    <span class="comment">/* Adjusted for output area */</span>
+    <span class="comment">/* Đã điều chỉnh cho khu vực hiển thị */</span>
     <span class="property">margin</span>: <span class="css-value">auto</span>;
     <span class="property">background-color</span>: <span class="css-value">white</span>;
     <span class="property">padding</span>: <span class="css-value">20px</span>;
@@ -504,52 +511,55 @@
 &lt;<span class="tag">body</span>&gt;
   &lt;<span class="tag">div</span> <span class="attr-name">id</span>=<span class="attr-value">"blog-container"</span>&gt;
     &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"post-header"</span>&gt;
-      &lt;<span class="tag">h1</span> <span class="attr-name">class</span>=<span class="attr-value">"post-title"</span>&gt;My Web Development Journey&lt;/<span class="tag">h1</span>&gt;
-      &lt;<span class="tag">p</span> <span class="attr-name">class</span>=<span class="attr-value">"post-meta"</span>&gt;Posted by John Doe on June 8, 2025&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">h1</span> <span class="attr-name">class</span>=<span class="attr-value">"post-title"</span>&gt;Hành trình phát triển Web của tôi&lt;/<span class="tag">h1</span>&gt;
+      &lt;<span class="tag">p</span> <span class="attr-name">class</span>=<span class="attr-value">"post-meta"</span>&gt;Đăng bởi John Doe vào ngày 22 tháng 6, 2025&lt;/<span class="tag">p</span>&gt;
     &lt;/<span class="tag">div</span>&gt;
     &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"post-content"</span>&gt;
-      &lt;<span class="tag">p</span>&gt;This is the first paragraph of the article. We are applying classes for styling.&lt;/<span class="tag">p</span>&gt;
-      &lt;<span class="tag">p</span>&gt;The div tag helps us group elements together.&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Đây là đoạn đầu tiên của bài viết. Chúng tôi đang áp dụng các class để định dạng.&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Thẻ div giúp chúng ta nhóm các phần tử lại với nhau.&lt;/<span class="tag">p</span>&gt;
     &lt;/<span class="tag">div</span>&gt;
     &lt;<span class="tag">div</span> <span class="attr-name">class</span>=<span class="attr-value">"author-box"</span>&gt;
-      &lt;<span class="tag">h4</span>&gt;About the Author&lt;/<span class="tag">h4</span>&gt;
-      &lt;<span class="tag">p</span>&gt;John Doe is a passionate web developer.&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">h4</span>&gt;Về tác giả&lt;/<span class="tag">h4</span>&gt;
+      &lt;<span class="tag">p</span>&gt;John Doe là một nhà phát triển web đầy nhiệt huyết.&lt;/<span class="tag">p</span>&gt;
     &lt;/<span class="tag">div</span>&gt;
   &lt;/<span class="tag">div</span>&gt;
 &lt;/<span class="tag">body</span>&gt;
 &lt;/<span class="tag">html</span>&gt;</code></pre>
                     </div>
                     <div>
-                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Rendered Output:</h4>
+                        <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">Kết quả hiển thị:</h4>
                         <div class="html-output h-full" id="blogLayoutOutput"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 8: Summary -->
         <div id="slide-8" class="slide">
             <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
-                <h2 class="text-5xl font-bold text-blue-700 mb-8">Session 2 Summary</h2>
+                <h2 class="text-5xl font-bold text-blue-700 mb-8">Tổng kết Buổi 2</h2>
                 <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
-                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>The <strong><code>&lt;div&gt;</code>
-                            tag</strong> is a tool for grouping elements and building layouts.</p>
-                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Understanding <strong>Block</strong>
-                        (takes the full line) and <strong>Inline</strong> (stays on the line) is key to controlling
-                        layout.</p>
-                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Using
-                        <strong><code>&lt;style&gt;</code></strong> keeps HTML cleaner and makes CSS more manageable.
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Thẻ <strong><code>&lt;div&gt;</code>
+                        </strong> là công cụ để nhóm các phần tử và xây dựng bố cục.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Hiểu rõ <strong>Block</strong>
+                        (chiếm toàn bộ dòng) và <strong>Inline</strong> (nằm trên cùng dòng) là chìa khóa để kiểm
+                        soát bố cục.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Sử dụng
+                        <strong><code>&lt;style&gt;</code></strong> giữ cho HTML gọn gàng hơn và giúp quản lý CSS
+                        dễ dàng hơn.
                     </p>
                     <p><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Class
-                            (<code>.class-name</code>)</strong> is used to apply one style to MANY elements.</p>
+                            (<code>.ten-class</code>)</strong> được sử dụng để áp dụng một kiểu cho NHIỀU phần tử.
+                    </p>
                     <p><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>ID
-                            (<code>#id-name</code>)</strong> is used to identify and style ONE UNIQUE element.</p>
+                            (<code>#ten-id</code>)</strong> được sử dụng để xác định và định dạng cho MỘT phần tử
+                        DUY NHẤT.</p>
                 </div>
                 <div
                     class="mt-12 bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
-                    <h4 class="text-2xl font-bold mb-2">See you in Session 3!</h4>
-                    <p class="text-lg">We will explore one of the most important CSS concepts: the <strong>Box
-                            Model</strong>!</p>
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở Buổi 3!</h4>
+                    <p class="text-lg">Chúng ta sẽ khám phá một trong những khái niệm quan trọng nhất của CSS:
+                        <strong>Mô hình hộp (Box Model)</strong>!
+                    </p>
                 </div>
             </div>
         </div>
@@ -583,7 +593,7 @@
                             if (!slide.classList.contains('active')) {
                                 slide.style.display = 'none';
                             }
-                        }, 400); // Match CSS transition duration
+                        }, 400); // Khớp với thời gian chuyển đổi của CSS
                     }
                 });
                 if (currentSlideNumDisplay) {
@@ -611,13 +621,13 @@
                 try {
                     document.execCommand('copy');
                     const originalIcon = buttonElement.innerHTML;
-                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã sao chép!';
                     setTimeout(() => {
                         buttonElement.innerHTML = originalIcon;
                     }, 1500);
                 } catch (err) {
                     console.error('Could not copy code:', err);
-                    alert('Copy failed!');
+                    alert('Sao chép thất bại!');
                 }
                 document.body.removeChild(textarea);
             }
@@ -646,7 +656,7 @@
                 shadow.innerHTML = `<style>${styleContent}</style>${bodyContent}`;
             }
 
-            // Setup navigation
+            // Thiết lập điều hướng
             if (prevButton && nextButton) {
                 prevButton.addEventListener('click', () => {
                     if (currentSlide > 0) {
@@ -663,19 +673,19 @@
                 });
             }
 
-            // Setup copy buttons
+            // Thiết lập các nút sao chép
             document.querySelectorAll('.copy-button').forEach(button => {
                 button.addEventListener('click', () => copyCode(button));
             });
 
-            // Render all live examples
+            // Hiển thị tất cả các ví dụ trực tiếp
             renderExample(document.querySelector('[data-code-id="blockInlineCode"]'), document.getElementById('blockInlineOutput'));
             renderExample(document.querySelector('[data-code-id="internalCssCode"]'), document.getElementById('internalCssOutput'));
             renderExample(document.querySelector('[data-code-id="classSelectorCode"]'), document.getElementById('classSelectorOutput'));
             renderExample(document.querySelector('[data-code-id="idSelectorCode"]'), document.getElementById('idSelectorOutput'));
             renderExample(document.querySelector('[data-code-id="blogLayoutCode"]'), document.getElementById('blogLayoutOutput'));
 
-            // Initial setup
+            // Thiết lập ban đầu
             if (slides.length > 0) {
                 showSlide(currentSlide);
             }
