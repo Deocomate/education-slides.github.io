@@ -27,7 +27,6 @@
             {
                 "title": "Bài kiểm tra 1",
                 "url": "./Python Basic/exam_midterm.html"
-                
             }
         ]
     },
@@ -38,19 +37,27 @@
         "lessons": [
             {
                 "title": "Lesson 1: Giới thiệu về HTML, cú pháp HTML cơ bản",
-                "url": "./Web Basic/html_intro_basic_tags_and_basic_style.html"
+                "url": "./Web Basic/lesson1.html"
             },
             {
                 "title": "Lesson 2: Cú pháp inline và block",
-                "url": "./Web Basic/html_inline_block_style.html"
+                "url": "./Web Basic/lesson2.html"
             },
             {
                 "title": "Lesson 3: CSS Box Model và Layouts",
-                "url": "./Web Basic/css_box_model_layouts.html"
+                "url": "./Web Basic/lesson3.html"
             },
             {
                 "title": "Lesson 4: CSS External, Flexbox and Layouts",
-                "url": "./Web Basic/css_external_flexbox.html"
+                "url": "./Web Basic/lesson4.html"
+            },
+            {
+                "title": "Lesson 5: Ôn tập, tổng quan",
+                "url": "./Web Basic/lesson5_overview.html"
+            },
+            {
+                "title": "Lesson 6: Bài kiểm tra giữa khoá",
+                "url": "./Web Basic/lesson6_midterm.html"
             }
         ]
     },
@@ -61,23 +68,27 @@
         "lessons": [
             {
                 "title": "Lesson 1: HTML Introduction, basic syntax and basic styling",
-                "url": "./Web Basic English/html_intro_basic_tags_and_basic_style.html"
+                "url": "./Web Basic English/lesson1.html"
             },
             {
                 "title": "Lesson 2: HTML Inline and Block Style",
-                "url": "./Web Basic English/html_inline_block_style.html"
+                "url": "./Web Basic English/lesson2.html"
             },
             {
                 "title": "Lesson 3: CSS Box Model and Layouts",
-                "url": "./Web Basic English/css_box_model_layouts.html"
+                "url": "./Web Basic English/lesson3.html"
             },
             {
                 "title": "Lesson 4: CSS External, Flexbox and Layouts",
-                "url": "./Web Basic English/css_external_flexbox.html"
+                "url": "./Web Basic English/lesson4.html"
             },
             {
                 "title": "Lesson 5: Overview",
                 "url": "./Web Basic English/lesson5_overview.html"
+            },
+            {
+                "title": "Lesson 6: Midterm Test",
+                "url": "./Web Basic English/lesson6_midterm.html"
             }
         ]
     },

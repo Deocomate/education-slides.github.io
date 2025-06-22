@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Thi Giữa Khoá: Xây Dựng Website Profile</title>
+    <!-- Using Tailwind for utility classes if needed, but primary styling is custom CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Fira+Code&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Modern, Minimalist CSS for the Tutorial Page */
+        :root {
+            --bg-color: #f8fafc;
+            /* Lighter gray background */
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            /* Slate 800 */
+            --text-secondary: #64748b;
+            /* Slate 500 */
+            --accent-color: #4f46e5;
+            /* Indigo 600 */
+            --accent-dark: #4338ca;
+            /* Indigo 700 */
+            --accent-light: #eef2ff;
+            /* Indigo 50 */
+            --border-color: #e2e8f0;
+            /* Slate 200 */
+            --code-bg: #1e293b;
+            /* Slate 800 for code */
+            --code-text: #e2e8f0;
+            /* Slate 200 for code text */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        .tutorial-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        /* Main Header */
+        .main-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .main-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0.5rem auto 0 auto;
+        }
+
+        /* Step Card Styling */
+        .step {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .step:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .step-header .step-number {
+            background-color: var(--accent-light);
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .step-header h2 span {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .step-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .step-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Explanation Column */
+        .explanation h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .explanation p,
+        .explanation li {
+            line-height: 1.7;
+            color: #374151;
+        }
+
+        .explanation ul {
+            padding-left: 20px;
+            margin-top: 1rem;
+        }
+
+        /* Code Block */
+        .code-block-container {
+            background-color: var(--code-bg);
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(27, 39, 59, 0.15);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: #374151;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            border-bottom: 1px solid #4b5563;
+        }
+
+        .file-name {
+            color: #d1d5db;
+            font-size: 0.875rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .copy-button {
+            background-color: #4b5563;
+            color: #e5e7eb;
+            border: none;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover:not(:disabled) {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .copy-button:disabled {
+            background-color: var(--accent-dark);
+            color: white;
+            cursor: default;
+        }
+
+
+        .code-block {
+            color: var(--code-text);
+            padding: 1.25rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* Custom scrollbar for code block */
+        .code-block::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .code-block::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .code-block::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 20px;
+            border: 2px solid var(--code-bg);
+        }
+
+
+        /* Preview Column */
+        .preview-area h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .preview-box {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #f1f5f9;
+            /* Slate 100 */
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+            height: 100%;
+            min-height: 650px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 6px;
+            background-color: white;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+        /* Special styling for intro and final challenge */
+        #intro-card,
+        #final-challenge-card {
+            grid-template-columns: 1fr;
+        }
+
+        #final-challenge-card .explanation ul {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1rem 1rem 2rem;
+            list-style-type: '🏆';
+            border-radius: 6px;
+            margin-left: 0;
+            padding-left: 2rem;
+        }
+
+        #final-challenge-card .explanation li {
+            padding-left: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-dark);
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="tutorial-container">
+        <!-- Main Page Header -->
+        <div class="text-center mb-16 main-header">
+            <h1 class="text-4xl font-bold">Bài Thi Giữa Khoá: Xây Dựng Website Profile</h1>
+            <p class="mt-2">Hướng dẫn chi tiết để tạo trang giới thiệu bản thân từ A-Z với HTML & CSS.</p>
+        </div>
+
+        <!-- Step 0: Giới thiệu -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">0</div>
+                <h2>Giới Thiệu & Tiêu Chí Chấm Điểm</h2>
+            </div>
+            <div class="step-content" id="intro-card">
+                <div class="explanation" id="final-challenge-card">
+                    <h3>Mục tiêu của bài thi</h3>
+                    <p>Trong bài thi này, chúng ta sẽ vận dụng toàn bộ kiến thức đã học để xây dựng một sản phẩm thực
+                        tế: một trang web giới thiệu bản thân (Portfolio). Đây là "tấm danh thiếp" của bạn trong thế
+                        giới số, vì vậy hãy thật chăm chút cho nó nhé!</p>
+
+                    <h3>Tiêu chí chấm điểm</h3>
+                    <ul>
+                        <li><b>Hoàn Thiện Yêu Cầu Cơ Bản (7 điểm):</b> Xây dựng trang web theo đúng các bước hướng dẫn,
+                            đảm bảo đầy đủ các thành phần và chức năng cơ bản.</li>
+                        <li><b>Sáng Tạo (3 điểm+):</b> Đây là phần để bạn thể hiện cá tính. Điểm cộng sẽ được trao cho
+                            những bạn thay đổi layout, màu sắc, font chữ, thêm hiệu ứng, bổ sung các thành phần mới,
+                            hoặc tự thiết kế một layout hoàn toàn mới.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: HTML Structure -->
+        <div class="step" id="step1">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2>Xây Dựng "Bộ Xương"<span>Cấu Trúc HTML</span></h2>
+            </div>
+            <div class="step-content">
+                <div>
+                    <div class="explanation">
+                        <h3>Khởi tạo dự án</h3>
+                        <p>Việc đầu tiên là tạo một thư mục cho dự án. Bên trong, hãy tạo 2 file:
+                            <code>index.html</code> và <code>style.css</code>.
+                        </p>
+                        <h3>Soạn cấu trúc HTML</h3>
+                        <p>Mở file <code>index.html</code> và sao chép đoạn code bên dưới. Đây là cấu trúc cơ bản cho
+                            trang profile của chúng ta, sử dụng các thẻ HTML ngữ nghĩa.
+                        </p>
+                        <p>Đừng quên thay thế các thông tin mẫu bằng thông tin cá nhân của bạn!</p>
+                    </div>
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            <span class="file-name">index.html</span>
+                            <button class="copy-button" data-target="code-step1">
+                                <span>Copy</span> <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="code-step1">&lt;!DOCTYPE html&gt;
+&lt;html lang="vi"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Trang Cá Nhân Của [Tên Của Bạn]&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="profile-card"&gt;
+        &lt;div class="info-section"&gt;
+            &lt;img class="profile-pic" src="https://placehold.co/150x150/4f46e5/FFFFFF?text=Avatar" alt="Ảnh đại diện"&gt;
+            &lt;h1 class="name"&gt;Nguyễn Văn A&lt;/h1&gt;
+            &lt;p class="title"&gt;Lập Trình Viên Web&lt;/p&gt;
+            &lt;p class="bio"&gt;Tôi là một người đam mê công nghệ và lập trình, luôn tìm tòi học hỏi những kiến thức mới.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="social-links"&gt;
+            &lt;a href="#"&gt;&lt;i class="fab fa-facebook"&gt;&lt;/i&gt;&lt;/a&gt;
+            &lt;a href="#"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;/a&gt;
+            &lt;a href="#"&gt;&lt;i class="fab fa-linkedin"&gt;&lt;/i&gt;&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                </div>
+                <div class="preview-area">
+                    <h4>Xem trước kết quả:</h4>
+                    <div class="preview-box">
+                        <iframe id="preview-step1" title="Preview for Step 1"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: CSS Box Model -->
+        <div class="step" id="step2">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2>"Trang Điểm" Cho Card<span>Box Model & Layout</span></h2>
+            </div>
+            <div class="step-content">
+                <div>
+                    <div class="explanation">
+                        <h3>Tạo style cho trang</h3>
+                        <p>Mở file <code>style.css</code>. Chúng ta sẽ bắt đầu bằng việc định dạng cho
+                            <code>&lt;body&gt;</code> để có một nền đẹp và căn giữa nội dung bằng Flexbox.
+                        </p>
+                        <h3>Định hình thẻ Profile</h3>
+                        <p>Tiếp theo, ta sẽ style cho class <code>.profile-card</code>. Đây là lúc vận dụng kiến thức về
+                            <b>Box Model</b> (<code>padding</code>, <code>border</code>, <code>box-shadow</code>) để tạo
+                            khối chính cho card.
+                        </p>
+                    </div>
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            <span class="file-name">style.css</span>
+                            <button class="copy-button" data-target="code-step2">
+                                <span>Copy</span> <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="code-step2">/* Reset cơ bản và font chữ */
+body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background-color: #f3f4f6;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Style cho card chính */
+.profile-card {
+    background-color: white;
+    max-width: 450px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    box-sizing: border-box;
+}</code></pre>
+                    </div>
+                </div>
+                <div class="preview-area">
+                    <h4>Xem trước kết quả:</h4>
+                    <div class="preview-box">
+                        <iframe id="preview-step2" title="Preview for Step 2"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Styling Content -->
+        <div class="step" id="step3">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2>Hoàn Thiện Giao Diện<span>Định Dạng Nội Dung</span></h2>
+            </div>
+            <div class="step-content">
+                <div>
+                    <div class="explanation">
+                        <h3>Làm đẹp ảnh và chữ</h3>
+                        <p>Bây giờ chúng ta sẽ đi sâu vào từng chi tiết bên trong card, định dạng cho ảnh đại diện, tên,
+                            chức danh và phần giới thiệu.</p>
+                        <h3>Style cho icon mạng xã hội</h3>
+                        <p>Cuối cùng, chúng ta sẽ định dạng cho các icon mạng xã hội, làm cho chúng lớn hơn, đổi màu và
+                            bỏ gạch chân mặc định của thẻ <code>&lt;a&gt;</code>.</p>
+                    </div>
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            <span class="file-name">style.css (viết tiếp)</span>
+                            <button class="copy-button" data-target="code-step3">
+                                <span>Copy</span> <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="code-step3">/* Style ảnh đại diện */
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid #4f46e5;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+/* Style cho các phần text */
+.name {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+.title {
+    margin: 5px 0 15px 0;
+    font-size: 1.1rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+.bio {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+    margin-bottom: 30px;
+}
+/* Style cho các liên kết MXH */
+.social-links a {
+    color: #4f46e5;
+    font-size: 1.75rem;
+    margin: 0 15px;
+    text-decoration: none;
+}</code></pre>
+                    </div>
+                </div>
+                <div class="preview-area">
+                    <h4>Xem trước kết quả:</h4>
+                    <div class="preview-box">
+                        <iframe id="preview-step3" title="Preview for Step 3"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Interactivity -->
+        <div class="step" id="step4">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2>Thêm "Sự Sống"<span>Hiệu Ứng Hover & Transition</span></h2>
+            </div>
+            <div class="step-content">
+                <div>
+                    <div class="explanation">
+                        <h3>Tạo hiệu ứng mượt mà</h3>
+                        <p>Một trang web tĩnh thì khá nhàm chán. Chúng ta sẽ thêm "sự sống" bằng cách sử dụng
+                            <code>transition</code> để tạo hiệu ứng chuyển động mượt mà khi người dùng tương tác
+                            (<code>:hover</code>) với các phần tử.
+                        </p>
+                    </div>
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            <span class="file-name">style.css (viết tiếp)</span>
+                            <button class="copy-button" data-target="code-step4">
+                                <span>Copy</span> <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="code-step4">/* Áp dụng transition cho card ở trạng thái gốc */
+.profile-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+/* Style KHI di chuột vào card */
+.profile-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+/* Áp dụng transition cho các icon */
+.social-links a {
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+/* Style KHI di chuột vào icon */
+.social-links a:hover {
+    transform: scale(1.2);
+    color: #3730a3;
+}</code></pre>
+                    </div>
+                </div>
+                <div class="preview-area">
+                    <h4>Xem trước kết quả (Hãy di chuột vào card và các icon):</h4>
+                    <div class="preview-box">
+                        <iframe id="preview-step4" title="Preview for Step 4"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Creative Challenge -->
+        <div class="step" id="step5">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <h2>Thử Thách Sáng Tạo<span>Thể Hiện Cá Tính Của Bạn</span></h2>
+            </div>
+            <div class="step-content">
+                <div>
+                    <div class="explanation">
+                        <h3>Thêm khu vực "Kỹ năng"</h3>
+                        <p>Đây là phần quan trọng nhất để bạn giành điểm cộng! Hãy thử thêm một khu vực hiển thị các kỹ
+                            năng của bạn (ví dụ: HTML, CSS, JavaScript) bằng cách sử dụng Flexbox để sắp xếp chúng.</p>
+                    </div>
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            <span class="file-name">index.html (thêm vào)</span>
+                            <button class="copy-button" data-target="code-step5-html">
+                                <span>Copy</span> <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="code-step5-html">&lt;!-- Đặt đoạn code này dưới div.social-links --&gt;
+&lt;div class="skills-section"&gt;
+    &lt;h3 class="skills-title"&gt;Kỹ Năng Của Tôi&lt;/h3&gt;
+    &lt;div class="skills-list"&gt;
+        &lt;div class="skill-item"&gt;HTML5&lt;/div&gt;
+        &lt;div class="skill-item"&gt;CSS3&lt;/div&gt;
+        &lt;div class="skill-item"&gt;Flexbox&lt;/div&gt;
+        &lt;div class="skill-item"&gt;JavaScript&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    </div>
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            <span class="file-name">style.css (viết tiếp)</span>
+                            <button class="copy-button" data-target="code-step5-css">
+                                <span>Copy</span> <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="code-step5-css">.skills-section {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #e5e7eb;
+}
+.skills-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #374151;
+}
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+.skill-item {
+    background-color: #eef2ff;
+    color: #4338ca;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.skill-item:hover {
+    background-color: #c7d2fe;
+    transform: scale(1.05);
+}</code></pre>
+                    </div>
+                </div>
+                <div class="preview-area">
+                    <h4>Xem trước kết quả cuối cùng:</h4>
+                    <div class="preview-box">
+                        <iframe id="preview-step5" title="Preview for Step 5"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA STORE ---
+            // Isolate all code snippets here to prevent DOM-related bugs.
+            // This is the single source of truth for the preview iframes.
+            const allCodeSnippets = {
+                html: {
+                    step1: document.getElementById('code-step1').innerHTML,
+                    step5: document.getElementById('code-step5-html').innerHTML,
+                },
+                css: {
+                    step2: document.getElementById('code-step2').textContent,
+                    step3: document.getElementById('code-step3').textContent,
+                    step4: document.getElementById('code-step4').textContent,
+                    step5: document.getElementById('code-step5-css').textContent,
+                }
+            };
+
+            // --- RENDER LOGIC ---
+            function renderPreview(frameId, htmlContent, cssContent) {
+                const previewFrame = document.getElementById(frameId);
+                if (!previewFrame) {
+                    console.error(`Preview frame with id ${frameId} not found.`);
+                    return;
+                }
+
+                // Decode HTML entities for iframe
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlContent;
+                const decodedHtml = tempDiv.textContent || tempDiv.innerText || "";
+
+
+                const fullHtml = `
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <link rel="preconnect" href="https://fonts.googleapis.com">
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                        <style>
+                            ${cssContent}
+                        </style>
+                    </head>
+                    ${decodedHtml.substring(decodedHtml.indexOf('<body>'))}
+                    </html>
+                `;
+                previewFrame.srcdoc = fullHtml;
+            }
+
+            // --- INITIALIZATION ---
+            function initializePreviews() {
+                const baseHtml = allCodeSnippets.html.step1;
+                const cssStep2 = allCodeSnippets.css.step2;
+                const cssStep3 = cssStep2 + allCodeSnippets.css.step3;
+                const cssStep4 = cssStep3 + allCodeSnippets.css.step4;
+
+                const htmlStep5 = baseHtml.replace(
+                    '&lt;/div&gt;\n&lt;/body&gt;',
+                    allCodeSnippets.html.step5 + '\n        &lt;/div&gt;\n&lt;/body&gt;'
+                );
+                const cssStep5 = cssStep4 + allCodeSnippets.css.step5;
+
+                renderPreview('preview-step1', baseHtml, '');
+                renderPreview('preview-step2', baseHtml, cssStep2);
+                renderPreview('preview-step3', baseHtml, cssStep3);
+                renderPreview('preview-step4', baseHtml, cssStep4);
+                renderPreview('preview-step5', htmlStep5, cssStep5);
+            }
+
+            function initializeCopyButtons() {
+                document.querySelectorAll('.copy-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const buttonEl = e.currentTarget;
+                        const targetId = buttonEl.dataset.target;
+                        const codeElement = document.getElementById(targetId);
+
+                        if (codeElement) {
+                            // Use a temporary textarea to preserve formatting and decode entities
+                            const textArea = document.createElement('textarea');
+                            textArea.innerHTML = codeElement.innerHTML;
+                            const codeText = textArea.value;
+
+                            navigator.clipboard.writeText(codeText).then(() => {
+                                const originalContent = buttonEl.innerHTML;
+                                buttonEl.innerHTML = `Đã chép! <i class="fa-solid fa-check"></i>`;
+                                buttonEl.disabled = true;
+
+                                setTimeout(() => {
+                                    buttonEl.innerHTML = originalContent;
+                                    buttonEl.disabled = false;
+                                }, 2000);
+
+                            }).catch(err => {
+                                console.error('Lỗi sao chép: ', err);
+                                // Fallback for older browsers
+                                textArea.style.position = 'fixed';
+                                textArea.style.top = '-9999px';
+                                document.body.appendChild(textArea);
+                                textArea.select();
+                                document.execCommand('copy');
+                                document.body.removeChild(textArea);
+                            });
+                        }
+                    });
+                });
+            }
+
+            initializePreviews();
+            initializeCopyButtons();
+        });
+    </script>
+</body>
+
+</html>
