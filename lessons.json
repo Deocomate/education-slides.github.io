@@ -5,28 +5,32 @@
         "color": "blue",
         "lessons": [
             {
-                "title": "Biển, kiểu dữ liệu, toán tử và input, output trong Python",
-                "url": "./Python Basic/variable_datatype_operator_input.html"
+                "title": "Lesson 1: Biển, kiểu dữ liệu, toán tử và input, output trong Python",
+                "url": "./Python Basic/lesson1.html"
             },
             {
                 "title": "Câu lệnh điều kiện cơ bản",
-                "url": "./Python Basic/if_else_statement.html"
+                "url": "./Python Basic/lesson2.html"
             },
             {
                 "title": "Vòng lặp nâng cao và giới thiệu về list trong python",
-                "url": "./Python Basic/loop_and_list.html"
+                "url": "./Python Basic/lesson3.html"
             },
             {
                 "title": "Dictionary, List & JSON",
-                "url": "./Python Basic/dictionary_list_jsonfile.html"
+                "url": "./Python Basic/lesson4.html"
             },
             {
                 "title": "Làm việc với list và txt file",
-                "url": "./Python Basic/list_txtfile.html"
+                "url": "./Python Basic/lesson5.html"
             },
             {
                 "title": "Bài kiểm tra 1",
-                "url": "./Python Basic/exam_midterm.html"
+                "url": "./Python Basic/lesson6.html"
+            },
+            {
+                "title": "Lesson 7: Hàm trong python",
+                "url": "./Python Basic/lesson7.html"
             }
         ]
     },
