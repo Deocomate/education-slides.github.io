@@ -38,6 +38,7 @@
         "category": "Web Basic (VN)",
         "icon": "fas fa-code",
         "color": "green",
+        
         "lessons": [
             {
                 "title": "Lesson 1: Giới thiệu về HTML, cú pháp HTML cơ bản",
