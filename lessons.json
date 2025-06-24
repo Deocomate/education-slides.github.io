@@ -38,7 +38,6 @@
         "category": "Web Basic (VN)",
         "icon": "fas fa-code",
         "color": "green",
-        
         "lessons": [
             {
                 "title": "Lesson 1: Giới thiệu về HTML, cú pháp HTML cơ bản",
@@ -109,6 +108,10 @@
             {
                 "title": "Lesson 2: Chắt lọc thông tin với AI",
                 "url": "./AI Course For Student/lesson2.html"
+            },
+            {
+                "title": "Lesson 3: Cá nhân hóa Kiến thức với AI",
+                "url": "./AI Course For Student/lesson3.html"
             }
         ]
     },

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 3: Cá nhân hóa Kiến thức với AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .prompt-block {
+            background-color: #f3f4f6;
+            border-left: 4px solid #4f46e5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .response-block {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .note-block {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .prompt-block p,
+        .response-block p,
+        .note-block p {
+            margin: 0;
+        }
+
+        img.slide-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">Bài 3: Cá nhân hóa Kiến thức với AI</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Slide Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Slide Tiếp <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 w-full sm:w-auto text-center sm:text-left sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Welcome -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-4">Bài 3: Cá nhân hóa</h2>
+                <p class="text-6xl font-bold text-indigo-500 mb-8">Kiến thức với AI</p>
+                <img src="https://placehold.co/600x350/a78bfa/ffffff?text=Gia+S%C6%B0+%C4%90%E1%BA%B7c+Bi%E1%BB%87t+C%E1%BB%A7a+B%E1%BA%A1n"
+                    alt="AI Personal Tutor" class="slide-image mx-auto">
+                <p class="mt-10 text-xl text-gray-700">Biến AI thành người bạn đồng hành không thể thiếu trong học tập!
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Mục tiêu buổi học -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">🎯 Mục Tiêu Buổi Học</h3>
+                <div class="space-y-4 text-lg max-w-2xl mx-auto">
+                    <div class="bg-indigo-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-user-graduate text-2xl text-indigo-500 mr-4 mt-1"></i>
+                        <span>Ứng dụng AI như một <strong>gia sư cá nhân</strong>: giải đáp, kiểm tra, và sửa
+                            lỗi.</span>
+                    </div>
+                    <div class="bg-green-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-file-alt text-2xl text-green-500 mr-4 mt-1"></i>
+                        <span>Biết cách tạo <strong>bản tóm tắt (giấy ghi nhớ)</strong> để ôn bài hiệu quả.</span>
+                    </div>
+                    <div class="bg-yellow-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-layer-group text-2xl text-yellow-500 mr-4 mt-1"></i>
+                        <span>Sử dụng AI để tạo <strong>thẻ học (flashcards)</strong> giúp ghi nhớ kiến thức nhanh
+                            chóng.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Ứng dụng AI như gia sư cá nhân -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-chalkboard-teacher text-6xl text-indigo-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-6">Phần 1: AI - Gia Sư Cá Nhân 24/7</h3>
+                <p class="text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">Khi không có thầy cô bên cạnh, AI có
+                    thể giúp con hiểu bài, luyện tập và sửa những chỗ còn chưa đúng.</p>
+                <img src="https://placehold.co/600x300/c4b5fd/4c1d95?text=H%E1%BB%8Fi+%C4%90%C3%A1p+M%E1%BB%8Di+L%C3%BAc+M%E1%BB%8Di+N%C6%A1i"
+                    alt="Hỏi đáp mọi lúc mọi nơi" class="slide-image mx-auto mt-8">
+            </div>
+        </div>
+
+        <!-- Slide 4: Dùng AI để đánh giá hiểu biết -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">1. Kể cho AI nghe và tìm chỗ chưa
+                    hiểu</h3>
+                <p class="text-center text-lg mb-6">Hãy mạnh dạn kể cho AI nghe những gì con đã học về một chủ đề và nhờ
+                    AI xem con còn thiếu sót ở đâu không nhé.</p>
+
+                <h4 class="font-bold mt-4">Ví dụ môn Tự nhiên & Xã hội:</h4>
+                <div class="prompt-block">
+                    <p>"Chào bạn, con là học sinh lớp 3. Con được học về các bộ phận của cây. Con biết cây có rễ, thân,
+                        lá. Rễ thì hút nước, lá thì có màu xanh.
+                        <br><br>
+                        Bạn xem giúp con đã hiểu đúng chưa và kể thêm cho con nghe về các bộ phận khác của cây được
+                        không ạ?"
+                    </p>
+                </div>
+
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i>AI có thể phản hồi:</p>
+                    <p class="mt-2">Chào con, con hiểu đúng rồi đó, giỏi lắm! Cây còn có những bộ phận thú vị khác nữa:
+                        <br>
+                        1. <strong>Hoa:</strong> Hoa có nhiều màu sắc đẹp và sau này hoa sẽ tạo thành quả.
+                        <br>
+                        2. <strong>Quả:</strong> Bên trong quả có hạt, mình ăn được rất nhiều loại quả ngon.
+                        <br>
+                        3. <strong>Hạt:</strong> Khi mình gieo hạt xuống đất, nó sẽ mọc thành cây mới.
+                        <br>
+                        Con có muốn xem hình ảnh của một bông hoa không?
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Dùng AI để luyện tư duy phản biện -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">2. Nhờ AI đặt câu hỏi để tự kiểm tra
+                </h3>
+                <p class="text-center text-lg mb-6">Sau khi học xong một bài, hãy nhờ AI đặt câu hỏi đố vui để xem con
+                    đã thực sự nhớ bài chưa.</p>
+
+                <h4 class="font-bold mt-4">Ví dụ môn Tiếng Việt (Kể chuyện):</h4>
+                <div class="prompt-block">
+                    <p>"Bạn hãy đọc truyện cổ tích 'Cây khế' rồi đặt cho mình 3 câu hỏi đố vui về các nhân vật trong
+                        truyện nhé."</p>
+                </div>
+
+                <h4 class="font-bold mt-6">Ví dụ môn Toán:</h4>
+                <div class="prompt-block">
+                    <p>"Hãy cho tớ một bài toán đố vui lớp 2 về phép cộng. Có lời giải chi tiết để tớ tự làm và kiểm tra
+                        lại nhé."</p>
+                </div>
+                <div class="note-block mt-6">
+                    <p class="font-semibold"><i class="fas fa-lightbulb mr-2"></i>Mẹo nhỏ:</p>
+                    <p class="mt-2">Con có thể nhờ AI tạo câu hỏi dễ hoặc khó hơn tùy theo ý muốn!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Dùng AI để chấm điểm và nhận xét -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">3. Nhờ AI "chấm bài" và góp ý</h3>
+                <p class="text-center text-lg mb-6">AI có thể đóng vai thầy cô giáo, đọc bài văn của con và chỉ ra những
+                    chỗ hay, những chỗ cần sửa lại cho tốt hơn.</p>
+
+                <h4 class="font-bold mt-4">Ví dụ môn Tập làm văn:</h4>
+                <div class="prompt-block">
+                    <p>"Hãy đóng vai một cô giáo. Đây là đoạn văn con tả con chó nhà con.
+                        <br><br>
+                        'Nhà em có nuôi một chú chó tên là Mực. Nó rất khôn. Nó có bộ lông màu đen. Hàng ngày nó đều vẫy
+                        đuôi mừng em đi học về.'
+                        <br><br>
+                        Cô hãy đọc và góp ý giúp con làm sao để bài văn hay hơn ạ."
+                    </p>
+                </div>
+
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-robot mr-2"></i>AI có thể nhận xét:</p>
+                    <p class="mt-2">Bài văn của con rất đáng yêu! Cô có một vài gợi ý nhỏ để bài văn sinh động hơn nhé:
+                        <br>
+                        - <strong>Về bộ lông:</strong> Thay vì chỉ nói "màu đen", con có thể tả kỹ hơn như "bộ lông màu
+                        đen mượt như nhung".
+                        <br>
+                        - <strong>Về hành động:</strong> Con có thể tả rõ hơn hành động vẫy đuôi như "cái đuôi nó ngoáy
+                        tít lên vì mừng rỡ".
+                        <br>
+                        <strong>Thử viết lại nhé:</strong> "Nhà em có một chú chó tên là Mực. Chú có bộ lông đen tuyền,
+                        mượt như nhung. Mỗi khi em đi học về, Mực lại chạy ra tận cổng, cái đuôi ngoáy tít lên mừng rỡ."
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Ôn tập hiệu quả trong tuần thi -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-bolt text-6xl text-yellow-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-6">Phần 2: Ôn Bài Siêu Tốc với AI</h3>
+                <p class="text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">Biến những bài học dài thành các
+                    giấy ghi nhớ cô đọng, dễ học thuộc chỉ trong vài phút.</p>
+                <img src="https://placehold.co/600x300/facc15/78350f?text=T%C3%B3m+T%E1%BA%AFt+%C4%90%E1%BB%83+%C3%94n+Thi"
+                    alt="Tóm tắt ôn thi" class="slide-image mx-auto mt-8">
+            </div>
+        </div>
+
+        <!-- Slide 8: Cách làm cheat sheet -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">Cách tạo "Giấy Ghi Nhớ" từ bài học
+                </h3>
+                <h4 class="text-xl font-bold mb-2">Bước 1: Chuẩn bị bài học</h4>
+                <p>Sao chép nội dung một câu chuyện hoặc một bài học con cần nhớ.</p>
+
+                <h4 class="text-xl font-bold mb-2 mt-4">Bước 2: Ra lệnh cho AI</h4>
+                <div class="prompt-block">
+                    <p>"Tớ sắp phải kể lại chuyện 'Sự tích bánh chưng, bánh giầy'. Bạn hãy giúp tớ tóm tắt lại câu
+                        chuyện này theo 4 ý chính để tớ dễ nhớ nhé.
+                        <br><br>
+                        [Dán nội dung câu chuyện vào đây]"
+                    </p>
+                </div>
+
+                <h4 class="text-xl font-bold mb-2 mt-4">Bước 3: Kiểm tra và chỉnh sửa</h4>
+                <p>Đọc lại bản tóm tắt, nếu thấy thiếu ý quan trọng, hãy nhờ AI bổ sung.</p>
+                <div class="prompt-block">
+                    <p>"Cảm ơn bạn. Bạn có thể thêm vào ý nghĩa của câu chuyện này được không?"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Ứng dụng làm flashcard -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="far fa-clone text-6xl text-sky-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-6">Phần 3: Học Thuộc Siêu Dễ với Thẻ Học</h3>
+                <p class="text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">Thẻ học (flashcard) rất tuyệt để học
+                    từ mới tiếng Anh, bảng cửu chương... Hãy để AI giúp con tạo những tấm thẻ này nhé!</p>
+                <img src="https://placehold.co/600x300/7dd3fc/075985?text=H%E1%BB%8Dc+M%E1%BB%8Di+Th%E1%BB%A9+V%E1%BB%9Bi+Flashcard"
+                    alt="Học với Flashcard" class="slide-image mx-auto mt-8">
+            </div>
+        </div>
+
+        <!-- Slide 10: Cách làm flashcard -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">Cách tạo Thẻ học tự động</h3>
+                <p class="text-center text-lg mb-6">Thay vì ngồi cắt giấy và viết tay, con có thể tạo hàng loạt thẻ học
+                    trên máy tính trong nháy mắt.</p>
+
+                <h4 class="text-xl font-bold mb-2">Bước 1: Chuẩn bị nội dung</h4>
+                <p>Liệt kê danh sách những thứ con muốn học, ví dụ như tên các con vật bằng tiếng Anh.</p>
+
+                <h4 class="text-xl font-bold mb-2 mt-4">Bước 2: Ra lệnh cho AI</h4>
+                <div class="prompt-block">
+                    <p>"Hãy giúp tớ tạo bộ thẻ học từ vựng tiếng Anh về các con vật. Một mặt là hình con vật (chỉ cần
+                        ghi tên, ví dụ 'Hình con chó'), mặt kia là tên tiếng Anh của nó.
+                        <br><br>
+                        Danh sách: chó, mèo, gà, lợn, sư tử."
+                    </p>
+                </div>
+
+                <h4 class="text-xl font-bold mb-2 mt-4">Bước 3: Nhận kết quả và sử dụng</h4>
+                <div class="response-block overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-green-100">
+                            <tr>
+                                <th class="p-2">Mặt 1: Hình ảnh</th>
+                                <th class="p-2">Mặt 2: Từ tiếng Anh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2 font-semibold">Hình con chó</td>
+                                <td class="p-2">Dog</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-semibold">Hình con mèo</td>
+                                <td class="p-2">Cat</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-semibold">Hình con gà</td>
+                                <td class="p-2">Chicken</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Bài tập thực hành -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-laptop-code text-6xl text-indigo-500 mb-6"></i>
+                <h2 class="text-5xl font-bold text-indigo-700 mb-6">Bài Tập Thực Hành</h2>
+                <p class="text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">Bây giờ, hãy cùng nhau giải quyết một tình
+                    huống "khó nhằn" khi kiểm tra bài nhé!</p>
+                <img src="https://placehold.co/500x300/818cf8/ffffff?text=Let's+Practice!" alt="Thực hành"
+                    class="slide-image mx-auto">
+            </div>
+        </div>
+
+        <!-- Slide 12: Tình huống thực hành -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-4 text-center">Tình huống: "Ngày mai kiểm tra rồi!"
+                </h3>
+                <p class="text-xl text-center text-gray-600 mb-6">Ngày mai con có bài kiểm tra môn Khoa học về 3 bài:
+                    "Hệ Mặt Trời", "Vòng tuần hoàn của nước" và "Cây xanh". Con thấy có nhiều thứ phải nhớ quá.</p>
+
+                <div class="note-block p-6">
+                    <h4 class="font-bold text-lg text-yellow-800 mb-2">Nhiệm vụ của con:</h4>
+                    <p>Hãy viết MỘT câu lệnh thật chi tiết để nhờ AI giúp con giải quyết vấn đề này. Câu lệnh của con
+                        cần nhờ AI làm những việc sau:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-2">
+                        <li><strong>Tóm tắt</strong> ý chính của cả 3 bài học.</li>
+                        <li>Lập một <strong>kế hoạch ôn bài</strong> trong buổi tối hôm nay.</li>
+                        <li>Tạo <strong>5 câu hỏi đố vui</strong> về các kiến thức quan trọng nhất.</li>
+                        <li>Tạo <strong>3 thẻ học</strong> về những điều khó nhớ nhất (ví dụ: tên các hành tinh).</li>
+                    </ul>
+                </div>
+                <h4 class="font-bold text-lg mt-6 text-center">Gợi ý cách bắt đầu câu lệnh của con:</h4>
+                <div class="prompt-block mt-2">
+                    <p>"Bạn ơi, mai tớ kiểm tra rồi! Tớ cần ôn 3 bài: 'Hệ Mặt Trời', 'Vòng tuần hoàn của nước', 'Cây
+                        xanh'. Bạn hãy giúp tớ..."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Lưu ý quan trọng -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-exclamation-triangle text-6xl text-amber-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-8">Điều Quan Trọng Cần Nhớ!</h3>
+                <div class="text-left max-w-2xl mx-auto space-y-5 text-xl">
+                    <div class="bg-gray-100 p-5 rounded-lg flex items-start">
+                        <i class="fas fa-user-check text-blue-500 mr-4 mt-1"></i>
+                        <p><strong>Luôn kiểm tra lại thông tin.</strong> AI đôi khi cũng có thể nhầm lẫn. Hãy hỏi lại
+                            thầy cô hoặc xem lại sách vở nhé.</p>
+                    </div>
+                    <div class="bg-gray-100 p-5 rounded-lg flex items-start">
+                        <i class="fas fa-brain text-green-500 mr-4 mt-1"></i>
+                        <p><strong>AI là công cụ giúp đỡ, không phải làm thay.</strong> Con vẫn là người phải chủ động
+                            suy nghĩ, hiểu và ghi nhớ kiến thức.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Tổng kết -->
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-8">Tổng Kết Buổi Học</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Con đã biết cách biến AI thành <strong>gia
+                            sư cá nhân</strong> để học bài tốt hơn.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Con có thể tạo <strong>giấy ghi
+                            nhớ</strong> để ôn bài nhanh chóng, hiệu quả.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Con có thể tạo <strong>thẻ học</strong> tự
+                        động để "hack" trí nhớ.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Quan trọng nhất: Con đã học cách
+                        <strong>kết hợp các kỹ năng</strong> để giải quyết các vấn đề học tập.
+                    </p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở các buổi học tiếp theo!</h4>
+                    <p class="text-lg">Chúng ta sẽ tiếp tục khám phá những điều kỳ diệu mà AI có thể làm!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 500); // Must match the transition duration in CSS
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            // Setup navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Initial setup
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
