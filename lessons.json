@@ -131,6 +131,10 @@
             {
                 "title": "Lesson 2: Cú pháp CRUD với SQL",
                 "url": "./Sql/lesson2.html"
+            },
+            {
+                "title": "Lesson 3: Thư viện matplotlib",
+                "url": "./Sql/lesson3.html"
             }
         ]
     },
@@ -150,4 +154,3 @@
         ]
     }
 ]
-

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 1: Trực Quan Hóa Dữ Liệu với Matplotlib</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3e8ff;
+            /* Light purple background */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        .code-block .keyword {
+            color: #c084fc;
+        }
+
+        .code-block .string {
+            color: #fde047;
+        }
+
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        .code-block .function {
+            color: #67e8f9;
+        }
+
+        .code-block .class-name {
+            color: #a5b4fc;
+        }
+
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+
+        /* Customizations for Lesson 1 Advance - Purple theme */
+        .text-theme-700 {
+            color: #6b21a8;
+        }
+
+        /* Purple 800 */
+        .text-theme-600 {
+            color: #7e22ce;
+        }
+
+        /* Purple 700 */
+        .bg-theme-500 {
+            background-color: #9333ea;
+        }
+
+        /* Purple 600 */
+        .hover\:bg-theme-700:hover {
+            background-color: #7e22ce;
+        }
+
+        /* Purple 700 */
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 1: Trực Quan Hóa Dữ Liệu với Matplotlib</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-5xl font-bold text-center text-theme-700 mb-6">Khám Phá Dữ Liệu Qua Hình Ảnh</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Sử dụng Matplotlib để biến những con số khô khan
+                    thành những câu chuyện sống động!</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/500x300/9333EA/FFFFFF?text=Data+Visualization"
+                        alt="[Hình ảnh về Trực quan hóa dữ liệu]" class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Chào mừng các bạn đến với buổi đầu tiên của Python
+                    Advance!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Data Visualization -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Trực Quan Hóa Dữ Liệu là gì?</h3>
+                <p class="mb-4 text-lg">Trực quan hóa dữ liệu (Data Visualization) là nghệ thuật và khoa học của việc
+                    biểu diễn dữ liệu dưới dạng hình ảnh, chẳng hạn như biểu đồ, đồ thị, và bản đồ.</p>
+                <p class="mb-6 text-lg">Mục tiêu là để làm cho dữ liệu phức tạp trở nên dễ hiểu, dễ tiếp cận và dễ phân
+                    tích hơn.</p>
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-blue-100 p-6 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-xl text-blue-800 mb-2">Từ Bảng Số Liệu...</h4>
+                        <p>Một bảng dữ liệu với hàng trăm, hàng nghìn dòng số có thể làm bạn choáng ngợp.</p>
+                        <img src="https://placehold.co/400x200/EFF6FF/3B82F6?text=Raw+Data+Table"
+                            alt="[Hình ảnh bảng dữ liệu]" class="mt-4 shadow-md">
+                    </div>
+                    <div class="bg-green-100 p-6 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-xl text-green-800 mb-2">...Đến Biểu Đồ Trực Quan</h4>
+                        <p>Một biểu đồ có thể ngay lập tức tiết lộ xu hướng, các điểm bất thường, và các mẫu hình ẩn
+                            giấu.</p>
+                        <img src="https://placehold.co/400x200/F0FDF4/22C55E?text=Insightful+Chart"
+                            alt="[Hình ảnh biểu đồ]" class="mt-4 shadow-md">
+                    </div>
+                </div>
+                <p class="text-center text-2xl mt-8 font-semibold text-gray-700">"Một bức tranh đáng giá ngàn lời nói"
+                    <span class="text-theme-600">- và ngàn dòng dữ liệu!</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Why Learn It? -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Tại sao phải học Trực quan hóa dữ liệu?</h3>
+                <p class="mb-6 text-lg">Trong thế giới số, dữ liệu ở khắp mọi nơi. Khả năng "đọc vị" và truyền đạt thông
+                    tin từ dữ liệu là một kỹ năng cực kỳ giá trị, ứng dụng trong nhiều lĩnh vực:</p>
+                <div class="space-y-4">
+                    <div class="bg-purple-100 p-4 rounded-lg flex items-center">
+                        <i class="fas fa-chart-line fa-2x text-purple-600 mr-4"></i>
+                        <div>
+                            <h4 class="font-bold text-xl text-purple-800">Khoa học Dữ liệu (Data Science)</h4>
+                            <p>Phân tích, khám phá dữ liệu, xây dựng mô hình và trình bày kết quả.</p>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-100 p-4 rounded-lg flex items-center">
+                        <i class="fas fa-briefcase fa-2x text-yellow-600 mr-4"></i>
+                        <div>
+                            <h4 class="font-bold text-xl text-yellow-800">Phân tích Kinh doanh (Business Analytics)</h4>
+                            <p>Theo dõi hiệu suất, phát hiện xu hướng thị trường và hỗ trợ ra quyết định.</p>
+                        </div>
+                    </div>
+                    <div class="bg-pink-100 p-4 rounded-lg flex items-center">
+                        <i class="fas fa-flask fa-2x text-pink-600 mr-4"></i>
+                        <div>
+                            <h4 class="font-bold text-xl text-pink-800">Nghiên cứu Khoa học</h4>
+                            <p>Trình bày kết quả thí nghiệm, phân tích các bộ dữ liệu phức tạp.</p>
+                        </div>
+                    </div>
+                    <div class="bg-teal-100 p-4 rounded-lg flex items-center">
+                        <i class="fas fa-robot fa-2x text-teal-600 mr-4"></i>
+                        <div>
+                            <h4 class="font-bold text-xl text-teal-800">Học máy & Trí tuệ Nhân tạo (ML/AI)</h4>
+                            <p>Hiểu dữ liệu đầu vào, đánh giá hiệu quả của mô hình.</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-xl mt-8 font-semibold text-gray-700">Học trực quan hóa dữ liệu giúp bạn <span
+                        class="text-theme-600">kể chuyện bằng dữ liệu</span> một cách thuyết phục.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Intro to Matplotlib -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Giới thiệu về Matplotlib</h3>
+                <p class="mb-4 text-lg">Matplotlib là thư viện "ông tổ" của việc vẽ đồ thị trong Python. Hầu hết các thư
+                    viện trực quan hóa khác như Seaborn, Plotly đều được xây dựng dựa trên hoặc lấy cảm hứng từ
+                    Matplotlib.</p>
+                <div class="flex justify-center my-6">
+                    <img src="https://matplotlib.org/stable/_static/logo2.svg" alt="[Logo của Matplotlib]"
+                        style="max-width: 300px;">
+                </div>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><b>Linh hoạt:</b> Cung cấp khả năng kiểm soát toàn diện trên từng chi tiết của biểu đồ. Bạn có
+                        thể tùy chỉnh gần như mọi thứ!</li>
+                    <li><b>Mạnh mẽ:</b> Có thể tạo ra hầu hết các loại biểu đồ 2D và một số biểu đồ 3D cơ bản.</li>
+                    <li><b>Nền tảng:</b> Hiểu Matplotlib giúp bạn dễ dàng học các thư viện trực quan hóa khác.</li>
+                </ul>
+                <p class="mt-6 text-lg bg-yellow-100 p-4 rounded-lg border-l-4 border-yellow-500">Mặc dù cú pháp của
+                    Matplotlib đôi khi hơi dài dòng, nhưng sự linh hoạt của nó là không đối thủ.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Installation -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Cài đặt các thư viện cần thiết</h3>
+                <p class="mb-4 text-lg">Để bắt đầu, chúng ta cần cài đặt một vài thư viện. Hãy mở Terminal (hoặc Command
+                    Prompt) và chạy các lệnh sau:</p>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cài đặt Matplotlib:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>pip install matplotlib</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cài đặt Pandas:</h4>
+                <p class="mb-2 text-lg">Thư viện cực kỳ mạnh mẽ để làm việc với dữ liệu dạng bảng (giống Excel), đặc
+                    biệt là đọc file CSV.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>pip install pandas</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cài đặt Scikit-learn (tùy chọn):</h4>
+                <p class="mb-2 text-lg">Thư viện học máy hàng đầu, chứa rất nhiều bộ dữ liệu mẫu tiện lợi để thực hành.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>pip install scikit-learn</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Loading Data -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Nạp dữ liệu vào chương trình</h3>
+                <p class="mb-4 text-lg">Có hai cách phổ biến để có dữ liệu thực hành:</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 text-lg space-y-2">
+                    <li>Sử dụng các bộ dữ liệu có sẵn trong các thư viện.</li>
+                    <li>Đọc dữ liệu từ file bên ngoài (ví dụ: file .csv).</li>
+                </ol>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cách 1: Dùng dataset mẫu từ Scikit-learn</h4>
+                <p class="mb-2 text-lg">Thư viện `scikit-learn` cung cấp bộ dữ liệu hoa Iris (hoa diên vĩ) kinh điển.
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Nạp bộ dữ liệu</span>
+iris_bundle = load_iris()
+<span class="comment"># Chuyển thành DataFrame của Pandas để dễ thao tác</span>
+iris_df = pd.DataFrame(data=iris_bundle.data, columns=iris_bundle.feature_names)
+iris_df[<span class="string">'species'</span>] = iris_bundle.target_names[iris_bundle.target]
+
+<span class="function">print</span>(iris_df.head()) <span class="comment"># In ra 5 dòng đầu tiên</span>
+</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cách 2: Đọc từ file CSV với Pandas</h4>
+                <p class="mb-2 text-lg">Giả sử chúng ta có file `diem_thi.csv`, ta sẽ dùng `pandas.read_csv()`.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Đọc file csv và tạo DataFrame</span>
+<span class="comment"># Giả sử file csv có tên là 'diem_thi.csv' và nằm cùng thư mục</span>
+<span class="keyword">try</span>:
+    diem_thi_df = pd.read_csv(<span class="string">'diem_thi.csv'</span>)
+    <span class="function">print</span>(diem_thi_df)
+<span class="keyword">except</span> FileNotFoundError:
+    <span class="function">print</span>(<span class="string">"Không tìm thấy file diem_thi.csv!"</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Anatomy of a Plot -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Giải phẫu một biểu đồ Matplotlib</h3>
+                <p class="mb-4 text-lg">Trước khi vẽ, hãy tìm hiểu các thành phần chính tạo nên một biểu đồ. Hiểu được
+                    điều này sẽ giúp bạn tùy chỉnh biểu đồ dễ dàng hơn rất nhiều.</p>
+                <div class="flex justify-center my-4">
+                    <img src="https://placehold.co/800x500/F3E8FF/6B21A8?text=Anatomy+of+a+Plot"
+                        alt="[Hình ảnh giải phẫu biểu đồ]" class="shadow-lg rounded-lg border-2 border-purple-200">
+                </div>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><b>Figure (Khung hình):</b> Toàn bộ cửa sổ hoặc trang mà mọi thứ được vẽ lên.</li>
+                    <li><b>Axes (Hệ trục):</b> "Vùng vẽ" thực sự, nơi các điểm dữ liệu được biểu diễn. Một Figure có thể
+                        có nhiều Axes.</li>
+                    <li><b>Title (Tiêu đề):</b> Tên của biểu đồ.</li>
+                    <li><b>X-axis / Y-axis Label (Nhãn trục X/Y):</b> Mô tả dữ liệu trên mỗi trục là gì.</li>
+                    <li><b>Ticks (Vạch chia):</b> Các vạch dấu trên các trục.</li>
+                    <li><b>Legend (Chú giải):</b> Bảng giải thích ý nghĩa của các đường hoặc màu sắc khác nhau trong
+                        biểu đồ.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Line Chart -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7.1. Biểu đồ đường (Line Chart)</h3>
+                <p class="mb-4 text-lg"><b>Công dụng:</b> Thường được sử dụng để hiển thị sự thay đổi, xu hướng của một
+                    giá trị theo thời gian hoặc một biến liên tục khác.</p>
+                <p class="mb-2 font-medium"><b>Ví dụ:</b> Vẽ biểu đồ giá cổ phiếu của một công ty trong 1 tuần.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># Dữ liệu mẫu</span>
+ngay = [<span class="string">'Thứ 2'</span>, <span class="string">'Thứ 3'</span>, <span class="string">'Thứ 4'</span>, <span class="string">'Thứ 5'</span>, <span class="string">'Thứ 6'</span>]
+gia_co_phieu = [<span class="number">100</span>, <span class="number">102</span>, <span class="number">99</span>, <span class="number">105</span>, <span class="number">104</span>]
+
+<span class="comment"># Bắt đầu vẽ</span>
+plt.figure(figsize=(<span class="number">8</span>, <span class="number">5</span>)) <span class="comment"># Tạo khung hình với kích thước cụ thể</span>
+
+plt.plot(ngay, gia_co_phieu, marker=<span class="string">'o'</span>, linestyle=<span class="string">'-'</span>, color=<span class="string">'#9333ea'</span>)
+
+<span class="comment"># Thêm các chi tiết cho biểu đồ</span>
+plt.title(<span class="string">'Biểu đồ giá cổ phiếu ABC tuần qua'</span>)
+plt.xlabel(<span class="string">'Ngày trong tuần'</span>)
+plt.ylabel(<span class="string">'Giá (USD)'</span>)
+plt.grid(<span class="keyword">True</span>) <span class="comment"># Thêm lưới để dễ nhìn</span>
+
+<span class="comment"># Hiển thị biểu đồ</span>
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Hàm cốt lõi ở đây là `plt.plot(x, y)`.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Bar Chart -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7.2. Biểu đồ cột (Bar Chart)</h3>
+                <p class="mb-4 text-lg"><b>Công dụng:</b> So sánh số lượng hoặc giá trị giữa các nhóm/danh mục khác
+                    nhau.</p>
+                <p class="mb-2 font-medium"><b>Ví dụ:</b> So sánh số lượng sinh viên trong các lớp học Python.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># Dữ liệu mẫu</span>
+lop_hoc = [<span class="string">'Python Cơ bản'</span>, <span class="string">'Python Advance'</span>, <span class="string">'Web Django'</span>]
+so_luong_sv = [<span class="number">50</span>, <span class="number">35</span>, <span class="number">25</span>]
+colors = [<span class="string">'#a78bfa'</span>, <span class="string">'#8b5cf6'</span>, <span class="string">'#7c3aed'</span>]
+
+<span class="comment"># Bắt đầu vẽ</span>
+plt.figure(figsize=(<span class="number">8</span>, <span class="number">5</span>))
+
+plt.bar(lop_hoc, so_luong_sv, color=colors)
+
+<span class="comment"># Thêm các chi tiết cho biểu đồ</span>
+plt.title(<span class="string">'Sĩ số các lớp học Python'</span>)
+plt.xlabel(<span class="string">'Lớp học'</span>)
+plt.ylabel(<span class="string">'Số lượng sinh viên'</span>)
+plt.ylim(<span class="number">0</span>, <span class="number">60</span>) <span class="comment"># Set giới hạn cho trục Y</span>
+
+<span class="comment"># Hiển thị biểu đồ</span>
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Hàm cốt lõi ở đây là `plt.bar(x, height)`.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Pie Chart -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7.3. Biểu đồ tròn (Pie Chart)</h3>
+                <p class="mb-4 text-lg"><b>Công dụng:</b> Hiển thị tỷ lệ phần trăm của các phần trong một tổng thể.
+                    Thích hợp khi bạn có ít danh mục.</p>
+                <p class="mb-2 font-medium"><b>Ví dụ:</b> Tỷ lệ các loại trình duyệt được sử dụng trong tháng.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># Dữ liệu mẫu</span>
+trinh_duyet = [<span class="string">'Chrome'</span>, <span class="string">'Firefox'</span>, <span class="string">'Safari'</span>, <span class="string">'Edge'</span>, <span class="string">'Khác'</span>]
+ty_le = [<span class="number">65</span>, <span class="number">15</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">5</span>]
+explode = (<span class="number">0.1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>) <span class="comment"># Tách miếng "Chrome" ra một chút</span>
+
+<span class="comment"># Bắt đầu vẽ</span>
+plt.figure(figsize=(<span class="number">7</span>, <span class="number">7</span>))
+
+plt.pie(ty_le, explode=explode, labels=trinh_duyet, autopct=<span class="string">'%1.1f%%'</span>, startangle=<span class="number">90</span>)
+
+<span class="comment"># Thêm các chi tiết cho biểu đồ</span>
+plt.title(<span class="string">'Thị phần các trình duyệt web'</span>)
+plt.axis(<span class="string">'equal'</span>) <span class="comment"># Đảm bảo biểu đồ tròn xoe</span>
+
+<span class="comment"># Hiển thị biểu đồ</span>
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Hàm cốt lõi là `plt.pie(sizes)`. Chú ý tham số `autopct` để hiển thị phần trăm.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Fun Dataset -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">8. Cùng phân tích một bộ dữ liệu thú vị!</h3>
+                <p class="mb-4 text-lg">Lý thuyết đã đủ, giờ là lúc thực hành! Chúng ta sẽ cùng nhau phân tích bộ dữ
+                    liệu về các bộ phim trên Netflix.</p>
+                <p class="text-lg">Bộ dữ liệu này chứa thông tin như tên phim, đạo diễn, quốc gia, năm phát hành, thể
+                    loại...</p>
+                <div class="flex justify-center my-6">
+                    <img src="https://placehold.co/500x250/1F2937/FFFFFF?text=Netflix+Dataset"
+                        alt="[Hình ảnh về bộ dữ liệu Netflix]" class="shadow-lg rounded-lg">
+                </div>
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Các câu hỏi có thể đặt ra:</h4>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li>Quốc gia nào sản xuất nhiều phim/show nhất?</li>
+                    <li>Thể loại nào là phổ biến nhất trên Netflix?</li>
+                    <li>Số lượng phim được thêm vào Netflix thay đổi như thế nào qua các năm?</li>
+                </ul>
+                <p class="mt-4 text-lg bg-blue-100 p-4 rounded-lg border-l-4 border-blue-500">Chúng ta sẽ dùng Pandas để
+                    xử lý dữ liệu và Matplotlib để trả lời những câu hỏi này bằng hình ảnh.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Fun Dataset Analysis -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Phân tích: Top 10 quốc gia sản xuất phim</h3>
+                <p class="mb-2 text-lg">Hãy trả lời câu hỏi: <b>Quốc gia nào sản xuất nhiều phim và TV show nhất trên
+                        Netflix?</b></p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># Tải dữ liệu (cần có file netflix_titles.csv)</span>
+<span class="keyword">try</span>:
+    df = pd.read_csv(<span class="string">'netflix_titles.csv'</span>)
+    
+    <span class="comment"># Đếm số lượng phim/show của mỗi quốc gia</span>
+    top_10_countries = df[<span class="string">'country'</span>].value_counts().head(<span class="number">10</span>)
+
+    <span class="comment"># Vẽ biểu đồ cột</span>
+    plt.figure(figsize=(<span class="number">12</span>, <span class="number">6</span>))
+    top_10_countries.plot(kind=<span class="string">'bar'</span>, color=<span class="string">'#7e22ce'</span>)
+    
+    plt.title(<span class="string">'Top 10 Quốc Gia Sản Xuất Nội Dung Nhiều Nhất Trên Netflix'</span>)
+    plt.xlabel(<span class="string">'Quốc gia'</span>)
+    plt.ylabel(<span class="string">'Số lượng Phim/Show'</span>)
+    plt.xticks(rotation=<span class="number">45</span>, ha=<span class="string">'right'</span>) <span class="comment"># Xoay nhãn trục X để dễ đọc</span>
+    plt.tight_layout() <span class="comment"># Tự động điều chỉnh layout</span>
+    
+    plt.show()
+
+<span class="keyword">except</span> FileNotFoundError:
+    <span class="function">print</span>(<span class="string">"Vui lòng tải file 'netflix_titles.csv' về thư mục."</span>)
+
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Bạn có thể tìm và tải bộ dữ liệu này trên Kaggle (tìm kiếm "Netflix Movies and
+                    TV Shows").</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Summary -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">9. Tóm Tắt Buổi Học</h3>
+                <p class="mb-4 text-lg">Hôm nay, chúng ta đã đi những bước đầu tiên vào thế giới trực quan hóa dữ liệu
+                    đầy màu sắc:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><b>Hiểu tầm quan trọng:</b> Biết tại sao trực quan hóa dữ liệu lại là một kỹ năng quan trọng
+                        trong nhiều ngành nghề.</li>
+                    <li><b>Làm quen Matplotlib:</b> Cài đặt và hiểu vai trò của Matplotlib là thư viện nền tảng.</li>
+                    <li><b>Nạp dữ liệu:</b> Học cách nạp dữ liệu từ file CSV bằng Pandas và từ các bộ dữ liệu có sẵn.
+                    </li>
+                    <li><b>Vẽ các biểu đồ cơ bản:</b> Thực hành vẽ và tùy chỉnh 3 loại biểu đồ phổ biến:
+                        <ul class="list-circle list-inside ml-6 mt-2 space-y-1">
+                            <li><b>Biểu đồ đường (Line Chart):</b> cho xu hướng.</li>
+                            <li><b>Biểu đồ cột (Bar Chart):</b> để so sánh.</li>
+                            <li><b>Biểu đồ tròn (Pie Chart):</b> cho tỷ lệ.</li>
+                        </ul>
+                    </li>
+                    <li><b>Thực hành:</b> Áp dụng kiến thức để phân tích một bộ dữ liệu thực tế.</li>
+                </ul>
+                <p class="text-xl mb-6 font-semibold">Từ giờ, hãy nghĩ về dữ liệu không chỉ là con số, mà còn là những
+                    câu chuyện đang chờ được kể!</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Q&A -->
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">10. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/6B21A8/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Đừng ngần ngại đặt câu hỏi về bất cứ điều gì chúng ta
+                    đã học hôm nay nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.style.display = 'none';
+                slide.classList.remove('active');
+            });
+
+            if (slides[index]) {
+                slides[index].style.display = 'flex';
+                setTimeout(() => {
+                    slides[index].classList.add('active');
+                }, 10);
+            }
+
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Initial load
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
