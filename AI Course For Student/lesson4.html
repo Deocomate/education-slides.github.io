@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 4: Sáng tạo Hình ảnh với AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .prompt-block {
+            background-color: #f3f4f6;
+            border-left: 4px solid #4f46e5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            word-wrap: break-word;
+        }
+
+        .response-block {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .note-block {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .prompt-block p,
+        .response-block p,
+        .note-block p {
+            margin: 0;
+        }
+
+        img.slide-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">Bài 4: Sáng tạo Hình ảnh với AI</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Slide Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Slide Tiếp <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 w-full sm:w-auto text-center sm:text-left sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Welcome -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-4">Bài 4: Sáng Tạo Hình Ảnh</h2>
+                <p class="text-6xl font-bold text-indigo-500 mb-8">với Trí Tuệ Nhân Tạo</p>
+                <img src="https://placehold.co/600x350/8b5cf6/ffffff?text=Bi%E1%BA%BFn+%C3%9D+T%C6%B0%E1%BB%9Fng+Th%C3%A0nh+H%C3%ACnh+%E1%BA%A2nh"
+                    alt="Biến ý tưởng thành hình ảnh" class="slide-image mx-auto">
+                <p class="mt-10 text-xl text-gray-700">Hãy cùng AI vẽ nên thế giới của riêng bạn!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Mục tiêu buổi học -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">🎯 Mục Tiêu Buổi Học</h3>
+                <div class="space-y-4 text-lg max-w-2xl mx-auto">
+                    <div class="bg-indigo-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-lightbulb text-2xl text-indigo-500 mr-4 mt-1"></i>
+                        <span>Hiểu cách AI (Gemini, ChatGPT) tạo ra hình ảnh từ văn bản.</span>
+                    </div>
+                    <div class="bg-green-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-pen-ruler text-2xl text-green-500 mr-4 mt-1"></i>
+                        <span>Nắm vững công thức viết câu lệnh (prompt) chi tiết để tạo ảnh theo ý muốn.</span>
+                    </div>
+                    <div class="bg-yellow-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-search text-2xl text-yellow-500 mr-4 mt-1"></i>
+                        <span>Biết cách tìm kiếm ý tưởng và mẫu prompt hay từ các trang web như PromptBase.</span>
+                    </div>
+                    <div class="bg-pink-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-palette text-2xl text-pink-500 mr-4 mt-1"></i>
+                        <span>Thực hành tạo ra những áp phích, hình ảnh ý nghĩa về chủ đề gia đình.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: AI tạo ảnh như thế nào? -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-magic text-6xl text-purple-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-6">Phép Màu Của AI Tạo Ảnh</h3>
+                <p class="text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">AI học từ hàng tỷ cặp "hình ảnh - mô
+                    tả" trên internet. Khi bạn đưa ra một câu lệnh, nó sẽ "hình dung" và vẽ ra một bức tranh hoàn toàn
+                    mới dựa trên những gì đã học.</p>
+                <img src="https://placehold.co/600x300/34d399/ffffff?text=C%C3%A2u+L%E1%BB%87nh+%E2%86%92+B%E1%BB%99+%C3%93c+AI+%E2%86%92+B%E1%BB%A9c+%E1%BA%A2nh"
+                    alt="Quy trình AI tạo ảnh" class="slide-image mx-auto mt-8">
+            </div>
+        </div>
+
+        <!-- Slide 4: Giới thiệu công cụ -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">Các "Họa Sĩ" AI Phổ Biến</h3>
+                <p class="text-center text-lg mb-6">Có rất nhiều công cụ, nhưng chúng ta sẽ tập trung vào những công cụ
+                    dễ tiếp cận nhất.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow text-center">
+                        <h4 class="text-2xl font-bold text-blue-700 mb-3">Google Gemini</h4>
+                        <p>Tích hợp trực tiếp vào công cụ tìm kiếm và chatbot của Google, rất mạnh mẽ và dễ sử dụng.</p>
+                        <img src="https://placehold.co/300x200/60a5fa/ffffff?text=Gemini" alt="Gemini Logo"
+                            class="mx-auto mt-4 rounded-lg">
+                    </div>
+                    <div class="bg-gray-800 text-white p-6 rounded-lg shadow text-center">
+                        <h4 class="text-2xl font-bold text-green-400 mb-3">DALL-E 3 (qua ChatGPT/Copilot)</h4>
+                        <p>Là một trong những mô hình tạo ảnh tiên tiến nhất, có sẵn trong ChatGPT Plus và Microsoft
+                            Copilot.</p>
+                        <img src="https://placehold.co/300x200/10b981/ffffff?text=ChatGPT+%2B+DALL-E" alt="DALL-E Logo"
+                            class="mx-auto mt-4 rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Sức mạnh của Prompt chi tiết -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">Prompt "Sơ Sài" vs. Prompt "Xịn"
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <div>
+                        <h4 class="font-bold text-center text-xl mb-2 text-red-600">❌ Prompt Sơ Sài</h4>
+                        <div class="prompt-block text-sm">"Một chú chó"</div>
+                        <img src="https://placehold.co/400x300/f87171/ffffff?text=H%C3%ACnh+%E1%BA%A3nh+chung+chung"
+                            alt="Ảnh một chú chó chung chung" class="slide-image mx-auto mt-2">
+                        <p class="text-center mt-2">Kết quả chung chung, không có gì đặc biệt.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-center text-xl mb-2 text-green-600">✅ Prompt Chi Tiết</h4>
+                        <div class="prompt-block text-sm">"Ảnh chụp cận cảnh một chú chó Corgi con, lông vàng mượt, đang
+                            mỉm cười và lè lưỡi, ngồi trên bãi cỏ xanh mướt vào một ngày nắng đẹp, phông nền mờ ảo"
+                        </div>
+                        <img src="https://placehold.co/400x300/4ade80/ffffff?text=H%C3%ACnh+%E1%BA%A3nh+%C4%91%E1%BA%B7c+s%E1%BA%AFc"
+                            alt="Ảnh một chú chó Corgi cụ thể" class="slide-image mx-auto mt-2">
+                        <p class="text-center mt-2">Kết quả đúng ý, độc đáo và đầy cảm xúc.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Công thức viết prompt -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center"><i
+                        class="fas fa-pen-nib mr-2"></i>Công Thức Vàng Cho Một Prompt Ảnh</h3>
+                <p class="text-center text-lg mb-6">Để có một bức ảnh đẹp, hãy kết hợp các yếu tố sau trong câu lệnh của
+                    con:</p>
+                <div class="space-y-3">
+                    <div class="bg-blue-100 p-4 rounded-lg"><strong>1. Đối Tượng Chính (Subject):</strong> Ai? Cái gì?
+                        (Ví dụ: một cô gái, một con rồng, gia đình ba người)</div>
+                    <div class="bg-green-100 p-4 rounded-lg"><strong>2. Hành Động & Bối Cảnh (Action &
+                            Setting):</strong> Đang làm gì? Ở đâu? (Ví dụ: đang đọc sách, bay trên mây, cắm trại trong
+                        rừng)</div>
+                    <div class="bg-yellow-100 p-4 rounded-lg"><strong>3. Phong Cách (Style):</strong> Trông như thế nào?
+                        (Ví dụ: tranh sơn dầu, ảnh chụp, phong cách anime, nghệ thuật 3D)</div>
+                    <div class="bg-purple-100 p-4 rounded-lg"><strong>4. Chi Tiết Phụ (Details):</strong> Màu sắc, ánh
+                        sáng, cảm xúc... (Ví dụ: mặc váy đỏ, ánh nắng hoàng hôn, khuôn mặt vui vẻ)</div>
+                    <div class="bg-red-100 p-4 rounded-lg"><strong>5. Bố Cục (Composition):</strong> Góc máy, khung
+                        hình... (Ví dụ: ảnh chân dung, ảnh toàn cảnh, chụp từ dưới lên)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Tìm kiếm ý tưởng với PromptBase -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-compass text-6xl text-amber-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-6">Nguồn Cảm Hứng Vô Tận: PromptBase</h3>
+                <p class="text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">Khi bí ý tưởng, hãy ghé thăm <a
+                        href="https://promptbase.com" target="_blank"
+                        class="text-indigo-600 font-bold hover:underline">PromptBase.com</a>. Đây là nơi mọi người chia
+                    sẻ những câu lệnh tạo ảnh đỉnh cao.</p>
+                <img src="https://placehold.co/700x350/fbbf24/ffffff?text=Kh%C3%A1m+ph%C3%A1+c%C3%A1c+prompt+%C4%91%E1%BB%89nh+cao+t%E1%BA%A1i+PromptBase"
+                    alt="Trang web PromptBase" class="slide-image mx-auto mt-8">
+                <p class="mt-4 text-lg">Con có thể học hỏi cách viết prompt và khám phá những phong cách nghệ thuật mới
+                    lạ.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Bài tập thực hành -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-heart text-6xl text-red-500 mb-6"></i>
+                <h2 class="text-5xl font-bold text-indigo-700 mb-6">Thực Hành: Món Quà Tình Thân</h2>
+                <p class="text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">Chủ đề hôm nay của chúng ta là <strong>Gia
+                        Đình</strong>. Hãy cùng nhau tạo ra một bức ảnh thật đẹp và ý nghĩa để dành tặng cho bố mẹ nhé!
+                </p>
+                <img src="https://placehold.co/500x350/fca5a5/ffffff?text=Love+You%2C+Mom+%26+Dad"
+                    alt="Tình yêu gia đình" class="slide-image mx-auto">
+            </div>
+        </div>
+
+        <!-- Slide 9: Ví dụ thực hành -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-indigo-600 mb-6 text-center">Ví Dụ: Bức tranh "Gia Đình Hạnh
+                    Phúc"</h3>
+                <p class="text-center text-lg mb-4">Hãy áp dụng công thức 5 yếu tố để tạo ra một câu lệnh hoàn chỉnh.
+                </p>
+                <div class="prompt-block">
+                    <p>
+                        <span class="bg-blue-200 px-1 rounded">[Đối tượng]</span> Một gia đình châu Á gồm bố, mẹ và con
+                        gái nhỏ,
+                        <span class="bg-green-200 px-1 rounded">[Hành động/Bối cảnh]</span> đang cùng nhau đi dạo trong
+                        một công viên ngập tràn hoa anh đào.
+                        <span class="bg-yellow-200 px-1 rounded">[Phong cách]</span> Phong cách anime của Studio Ghibli,
+                        màu sắc tươi sáng, ấm áp.
+                        <span class="bg-purple-200 px-1 rounded">[Chi tiết]</span> Cả nhà đều mỉm cười hạnh phúc, cô con
+                        gái đang chỉ tay vào một cánh hoa.
+                        <span class="bg-red-200 px-1 rounded">[Bố cục]</span> Ảnh toàn cảnh, ánh nắng dịu nhẹ xuyên qua
+                        tán lá cây.
+                    </p>
+                </div>
+                <div class="response-block mt-4">
+                    <p class="font-semibold text-green-800"><i class="fas fa-image mr-2"></i>Kết quả mong đợi:</p>
+                    <img src="https://placehold.co/600x350/f9a8d4/ffffff?text=H%C3%ACnh+%E1%BA%A3nh+gia+%C4%91%C3%ACnh+h%E1%BA%A1nh+ph%C3%BAc"
+                        alt="Ảnh gia đình hạnh phúc" class="slide-image mx-auto mt-2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Thử thách đặc biệt -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-4 text-center">Thử Thách: "Tấm Lòng Của Con"</h3>
+                <p class="text-xl text-center text-gray-600 mb-6">Bây giờ, hãy cùng nhau giải một bài toán khó hơn nhé.
+                    Làm thế nào để tạo ảnh một em bé cầm tấm biển "Con yêu bố mẹ"?</p>
+                <div class="note-block p-6">
+                    <h4 class="font-bold text-lg text-yellow-800 mb-2">Nhiệm vụ của con:</h4>
+                    <p>Viết MỘT câu lệnh thật chi tiết để AI tạo ra bức ảnh một em bé (trai hoặc gái) theo phong cách
+                        anime, đang cầm một tấm biển có dòng chữ "Con yêu bố mẹ".</p>
+                </div>
+                <h4 class="font-bold text-lg mt-6 text-center">Gợi ý cách viết prompt:</h4>
+                <div class="prompt-block mt-2">
+                    <p>"Một em bé trai/gái anime chibi dễ thương, mắt to tròn long lanh, đang mỉm cười rạng rỡ. Em bé
+                        dùng hai tay giữ một tấm bảng trắng lớn. Trên tấm bảng có viết rõ dòng chữ 'Con yêu bố mẹ' bằng
+                        phông chữ ngộ nghĩnh. Phông nền màu pastel nhẹ nhàng với những ngôi sao lấp lánh."</p>
+                </div>
+                <img src="https://placehold.co/500x400/a5b4fc/ffffff?text=B%C3%A9+c%E1%BA%A7m+bi%E1%BB%83n"
+                    alt="Bé cầm biển" class="slide-image mx-auto mt-6">
+            </div>
+        </div>
+
+        <!-- Slide 11: Lưu ý quan trọng -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-exclamation-triangle text-6xl text-amber-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-8">Điều Quan Trọng Cần Nhớ!</h3>
+                <div class="text-left max-w-2xl mx-auto space-y-5 text-xl">
+                    <div class="bg-gray-100 p-5 rounded-lg flex items-start">
+                        <i class="fas fa-lightbulb text-blue-500 mr-4 mt-1"></i>
+                        <p><strong>Sáng tạo là không giới hạn.</strong> Đừng ngại thử những ý tưởng "điên rồ" nhất. Đôi
+                            khi kết quả sẽ làm con bất ngờ.</p>
+                    </div>
+                    <div class="bg-gray-100 p-5 rounded-lg flex items-start">
+                        <i class="fas fa-sync-alt text-green-500 mr-4 mt-1"></i>
+                        <p><strong>Thử lại nhiều lần.</strong> Nếu ảnh đầu tiên chưa ưng ý, hãy sửa lại prompt, thêm
+                            hoặc bớt chi tiết và tạo lại.</p>
+                    </div>
+                    <div class="bg-gray-100 p-5 rounded-lg flex items-start">
+                        <i class="fas fa-font text-red-500 mr-4 mt-1"></i>
+                        <p><strong>AI đôi khi viết chữ bị sai.</strong> Nếu chữ trong ảnh bị lỗi, hãy thử viết câu lệnh
+                            bằng tiếng Anh hoặc tạo ảnh không có chữ rồi thêm vào sau.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Tổng kết -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-8">Tổng Kết Buổi Học</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Con đã biết cách AI <strong>tạo ra hình
+                            ảnh</strong> từ những mô tả.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Con đã nắm được <strong>công thức 5 yếu
+                            tố</strong> để viết một prompt hoàn hảo.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Con đã biết nơi để <strong>tìm kiếm cảm
+                            hứng</strong> và các mẫu prompt chất lượng.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Quan trọng nhất: Con đã <strong>tự tay tạo
+                            ra</strong> một tác phẩm nghệ thuật ý nghĩa bằng AI.
+                    </p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
+                    <h4 class="text-2xl font-bold mb-2">Hẹn gặp lại ở các buổi học tiếp theo!</h4>
+                    <p class="text-lg">Thế giới nghệ thuật AI rộng lớn vẫn đang chờ chúng ta khám phá!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 500); // Must match the transition duration in CSS
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            // Setup navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Initial setup
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
