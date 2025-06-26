@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Advance - Buổi 2: Thao tác dữ liệu với CRUD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f0fdf4;
+            /* Light green background */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        /* Syntax Highlighting for SQL */
+        .code-block .comment {
+            color: #6b7280;
+        }
+
+        /* Gray 500 for comments */
+        .code-block .keyword {
+            color: #60a5fa;
+        }
+
+        /* Blue 400 for keywords */
+        .code-block .string {
+            color: #a3e635;
+        }
+
+        /* Lime 400 for strings */
+        .code-block .number {
+            color: #f97316;
+        }
+
+        /* Orange 500 for numbers */
+        .code-block .function {
+            color: #c084fc;
+        }
+
+        /* Purple 400 for functions/types */
+        .code-block .variable {
+            color: #e5e7eb;
+        }
+
+        /* Gray 200 for variables/names */
+        .code-block .operator {
+            color: #f87171;
+        }
+
+        /* Red 400 for operators */
+
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #718096;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+
+        /* Customizations for Lesson 2 - Green/Emerald theme */
+        .text-theme-700 {
+            color: #047857;
+        }
+
+        /* Emerald 800 */
+        .text-theme-600 {
+            color: #059669;
+        }
+
+        /* Emerald 700 */
+        .bg-theme-500 {
+            background-color: #10b981;
+        }
+
+        /* Emerald 600 */
+        .hover\:bg-theme-700:hover {
+            background-color: #047857;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 2: Thao tác dữ liệu với CRUD</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi 2: Thao Tác Dữ Liệu với CRUD</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Làm chủ 4 hoạt động cơ bản của mọi ứng dụng!</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/500x300/10B981/FFFFFF?text=CRUD" alt="[Hình ảnh về CRUD]"
+                        class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Hôm nay, chúng ta sẽ làm cho dữ liệu trở nên "sống"
+                    bằng cách thêm, đọc, sửa và xóa chúng.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is CRUD? -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-6">1. CRUD là gì?</h3>
+                <p class="mb-4 text-lg">Buổi trước chúng ta đã tạo ra "khung sườn" cho dữ liệu (database và table). Bây
+                    giờ là lúc "bỏ đồ vào".</p>
+                <p class="mb-6 text-lg"><strong>CRUD</strong> là viết tắt của 4 hoạt động cơ bản nhất trong việc quản lý
+                    và thao tác với dữ liệu trong bất kỳ hệ thống nào:</p>
+                <div class="grid md:grid-cols-2 gap-6 text-center">
+                    <div class="bg-blue-100 p-6 rounded-lg">
+                        <h4 class="font-bold text-2xl text-blue-800 mb-2">Create (Tạo)</h4>
+                        <p class="text-lg">Thêm mới dữ liệu. <span
+                                class="font-mono text-blue-600 font-semibold">(INSERT)</span></p>
+                    </div>
+                    <div class="bg-green-100 p-6 rounded-lg">
+                        <h4 class="font-bold text-2xl text-green-800 mb-2">Read (Đọc)</h4>
+                        <p class="text-lg">Truy xuất, đọc dữ liệu. <span
+                                class="font-mono text-green-600 font-semibold">(SELECT)</span></p>
+                    </div>
+                    <div class="bg-yellow-100 p-6 rounded-lg">
+                        <h4 class="font-bold text-2xl text-yellow-800 mb-2">Update (Cập nhật)</h4>
+                        <p class="text-lg">Chỉnh sửa dữ liệu đã có. <span
+                                class="font-mono text-yellow-600 font-semibold">(UPDATE)</span></p>
+                    </div>
+                    <div class="bg-red-100 p-6 rounded-lg">
+                        <h4 class="font-bold text-2xl text-red-800 mb-2">Delete (Xóa)</h4>
+                        <p class="text-lg">Loại bỏ dữ liệu. <span
+                                class="font-mono text-red-600 font-semibold">(DELETE)</span></p>
+                    </div>
+                </div>
+                <p class="mt-8 text-lg text-center">Hầu hết mọi chức năng bạn thấy trong các ứng dụng (từ mạng xã hội,
+                    web thương mại điện tử, game,...) đều xoay quanh 4 thao tác này.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: CREATE - INSERT -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. CREATE - Lệnh `INSERT`</h3>
+                <p class="mb-4 text-lg">Để thêm một hàng (record) mới vào bảng, chúng ta sử dụng lệnh
+                    <code>INSERT INTO</code>.
+                </p>
+                <h4 class="text-xl font-semibold mt-6 mb-2">Cú pháp:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">INSERT INTO</span> <span class="variable">ten_bang</span> (<span class="variable">cot_1</span>, <span class="variable">cot_2</span>, ...)
+<span class="keyword">VALUES</span> (<span class="string">'gia_tri_1'</span>, <span class="string">'gia_tri_2'</span>, ...);</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ:</h4>
+                <p class="mb-2 text-lg">Thêm một sinh viên mới vào bảng `SinhVien` chúng ta đã tạo ở buổi 1.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="comment">-- Giả sử đang dùng CSDL 'quanly_sinhvien'</span>
+<span class="keyword">INSERT INTO</span> <span class="variable">SinhVien</span> (<span class="variable">ho_ten</span>, <span class="variable">email</span>, <span class="variable">ngay_sinh</span>, <span class="variable">diem_trung_binh</span>)
+<span class="keyword">VALUES</span> (<span class="string">'Nguyễn Văn An'</span>, <span class="string">'an.nv@email.com'</span>, <span class="string">'2003-05-10'</span>, <span class="number">8.5</span>);</code></pre>
+                </div>
+                <p class="mt-4 text-lg"><strong>Giải thích:</strong></p>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2 mt-2 text-lg">
+                    <li>Bạn không cần chèn giá trị cho cột `id` vì nó đã được thiết lập `AUTO_INCREMENT`.</li>
+                    <li>Danh sách các cột phải tương ứng thứ tự với danh sách các giá trị.</li>
+                    <li>Giá trị chuỗi và ngày tháng phải được đặt trong dấu nháy đơn `''`.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: INSERT Multiple Rows -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.1. Thêm nhiều hàng cùng lúc</h3>
+                <p class="mb-4 text-lg">Để hiệu quả hơn, bạn có thể thêm nhiều hàng chỉ với một câu lệnh `INSERT` duy
+                    nhất.</p>
+                <p class="mb-2 text-lg">Chỉ cần liệt kê các bộ giá trị, cách nhau bởi dấu phẩy.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">INSERT INTO</span> <span class="variable">SinhVien</span> (<span class="variable">ho_ten</span>, <span class="variable">email</span>, <span class="variable">ngay_sinh</span>, <span class="variable">diem_trung_binh</span>)
+<span class="keyword">VALUES</span> 
+    (<span class="string">'Trần Thị Bình'</span>, <span class="string">'binh.tt@email.com'</span>, <span class="string">'2003-08-15'</span>, <span class="number">7.8</span>),
+    (<span class="string">'Lê Văn Cường'</span>, <span class="string">'cuong.lv@email.com'</span>, <span class="string">'2002-11-20'</span>, <span class="number">6.5</span>),
+    (<span class="string">'Phạm Thị Dung'</span>, <span class="string">'dung.pt@email.com'</span>, <span class="string">'2003-02-25'</span>, <span class="number">9.1</span>);</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-green-100 p-4 rounded-lg"><i
+                        class="fas fa-lightbulb mr-2"></i><strong>Mẹo:</strong> Cách này nhanh hơn rất nhiều so với việc
+                    chạy từng lệnh `INSERT` riêng lẻ, vì CSDL chỉ cần xử lý một yêu cầu thay vì nhiều yêu cầu.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: READ - SELECT -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. READ - Lệnh `SELECT`</h3>
+                <p class="mb-4 text-lg">Đây là lệnh bạn sẽ dùng nhiều nhất. <code>SELECT</code> dùng để truy xuất và
+                    hiển thị dữ liệu từ một hoặc nhiều bảng.</p>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Cú pháp cơ bản:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">SELECT</span> <span class="variable">cot_1</span>, <span class="variable">cot_2</span>, ... <span class="keyword">FROM</span> <span class="variable">ten_bang</span>;</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ 1: Lấy tất cả thông tin</h4>
+                <p class="mb-2 text-lg">Dấu sao <code>*</code> là cách viết tắt để chọn tất cả các cột.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="variable">SinhVien</span>;</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ 2: Chỉ lấy một vài cột</h4>
+                <p class="mb-2 text-lg">Lấy họ tên và email của tất cả sinh viên.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">SELECT</span> <span class="variable">ho_ten</span>, <span class="variable">email</span> <span class="keyword">FROM</span> <span class="variable">SinhVien</span>;</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Filtering with WHERE -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.1. Lọc kết quả với `WHERE`</h3>
+                <p class="mb-4 text-lg">Thường thì chúng ta không muốn lấy tất cả dữ liệu, mà chỉ cần những hàng thỏa
+                    mãn một điều kiện nào đó. Mệnh đề <code>WHERE</code> được dùng để lọc kết quả.</p>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Cú pháp:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">SELECT</span> <span class="variable">cac_cot</span> <span class="keyword">FROM</span> <span class="variable">ten_bang</span> <span class="keyword">WHERE</span> <span class="variable">dieu_kien</span>;</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ 1: Tìm sinh viên có điểm cao</h4>
+                <p class="mb-2 text-lg">Lấy thông tin các sinh viên có điểm trung bình từ 8.0 trở lên.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">SELECT</span> <span class="variable">ho_ten</span>, <span class="variable">diem_trung_binh</span> <span class="keyword">FROM</span> <span class="variable">SinhVien</span> <span class="keyword">WHERE</span> <span class="variable">diem_trung_binh</span> <span class="operator">&gt;=</span> <span class="number">8.0</span>;</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ 2: Tìm một sinh viên cụ thể</h4>
+                <p class="mb-2 text-lg">Tìm sinh viên có `id` là 2.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="variable">SinhVien</span> <span class="keyword">WHERE</span> <span class="variable">id</span> <span class="operator">=</span> <span class="number">2</span>;</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: UPDATE -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. UPDATE - Lệnh `UPDATE`</h3>
+                <p class="mb-4 text-lg">Để chỉnh sửa dữ liệu của các hàng đã tồn tại, chúng ta dùng lệnh
+                    <code>UPDATE</code>.
+                </p>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Cú pháp:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">UPDATE</span> <span class="variable">ten_bang</span>
+<span class="keyword">SET</span> <span class="variable">cot_1</span> <span class="operator">=</span> <span class="string">'gia_tri_moi_1'</span>, <span class="variable">cot_2</span> <span class="operator">=</span> <span class="string">'gia_tri_moi_2'</span>
+<span class="keyword">WHERE</span> <span class="variable">dieu_kien</span>;</code></pre>
+                </div>
+
+                <p class="mt-6 text-lg text-red-700 bg-red-100 p-4 rounded-lg"><i
+                        class="fas fa-exclamation-triangle mr-2"></i><strong>CẢNH BÁO CỰC KỲ QUAN TRỌNG:</strong> Nếu
+                    bạn quên mệnh đề <code>WHERE</code>, lệnh <code>UPDATE</code> sẽ cập nhật <strong>TẤT CẢ CÁC
+                        HÀNG</strong> trong bảng. Hãy luôn cẩn thận!</p>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ:</h4>
+                <p class="mb-2 text-lg">Cập nhật điểm trung bình cho sinh viên có `id` là 3.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">UPDATE</span> <span class="variable">SinhVien</span>
+<span class="keyword">SET</span> <span class="variable">diem_trung_binh</span> <span class="operator">=</span> <span class="number">7.0</span>
+<span class="keyword">WHERE</span> <span class="variable">id</span> <span class="operator">=</span> <span class="number">3</span>;</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: DELETE -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. DELETE - Lệnh `DELETE`</h3>
+                <p class="mb-4 text-lg">Lệnh cuối cùng trong bộ tứ CRUD là <code>DELETE</code>, dùng để xóa một hoặc
+                    nhiều hàng khỏi bảng.</p>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Cú pháp:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">DELETE FROM</span> <span class="variable">ten_bang</span> <span class="keyword">WHERE</span> <span class="variable">dieu_kien</span>;</code></pre>
+                </div>
+
+                <p class="mt-6 text-lg text-red-700 bg-red-100 p-4 rounded-lg"><i
+                        class="fas fa-skull-crossbones mr-2"></i><strong>CẢNH BÁO TUYỆT ĐỐI:</strong> Giống như
+                    <code>UPDATE</code>, nếu bạn quên mệnh đề <code>WHERE</code>, lệnh <code>DELETE</code> sẽ xóa
+                    <strong>TOÀN BỘ DỮ LIỆU</strong> trong bảng. Thao tác này không thể hoàn tác dễ dàng. Hãy kiểm tra
+                    điều kiện `WHERE` thật kỹ!
+                </p>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ:</h4>
+                <p class="mb-2 text-lg">Xóa sinh viên có `id` là 3.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">DELETE FROM</span> <span class="variable">SinhVien</span> <span class="keyword">WHERE</span> <span class="variable">id</span> <span class="operator">=</span> <span class="number">3</span>;</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Exercises -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Bài Tập Thực Hành</h3>
+                <p class="mb-4 text-lg">Đã đến lúc thực hành! Hãy mở MySQL client của bạn và thực hiện các yêu cầu sau
+                    trên CSDL `quanly_sinhvien`.</p>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">Bài 1: Thêm và đọc dữ liệu (Dễ)</h4>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Dùng lệnh <code>INSERT</code> để thêm 2 người bạn của bạn vào bảng <code>SinhVien</code> với
+                        thông tin tự điền.</li>
+                    <li>Dùng lệnh <code>SELECT *</code> để kiểm tra xem tất cả sinh viên (bao gồm cả những sinh viên đã
+                        thêm ở các ví dụ) đã có trong bảng chưa.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 10: Exercises 2 -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Bài Tập Thực Hành</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 2: Cập nhật và lọc (Trung bình)</h4>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Chọn một sinh viên bất kỳ trong bảng và dùng lệnh <code>UPDATE</code> để thay đổi điểm trung
+                        bình của họ thành `5.5`. (Gợi ý: dùng `id` hoặc `email` trong mệnh đề `WHERE`).</li>
+                    <li>Dùng lệnh <code>SELECT</code> với mệnh đề <code>WHERE</code> để hiển thị họ tên và điểm của
+                        những sinh viên có điểm dưới 6.0.</li>
+                    <li>Dùng lệnh <code>UPDATE</code> để thay đổi email của 'Nguyễn Văn An' thành
+                        `an.nguyenvan@gmail.com`.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 11: Exercises 3 -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Bài Tập Thực Hành</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 3: Xóa và xử lý lỗi (Khó)</h4>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Thử <code>INSERT</code> một sinh viên mới nhưng dùng một `email` đã tồn tại trong bảng. Quan sát
+                        lỗi mà MySQL trả về. Lỗi này xảy ra do ràng buộc nào chúng ta đã thiết lập ở Buổi 1?</li>
+                    <li>Dùng lệnh <code>DELETE</code> để xóa sinh viên 'Trần Thị Bình' khỏi bảng.</li>
+                    <li>Dùng <code>SELECT * FROM SinhVien;</code> để xác nhận rằng sinh viên đó đã thực sự bị xóa.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 12: Summary -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-6">7. Tóm Tắt Buổi Học</h3>
+                <p class="mb-6 text-lg">Hôm nay, chúng ta đã làm chủ 4 trụ cột của thao tác dữ liệu:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
+                    <div class="bg-blue-50 p-4 rounded-lg"><strong>CREATE</strong>: Dùng
+                        <code>INSERT INTO ten_bang (...) VALUES (...)</code> để thêm dữ liệu mới.
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg"><strong>READ</strong>: Dùng
+                        <code>SELECT cot FROM bang WHERE dieu_kien</code> để truy xuất dữ liệu.
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg"><strong>UPDATE</strong>: Dùng
+                        <code>UPDATE bang SET cot = gia_tri WHERE dieu_kien</code> để sửa dữ liệu.
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg"><strong>DELETE</strong>: Dùng
+                        <code>DELETE FROM bang WHERE dieu_kien</code> để xóa dữ liệu.
+                    </div>
+                </div>
+                <p class="mt-8 text-lg font-semibold">Ghi nhớ quan trọng: Mệnh đề <code>WHERE</code> là người bạn tốt
+                    nhất của bạn khi dùng <code>UPDATE</code> và <code>DELETE</code> để tránh những sai lầm không thể
+                    khắc phục.</p>
+                <p class="text-xl mt-8 font-semibold text-center">Nắm vững CRUD là bạn đã nắm được 80% công việc hàng
+                    ngày với CSDL!</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Q&A -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">8. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/059669/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào về INSERT, SELECT,
+                    UPDATE, DELETE không?</h4>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        const navbar = document.getElementById('navbar');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                } else {
+                    slide.classList.remove('active');
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            if (navbar) {
+                window.scrollTo({ top: navbar.offsetHeight, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Initialize the first slide
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>

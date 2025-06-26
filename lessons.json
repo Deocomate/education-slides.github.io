@@ -120,6 +120,21 @@
         ]
     },
     {
+        "category": "SQL Learning",
+        "icon": "fas fa-mobile-alt",
+        "color": "purple",
+        "lessons": [
+            {
+                "title": "Lesson 1: Giới thiệu về cơ sở dữ liệu, mysql",
+                "url": "./Sql/lesson1.html"
+            },
+            {
+                "title": "Lesson 2: Cú pháp CRUD với SQL",
+                "url": "./Sql/lesson2.html"
+            }
+        ]
+    },
+    {
         "category": "Hau",
         "icon": "fas fa-mobile-alt",
         "color": "purple",

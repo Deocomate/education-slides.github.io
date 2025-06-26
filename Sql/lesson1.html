@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Advance - Buổi 1: Cơ sở dữ liệu và SQL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+            /* Lighter gray background */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        /* Syntax Highlighting for SQL */
+        .code-block .comment {
+            color: #6b7280;
+        }
+
+        /* Gray 500 for comments */
+        .code-block .keyword {
+            color: #60a5fa;
+        }
+
+        /* Blue 400 for keywords */
+        .code-block .string {
+            color: #a3e635;
+        }
+
+        /* Lime 400 for strings */
+        .code-block .number {
+            color: #f97316;
+        }
+
+        /* Orange 500 for numbers */
+        .code-block .function {
+            color: #c084fc;
+        }
+
+        /* Purple 400 for functions/types */
+        .code-block .variable {
+            color: #e5e7eb;
+        }
+
+        /* Gray 200 for variables/names */
+        .code-block .operator {
+            color: #f87171;
+        }
+
+        /* Red 400 for operators */
+
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #718096;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+
+        /* Customizations for Lesson 1 - Blue/Indigo theme */
+        .text-theme-700 {
+            color: #3730a3;
+        }
+
+        /* Indigo 800 */
+        .text-theme-600 {
+            color: #4338ca;
+        }
+
+        /* Indigo 700 */
+        .bg-theme-500 {
+            background-color: #4f46e5;
+        }
+
+        /* Indigo 600 */
+        .hover\:bg-theme-700:hover {
+            background-color: #3730a3;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 1: Python và Cơ sở dữ liệu</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi 1: Python và Cơ Sở Dữ Liệu</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Bước đầu khám phá thế giới lưu trữ dữ liệu với SQL!
+                </p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/500x300/4F46E5/FFFFFF?text=Python+%2B+SQL"
+                        alt="[Hình ảnh Python và SQL]" class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Hôm nay chúng ta sẽ học cách để chương trình Python
+                    "nói chuyện" với cơ sở dữ liệu.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Why Database? -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-6">1. Tại sao cần đến Cơ sở dữ liệu (CSDL)?</h3>
+                <p class="mb-4 text-lg">Chúng ta đã biết cách lưu dữ liệu vào file (như .txt, .json). Nhưng khi dữ liệu
+                    lớn và phức tạp hơn, cách này không còn hiệu quả.</p>
+                <p class="mb-6 text-lg">CSDL (Database) là một hệ thống được thiết kế chuyên biệt để lưu trữ, quản lý,
+                    và truy xuất dữ liệu một cách hiệu quả, an toàn và có tổ chức.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-100 p-6 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-xl text-blue-800 mb-2"><i class="fas fa-server mr-2"></i>Lưu trữ có
+                            cấu trúc</h4>
+                        <p>Dữ liệu được tổ chức theo một cấu trúc rõ ràng (bảng, hàng, cột), không phải một mớ hỗn độn.
+                        </p>
+                    </div>
+                    <div class="bg-green-100 p-6 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-xl text-green-800 mb-2"><i class="fas fa-bolt mr-2"></i>Truy vấn mạnh
+                            mẽ</h4>
+                        <p>Dễ dàng tìm kiếm, lọc, sắp xếp, và tổng hợp dữ liệu phức tạp chỉ bằng vài dòng lệnh.</p>
+                    </div>
+                    <div class="bg-yellow-100 p-6 rounded-lg border-l-4 border-yellow-500">
+                        <h4 class="font-bold text-xl text-yellow-800 mb-2"><i class="fas fa-users mr-2"></i>Hỗ trợ nhiều
+                            người dùng</h4>
+                        <p>Nhiều người hoặc nhiều chương trình có thể truy cập và làm việc với cùng một dữ liệu một lúc.
+                        </p>
+                    </div>
+                    <div class="bg-red-100 p-6 rounded-lg border-l-4 border-red-500">
+                        <h4 class="font-bold text-xl text-red-800 mb-2"><i class="fas fa-shield-alt mr-2"></i>An toàn và
+                            bảo mật</h4>
+                        <p>Cung cấp các cơ chế phân quyền, sao lưu và phục hồi để bảo vệ dữ liệu quý giá của bạn.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Relational Database -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. CSDL Quan hệ (Relational Database)</h3>
+                <p class="mb-4 text-lg">Đây là loại CSDL phổ biến nhất. Dữ liệu được tổ chức thành các <strong>bảng
+                        (tables)</strong>. Mỗi bảng bao gồm các <strong>hàng (rows)</strong> và <strong>cột
+                        (columns)</strong>.</p>
+                <p class="mb-6 text-lg">Hãy tưởng tượng nó giống như một file Excel siêu cấp:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><strong>Bảng (Table)</strong>: Tương ứng một sheet trong Excel (ví dụ: `HocSinh`, `LopHoc`).
+                    </li>
+                    <li><strong>Cột (Column/Field)</strong>: Là một thuộc tính của đối tượng (ví dụ: `MaHS`, `HoTen`,
+                        `NgaySinh`).</li>
+                    <li><strong>Hàng (Row/Record)</strong>: Là một đối tượng cụ thể trong bảng (ví dụ: thông tin của bạn
+                        học sinh Nguyễn Văn A).</li>
+                </ul>
+                <div class="flex justify-center">
+                    <img src="https://placehold.co/600x350/E0E7FF/3730A3?text=Bảng+dữ+liệu"
+                        alt="[Hình ảnh minh họa bảng dữ liệu]" class="shadow-md rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: SQL -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. SQL là gì?</h3>
+                <p class="mb-4 text-lg"><strong>SQL (Structured Query Language)</strong> là ngôn ngữ tiêu chuẩn để giao
+                    tiếp với các CSDL quan hệ.</p>
+                <p class="mb-4 text-lg">Nó không phải là một ngôn ngữ lập trình như Python. Thay vào đó, nó là một
+                    <strong>ngôn ngữ truy vấn</strong>. Bạn dùng nó để "yêu cầu" CSDL làm một việc gì đó.
+                </p>
+                <div class="bg-gray-100 p-6 rounded-lg">
+                    <p class="text-center text-2xl text-gray-700 italic">"Này CSDL, hãy <span
+                            class="text-theme-600 font-semibold">TẠO</span> cho tôi một bảng mới!"</p>
+                    <p class="text-center text-2xl text-gray-700 italic mt-2">"Này CSDL, hãy <span
+                            class="text-theme-600 font-semibold">LẤY RA</span> tất cả học sinh có điểm trên 8.0!"</p>
+                </div>
+                <p class="mt-6 text-lg">Các hệ quản trị CSDL phổ biến sử dụng SQL là: <strong>MySQL</strong>,
+                    PostgreSQL, SQL Server, Oracle, SQLite.</p>
+                <p class="mt-2 text-lg font-semibold">Trong khóa học này, chúng ta sẽ tập trung vào <span
+                        class="text-blue-600">MySQL</span>.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: CREATE DATABASE -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Lệnh đầu tiên: TẠO CƠ SỞ DỮ LIỆU</h3>
+                <p class="mb-4 text-lg">Việc đầu tiên cần làm là tạo một "không gian" để chứa tất cả các bảng của chúng
+                    ta. Đó chính là một cơ sở dữ liệu.</p>
+                <p class="mb-2 text-lg">Chúng ta sử dụng lệnh <code>CREATE DATABASE</code>.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">CREATE DATABASE</span> <span class="variable">ten_database</span>;</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ:</h4>
+                <p class="mb-2 text-lg">Tạo một CSDL để quản lý sinh viên.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">CREATE DATABASE</span> <span class="variable">quanly_sinhvien</span>;</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Mẹo hay:</h4>
+                <p class="mb-2 text-lg">Để tránh lỗi nếu CSDL đã tồn tại, hãy thêm <code>IF NOT EXISTS</code>.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">CREATE DATABASE IF NOT EXISTS</span> <span class="variable">quanly_sinhvien</span>;</code></pre>
+                </div>
+                <p class="mt-4 text-base text-gray-600"><i class="fas fa-info-circle mr-2"></i>Lưu ý: Mỗi câu lệnh SQL
+                    nên kết thúc bằng dấu chấm phẩy <code>;</code></p>
+            </div>
+        </div>
+
+        <!-- Slide 6: USE Database -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Chọn CSDL để làm việc</h3>
+                <p class="mb-4 text-lg">Sau khi tạo CSDL, bạn cần "nói" cho MySQL biết rằng "Từ bây giờ, mọi lệnh tôi gõ
+                    sẽ áp dụng cho CSDL này nhé!".</p>
+                <p class="mb-2 text-lg">Chúng ta dùng lệnh <code>USE</code>.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">USE</span> <span class="variable">ten_database</span>;</code></pre>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">Ví dụ:</h4>
+                <p class="mb-2 text-lg">Sử dụng CSDL `quanly_sinhvien` mà chúng ta vừa tạo.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code><span class="keyword">USE</span> <span class="variable">quanly_sinhvien</span>;</code></pre>
+                </div>
+                <p class="mt-6 text-lg text-yellow-700 bg-yellow-100 p-4 rounded-lg"><i
+                        class="fas fa-exclamation-triangle mr-2"></i><strong>Quan trọng:</strong> Bạn phải chạy lệnh
+                    <code>USE</code> trước khi có thể tạo bảng hoặc thực hiện các thao tác khác trên dữ liệu bên trong
+                    CSDL đó.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 7: CREATE TABLE -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. TẠO BẢNG</h3>
+                <p class="mb-4 text-lg">Bây giờ chúng ta sẽ tạo "ngăn kéo" đầu tiên trong "tủ hồ sơ" của mình. Đó chính
+                    là tạo bảng.</p>
+                <p class="mb-2 text-lg">Cú pháp của lệnh <code>CREATE TABLE</code>:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">CREATE TABLE</span> <span class="variable">ten_bang</span> (
+    <span class="variable">ten_cot_1</span> <span class="function">KIEU_DU_LIEU</span> <span class="variable">rang_buoc</span>,
+    <span class="variable">ten_cot_2</span> <span class="function">KIEU_DU_LIEU</span> <span class="variable">rang_buoc</span>,
+    ...
+);</code></pre>
+                </div>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2 mt-4 text-lg">
+                    <li><code>ten_bang</code>: Tên bạn muốn đặt cho bảng (ví dụ: `SinhVien`).</li>
+                    <li><code>ten_cot</code>: Tên của từng cột trong bảng (ví dụ: `ho_ten`, `email`).</li>
+                    <li><code>KIEU_DU_LIEU</code>: Loại dữ liệu mà cột đó sẽ chứa (số, chữ, ngày tháng,...). Chúng ta sẽ
+                        tìm hiểu ngay sau đây.</li>
+                    <li><code>rang_buoc</code>: Các quy tắc áp dụng cho cột (ví dụ: không được để trống).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Data Types -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7. Các kiểu dữ liệu phổ biến</h3>
+                <p class="mb-6 text-lg">Việc chọn đúng kiểu dữ liệu rất quan trọng, nó giúp tiết kiệm dung lượng và đảm
+                    bảo tính toàn vẹn của dữ liệu.</p>
+
+                <div class="space-y-4">
+                    <div class="p-4 border rounded-lg">
+                        <p class="font-semibold text-lg text-blue-600">Kiểu SỐ (Numeric)</p>
+                        <ul class="list-disc list-inside ml-4 mt-2">
+                            <li><code class="text-purple-700 font-mono">INT</code>: Dùng cho số nguyên (ví dụ: `10`,
+                                `100`, `-50`).</li>
+                            <li><code class="text-purple-700 font-mono">FLOAT</code>, <code
+                                    class="text-purple-700 font-mono">DOUBLE</code>: Dùng cho số thực (ví dụ: `9.5`,
+                                `3.14`).</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border rounded-lg">
+                        <p class="font-semibold text-lg text-green-600">Kiểu CHUỖI (String)</p>
+                        <ul class="list-disc list-inside ml-4 mt-2">
+                            <li><code class="text-purple-700 font-mono">VARCHAR(n)</code>: Dùng cho chuỗi có độ dài thay
+                                đổi, với `n` là độ dài tối đa. Rất phổ biến cho tên, email,... (ví dụ: `VARCHAR(255)`).
+                            </li>
+                            <li><code class="text-purple-700 font-mono">TEXT</code>: Dùng cho các đoạn văn bản dài (mô
+                                tả, bài viết,...).</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border rounded-lg">
+                        <p class="font-semibold text-lg text-orange-600">Kiểu NGÀY GIỜ (Date and Time)</p>
+                        <ul class="list-disc list-inside ml-4 mt-2">
+                            <li><code class="text-purple-700 font-mono">DATE</code>: Chỉ lưu ngày, tháng, năm (ví dụ:
+                                `'2024-10-26'`).</li>
+                            <li><code class="text-purple-700 font-mono">DATETIME</code>: Lưu cả ngày và giờ.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Primary Key -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">8. Khóa chính (PRIMARY KEY)</h3>
+                <p class="mb-4 text-lg">Đây là một trong những khái niệm quan trọng nhất trong CSDL quan hệ.</p>
+                <p class="mb-4 text-lg"><strong>Khóa chính</strong> là một (hoặc nhiều) cột dùng để <strong>nhận dạng
+                        duy nhất</strong> cho mỗi hàng trong một bảng.</p>
+
+                <div class="bg-indigo-100 p-6 rounded-lg border-l-4 border-indigo-500">
+                    <h4 class="font-bold text-xl text-indigo-800 mb-2"><i class="fas fa-key mr-2"></i>Quy tắc của Khóa
+                        chính:</h4>
+                    <ol class="list-decimal list-inside text-lg">
+                        <li>Giá trị của nó phải là <strong>DUY NHẤT</strong> trong toàn bộ bảng.</li>
+                        <li>Nó <strong>KHÔNG ĐƯỢC PHÉP</strong> có giá trị rỗng (NULL).</li>
+                    </ol>
+                </div>
+
+                <p class="mt-6 mb-2 text-lg">Trong thực tế, người ta thường tạo một cột ID kiểu <code>INT</code> làm
+                    khóa chính và để nó tự động tăng giá trị mỗi khi có hàng mới được thêm vào.
+                    Chúng ta sử dụng từ khóa <code class="text-red-500 font-semibold">AUTO_INCREMENT</code>.</p>
+                <p class="text-lg">Ví dụ: Mã số sinh viên, mã số đơn hàng, ID người dùng... mỗi cái là duy nhất, không
+                    bao giờ trùng lặp.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Full Example -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">9. Ví dụ hoàn chỉnh: Tạo bảng SinhVien</h3>
+                <p class="mb-4 text-lg">Bây giờ, hãy áp dụng tất cả kiến thức để tạo một bảng `SinhVien` hoàn chỉnh
+                    trong CSDL `quanly_sinhvien`.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment">-- Đảm bảo chúng ta đang làm việc đúng CSDL</span>
+<span class="keyword">USE</span> <span class="variable">quanly_sinhvien</span>;
+
+<span class="comment">-- Lệnh tạo bảng SinhVien</span>
+<span class="keyword">CREATE TABLE</span> <span class="variable">SinhVien</span> (
+    <span class="comment">-- Cột id làm khóa chính, tự động tăng</span>
+    <span class="variable">id</span> <span class="function">INT</span> <span class="keyword">AUTO_INCREMENT PRIMARY KEY</span>,
+    
+    <span class="comment">-- Cột họ tên, tối đa 100 ký tự, không được để trống</span>
+    <span class="variable">ho_ten</span> <span class="function">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,
+    
+    <span class="comment">-- Cột email, tối đa 100 ký tự, phải là duy nhất</span>
+    <span class="variable">email</span> <span class="function">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL UNIQUE</span>,
+
+    <span class="comment">-- Cột ngày sinh, kiểu DATE</span>
+    <span class="variable">ngay_sinh</span> <span class="function">DATE</span>,
+
+    <span class="comment">-- Cột điểm trung bình, kiểu số thực</span>
+    <span class="variable">diem_trung_binh</span> <span class="function">FLOAT</span>
+);
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg"><strong>Giải thích các ràng buộc:</strong></p>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2 mt-2 text-lg">
+                    <li><code class="text-purple-700 font-mono">PRIMARY KEY</code>: Đánh dấu cột `id` là khóa chính.
+                    </li>
+                    <li><code class="text-purple-700 font-mono">AUTO_INCREMENT</code>: MySQL sẽ tự động gán giá trị 1,
+                        2, 3,... cho cột `id` mỗi khi có sinh viên mới.</li>
+                    <li><code class="text-purple-700 font-mono">NOT NULL</code>: Bắt buộc cột này phải có giá trị khi
+                        thêm dữ liệu.</li>
+                    <li><code class="text-purple-700 font-mono">UNIQUE</code>: Đảm bảo không có hai sinh viên nào có
+                        cùng email.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Summary -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-6">10. Tóm Tắt Buổi Học</h3>
+                <p class="mb-6 text-lg">Hôm nay, chúng ta đã đi những bước đầu tiên vào thế giới CSDL:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-4 text-lg">
+                    <li>Hiểu được <strong>CSDL là gì</strong> và tại sao nó quan trọng hơn việc lưu file thông thường.
+                    </li>
+                    <li>Làm quen với mô hình <strong>CSDL Quan hệ</strong> (bảng, hàng, cột) và ngôn ngữ
+                        <strong>SQL</strong>.
+                    </li>
+                    <li>Thực hành các câu lệnh SQL cơ bản nhất với <strong>MySQL</strong>:
+                        <ul class="list-circle list-inside ml-6 mt-2 space-y-2">
+                            <li><code>CREATE DATABASE ...</code> để tạo CSDL mới.</li>
+                            <li><code>USE ...</code> để chọn một CSDL để làm việc.</li>
+                            <li><code>CREATE TABLE ...</code> để định nghĩa cấu trúc của một bảng.</li>
+                        </ul>
+                    </li>
+                    <li>Nắm được các <strong>kiểu dữ liệu</strong> phổ biến và vai trò cực kỳ quan trọng của
+                        <strong>Khóa chính (PRIMARY KEY)</strong>.
+                    </li>
+                </ul>
+                <p class="text-xl mt-8 font-semibold text-center">Bạn đã sẵn sàng để thêm dữ liệu vào các bảng này trong
+                    buổi học tới!</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Q&A -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">11. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/3730A3/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Đừng ngần ngại hỏi nhé, đây là những khái niệm nền
+                    tảng rất quan trọng!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        const navbar = document.getElementById('navbar');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                } else {
+                    slide.classList.remove('active');
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            if (navbar) {
+                // Scroll to the top of the content area, below the navbar
+                window.scrollTo({ top: navbar.offsetHeight, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Initialize the first slide
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
