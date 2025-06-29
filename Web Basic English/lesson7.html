@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 7: Introduction to Git & GitHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-block .prompt {
+            color: #a0aec0;
+        }
+
+        .code-block .command {
+            color: #e2e8f0;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .html-output {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            min-height: 100px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-green-600">Web Development - Session 7</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Prev
+                </button>
+                <button id="nextSlide"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-green-700 mb-6">Session 7: Introduction to Git & GitHub</h2>
+                <p class="text-2xl text-gray-600 mb-12">Storing, Sharing, and Deploying Your Code</p>
+                <img src="https://placehold.co/600x350/22C55E/FFFFFF?text=Git+%26+GitHub" alt=""
+                    class="rounded-lg shadow-xl max-w-2xl">
+                <p class="mt-10 text-xl text-gray-700">Let's put your website on the internet for everyone to see!</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-6">Recap & Today's Goal</h3>
+                <p class="text-xl text-gray-700 mb-4">Congratulations! You have successfully built a complete personal
+                    profile website in the mid-term exam. It looks great on your computer, but how do you share it with
+                    the world?</p>
+                <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg mt-6">
+                    <h4 class="text-2xl font-bold text-green-800 mb-3">Today's Goal</h4>
+                    <p class="text-lg text-gray-700">We will learn how to use <strong>Git</strong> and
+                        <strong>GitHub</strong> - two essential tools for professional developers - to store your code
+                        and deploy your website online for free.
+                    </p>
+                </div>
+                <img src="https://placehold.co/700x300/D1FAE5/10B981?text=Your+Local+Code+--->+The+Internet"
+                    alt="[Diagram showing code moving to the internet]" class="mx-auto rounded-md shadow-md mt-10">
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-6">1. What is Git? (The Tool)</h3>
+                <p class="text-lg text-gray-700 mb-4"><strong>Git</strong> is a <strong>Version Control System
+                        (VCS)</strong>. It's a tool that runs on your computer.</p>
+                <p class="text-lg text-gray-700 mb-6">Think of it like a "save" button for your entire project, but much
+                    more powerful.</p>
+                <div class="grid md:grid-cols-2 gap-8 text-lg">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Key Idea:</h4>
+                        <p>Git takes "snapshots" (called <strong>commits</strong>) of your files at different points in
+                            time. You decide when to take a snapshot and write a message describing what you changed.
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Why is it useful?</h4>
+                        <ul class="list-disc list-inside pl-2 space-y-2">
+                            <li><strong>Track History:</strong> See every change made to the project.</li>
+                            <li><strong>Undo Mistakes:</strong> Easily go back to a previous version if you break
+                                something.</li>
+                            <li><strong>Collaboration:</strong> Helps multiple people work on the same project without
+                                conflicts.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-6">2. What is GitHub? (The Service)</h3>
+                <p class="text-lg text-gray-700 mb-4"><strong>GitHub</strong> is a website and cloud-based service that
+                    helps you store and manage your Git repositories.</p>
+                <div class="bg-blue-50 p-8 rounded-lg mt-6 text-center">
+                    <h4 class="text-2xl font-bold text-blue-800 mb-3">Analogy: Git vs. GitHub</h4>
+                    <p class="text-xl text-blue-700 max-w-3xl mx-auto">
+                        If <strong>Git</strong> is the tool on your computer for creating snapshots of your project,
+                        then <strong>GitHub</strong> is the "Google Drive" or "Dropbox" where you upload and store those
+                        snapshots online.
+                    </p>
+                </div>
+                <div class="mt-8 text-center">
+                    <img src="https://placehold.co/800x200/EFF6FF/3B82F6?text=Git+(Your+Computer)+<--->+GitHub+(The+Cloud)"
+                        alt="[Diagram of Git on computer syncing with GitHub in the cloud]"
+                        class="mx-auto rounded-lg shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-6">3. The Basic Git Workflow</h3>
+                <p class="text-lg text-gray-700 mb-6">Here is the fundamental process you'll follow to save your work
+                    and upload it to GitHub.</p>
+                <img src="https://placehold.co/900x400/F3F4F6/1F2937?text=Local+Computer+--------------------------->+GitHub"
+                    alt="Workflow Diagram" class="mx-auto rounded-lg shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center mt-[-250px] relative text-white">
+                    <div class="bg-sky-500 p-4 rounded-lg shadow-xl">
+                        <h4 class="font-bold text-lg">1. Modify Files</h4>
+                        <p class="text-sm">Work on your code (HTML, CSS).</p>
+                    </div>
+                    <div class="bg-indigo-500 p-4 rounded-lg shadow-xl">
+                        <h4 class="font-bold text-lg">2. `git add`</h4>
+                        <p class="text-sm">Choose which changes to include in the next snapshot.</p>
+                    </div>
+                    <div class="bg-purple-500 p-4 rounded-lg shadow-xl">
+                        <h4 class="font-bold text-lg">3. `git commit`</h4>
+                        <p class="text-sm">Save the snapshot to your local computer.</p>
+                    </div>
+                    <div class="bg-rose-500 p-4 rounded-lg shadow-xl">
+                        <h4 class="font-bold text-lg">4. `git push`</h4>
+                        <p class="text-sm">Upload your saved snapshots to GitHub.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-4">4. Step-by-Step Guide: Let's Begin!</h3>
+                <h4 class="text-2xl font-medium text-gray-800 mb-3">Step 1: `git init` - Initialize a Repository</h4>
+                <p class="text-lg text-gray-700 mb-4">This command creates a new Git repository in your project folder.
+                    You only need to do this <strong>once</strong> per project.</p>
+                <ol class="list-decimal list-inside pl-4 text-gray-700 space-y-2 text-lg mb-4">
+                    <li>Open your computer's command line or terminal.</li>
+                    <li>Navigate to your project folder (e.g., the one with `index.html` and `style.css`).</li>
+                    <li>Run the command:</li>
+                </ol>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="gitInit"><span class="prompt">$</span> <span class="command">git init</span></pre>
+                </div>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-4 mt-4 rounded-r-lg">
+                    <p><strong>What it does:</strong> Creates a hidden subfolder named `.git`. This folder is the
+                        "brain" of your repository; it's where Git stores all the history and snapshots. Don't delete
+                        it!</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-4">Step 2: `add` & `commit` - Take a Snapshot</h3>
+                <p class="text-lg text-gray-700 mb-4">Now, we'll tell Git to track our files and save the first version
+                    of our project.</p>
+
+                <h4 class="text-xl font-medium text-gray-800 mb-2">A. Stage the files with `git add`</h4>
+                <p class="text-lg text-gray-700 mb-2">This prepares the files for the snapshot. The `.` means "add all
+                    files in this folder".</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="gitAdd"><span class="prompt">$</span> <span class="command">git add .</span></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-800 mb-2 mt-4">B. Commit the files with `git commit`</h4>
+                <p class="text-lg text-gray-700 mb-2">This saves the staged files as a snapshot. The `-m` flag is for
+                    the commit <strong>message</strong>, which should describe the changes.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="gitCommit"><span class="prompt">$</span> <span class="command">git commit -m "Initial commit: Add profile website files"</span></pre>
+                </div>
+
+                <div class="bg-sky-50 border-l-4 border-sky-400 text-sky-700 p-4 mt-4 rounded-r-lg">
+                    <p><strong>Pro Tip:</strong> You can run `git status` at any time to see which files have changed
+                        and which are staged.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-4">Step 3: Create a Repository on GitHub</h3>
+                <p class="text-lg text-gray-700 mb-4">Now it's time to create the "cloud storage" for our project on
+                    GitHub's website.</p>
+                <ol
+                    class="list-decimal list-inside pl-4 text-gray-700 space-y-3 text-lg mb-4 bg-gray-50 p-6 rounded-lg">
+                    <li>Go to <a href="https://github.com" target="_blank"
+                            class="text-blue-600 hover:underline">GitHub.com</a> and log in.</li>
+                    <li>Click the `+` icon in the top-right corner and select <strong>"New repository"</strong>.</li>
+                    <li>Give your repository a name (e.g., `my-portfolio` or `personal-website`).</li>
+                    <li>Make sure it's set to <strong>Public</strong>.</li>
+                    <li><strong>Important:</strong> Do NOT initialize with a README, license, or .gitignore. We want an
+                        empty repository to push our existing code into.</li>
+                    <li>Click "Create repository".</li>
+                </ol>
+                <img src="https://placehold.co/700x350/F3F4F6/1F2937?text=New+Repository+on+GitHub.com"
+                    alt="[UI of creating a new GitHub repository]" class="mx-auto rounded-lg shadow-md mt-6">
+            </div>
+        </div>
+
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-4">Step 4: Connect Local to Remote</h3>
+                <p class="text-lg text-gray-700 mb-4">After creating the repository on GitHub, you'll see a page with
+                    some commands. We need the one that connects our local repository to this new remote one.</p>
+                <p class="text-lg text-gray-700 mb-4">Copy the command that looks like this and run it in your terminal:
+                </p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="gitRemote"><span class="prompt">$</span> <span class="command">git remote add origin https://github.com/YourUsername/your-repo-name.git</span></pre>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg mt-4 text-lg">
+                    <h4 class="font-bold text-xl mb-3">Breaking down the command:</h4>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><code>git remote add</code>: A command to add a new remote connection.</li>
+                        <li><code>origin</code>: A standard nickname for the main remote URL. Think of it as a contact's
+                            name in your phone.</li>
+                        <li><code>https://...git</code>: The actual URL of your repository on GitHub.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-4">Step 5: `git push` - Upload Your Code</h3>
+                <p class="text-lg text-gray-700 mb-4">This is the final step! The `push` command uploads your local
+                    commits (the snapshots you saved) to the remote repository (`origin`) on GitHub.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-block"
+                        data-code-id="gitPush"><span class="prompt">$</span> <span class="command">git push -u origin main</span></pre>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg mt-4 text-lg">
+                    <h4 class="font-bold text-xl mb-3">Breaking down the command:</h4>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><code>git push</code>: The command to upload.</li>
+                        <li><code>-u origin main</code>: This sets the "upstream" link. It's a one-time setup that
+                            tells Git your local `main` branch should track the remote `main` branch.
+                            <strong>After this first time, you can just use `git push`</strong>.
+                        </li>
+                    </ul>
+                </div>
+                <p class="text-lg text-gray-700 mt-6">After running this, refresh your GitHub repository page. You
+                    should
+                    see your `index.html` and `style.css` files there!</p>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-green-600 mb-4">Step 6: Go Live with GitHub Pages!</h3>
+                <p class="text-lg text-gray-700 mb-4">This is the magic moment. GitHub provides a free service to turn
+                    your repository into a live, public website.</p>
+                <ol
+                    class="list-decimal list-inside pl-4 text-gray-700 space-y-3 text-lg mb-4 bg-green-50 p-6 rounded-lg">
+                    <li>In your GitHub repository, click the <strong>"Settings"</strong> tab.</li>
+                    <li>In the left sidebar, click on <strong>"Pages"</strong>.</li>
+                    <li>Under "Build and deployment", change the "Source" from "GitHub Actions" to <strong>"Deploy from
+                            a branch"</strong>.</li>
+                    <li>Under "Branch", select `main` and keep `/root` as the folder. Click <strong>"Save"</strong>.
+                    </li>
+                    <li>Wait a minute or two. The page will refresh, and a green box will appear at the top with your
+                        live website's URL!</li>
+                </ol>
+                <a href="https://placehold.co/800x400/16A34A/FFFFFF?text=Your+site+is+live+at%0Ahttps://YourUsername.github.io/your-repo-name/"
+                    target="_blank" class="block mt-6">
+                    <img src="https://placehold.co/800x400/16A34A/FFFFFF?text=Your+site+is+live+at%0Ahttps://YourUsername.github.io/your-repo-name/"
+                        alt="[Screenshot of GitHub Pages success message]" class="mx-auto rounded-lg shadow-xl">
+                </a>
+            </div>
+        </div>
+
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-green-700 mb-8">Session 7 Summary</h2>
+                <div class="text-xl text-gray-700 space-y-4 max-w-4xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You understand that <strong>Git</strong>
+                        is a tool for tracking code history on your computer.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You know that <strong>GitHub</strong> is a
+                        website for storing your Git repositories online.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>You have learned the essential commands:
+                        <code>git init</code>, <code>git add</code>, <code>git commit</code>, and <code>git push</code>.
+                    </p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-2"></i>Most importantly, you have deployed your
+                        website to the internet using <strong>GitHub Pages</strong>!
+                    </p>
+                </div>
+                <div
+                    class="mt-12 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-6 rounded-r-lg shadow-lg w-full max-w-4xl">
+                    <h4 class="text-2xl font-bold mb-2">Your Future Workflow</h4>
+                    <p class="text-lg">To update your live website, just follow this loop:
+                    <ol class="list-decimal list-inside pl-4 mt-2">
+                        <li>Make changes to your code locally.</li>
+                        <li>Run `git add .`</li>
+                        <li>Run `git commit -m "Describe your update"`</li>
+                        <li>Run `git push`</li>
+                    </ol>
+                    Your changes will automatically go live after a minute!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+            if (totalSlidesNumDisplay) {
+                totalSlidesNumDisplay.textContent = slides.length || '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) slide.style.display = 'none';
+                        }, 400);
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            function copyCode(buttonElement) {
+                const codeBlock = buttonElement.closest('.code-block-container').querySelector('pre.code-block');
+                if (!codeBlock) return;
+                const codeToCopy = codeBlock.innerText;
+                navigator.clipboard.writeText(codeToCopy).then(() => {
+                    const originalIcon = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalIcon;
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', () => copyCode(button));
+            });
+
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>

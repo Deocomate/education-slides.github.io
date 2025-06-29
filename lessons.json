@@ -93,6 +93,10 @@
             {
                 "title": "Lesson 6: Midterm Test",
                 "url": "./Web Basic English/lesson6_midterm.html"
+            },
+            {
+                "title": "Lesson 7: Git and Github",
+                "url": "./Web Basic English/lesson7.html"
             }
         ]
     },
