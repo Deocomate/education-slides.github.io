@@ -31,6 +31,10 @@
             {
                 "title": "Lesson 7: Hàm trong python",
                 "url": "./Python Basic/lesson7.html"
+            },
+            {
+                "title": "Lesson 8: Luyện tập về hàm trong python",
+                "url": "./Python Basic/lesson8.html"
             }
         ]
     },
@@ -143,6 +147,17 @@
         ]
     },
     {
+        "category": "AI trại hè",
+        "icon": "fas fa-mobile-alt",
+        "color": "purple",
+        "lessons": [
+            {
+                "title": "Slide bài giảng",
+                "url": "./Ai Course High School/index.html"
+            }
+        ]
+    },
+    {
         "category": "Hau",
         "icon": "fas fa-mobile-alt",
         "color": "purple",
@@ -158,4 +173,3 @@
         ]
     }
 ]
-

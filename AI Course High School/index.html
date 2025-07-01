@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trại hè AI - Khám phá Trí tuệ Nhân tạo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS Reset and Base Styles */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevent scrollbars on the body */
+            font-family: 'Lexend', sans-serif;
+            background-color: #1a1a2e; /* Dark blue background */
+        }
+
+        /* Slide Container */
+        .slides-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Individual Slide Styling */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            box-sizing: border-box;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0.5s;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        /* Slide Content Styling */
+        .slide h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #e94560, #f8b400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide h2 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+
+        .slide p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .slide .subtitle {
+            font-size: 2rem;
+            color: #c0c0c0;
+            font-weight: 500;
+        }
+        
+        .emoji-large {
+            font-size: 6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Navigation Buttons */
+        .nav-button {
+            position: fixed;
+            z-index: 10;
+            bottom: 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        #prev {
+            left: 30px;
+        }
+
+        #next {
+            right: 30px;
+        }
+        
+        .nav-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        /* Slide Counter */
+        #slide-counter {
+            position: fixed;
+            z-index: 10;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1rem;
+        }
+
+        /* Custom elements */
+        .highlight {
+             color: #f8b400; /* Bright yellow/orange for highlight */
+             font-weight: 600;
+        }
+        
+        .two-column {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            width: 100%;
+        }
+
+        .column {
+            flex: 1;
+            max-width: 500px;
+        }
+        
+        .column img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        ul.list-disc {
+            text-align: left;
+            display: inline-block;
+            font-size: 1.5rem;
+        }
+        
+        ul.list-disc li {
+           margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="slides-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active">
+            <div class="emoji-large">🚀</div>
+            <h1>Khám phá Trí tuệ Nhân tạo</h1>
+            <p class="subtitle">Từ Ý Tưởng đến Hành Động</p>
+            <p class="mt-10 text-xl">Chào mừng các bạn đến với trại hè AI! 🎉</p>
+        </section>
+
+        <!-- Slide 2: Warm-up Question -->
+        <section class="slide">
+            <h2>Khởi động 🧠</h2>
+            <p>Một câu hỏi nhỏ...</p>
+            <p class="text-4xl font-semibold my-8 leading-normal" style="color: #50e3c2;">"Sáng nay, bạn đã gặp AI ở đâu chưa?"</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 text-lg">
+                <div class="bg-white/10 p-4 rounded-xl">📱 Mở khóa điện thoại</div>
+                <div class="bg-white/10 p-4 rounded-xl">👍 Lướt mạng xã hội</div>
+                <div class="bg-white/10 p-4 rounded-xl">🎬 Netflix, Youtube gợi ý</div>
+                <div class="bg-white/10 p-4 rounded-xl">📸 Chụp ảnh xóa phông</div>
+            </div>
+        </section>
+
+        <!-- Slide 3: What is AI? -->
+        <section class="slide">
+             <h2>AI là gì mà "hot" thế? 🤔</h2>
+            <div class="two-column">
+                <div class="column">
+                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=Human+Brain" alt="Human Brain">
+                </div>
+                <div class="column text-left">
+                     <p>Nói đơn giản, Trí tuệ Nhân tạo (AI) là lĩnh vực khoa học máy tính giúp tạo ra những cỗ máy <span class="highlight">thông minh</span>.</p>
+                     <p>...có khả năng <span class="highlight">"suy nghĩ"</span>, <span class="highlight">"học hỏi"</span>, và <span class="highlight">"hành động"</span> tương tự như con người.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: AI, ML, DL Relationship -->
+        <section class="slide">
+            <h2>Gia đình nhà AI 👨‍👩‍👧‍👦</h2>
+            <p>AI không chỉ có một mình, mà còn có các "họ hàng" rất thân thiết!</p>
+            <img src="https://placehold.co/800x450/2d3748/ffffff?text=AI+%3E+Machine+Learning+%3E+Deep+Learning" alt="Biểu đồ quan hệ AI, ML, DL" class="my-8 rounded-2xl shadow-lg">
+            <p>AI là một ngôi nhà lớn, chứa đựng Machine Learning và Deep Learning bên trong.</p>
+        </section>
+        
+        <!-- Slide 5: What is Machine Learning? -->
+        <section class="slide">
+             <h2>Machine Learning (Học Máy) ⚙️</h2>
+            <p>Là một nhánh của AI, cho phép máy tính <span class="highlight">tự học từ dữ liệu</span> mà không cần được lập trình cụ thể cho từng việc.</p>
+            <div class="two-column mt-8">
+                <div class="column">
+                    <p class="text-2xl font-semibold">Ví dụ kinh điển:</p>
+                    <p>Hòm thư của bạn tự động nhận diện và lọc <span class="highlight">thư rác (Spam)</span>. Nó đã "học" từ hàng triệu email để biết đâu là thư quan trọng, đâu là thư rác.</p>
+                </div>
+                <div class="column">
+                     <img src="https://placehold.co/500x350/e11d48/ffffff?text=SPAM+FILTER" alt="Spam Filter">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: What is Deep Learning? -->
+        <section class="slide">
+            <h2>Deep Learning (Học Sâu) 🧠✨</h2>
+            <p>Là một lĩnh vực con của Machine Learning, lấy cảm hứng từ <span class="highlight">cấu trúc bộ não người</span> (mạng nơ-ron thần kinh).</p>
+            <div class="two-column mt-8">
+                <div class="column">
+                     <img src="https://placehold.co/500x350/fb923c/ffffff?text=Image+Recognition" alt="Image Recognition">
+                </div>
+                <div class="column">
+                    <p class="text-2xl font-semibold">Sức mạnh của Học Sâu:</p>
+                    <p>Giúp điện thoại <span class="highlight">nhận diện khuôn mặt</span> của bạn, xe ô tô có thể <span class="highlight">tự lái</span>, hay Google Dịch có thể <span class="highlight">dịch cả một cuộc hội thoại</span>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Algorithmic Thinking -->
+        <section class="slide">
+            <h2>Tư duy Thuật toán - Nền tảng của AI 🧩</h2>
+            <p>Thuật toán đơn giản là <span class="highlight">một bộ các hướng dẫn từng bước</span> để giải quyết một vấn đề.</p>
+            <p class="text-2xl font-bold my-6">Trò chơi nhỏ: Hãy "lập trình" cho một bạn robot!</p>
+            <div class="bg-white/10 p-8 rounded-2xl text-left max-w-2xl mx-auto">
+                <h3 class="text-2xl font-semibold mb-4 text-center">🤖 Nhiệm vụ: Lấy một chai nước trên bàn</h3>
+                <ol class="list-decimal list-inside text-xl space-y-2">
+                    <li>Bắt đầu từ vị trí hiện tại.</li>
+                    <li>Tiến về phía trước 5 bước.</li>
+                    <li>Xoay sang trái 90 độ.</li>
+                    <li>Tiến về phía trước 2 bước.</li>
+                    <li>Vươn tay phải ra phía trước.</li>
+                    <li>Nắm lấy chai nước.</li>
+                    <li>... ???</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Slide 8: Video Break -->
+        <section class="slide">
+            <div class="emoji-large">🎬</div>
+            <h2>Xem một video ngắn nhé!</h2>
+            <p>"AI đã thay đổi thế giới của chúng ta như thế nào?"</p>
+            <p class="text-gray-400 text-lg">(Giảng viên sẽ chiếu một video ngắn tại đây)</p>
+        </section>
+
+        <!-- Slide 9: Transition to Demo -->
+        <section class="slide">
+            <div class="emoji-large">🛠️</div>
+            <h2>Lý thuyết đủ rồi, "vọc" thôi!</h2>
+            <p>Bây giờ, chúng ta sẽ cùng nhau trải nghiệm một vài <span class="highlight">công cụ AI</span> cực kỳ hữu ích và thú vị.</p>
+        </section>
+        
+        <!-- === UPDATED SLIDES START HERE === -->
+
+        <!-- Slide 10: LMSYS Chatbot Arena -->
+        <section class="slide">
+            <h2>Ai là AI "xịn" nhất? 🏆</h2>
+            <p>Giữa hàng trăm mô hình AI, làm sao biết được model nào mạnh nhất? Hãy đến với <span class="highlight">LMSYS Chatbot Arena</span>!</p>
+            <img src="https://placehold.co/800x400/38bdf8/ffffff?text=lmarena.ai/leaderboard" alt="LMSYS Chatbot Arena Leaderboard" class="my-6 rounded-2xl shadow-lg">
+            <p class="text-xl">Đây là một "đấu trường" nơi mọi người dùng thử và bình chọn ẩn danh cho các AI. Bảng xếp hạng được cập nhật liên tục dựa trên kết quả các "trận đấu" này.</p>
+        </section>
+
+        <!-- Slide 11: Google AI Studio Intro -->
+        <section class="slide">
+            <h2>Thử nghiệm AI từ Google: AI Studio 🚀</h2>
+            <p><span class="highlight">Google AI Studio</span> là "sân chơi" miễn phí để bạn trực tiếp trò chuyện và ra lệnh cho các mô hình AI thế hệ mới nhất của Google, như <span class="highlight">Gemini</span>.</p>
+            <img src="https://placehold.co/800x400/4c1d95/ffffff?text=Google+AI+Studio" alt="Google AI Studio Interface" class="my-6 rounded-2xl shadow-lg">
+            <p class="text-xl">Bạn có thể thử nghiệm, xây dựng và sáng tạo với công nghệ AI tiên tiến một cách dễ dàng.</p>
+        </section>
+
+        <!-- Slide 12: Google AI Studio Applications -->
+        <section class="slide">
+            <h2>Sức mạnh của Google AI Studio 🛠️</h2>
+            <p>Với AI Studio, bạn có thể biến các ý tưởng thành hành động:</p>
+            <div class="grid md:grid-cols-2 gap-6 mt-8 text-lg w-full max-w-4xl">
+                <div class="bg-white/10 p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-2 text-yellow-300">💡 Lên ý tưởng</h3>
+                    <p>Sáng tạo kịch bản, viết email, nghĩ ra tên cho dự án...</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-2 text-green-300">💻 Viết và gỡ lỗi Code</h3>
+                    <p>Tạo ra các đoạn code, tìm lỗi và giải thích code cho bạn.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-2 text-blue-300">📚 Tóm tắt & Phân tích</h3>
+                    <p>Rút gọn các tài liệu dài, phân tích dữ liệu phức tạp.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-2 text-pink-300">🤖 Xây dựng Chatbot</h3>
+                    <p>Tạo ra các chatbot chuyên biệt cho các nhiệm vụ của riêng bạn.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 13: NotebookLM Intro -->
+        <section class="slide">
+            <h2>Trợ lý học tập cá nhân: NotebookLM 📚</h2>
+            <p><span class="highlight">NotebookLM</span> không phải là một chatbot thông thường. Nó là một trợ lý nghiên cứu và ghi chú được cá nhân hóa dựa trên chính <span class="highlight">tài liệu của bạn</span>.</p>
+            <img src="https://placehold.co/800x400/f97316/ffffff?text=NotebookLM+Interface" alt="NotebookLM Interface" class="my-6 rounded-2xl shadow-lg">
+            <p class="text-xl">Bạn tải tài liệu lên (slide bài giảng, file PDF, ghi chú...), NotebookLM sẽ trở thành chuyên gia về chính những tài liệu đó.</p>
+        </section>
+
+        <!-- Slide 14: NotebookLM Use Case -->
+        <section class="slide">
+             <h2>Học siêu tốc với NotebookLM ⚡</h2>
+             <p>Tưởng tượng bạn vừa tải lên tài liệu Lịch sử Việt Nam dài 50 trang.</p>
+             <div class="bg-gray-800 p-6 rounded-xl my-4 text-left max-w-4xl w-full">
+                <p class="text-purple-400 font-semibold text-lg">👤 BẠN TẢI LÊN:</p>
+                <p class="text-white text-xl">[Lich_Su_Viet_Nam.pdf]</p>
+             </div>
+             <div class="bg-gray-700 p-6 rounded-xl text-left max-w-4xl w-full">
+                <p class="text-green-400 font-semibold text-lg">👤 BẠN HỎI:</p>
+                <p class="text-white text-xl">
+                    "Tóm tắt các sự kiện chính của nhà Trần và tạo một bảng câu hỏi ôn tập."
+                </p>
+             </div>
+             <p class="mt-4">NotebookLM sẽ ngay lập tức tạo bản tóm tắt và câu hỏi dựa <span class="highlight">CHÍNH XÁC</span> vào nội dung tài liệu bạn cung cấp.</p>
+        </section>
+
+        <!-- Slide 15: Recap Part 1 (Updated) -->
+        <section class="slide">
+            <h2>Tóm tắt nhanh 🧐</h2>
+            <p>Vậy là trong phần đầu tiên, chúng ta đã cùng nhau:</p>
+            <ul class="list-disc mt-8 text-2xl space-y-4 max-w-3xl mx-auto">
+                <li><span class="highlight">Giải mã</span> được AI, Machine Learning và Deep Learning là gì.</li>
+                <li>Biết cách <span class="highlight">đánh giá sức mạnh</span> của các mô hình AI qua Chatbot Arena.</li>
+                <li><span class="highlight">Trải nghiệm</span> các công cụ AI đỉnh cao từ Google như AI Studio và NotebookLM để học tập, sáng tạo.</li>
+            </ul>
+        </section>
+
+        <!-- Slide 16: Next Steps / Creative Challenge (Updated) -->
+        <section class="slide">
+            <div class="emoji-large">🏆</div>
+            <h2>Thử Thách Sáng Tạo!</h2>
+            <p>Đây là phần của bạn! Hãy vận dụng những công cụ vừa học để biến ý tưởng thành hiện thực.</p>
+            <div class="grid md:grid-cols-3 gap-6 mt-8 text-lg w-full max-w-6xl">
+                <div class="bg-white/10 p-6 rounded-xl transform hover:scale-105 transition-transform">
+                    <h3 class="text-2xl font-bold mb-2 text-yellow-300">Nhà Sử Học AI</h3>
+                    <p>Dùng NotebookLM, tải lên một tài liệu lịch sử và nhờ nó tạo một bài tóm tắt và một kịch bản ngắn về sự kiện đó.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl transform hover:scale-105 transition-transform">
+                    <h3 class="text-2xl font-bold mb-2 text-green-300">Nhà phát minh ý tưởng</h3>
+                    <p>Dùng Google AI Studio để lên 5 ý tưởng cho một dự án khoa học giúp bảo vệ môi trường trong trường học.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl transform hover:scale-105 transition-transform">
+                     <h3 class="text-2xl font-bold mb-2 text-blue-300">Nhà thơ Gen Z</h3>
+                    <p>Yêu cầu Google AI Studio sáng tác một bài thơ về chủ đề "trí tuệ nhân tạo" theo phong cách của bạn.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- === UPDATED SLIDES END HERE === -->
+
+        <!-- Slide 17: AI Responsibility -->
+        <section class="slide">
+            <div class="emoji-large">🤝</div>
+            <h2>Dùng AI có Trách nhiệm</h2>
+            <p>AI là một công cụ mạnh mẽ, hãy là một người dùng thông thái!</p>
+            <ul class="list-disc mt-8 text-2xl space-y-4 max-w-3xl mx-auto">
+                <li>AI là <span class="highlight">trợ lý</span>, không phải người làm thay. Hãy dùng nó để học tốt hơn, không phải để gian lận.</li>
+                <li>Luôn <span class="highlight">kiểm tra lại</span> thông tin do AI cung cấp. Nó có thể mắc lỗi!</li>
+                <li>Hãy <span class="highlight">sáng tạo</span> và đừng ngại thử nghiệm những điều mới mẻ.</li>
+            </ul>
+        </section>
+
+        <!-- Slide 18: Q&A -->
+        <section class="slide">
+            <div class="emoji-large">🙋‍♂️🙋‍♀️</div>
+            <h2>Hỏi gì đáp nấy!</h2>
+            <p>Các bạn có câu hỏi nào không?</p>
+        </section>
+
+        <!-- Slide 19: Thank You -->
+        <section class="slide">
+            <div class="emoji-large">💖</div>
+            <h2>Cảm ơn các bạn đã lắng nghe!</h2>
+            <p>Chúc các bạn có một mùa hè thật vui và đầy sáng tạo cùng AI.</p>
+            <p class="mt-8 text-xl">Giữ kết nối và đừng ngừng khám phá nhé!</p>
+        </section>
+    </div>
+
+    <!-- Navigation -->
+    <button id="prev" class="nav-button" title="Slide trước (Mũi tên trái)">&lt;</button>
+    <button id="next" class="nav-button" title="Slide tiếp (Mũi tên phải)">&gt;</button>
+    <div id="slide-counter"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            const slideCounter = document.getElementById('slide-counter');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(index) {
+                // Deactivate current slide
+                if(slides[currentSlide]) {
+                    slides[currentSlide].classList.remove('active');
+                }
+
+                // Update current slide index
+                currentSlide = index;
+
+                // Activate new slide
+                if(slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+
+                // Update navigation buttons
+                updateNav();
+            }
+
+            function updateNav() {
+                // Update counter
+                if(slideCounter) {
+                    slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+                }
+
+                // Update button states
+                if(prevBtn) {
+                    prevBtn.disabled = currentSlide === 0;
+                }
+                if(nextBtn) {
+                    nextBtn.disabled = currentSlide === totalSlides - 1;
+                }
+            }
+
+            function nextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    showSlide(currentSlide + 1);
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    showSlide(currentSlide - 1);
+                }
+            }
+
+            // Event Listeners for buttons
+            if(nextBtn) {
+                nextBtn.addEventListener('click', nextSlide);
+            }
+            if(prevBtn) {
+                prevBtn.addEventListener('click', prevSlide);
+            }
+
+            // Event Listener for keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            
+            // Initial setup
+            if(slides.length > 0) {
+                showSlide(0);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 8: Dự Án Thực Tế - Quản Lý Nhân Vật Minecraft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f1f5f9;
+            /* slate-100 */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        /* Emerald 300 */
+        .code-block .keyword {
+            color: #93c5fd;
+        }
+
+        /* Blue 300 */
+        .code-block .string {
+            color: #fde047;
+        }
+
+        /* Yellow 300 */
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        /* Orange 300 */
+        .code-block .function {
+            color: #d8b4fe;
+        }
+
+        /* Purple 300 */
+        .code-block .def-name {
+            color: #67e8f9;
+        }
+
+        /* Cyan 300 */
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+        /* Rose 300 */
+        .code-block .boolean {
+            color: #fdbb74;
+        }
+
+        /* Customizations for Lesson 8 - Emerald/Green theme for Minecraft */
+        .text-theme-700 {
+            color: #047857;
+        }
+
+        /* Emerald 700 */
+        .text-theme-600 {
+            color: #059669;
+        }
+
+        /* Emerald 600 */
+        .bg-theme-500 {
+            background-color: #10b981;
+        }
+
+        /* Emerald 500 */
+        .hover\:bg-theme-700:hover {
+            background-color: #047857;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 8: Dự Án Quản Lý Nhân Vật Minecraft</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi 8: Xây Dựng Ứng Dụng Hoàn Chỉnh</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Dự án: Quản lý nhân vật trong game Minecraft</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/10B981/FFFFFF?text=Python+Minecraft"
+                        alt="[Hình ảnh Python và Minecraft]" class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Hôm nay, chúng ta sẽ kết hợp mọi thứ đã học để xây
+                    dựng một chương trình hoàn chỉnh!</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Ôn Tập và Mục Tiêu Dự Án</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Kiến thức áp dụng:</h4>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><strong>List:</strong> Để lưu trữ danh sách các nhân vật.</li>
+                    <li><strong>Dictionary:</strong> Để lưu thông tin chi tiết cho mỗi nhân vật.</li>
+                    <li><strong>Hàm (Function):</strong> Để chia nhỏ chương trình thành các khối logic, dễ quản lý.
+                    </li>
+                    <li><strong>JSON:</strong> Để lưu và tải dữ liệu của chương trình, giúp dữ liệu không bị mất khi
+                        tắt.</li>
+                    <li><strong>Vòng lặp và Câu lệnh điều kiện:</strong> Để xây dựng menu và xử lý logic.</li>
+                </ul>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">Mục tiêu dự án:</h4>
+                <p class="mb-4 text-lg">Xây dựng một chương trình trên giao diện dòng lệnh (command-line) có các chức
+                    năng sau:</p>
+                <div class="bg-emerald-50 p-6 rounded-lg border-l-4 border-emerald-500">
+                    <ul class="list-none space-y-3">
+                        <li><i class="fas fa-eye mr-2 text-emerald-600"></i>Xem danh sách tất cả nhân vật.</li>
+                        <li><i class="fas fa-plus-circle mr-2 text-emerald-600"></i>Thêm một nhân vật mới.</li>
+                        <li><i class="fas fa-search mr-2 text-emerald-600"></i>Tìm kiếm và cập nhật thông tin một nhân
+                            vật.</li>
+                        <li><i class="fas fa-save mr-2 text-emerald-600"></i>Tự động lưu dữ liệu ra file JSON khi thoát.
+                        </li>
+                        <li><i class="fas fa-upload mr-2 text-emerald-600"></i>Tự động tải dữ liệu từ file JSON khi khởi
+                            động.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Lên Kế Hoạch và Cấu Trúc</h3>
+                <p class="mb-4 text-lg">Trước khi code, một lập trình viên chuyên nghiệp luôn lên kế hoạch. Đây là bước
+                    cực kỳ quan trọng!</p>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">a. Cấu trúc dữ liệu:</h4>
+                <p class="mb-2 text-lg">Mỗi nhân vật sẽ là một <strong>Dictionary</strong>. Toàn bộ nhân vật sẽ được lưu
+                    trong một <strong>List</strong>.</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># List chứa các Dictionary</span>
+[
+    {
+        <span class="string">"ten"</span>: <span class="string">"Steve"</span>,
+        <span class="string">"hp"</span>: <span class="number">100</span>,
+        <span class="string">"vat_pham"</span>: [<span class="string">"Cúp Gỗ"</span>, <span class="string">"Táo"</span>]
+    },
+    {
+        <span class="string">"ten"</span>: <span class="string">"Alex"</span>,
+        <span class="string">"hp"</span>: <span class="number">120</span>,
+        <span class="string">"vat_pham"</span>: [<span class="string">"Kiếm Sắt"</span>]
+    }
+]</code></pre>
+                </div>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">b. Phân chia chức năng (Hàm):</h4>
+                <p class="mb-2 text-lg">Chúng ta sẽ chia chương trình thành các hàm nhỏ, mỗi hàm một nhiệm vụ:</p>
+                <ul class="list-disc list-inside pl-4 text-gray-700 text-lg space-y-1">
+                    <li><code>hien_thi_menu()</code>: In menu chức năng.</li>
+                    <li><code>tai_du_lieu()</code>: Đọc dữ liệu từ file JSON.</li>
+                    <li><code>luu_du_lieu(danh_sach)</code>: Ghi dữ liệu vào file JSON.</li>
+                    <li><code>hien_thi_nhan_vat(danh_sach)</code>: In danh sách nhân vật.</li>
+                    <li><code>them_nhan_vat(danh_sach)</code>: Thêm nhân vật mới.</li>
+                    <li><code>tim_va_cap_nhat_nhan_vat(danh_sach)</code>: Tìm và sửa thông tin nhân vật.</li>
+                    <li><code>main()</code>: Hàm chính để điều khiển toàn bộ chương trình.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bước 1: Tạo Bộ Xương Chương Trình</h3>
+                <p class="mb-4 text-lg">Đầu tiên, chúng ta tạo file <code>minecraft_manager.py</code> và viết "bộ xương"
+                    với vòng lặp chính và menu. Việc này giúp định hình luồng chạy của ứng dụng.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> <span class="variable">json</span>
+<span class="keyword">import</span> <span class="variable">os</span>
+
+<span class="keyword">def</span> <span class="def-name">hien_thi_menu</span>():
+    <span class="function">print</span>(<span class="string">"\n--- CHƯƠNG TRÌNH QUẢN LÝ NHÂN VẬT MINECRAFT ---"</span>)
+    <span class="function">print</span>(<span class="string">"1. Hiển thị danh sách nhân vật"</span>)
+    <span class="function">print</span>(<span class="string">"2. Thêm nhân vật mới"</span>)
+    <span class="function">print</span>(<span class="string">"3. Tìm và cập nhật nhân vật"</span>)
+    <span class="function">print</span>(<span class="string">"0. Thoát và lưu"</span>)
+
+<span class="keyword">def</span> <span class="def-name">main</span>():
+    <span class="comment"># Tạm thời dùng một list rỗng</span>
+    <span class="variable">danh_sach_nhan_vat</span> <span class="operator">=</span> []
+
+    <span class="keyword">while</span> <span class="boolean">True</span>:
+        <span class="def-name">hien_thi_menu</span>()
+        <span class="variable">lua_chon</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập lựa chọn của bạn: "</span>)
+
+        <span class="keyword">if</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'1'</span>:
+            <span class="function">print</span>(<span class="string">"Chức năng đang phát triển..."</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'2'</span>:
+            <span class="function">print</span>(<span class="string">"Chức năng đang phát triển..."</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'3'</span>:
+            <span class="function">print</span>(<span class="string">"Chức năng đang phát triển..."</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'0'</span>:
+            <span class="function">print</span>(<span class="string">"Đang lưu dữ liệu... Tạm biệt!"</span>)
+            <span class="keyword">break</span>
+        <span class="keyword">else</span>:
+            <span class="function">print</span>(<span class="string">"Lựa chọn không hợp lệ. Vui lòng chọn lại."</span>)
+
+<span class="comment"># Chạy chương trình</span>
+<span class="def-name">main</span>()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Chạy file này, bạn sẽ thấy menu hiện ra và có thể nhập lựa chọn.</p>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bước 2: Xử Lý Lưu và Tải File JSON</h3>
+                <p class="mb-4 text-lg">Đây là phần cốt lõi để dữ liệu không bị mất. Chúng ta sẽ viết hàm
+                    <code>tai_du_lieu()</code> và <code>luu_du_lieu()</code>.
+                </p>
+                <p class="mb-2 text-lg">Hàm tải dữ liệu cần xử lý trường hợp file chưa tồn tại (lần chạy đầu tiên).
+                </p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">FILE_NAME</span> <span class="operator">=</span> <span class="string">'characters.json'</span>
+
+<span class="keyword">def</span> <span class="def-name">tai_du_lieu</span>():
+    <span class="comment"># Kiểm tra file có tồn tại không</span>
+    <span class="keyword">if not</span> <span class="variable">os</span>.<span class="variable">path</span>.<span class="function">exists</span>(<span class="variable">FILE_NAME</span>):
+        <span class="keyword">return</span> [] <span class="comment"># Nếu không có, trả về list rỗng</span>
+    
+    <span class="keyword">try</span>:
+        <span class="keyword">with</span> <span class="function">open</span>(<span class="variable">FILE_NAME</span>, <span class="string">'r'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span>:
+            <span class="variable">data</span> <span class="operator">=</span> <span class="variable">json</span>.<span class="method">load</span>(<span class="variable">f</span>)
+            <span class="keyword">return</span> <span class="variable">data</span>
+    <span class="keyword">except</span> <span class="class-name">json</span>.<span class="class-name">JSONDecodeError</span>:
+        <span class="keyword">return</span> [] <span class="comment"># Nếu file rỗng hoặc lỗi, trả về list rỗng</span>
+
+<span class="keyword">def</span> <span class="def-name">luu_du_lieu</span>(<span class="variable">danh_sach</span>):
+    <span class="keyword">with</span> <span class="function">open</span>(<span class="variable">FILE_NAME</span>, <span class="string">'w'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span>:
+        <span class="variable">json</span>.<span class="method">dump</span>(<span class="variable">danh_sach</span>, <span class="variable">f</span>, <span class="variable">indent</span><span class="operator">=</span><span class="number">4</span>, <span class="variable">ensure_ascii</span><span class="operator">=</span><span class="boolean">False</span>)
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Bây giờ, hãy cập nhật hàm <code>main()</code> để gọi 2 hàm này.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">def</span> <span class="def-name">main</span>():
+    <span class="variable">danh_sach_nhan_vat</span> <span class="operator">=</span> <span class="def-name">tai_du_lieu</span>() <span class="comment"># Tải dữ liệu khi bắt đầu</span>
+
+    <span class="keyword">while</span> <span class="boolean">True</span>:
+        <span class="comment"># ... (các lựa chọn menu) ...</span>
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'0'</span>:
+            <span class="def-name">luu_du_lieu</span>(<span class="variable">danh_sach_nhan_vat</span>) <span class="comment"># Lưu dữ liệu khi thoát</span>
+            <span class="function">print</span>(<span class="string">"Đã lưu dữ liệu! Tạm biệt!"</span>)
+            <span class="keyword">break</span>
+        <span class="comment"># ...</span>
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bước 3: Hiển Thị Danh Sách Nhân Vật</h3>
+                <p class="mb-4 text-lg">Hàm này sẽ duyệt qua list nhân vật và in thông tin từng người ra màn hình một
+                    cách đẹp mắt. Cần xử lý trường hợp danh sách rỗng.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">def</span> <span class="def-name">hien_thi_nhan_vat</span>(<span class="variable">danh_sach</span>):
+    <span class="function">print</span>(<span class="string">"\n--- DANH SÁCH NHÂN VẬT ---"</span>)
+    <span class="keyword">if not</span> <span class="variable">danh_sach</span>:
+        <span class="function">print</span>(<span class="string">"Chưa có nhân vật nào trong danh sách."</span>)
+        <span class="keyword">return</span>
+
+    <span class="keyword">for</span> <span class="variable">nv</span> <span class="keyword">in</span> <span class="variable">danh_sach</span>:
+        <span class="function">print</span>(<span class="string">f"Tên: {nv['ten']}"</span>)
+        <span class="function">print</span>(<span class="string">f"  - HP: {nv['hp']}"</span>)
+        <span class="comment"># Dùng join để in list vật phẩm đẹp hơn</span>
+        <span class="variable">vat_pham_str</span> <span class="operator">=</span> <span class="string">", "</span>.<span class="method">join</span>(<span class="variable">nv</span>[<span class="string">'vat_pham'</span>])
+        <span class="function">print</span>(<span class="string">f"  - Vật phẩm: {vat_pham_str}"</span>)
+        <span class="function">print</span>(<span class="string">"-"</span> <span class="operator">*</span> <span class="number">20</span>)
+</code></pre>
+                </div>
+
+                <p class="mt-4 text-lg">Cập nhật hàm <code>main()</code>:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># ... trong hàm main()</span>
+        <span class="keyword">if</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'1'</span>:
+            <span class="def-name">hien_thi_nhan_vat</span>(<span class="variable">danh_sach_nhan_vat</span>)
+<span class="comment"># ...</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bước 4: Thêm Nhân Vật Mới</h3>
+                <p class="mb-4 text-lg">Hàm này sẽ hỏi người dùng thông tin, tạo một dictionary mới và thêm vào danh
+                    sách.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">def</span> <span class="def-name">them_nhan_vat</span>(<span class="variable">danh_sach</span>):
+    <span class="function">print</span>(<span class="string">"\n--- THÊM NHÂN VẬT MỚI ---"</span>)
+    <span class="variable">ten</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập tên nhân vật: "</span>)
+    <span class="variable">hp</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập HP: "</span>))
+    <span class="variable">vat_pham_input</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập các vật phẩm, cách nhau bởi dấu phẩy (vd: Kiếm, Táo): "</span>)
+    
+    <span class="comment"># Tách chuỗi vật phẩm thành một list</span>
+    <span class="variable">vat_pham</span> <span class="operator">=</span> [<span class="variable">item</span>.<span class="method">strip</span>() <span class="keyword">for</span> <span class="variable">item</span> <span class="keyword">in</span> <span class="variable">vat_pham_input</span>.<span class="method">split</span>(<span class="string">','</span>)]
+
+    <span class="variable">nhan_vat_moi</span> <span class="operator">=</span> {
+        <span class="string">"ten"</span>: <span class="variable">ten</span>,
+        <span class="string">"hp"</span>: <span class="variable">hp</span>,
+        <span class="string">"vat_pham"</span>: <span class="variable">vat_pham</span>
+    }
+
+    <span class="variable">danh_sach</span>.<span class="method">append</span>(<span class="variable">nhan_vat_moi</span>)
+    <span class="function">print</span>(<span class="string">f"Đã thêm nhân vật '{ten}' thành công!"</span>)
+</code></pre>
+                </div>
+
+                <p class="mt-4 text-lg">Cập nhật hàm <code>main()</code>:</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># ... trong hàm main()</span>
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'2'</span>:
+            <span class="def-name">them_nhan_vat</span>(<span class="variable">danh_sach_nhan_vat</span>)
+<span class="comment"># ...</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bước 5: Tìm và Cập Nhật Nhân Vật</h3>
+                <p class="mb-4 text-lg">Đây là hàm phức tạp nhất. Nó sẽ tìm kiếm nhân vật theo tên. Nếu thấy, nó sẽ cho
+                    phép cập nhật HP hoặc thêm vật phẩm.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">def</span> <span class="def-name">tim_va_cap_nhat_nhan_vat</span>(<span class="variable">danh_sach</span>):
+    <span class="function">print</span>(<span class="string">"\n--- TÌM & CẬP NHẬT NHÂN VẬT ---"</span>)
+    <span class="variable">ten_can_tim</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập tên nhân vật cần tìm: "</span>)
+
+    <span class="variable">nhan_vat_tim_thay</span> <span class="operator">=</span> <span class="none">None</span>
+    <span class="keyword">for</span> <span class="variable">nv</span> <span class="keyword">in</span> <span class="variable">danh_sach</span>:
+        <span class="comment"># So sánh không phân biệt hoa thường</span>
+        <span class="keyword">if</span> <span class="variable">nv</span>[<span class="string">'ten'</span>].<span class="method">lower</span>() <span class="operator">==</span> <span class="variable">ten_can_tim</span>.<span class="method">lower</span>():
+            <span class="variable">nhan_vat_tim_thay</span> <span class="operator">=</span> <span class="variable">nv</span>
+            <span class="keyword">break</span>
+    
+    <span class="keyword">if</span> <span class="variable">nhan_vat_tim_thay</span>:
+        <span class="function">print</span>(<span class="string">f"Đã tìm thấy nhân vật: {nhan_vat_tim_thay['ten']}"</span>)
+        <span class="function">print</span>(<span class="string">"Bạn muốn cập nhật gì?"</span>)
+        <span class="function">print</span>(<span class="string">"  a. Cập nhật HP"</span>)
+        <span class="function">print</span>(<span class="string">"  b. Thêm vật phẩm"</span>)
+        <span class="variable">lua_chon_update</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Lựa chọn (a/b): "</span>).<span class="method">lower</span>()
+
+        <span class="keyword">if</span> <span class="variable">lua_chon_update</span> <span class="operator">==</span> <span class="string">'a'</span>:
+            <span class="variable">hp_moi</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập HP mới: "</span>))
+            <span class="variable">nhan_vat_tim_thay</span>[<span class="string">'hp'</span>] <span class="operator">=</span> <span class="variable">hp_moi</span>
+            <span class="function">print</span>(<span class="string">"Đã cập nhật HP."</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon_update</span> <span class="operator">==</span> <span class="string">'b'</span>:
+            <span class="variable">vat_pham_moi</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập vật phẩm mới để thêm: "</span>)
+            <span class="variable">nhan_vat_tim_thay</span>[<span class="string">'vat_pham'</span>].<span class="method">append</span>(<span class="variable">vat_pham_moi</span>)
+            <span class="function">print</span>(<span class="string">"Đã thêm vật phẩm."</span>)
+        <span class="keyword">else</span>:
+            <span class="function">print</span>(<span class="string">"Lựa chọn không hợp lệ."</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">f"Không tìm thấy nhân vật có tên '{ten_can_tim}'."</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Mã Nguồn Hoàn Chỉnh</h3>
+                <p class="mb-4 text-lg">Đây là toàn bộ code của ứng dụng sau khi đã ghép các bước lại với nhau. Các bạn
+                    có thể sao chép và chạy thử.</p>
+                <div class="code-block-container" style="max-height: 70vh; overflow-y: auto;">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> <span class="variable">json</span>
+<span class="keyword">import</span> <span class="variable">os</span>
+
+<span class="variable">FILE_NAME</span> <span class="operator">=</span> <span class="string">'characters.json'</span>
+
+<span class="keyword">def</span> <span class="def-name">tai_du_lieu</span>():
+    <span class="keyword">if not</span> <span class="variable">os</span>.<span class="variable">path</span>.<span class="function">exists</span>(<span class="variable">FILE_NAME</span>):
+        <span class="keyword">return</span> []
+    <span class="keyword">try</span>:
+        <span class="keyword">with</span> <span class="function">open</span>(<span class="variable">FILE_NAME</span>, <span class="string">'r'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span>:
+            <span class="keyword">return</span> <span class="variable">json</span>.<span class="method">load</span>(<span class="variable">f</span>)
+    <span class="keyword">except</span> (<span class="class-name">json</span>.<span class="class-name">JSONDecodeError</span>, <span class="class-name">FileNotFoundError</span>):
+        <span class="keyword">return</span> []
+
+<span class="keyword">def</span> <span class="def-name">luu_du_lieu</span>(<span class="variable">danh_sach</span>):
+    <span class="keyword">with</span> <span class="function">open</span>(<span class="variable">FILE_NAME</span>, <span class="string">'w'</span>, <span class="variable">encoding</span><span class="operator">=</span><span class="string">'utf-8'</span>) <span class="keyword">as</span> <span class="variable">f</span>:
+        <span class="variable">json</span>.<span class="method">dump</span>(<span class="variable">danh_sach</span>, <span class="variable">f</span>, <span class="variable">indent</span><span class="operator">=</span><span class="number">4</span>, <span class="variable">ensure_ascii</span><span class="operator">=</span><span class="boolean">False</span>)
+
+<span class="keyword">def</span> <span class="def-name">hien_thi_menu</span>():
+    <span class="function">print</span>(<span class="string">"\n--- CHƯƠNG TRÌNH QUẢN LÝ NHÂN VẬT MINECRAFT ---"</span>)
+    <span class="function">print</span>(<span class="string">"1. Hiển thị danh sách nhân vật"</span>)
+    <span class="function">print</span>(<span class="string">"2. Thêm nhân vật mới"</span>)
+    <span class="function">print</span>(<span class="string">"3. Tìm và cập nhật nhân vật"</span>)
+    <span class="function">print</span>(<span class="string">"0. Thoát và lưu"</span>)
+
+<span class="keyword">def</span> <span class="def-name">hien_thi_nhan_vat</span>(<span class="variable">danh_sach</span>):
+    <span class="function">print</span>(<span class="string">"\n--- DANH SÁCH NHÂN VẬT ---"</span>)
+    <span class="keyword">if not</span> <span class="variable">danh_sach</span>:
+        <span class="function">print</span>(<span class="string">"Chưa có nhân vật nào trong danh sách."</span>)
+        <span class="keyword">return</span>
+    <span class="keyword">for</span> <span class="variable">nv</span> <span class="keyword">in</span> <span class="variable">danh_sach</span>:
+        <span class="function">print</span>(<span class="string">f"Tên: {nv['ten']}"</span>)
+        <span class="function">print</span>(<span class="string">f"  - HP: {nv['hp']}"</span>)
+        <span class="variable">vat_pham_str</span> <span class="operator">=</span> <span class="string">", "</span>.<span class="method">join</span>(<span class="variable">nv</span>[<span class="string">'vat_pham'</span>])
+        <span class="function">print</span>(<span class="string">f"  - Vật phẩm: {vat_pham_str}"</span>)
+        <span class="function">print</span>(<span class="string">"-"</span> <span class="operator">*</span> <span class="number">20</span>)
+
+<span class="keyword">def</span> <span class="def-name">them_nhan_vat</span>(<span class="variable">danh_sach</span>):
+    <span class="function">print</span>(<span class="string">"\n--- THÊM NHÂN VẬT MỚI ---"</span>)
+    <span class="variable">ten</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập tên nhân vật: "</span>)
+    <span class="variable">hp</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập HP: "</span>))
+    <span class="variable">vat_pham_input</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập các vật phẩm, cách nhau bởi dấu phẩy: "</span>)
+    <span class="variable">vat_pham</span> <span class="operator">=</span> [<span class="variable">item</span>.<span class="method">strip</span>() <span class="keyword">for</span> <span class="variable">item</span> <span class="keyword">in</span> <span class="variable">vat_pham_input</span>.<span class="method">split</span>(<span class="string">','</span>)]
+    <span class="variable">nhan_vat_moi</span> <span class="operator">=</span> {<span class="string">"ten"</span>: <span class="variable">ten</span>, <span class="string">"hp"</span>: <span class="variable">hp</span>, <span class="string">"vat_pham"</span>: <span class="variable">vat_pham</span>}
+    <span class="variable">danh_sach</span>.<span class="method">append</span>(<span class="variable">nhan_vat_moi</span>)
+    <span class="function">print</span>(<span class="string">f"Đã thêm nhân vật '{ten}' thành công!"</span>)
+
+<span class="keyword">def</span> <span class="def-name">tim_va_cap_nhat_nhan_vat</span>(<span class="variable">danh_sach</span>):
+    <span class="function">print</span>(<span class="string">"\n--- TÌM & CẬP NHẬT NHÂN VẬT ---"</span>)
+    <span class="variable">ten_can_tim</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập tên nhân vật cần tìm: "</span>)
+    <span class="variable">nhan_vat_tim_thay</span> <span class="operator">=</span> <span class="none">None</span>
+    <span class="keyword">for</span> <span class="variable">nv</span> <span class="keyword">in</span> <span class="variable">danh_sach</span>:
+        <span class="keyword">if</span> <span class="variable">nv</span>[<span class="string">'ten'</span>].<span class="method">lower</span>() <span class="operator">==</span> <span class="variable">ten_can_tim</span>.<span class="method">lower</span>():
+            <span class="variable">nhan_vat_tim_thay</span> <span class="operator">=</span> <span class="variable">nv</span>
+            <span class="keyword">break</span>
+    <span class="keyword">if</span> <span class="variable">nhan_vat_tim_thay</span>:
+        <span class="function">print</span>(<span class="string">f"Đã tìm thấy: {nhan_vat_tim_thay['ten']}"</span>)
+        <span class="function">print</span>(<span class="string">"Bạn muốn cập nhật gì? (a: HP, b: Thêm vật phẩm)"</span>)
+        <span class="variable">lua_chon_update</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Lựa chọn: "</span>).<span class="method">lower</span>()
+        <span class="keyword">if</span> <span class="variable">lua_chon_update</span> <span class="operator">==</span> <span class="string">'a'</span>:
+            <span class="variable">hp_moi</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập HP mới: "</span>))
+            <span class="variable">nhan_vat_tim_thay</span>[<span class="string">'hp'</span>] <span class="operator">=</span> <span class="variable">hp_moi</span>
+            <span class="function">print</span>(<span class="string">"Đã cập nhật HP."</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon_update</span> <span class="operator">==</span> <span class="string">'b'</span>:
+            <span class="variable">vat_pham_moi</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập vật phẩm mới để thêm: "</span>)
+            <span class="variable">nhan_vat_tim_thay</span>[<span class="string">'vat_pham'</span>].<span class="method">append</span>(<span class="variable">vat_pham_moi</span>)
+            <span class="function">print</span>(<span class="string">"Đã thêm vật phẩm."</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">f"Không tìm thấy nhân vật '{ten_can_tim}'."</span>)
+
+<span class="keyword">def</span> <span class="def-name">main</span>():
+    <span class="variable">danh_sach_nhan_vat</span> <span class="operator">=</span> <span class="def-name">tai_du_lieu</span>()
+    <span class="keyword">while</span> <span class="boolean">True</span>:
+        <span class="def-name">hien_thi_menu</span>()
+        <span class="variable">lua_chon</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập lựa chọn của bạn: "</span>)
+        <span class="keyword">if</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'1'</span>:
+            <span class="def-name">hien_thi_nhan_vat</span>(<span class="variable">danh_sach_nhan_vat</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'2'</span>:
+            <span class="def-name">them_nhan_vat</span>(<span class="variable">danh_sach_nhan_vat</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'3'</span>:
+            <span class="def-name">tim_va_cap_nhat_nhan_vat</span>(<span class="variable">danh_sach_nhan_vat</span>)
+        <span class="keyword">elif</span> <span class="variable">lua_chon</span> <span class="operator">==</span> <span class="string">'0'</span>:
+            <span class="def-name">luu_du_lieu</span>(<span class="variable">danh_sach_nhan_vat</span>)
+            <span class="function">print</span>(<span class="string">"Đã lưu dữ liệu! Tạm biệt!"</span>)
+            <span class="keyword">break</span>
+        <span class="keyword">else</span>:
+            <span class="function">print</span>(<span class="string">"Lựa chọn không hợp lệ. Vui lòng chọn lại."</span>)
+
+<span class="comment"># Điểm bắt đầu của chương trình</span>
+<span class="def-name">main</span>()
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Tổng Kết và Thử Thách</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Những gì chúng ta đã làm được:</h4>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li>Phân tích yêu cầu và lên kế hoạch cho một ứng dụng hoàn chỉnh.</li>
+                    <li>Xây dựng cấu trúc dữ liệu bằng List và Dictionary.</li>
+                    <li>Áp dụng các hàm để tạo ra code có tính module, sạch sẽ và dễ bảo trì.</li>
+                    <li>Thực hiện đầy đủ các thao tác: <strong>Thêm, Xem, Sửa</strong> dữ liệu.</li>
+                    <li>Sử dụng <strong>file JSON</strong> để lưu trữ dữ liệu vĩnh viễn.</li>
+                </ul>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">Thử thách (Bài tập về nhà):</h4>
+                <p class="mb-4 text-lg">Hãy tự mình nâng cấp chương trình với các chức năng sau:</p>
+                <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
+                    <ul class="list-none space-y-3">
+                        <li><i class="fas fa-trash-alt mr-2 text-amber-600"></i><strong>Chức năng 4: Xóa một nhân
+                                vật</strong>. Viết hàm <code>xoa_nhan_vat(danh_sach)</code>, yêu cầu người dùng nhập tên
+                            và
+                            xóa nhân vật tương ứng khỏi danh sách.</li>
+                        <li><i class="fas fa-exclamation-triangle mr-2 text-amber-600"></i><strong>Cải tiến:</strong>
+                            Trong hàm <code>them_nhan_vat</code>, hãy kiểm tra xem tên nhân vật đã tồn tại chưa. Nếu đã
+                            có
+                            rồi thì không cho thêm.</li>
+                        <li><i class="fas fa-search-plus mr-2 text-amber-600"></i><strong>Nâng cao:</strong> Viết một
+                            hàm
+                            mới cho phép tìm tất cả các nhân vật đang giữ một vật phẩm cụ thể (ví dụ: tìm tất cả nhân
+                            vật
+                            có "Kiếm Sắt").</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">7. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/047857/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Chúc mừng các bạn đã hoàn thành dự án đầu
+                    tiên!</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Các bạn có câu hỏi nào về dự án này không?</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        const navbar = document.getElementById('navbar');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i !== index) {
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                } else {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
