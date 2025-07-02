@@ -1,35 +1,22 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trại hè AI - Khám phá Trí tuệ Nhân tạo</title>
+    <title>Thuyết trình: AI - Từ Lý Thuyết Đến Thực Hành</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&display=swap"
+          rel="stylesheet">
     <style>
-        /* CSS Reset and Base Styles */
-        html,
         body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* Prevent scrollbars on the body */
-            font-family: 'Lexend', sans-serif;
-            background-color: #1a1a2e; /* Dark blue background */
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            overflow: hidden;
         }
 
-        /* Slide Container */
-        .slides-container {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-        }
-
-        /* Individual Slide Styling */
         .slide {
             position: absolute;
             top: 0;
@@ -41,467 +28,774 @@
             justify-content: center;
             align-items: center;
             padding: 4rem;
-            box-sizing: border-box;
-            background-color: #1a1a2e;
-            color: #e0e0e0;
-            text-align: center;
             opacity: 0;
             visibility: hidden;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
             transform: scale(0.95);
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0.5s;
-            z-index: 1;
         }
 
         .slide.active {
             opacity: 1;
             visibility: visible;
             transform: scale(1);
-            z-index: 2;
         }
 
-        /* Slide Content Styling */
-        .slide h1 {
-            font-size: 4.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, #e94560, #f8b400);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .slide-content {
+            width: 100%;
+            max-width: 1200px;
         }
 
-        .slide h2 {
-            font-size: 3.5rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            color: #ffffff;
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        .slide p {
-            font-size: 1.5rem;
-            line-height: 1.6;
-            max-width: 800px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .slide .subtitle {
-            font-size: 2rem;
-            color: #c0c0c0;
-            font-weight: 500;
-        }
-        
-        .emoji-large {
-            font-size: 6rem;
-            margin-bottom: 1.5rem;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Navigation Buttons */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .active .animate-fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .active .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-in-out forwards;
+        }
+
+        .active .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-in-out forwards;
+        }
+
+        .active .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-in-out forwards;
+        }
+
+        .active .animate-pop-in {
+            animation: popIn 0.6s ease-in-out forwards;
+        }
+
+        /* Staggered animations */
+        .active .stagger-1 {
+            animation-delay: 0.2s;
+        }
+
+        .active .stagger-2 {
+            animation-delay: 0.4s;
+        }
+
+        .active .stagger-3 {
+            animation-delay: 0.6s;
+        }
+
+        .active .stagger-4 {
+            animation-delay: 0.8s;
+        }
+
+        .active .stagger-5 {
+            animation-delay: 1.0s;
+        }
+
+        .active .stagger-6 {
+            animation-delay: 1.2s;
+        }
+
         .nav-button {
             position: fixed;
-            z-index: 10;
-            bottom: 30px;
+            bottom: 2rem;
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            transition: background-color 0.3s;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .nav-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
         }
 
-        #prev {
-            left: 30px;
+        #prev-btn {
+            left: 2rem;
         }
 
-        #next {
-            right: 30px;
+        #next-btn {
+            right: 2rem;
         }
-        
-        .nav-button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        
-        /* Slide Counter */
+
         #slide-counter {
             position: fixed;
-            z-index: 10;
-            bottom: 30px;
+            bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 1rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: #a0a0a0;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            z-index: 100;
         }
 
-        /* Custom elements */
-        .highlight {
-             color: #f8b400; /* Bright yellow/orange for highlight */
-             font-weight: 600;
-        }
-        
-        .two-column {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-            width: 100%;
+        .gradient-text {
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .column {
-            flex: 1;
-            max-width: 500px;
-        }
-        
-        .column img {
-            max-width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        ul.list-disc {
+        .code-block {
+            background-color: #1e1e1e;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            border: 1px solid #333;
+            white-space: pre-wrap;
             text-align: left;
-            display: inline-block;
-            font-size: 1.5rem;
-        }
-        
-        ul.list-disc li {
-           margin-bottom: 1rem;
+            max-height: 60vh;
+            overflow-y: auto;
         }
     </style>
 </head>
-
 <body>
 
-    <div class="slides-container">
-        <!-- Slide 1: Title -->
-        <section class="slide active">
-            <div class="emoji-large">🚀</div>
-            <h1>Khám phá Trí tuệ Nhân tạo</h1>
-            <p class="subtitle">Từ Ý Tưởng đến Hành Động</p>
-            <p class="mt-10 text-xl">Chào mừng các bạn đến với trại hè AI! 🎉</p>
-        </section>
-
-        <!-- Slide 2: Warm-up Question -->
-        <section class="slide">
-            <h2>Khởi động 🧠</h2>
-            <p>Một câu hỏi nhỏ...</p>
-            <p class="text-4xl font-semibold my-8 leading-normal" style="color: #50e3c2;">"Sáng nay, bạn đã gặp AI ở đâu chưa?"</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 text-lg">
-                <div class="bg-white/10 p-4 rounded-xl">📱 Mở khóa điện thoại</div>
-                <div class="bg-white/10 p-4 rounded-xl">👍 Lướt mạng xã hội</div>
-                <div class="bg-white/10 p-4 rounded-xl">🎬 Netflix, Youtube gợi ý</div>
-                <div class="bg-white/10 p-4 rounded-xl">📸 Chụp ảnh xóa phông</div>
-            </div>
-        </section>
-
-        <!-- Slide 3: What is AI? -->
-        <section class="slide">
-             <h2>AI là gì mà "hot" thế? 🤔</h2>
-            <div class="two-column">
-                <div class="column">
-                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=Human+Brain" alt="Human Brain">
-                </div>
-                <div class="column text-left">
-                     <p>Nói đơn giản, Trí tuệ Nhân tạo (AI) là lĩnh vực khoa học máy tính giúp tạo ra những cỗ máy <span class="highlight">thông minh</span>.</p>
-                     <p>...có khả năng <span class="highlight">"suy nghĩ"</span>, <span class="highlight">"học hỏi"</span>, và <span class="highlight">"hành động"</span> tương tự như con người.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 4: AI, ML, DL Relationship -->
-        <section class="slide">
-            <h2>Gia đình nhà AI 👨‍👩‍👧‍👦</h2>
-            <p>AI không chỉ có một mình, mà còn có các "họ hàng" rất thân thiết!</p>
-            <img src="https://placehold.co/800x450/2d3748/ffffff?text=AI+%3E+Machine+Learning+%3E+Deep+Learning" alt="Biểu đồ quan hệ AI, ML, DL" class="my-8 rounded-2xl shadow-lg">
-            <p>AI là một ngôi nhà lớn, chứa đựng Machine Learning và Deep Learning bên trong.</p>
-        </section>
-        
-        <!-- Slide 5: What is Machine Learning? -->
-        <section class="slide">
-             <h2>Machine Learning (Học Máy) ⚙️</h2>
-            <p>Là một nhánh của AI, cho phép máy tính <span class="highlight">tự học từ dữ liệu</span> mà không cần được lập trình cụ thể cho từng việc.</p>
-            <div class="two-column mt-8">
-                <div class="column">
-                    <p class="text-2xl font-semibold">Ví dụ kinh điển:</p>
-                    <p>Hòm thư của bạn tự động nhận diện và lọc <span class="highlight">thư rác (Spam)</span>. Nó đã "học" từ hàng triệu email để biết đâu là thư quan trọng, đâu là thư rác.</p>
-                </div>
-                <div class="column">
-                     <img src="https://placehold.co/500x350/e11d48/ffffff?text=SPAM+FILTER" alt="Spam Filter">
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 6: What is Deep Learning? -->
-        <section class="slide">
-            <h2>Deep Learning (Học Sâu) 🧠✨</h2>
-            <p>Là một lĩnh vực con của Machine Learning, lấy cảm hứng từ <span class="highlight">cấu trúc bộ não người</span> (mạng nơ-ron thần kinh).</p>
-            <div class="two-column mt-8">
-                <div class="column">
-                     <img src="https://placehold.co/500x350/fb923c/ffffff?text=Image+Recognition" alt="Image Recognition">
-                </div>
-                <div class="column">
-                    <p class="text-2xl font-semibold">Sức mạnh của Học Sâu:</p>
-                    <p>Giúp điện thoại <span class="highlight">nhận diện khuôn mặt</span> của bạn, xe ô tô có thể <span class="highlight">tự lái</span>, hay Google Dịch có thể <span class="highlight">dịch cả một cuộc hội thoại</span>.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 7: Algorithmic Thinking -->
-        <section class="slide">
-            <h2>Tư duy Thuật toán - Nền tảng của AI 🧩</h2>
-            <p>Thuật toán đơn giản là <span class="highlight">một bộ các hướng dẫn từng bước</span> để giải quyết một vấn đề.</p>
-            <p class="text-2xl font-bold my-6">Trò chơi nhỏ: Hãy "lập trình" cho một bạn robot!</p>
-            <div class="bg-white/10 p-8 rounded-2xl text-left max-w-2xl mx-auto">
-                <h3 class="text-2xl font-semibold mb-4 text-center">🤖 Nhiệm vụ: Lấy một chai nước trên bàn</h3>
-                <ol class="list-decimal list-inside text-xl space-y-2">
-                    <li>Bắt đầu từ vị trí hiện tại.</li>
-                    <li>Tiến về phía trước 5 bước.</li>
-                    <li>Xoay sang trái 90 độ.</li>
-                    <li>Tiến về phía trước 2 bước.</li>
-                    <li>Vươn tay phải ra phía trước.</li>
-                    <li>Nắm lấy chai nước.</li>
-                    <li>... ???</li>
-                </ol>
-            </div>
-        </section>
-
-        <!-- Slide 8: Video Break -->
-        <section class="slide">
-            <div class="emoji-large">🎬</div>
-            <h2>Xem một video ngắn nhé!</h2>
-            <p>"AI đã thay đổi thế giới của chúng ta như thế nào?"</p>
-            <p class="text-gray-400 text-lg">(Giảng viên sẽ chiếu một video ngắn tại đây)</p>
-        </section>
-
-        <!-- Slide 9: Transition to Demo -->
-        <section class="slide">
-            <div class="emoji-large">🛠️</div>
-            <h2>Lý thuyết đủ rồi, "vọc" thôi!</h2>
-            <p>Bây giờ, chúng ta sẽ cùng nhau trải nghiệm một vài <span class="highlight">công cụ AI</span> cực kỳ hữu ích và thú vị.</p>
-        </section>
-        
-        <!-- === UPDATED SLIDES START HERE === -->
-
-        <!-- Slide 10: LMSYS Chatbot Arena -->
-        <section class="slide">
-            <h2>Ai là AI "xịn" nhất? 🏆</h2>
-            <p>Giữa hàng trăm mô hình AI, làm sao biết được model nào mạnh nhất? Hãy đến với <span class="highlight">LMSYS Chatbot Arena</span>!</p>
-            <img src="https://placehold.co/800x400/38bdf8/ffffff?text=lmarena.ai/leaderboard" alt="LMSYS Chatbot Arena Leaderboard" class="my-6 rounded-2xl shadow-lg">
-            <p class="text-xl">Đây là một "đấu trường" nơi mọi người dùng thử và bình chọn ẩn danh cho các AI. Bảng xếp hạng được cập nhật liên tục dựa trên kết quả các "trận đấu" này.</p>
-        </section>
-
-        <!-- Slide 11: Google AI Studio Intro -->
-        <section class="slide">
-            <h2>Thử nghiệm AI từ Google: AI Studio 🚀</h2>
-            <p><span class="highlight">Google AI Studio</span> là "sân chơi" miễn phí để bạn trực tiếp trò chuyện và ra lệnh cho các mô hình AI thế hệ mới nhất của Google, như <span class="highlight">Gemini</span>.</p>
-            <img src="https://placehold.co/800x400/4c1d95/ffffff?text=Google+AI+Studio" alt="Google AI Studio Interface" class="my-6 rounded-2xl shadow-lg">
-            <p class="text-xl">Bạn có thể thử nghiệm, xây dựng và sáng tạo với công nghệ AI tiên tiến một cách dễ dàng.</p>
-        </section>
-
-        <!-- Slide 12: Google AI Studio Applications -->
-        <section class="slide">
-            <h2>Sức mạnh của Google AI Studio 🛠️</h2>
-            <p>Với AI Studio, bạn có thể biến các ý tưởng thành hành động:</p>
-            <div class="grid md:grid-cols-2 gap-6 mt-8 text-lg w-full max-w-4xl">
-                <div class="bg-white/10 p-6 rounded-xl">
-                    <h3 class="text-2xl font-bold mb-2 text-yellow-300">💡 Lên ý tưởng</h3>
-                    <p>Sáng tạo kịch bản, viết email, nghĩ ra tên cho dự án...</p>
-                </div>
-                <div class="bg-white/10 p-6 rounded-xl">
-                    <h3 class="text-2xl font-bold mb-2 text-green-300">💻 Viết và gỡ lỗi Code</h3>
-                    <p>Tạo ra các đoạn code, tìm lỗi và giải thích code cho bạn.</p>
-                </div>
-                <div class="bg-white/10 p-6 rounded-xl">
-                    <h3 class="text-2xl font-bold mb-2 text-blue-300">📚 Tóm tắt & Phân tích</h3>
-                    <p>Rút gọn các tài liệu dài, phân tích dữ liệu phức tạp.</p>
-                </div>
-                <div class="bg-white/10 p-6 rounded-xl">
-                    <h3 class="text-2xl font-bold mb-2 text-pink-300">🤖 Xây dựng Chatbot</h3>
-                    <p>Tạo ra các chatbot chuyên biệt cho các nhiệm vụ của riêng bạn.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 13: NotebookLM Intro -->
-        <section class="slide">
-            <h2>Trợ lý học tập cá nhân: NotebookLM 📚</h2>
-            <p><span class="highlight">NotebookLM</span> không phải là một chatbot thông thường. Nó là một trợ lý nghiên cứu và ghi chú được cá nhân hóa dựa trên chính <span class="highlight">tài liệu của bạn</span>.</p>
-            <img src="https://placehold.co/800x400/f97316/ffffff?text=NotebookLM+Interface" alt="NotebookLM Interface" class="my-6 rounded-2xl shadow-lg">
-            <p class="text-xl">Bạn tải tài liệu lên (slide bài giảng, file PDF, ghi chú...), NotebookLM sẽ trở thành chuyên gia về chính những tài liệu đó.</p>
-        </section>
-
-        <!-- Slide 14: NotebookLM Use Case -->
-        <section class="slide">
-             <h2>Học siêu tốc với NotebookLM ⚡</h2>
-             <p>Tưởng tượng bạn vừa tải lên tài liệu Lịch sử Việt Nam dài 50 trang.</p>
-             <div class="bg-gray-800 p-6 rounded-xl my-4 text-left max-w-4xl w-full">
-                <p class="text-purple-400 font-semibold text-lg">👤 BẠN TẢI LÊN:</p>
-                <p class="text-white text-xl">[Lich_Su_Viet_Nam.pdf]</p>
-             </div>
-             <div class="bg-gray-700 p-6 rounded-xl text-left max-w-4xl w-full">
-                <p class="text-green-400 font-semibold text-lg">👤 BẠN HỎI:</p>
-                <p class="text-white text-xl">
-                    "Tóm tắt các sự kiện chính của nhà Trần và tạo một bảng câu hỏi ôn tập."
-                </p>
-             </div>
-             <p class="mt-4">NotebookLM sẽ ngay lập tức tạo bản tóm tắt và câu hỏi dựa <span class="highlight">CHÍNH XÁC</span> vào nội dung tài liệu bạn cung cấp.</p>
-        </section>
-
-        <!-- Slide 15: Recap Part 1 (Updated) -->
-        <section class="slide">
-            <h2>Tóm tắt nhanh 🧐</h2>
-            <p>Vậy là trong phần đầu tiên, chúng ta đã cùng nhau:</p>
-            <ul class="list-disc mt-8 text-2xl space-y-4 max-w-3xl mx-auto">
-                <li><span class="highlight">Giải mã</span> được AI, Machine Learning và Deep Learning là gì.</li>
-                <li>Biết cách <span class="highlight">đánh giá sức mạnh</span> của các mô hình AI qua Chatbot Arena.</li>
-                <li><span class="highlight">Trải nghiệm</span> các công cụ AI đỉnh cao từ Google như AI Studio và NotebookLM để học tập, sáng tạo.</li>
-            </ul>
-        </section>
-
-        <!-- Slide 16: Next Steps / Creative Challenge (Updated) -->
-        <section class="slide">
-            <div class="emoji-large">🏆</div>
-            <h2>Thử Thách Sáng Tạo!</h2>
-            <p>Đây là phần của bạn! Hãy vận dụng những công cụ vừa học để biến ý tưởng thành hiện thực.</p>
-            <div class="grid md:grid-cols-3 gap-6 mt-8 text-lg w-full max-w-6xl">
-                <div class="bg-white/10 p-6 rounded-xl transform hover:scale-105 transition-transform">
-                    <h3 class="text-2xl font-bold mb-2 text-yellow-300">Nhà Sử Học AI</h3>
-                    <p>Dùng NotebookLM, tải lên một tài liệu lịch sử và nhờ nó tạo một bài tóm tắt và một kịch bản ngắn về sự kiện đó.</p>
-                </div>
-                <div class="bg-white/10 p-6 rounded-xl transform hover:scale-105 transition-transform">
-                    <h3 class="text-2xl font-bold mb-2 text-green-300">Nhà phát minh ý tưởng</h3>
-                    <p>Dùng Google AI Studio để lên 5 ý tưởng cho một dự án khoa học giúp bảo vệ môi trường trong trường học.</p>
-                </div>
-                <div class="bg-white/10 p-6 rounded-xl transform hover:scale-105 transition-transform">
-                     <h3 class="text-2xl font-bold mb-2 text-blue-300">Nhà thơ Gen Z</h3>
-                    <p>Yêu cầu Google AI Studio sáng tác một bài thơ về chủ đề "trí tuệ nhân tạo" theo phong cách của bạn.</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- === UPDATED SLIDES END HERE === -->
-
-        <!-- Slide 17: AI Responsibility -->
-        <section class="slide">
-            <div class="emoji-large">🤝</div>
-            <h2>Dùng AI có Trách nhiệm</h2>
-            <p>AI là một công cụ mạnh mẽ, hãy là một người dùng thông thái!</p>
-            <ul class="list-disc mt-8 text-2xl space-y-4 max-w-3xl mx-auto">
-                <li>AI là <span class="highlight">trợ lý</span>, không phải người làm thay. Hãy dùng nó để học tốt hơn, không phải để gian lận.</li>
-                <li>Luôn <span class="highlight">kiểm tra lại</span> thông tin do AI cung cấp. Nó có thể mắc lỗi!</li>
-                <li>Hãy <span class="highlight">sáng tạo</span> và đừng ngại thử nghiệm những điều mới mẻ.</li>
-            </ul>
-        </section>
-
-        <!-- Slide 18: Q&A -->
-        <section class="slide">
-            <div class="emoji-large">🙋‍♂️🙋‍♀️</div>
-            <h2>Hỏi gì đáp nấy!</h2>
-            <p>Các bạn có câu hỏi nào không?</p>
-        </section>
-
-        <!-- Slide 19: Thank You -->
-        <section class="slide">
-            <div class="emoji-large">💖</div>
-            <h2>Cảm ơn các bạn đã lắng nghe!</h2>
-            <p>Chúc các bạn có một mùa hè thật vui và đầy sáng tạo cùng AI.</p>
-            <p class="mt-8 text-xl">Giữ kết nối và đừng ngừng khám phá nhé!</p>
-        </section>
+<main id="presentation-container">
+    <div class="slide active">
+        <div class="slide-content text-center">
+            <h1 class="text-7xl md:text-8xl font-black uppercase tracking-wider animate-fade-in-up gradient-text">AI: Từ
+                Lý Thuyết Đến Thực Hành</h1>
+            <p class="mt-6 text-2xl text-neutral-300 animate-fade-in-up stagger-1">Làm chủ công cụ AI để đột phá trong
+                công việc và cuộc sống</p>
+            <p class="mt-12 text-2xl text-neutral-300 animate-fade-in-up stagger-2">Minh Long</p>
+            <p class="mt-4 text-xl text-neutral-400 animate-fade-in-up stagger-3">Trường học công nghệ EVO Education</p>
+        </div>
     </div>
 
-    <!-- Navigation -->
-    <button id="prev" class="nav-button" title="Slide trước (Mũi tên trái)">&lt;</button>
-    <button id="next" class="nav-button" title="Slide tiếp (Mũi tên phải)">&gt;</button>
-    <div id="slide-counter"></div>
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-5xl font-bold text-center mb-12 animate-fade-in-up">Chúng ta sẽ cùng nhau khám phá những
+                gì?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                <div class="bg-neutral-800 p-6 rounded-xl animate-fade-in-up stagger-1">
+                    <p class="text-4xl mb-3">🤔</p>
+                    <h3 class="text-xl font-bold">1. Phá băng</h3>
+                    <p class="text-neutral-400">Những câu hỏi lớn về AI</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl animate-fade-in-up stagger-2">
+                    <p class="text-4xl mb-3">💡</p>
+                    <h3 class="text-xl font-bold">2. Giải mã AI</h3>
+                    <p class="text-neutral-400">Hiểu đúng về trí tuệ nhân tạo</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl animate-fade-in-up stagger-3">
+                    <p class="text-4xl mb-3">🏆</p>
+                    <h3 class="text-xl font-bold">3. Đấu trường AI</h3>
+                    <p class="text-neutral-400">Ai là người mạnh nhất?</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl animate-fade-in-up stagger-4">
+                    <p class="text-4xl mb-3">🚀</p>
+                    <h3 class="text-xl font-bold">4. Thực chiến</h3>
+                    <p class="text-neutral-400">Trải nghiệm Google AI Studio</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl animate-fade-in-up stagger-5">
+                    <p class="text-4xl mb-3">🎮</p>
+                    <h3 class="text-xl font-bold">5. Workshop</h3>
+                    <p class="text-neutral-400">Dùng AI lập trình game/web</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl animate-fade-in-up stagger-6">
+                    <p class="text-4xl mb-3">💬</p>
+                    <h3 class="text-xl font-bold">6. Tổng kết & Hỏi đáp</h3>
+                    <p class="text-neutral-400">Cùng nhìn lại và trao đổi</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prev');
-            const nextBtn = document.getElementById('next');
-            const slideCounter = document.getElementById('slide-counter');
-            let currentSlide = 0;
-            const totalSlides = slides.length;
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold mb-12 animate-fade-in-up">BẠN ĐÃ TỪNG SỬ DỤNG AI CHƯA?</h2>
+            <div class="flex flex-wrap justify-center items-center gap-8">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT Logo"
+                     class="h-16 opacity-0 animate-pop-in stagger-1">
+                <img src="./gemini_logo.png" alt="Gemini Logo" class="h-16 opacity-0 animate-pop-in stagger-2">
+                <img src="./notebooklm.png" alt="Midjourney Logo" class="h-16 opacity-0 animate-pop-in stagger-3"
+                     style="filter: invert(1);">
+                <img src="./copilot_logo.png" alt="Copilot Logo" class="h-16 opacity-0 animate-pop-in stagger-4">
+                <img src="./google_ai_studio.png" alt="Notion Logo" class="h-12 opacity-0 animate-pop-in stagger-5">
+            </div>
+            <p class="mt-12 text-xl text-neutral-400 animate-fade-in-up stagger-6">"Hãy giơ tay nếu bạn đã dùng ít nhất
+                một trong các công cụ này!"</p>
+        </div>
+    </div>
 
-            function showSlide(index) {
-                // Deactivate current slide
-                if(slides[currentSlide]) {
-                    slides[currentSlide].classList.remove('active');
-                }
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold mb-8 animate-fade-in-up">Hãy kể tên những AI mà bạn ấn tượng nhất?</h2>
+            <p class="text-2xl text-neutral-400 animate-fade-in-up stagger-1">AI nào đã giúp bạn làm được điều gì thú
+                vị?</p>
+            <div class="mt-12 text-8xl animate-fade-in-up stagger-2">🎤</div>
+        </div>
+    </div>
 
-                // Update current slide index
-                currentSlide = index;
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">LIỆU AI CÓ THAY THẾ ĐƯỢC CON NGƯỜI?</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-red-900/20 border border-red-500/30 p-8 rounded-xl opacity-0 animate-slide-in-left">
+                    <h3 class="text-3xl font-bold text-red-400 mb-4">Lo lắng 😟</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li>Robot làm việc trong nhà máy</li>
+                        <li>AI viết báo, sáng tác nhạc</li>
+                        <li>AI vẽ tranh, thiết kế</li>
+                        <li>Tự động hóa các công việc lặp lại</li>
+                    </ul>
+                </div>
+                <div class="bg-green-900/20 border border-green-500/30 p-8 rounded-xl opacity-0 animate-slide-in-right">
+                    <h3 class="text-3xl font-bold text-green-400 mb-4">Cơ hội 😊</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li>Bác sĩ dùng AI chẩn đoán bệnh nhanh hơn</li>
+                        <li>Lập trình viên dùng AI để code hiệu quả hơn</li>
+                        <li>Nhà thiết kế dùng AI để tìm cảm hứng</li>
+                        <li>Trợ lý ảo cá nhân hóa cho mọi người</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                // Activate new slide
-                if(slides[currentSlide]) {
-                    slides[currentSlide].classList.add('active');
-                }
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-4 animate-fade-in-up">Đừng sợ hãi, hãy chuẩn bị!</h2>
+            <p class="text-xl text-center text-neutral-400 mb-12 animate-fade-in-up stagger-1">Những kỹ năng cần có để
+                "hòa nhập" với AI</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="border border-indigo-500/30 bg-indigo-900/20 p-6 rounded-lg opacity-0 animate-pop-in stagger-1">
+                    <h3 class="text-2xl font-bold text-indigo-300">Prompt Engineering</h3>
+                    <p>Học cách "nói chuyện" để AI hiểu và cho ra kết quả mong muốn.</p>
+                </div>
+                <div class="border-pink-500/30 bg-pink-900/20 p-6 rounded-lg opacity-0 animate-pop-in stagger-2">
+                    <h3 class="text-2xl font-bold text-pink-300">Tư duy phản biện</h3>
+                    <p>Phân biệt đâu là thông tin đúng, đâu là "ảo giác" của AI.</p>
+                </div>
+                <div class="border-teal-500/30 bg-teal-900/20 p-6 rounded-lg opacity-0 animate-pop-in stagger-3">
+                    <h3 class="text-2xl font-bold text-teal-300">Sáng tạo & Đặt vấn đề</h3>
+                    <p>AI là công cụ, con người vẫn là người khởi xướng ý tưởng.</p>
+                </div>
+                <div class="border-amber-500/30 bg-amber-900/20 p-6 rounded-lg opacity-0 animate-pop-in stagger-4">
+                    <h3 class="text-2xl font-bold text-amber-300">Kiến thức chuyên môn</h3>
+                    <p>AI cần kiến thức nền của bạn để tạo ra kết quả có giá trị.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                // Update navigation buttons
-                updateNav();
-            }
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold mb-12 animate-fade-in-up">AI CŨNG PHẢI ĐI HỌC</h2>
+            <div class="flex justify-center items-center gap-8 md:gap-16">
+                <div class="text-5xl md:text-7xl space-y-6">
+                    <div class="opacity-0 animate-slide-in-left stagger-1">📚</div>
+                    <div class="opacity-0 animate-slide-in-left stagger-2">🖼️</div>
+                    <div class="opacity-0 animate-slide-in-left stagger-3">💻</div>
+                </div>
+                <div class="text-6xl animate-fade-in">➡️</div>
+                <div class="text-8xl md:text-9xl opacity-0 animate-pop-in stagger-4">🤖</div>
+                <div class="text-6xl animate-fade-in">➡️</div>
+                <div class="text-8xl md:text-9xl opacity-0 animate-pop-in stagger-5">🧠</div>
+            </div>
+            <p class="mt-12 text-2xl text-neutral-300 animate-fade-in-up stagger-6">AI "đọc" dữ liệu khổng lồ để học các
+                quy luật và trở nên thông minh.</p>
+        </div>
+    </div>
 
-            function updateNav() {
-                // Update counter
-                if(slideCounter) {
-                    slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
-                }
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold mb-12 animate-fade-in-up">BÊN TRONG AI CÓ GÌ?</h2>
+            <div class="flex items-center justify-center space-x-8 text-2xl">
+                <div class="bg-neutral-800 p-6 rounded-lg opacity-0 animate-pop-in stagger-1">Bạn hỏi (Input)</div>
+                <div class="text-5xl text-neutral-500 opacity-0 animate-fade-in stagger-2">→</div>
+                <div class="border-2 border-dashed border-indigo-500 p-8 rounded-lg opacity-0 animate-pop-in stagger-3">
+                    <p class="text-3xl font-bold">BLACK BOX</p>
+                    <p class="text-lg text-neutral-400">Mô hình Ngôn ngữ Lớn (LLM)</p>
+                </div>
+                <div class="text-5xl text-neutral-500 opacity-0 animate-fade-in stagger-4">→</div>
+                <div class="bg-neutral-800 p-6 rounded-lg opacity-0 animate-pop-in stagger-5">AI trả lời (Output)</div>
+            </div>
+            <p class="mt-12 text-xl text-neutral-400 max-w-4xl mx-auto animate-fade-in-up stagger-6">Hãy tưởng tượng nó
+                như một bộ não kỹ thuật số siêu thông minh, có khả năng dự đoán từ tiếp theo một cách hợp lý nhất.</p>
+        </div>
+    </div>
 
-                // Update button states
-                if(prevBtn) {
-                    prevBtn.disabled = currentSlide === 0;
-                }
-                if(nextBtn) {
-                    nextBtn.disabled = currentSlide === totalSlides - 1;
-                }
-            }
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">TẠI SAO ĐÔI KHI AI "BỊA" CÂU TRẢ
+                LỜI?</h2>
+            <div class="text-center text-8xl mb-8 animate-pop-in">🤖?</div>
+            <div class="grid md:grid-cols-3 gap-6 text-lg">
+                <div class="bg-neutral-800 p-6 rounded-lg opacity-0 animate-fade-in-up stagger-1">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-2">1. Dữ liệu thiếu/cũ</h3>
+                    <p>AI không biết về các sự kiện mới nếu chưa được "học" về chúng.</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-lg opacity-0 animate-fade-in-up stagger-2">
+                    <h3 class="text-2xl font-bold text-rose-400 mb-2">2. "Ảo giác" (Hallucination)</h3>
+                    <p>Khi không chắc, AI sẽ "bịa" ra câu trả lời nghe hợp lý nhất. Đây là một lỗi!</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-lg opacity-0 animate-fade-in-up stagger-3">
+                    <h3 class="text-2xl font-bold text-sky-400 mb-2">3. Prompt không rõ ràng</h3>
+                    <p>Bạn hỏi chung chung, AI trả lời chung chung. Rác vào, rác ra.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            function nextSlide() {
-                if (currentSlide < totalSlides - 1) {
-                    showSlide(currentSlide + 1);
-                }
-            }
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">Garbage In, Garbage Out</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="opacity-0 animate-slide-in-left">
+                    <h3 class="text-3xl font-bold text-red-400 mb-4">Prompt Tệ 👎</h3>
+                    <div class="code-block text-red-300">"Viết về marketing."</div>
+                    <div class="mt-4 p-4 border border-red-500/30 rounded-lg bg-red-900/20">
+                        <p class="font-bold">Kết quả:</p>
+                        <p class="text-neutral-400">Marketing là một lĩnh vực rộng lớn bao gồm nhiều hoạt động nhằm
+                            quảng bá sản phẩm hoặc dịch vụ...</p>
+                    </div>
+                </div>
+                <div class="opacity-0 animate-slide-in-right">
+                    <h3 class="text-3xl font-bold text-green-400 mb-4">Prompt Tốt 👍</h3>
+                    <div class="code-block text-green-300">"Hãy đóng vai chuyên gia marketing, viết 5 tiêu đề email cho
+                        sản phẩm 'trà giảm cân' nhắm đến nữ văn phòng 25-35 tuổi."
+                    </div>
+                    <div class="mt-4 p-4 border border-green-500/30 rounded-lg bg-green-900/20">
+                        <p class="font-bold">Kết quả:</p>
+                        <p class="text-neutral-400">1. Vóc dáng thon gọn, tự tin nơi công sở? <br>2. [Tên], đừng để công
+                            việc bận rộn cản trở bạn...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            function prevSlide() {
-                if (currentSlide > 0) {
-                    showSlide(currentSlide - 1);
-                }
-            }
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-5xl font-bold text-center mb-12 animate-fade-in-up">Công Thức Vàng Cho Một Prompt Hiệu
+                Quả</h2>
+            <div class="bg-neutral-900/50 p-8 rounded-xl border border-neutral-700">
+                <div class="grid md:grid-cols-2 gap-8 text-xl">
+                    <div class="opacity-0 animate-fade-in-up stagger-1"><strong class="text-2xl text-indigo-400">R -
+                        Role (Vai trò):</strong> "Hãy đóng vai là..."
+                    </div>
+                    <div class="opacity-0 animate-fade-in-up stagger-2"><strong class="text-2xl text-pink-400">T - Task
+                        (Nhiệm vụ):</strong> "Hãy viết/tóm tắt/lên kế hoạch..."
+                    </div>
+                    <div class="opacity-0 animate-fade-in-up stagger-3"><strong class="text-2xl text-teal-400">F -
+                        Format (Định dạng):</strong> "Dưới dạng bảng/email/code..."
+                    </div>
+                    <div class="opacity-0 animate-fade-in-up stagger-4"><strong class="text-2xl text-amber-400">C -
+                        Context (Bối cảnh):</strong> Cung cấp thông tin nền, mục tiêu...
+                    </div>
+                </div>
+                <hr class="my-8 border-neutral-700 opacity-0 animate-fade-in stagger-4">
+                <div class="opacity-0 animate-fade-in-up stagger-5">
+                    <p class="text-lg text-neutral-400 mb-2">Ví dụ:</p>
+                    <p class="text-lg leading-relaxed">"Hãy <strong class='text-indigo-400'>(R)</strong> đóng vai một
+                        đầu bếp. <strong class='text-pink-400'>(T)</strong> Lên thực đơn 7 ngày lành mạnh cho người muốn
+                        giảm cân. <strong class='text-teal-400'>(F)</strong> Trình bày dưới dạng bảng. <strong
+                                class='text-amber-400'>(C)</strong> Lưu ý: người này không ăn được hải sản và có ngân
+                        sách 2 triệu/tuần."</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Event Listeners for buttons
-            if(nextBtn) {
-                nextBtn.addEventListener('click', nextSlide);
-            }
-            if(prevBtn) {
-                prevBtn.addEventListener('click', prevSlide);
-            }
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold mb-8 animate-fade-in-up">AI NÀO ĐANG DẪN ĐẦU?</h2>
+            <p class="text-2xl text-neutral-300 mb-8 max-w-4xl mx-auto animate-fade-in-up stagger-1">Giới thiệu <strong
+                    class="gradient-text">LMSYS Chatbot Arena Leaderboard</strong> - Bảng xếp hạng uy tín dựa trên bình
+                chọn của người dùng toàn cầu.</p>
+            <div class="bg-neutral-800 border border-neutral-700 rounded-lg p-4 w-full max-w-5xl mx-auto animate-pop-in stagger-2">
+                <div class="bg-black p-2 rounded-t-lg flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <img src="./lmarena.png" alt="Chatbot Arena Leaderboard Screenshot"
+                     class="w-full rounded-b-lg">
+            </div>
+            <a href="https://chat.lmsys.org/" target="_blank"
+               class="mt-8 inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-colors animate-fade-in-up stagger-3">Xem
+                Bảng Xếp Hạng Trực Tiếp</a>
+        </div>
+    </div>
 
-            // Event Listener for keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight') {
-                    nextSlide();
-                } else if (e.key === 'ArrowLeft') {
-                    prevSlide();
-                }
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">MỖI NGƯỜI MỘT VẺ</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-neutral-800 p-6 rounded-xl text-center opacity-0 animate-pop-in stagger-1">
+                    <h3 class="text-2xl font-bold">GPT-4o</h3>
+                    <p class="text-neutral-400 mt-2">Cực kỳ thông minh, lý luận phức tạp, đa phương thức (nhìn, nghe,
+                        nói).</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl text-center opacity-0 animate-pop-in stagger-2">
+                    <h3 class="text-2xl font-bold">Claude 3 Opus</h3>
+                    <p class="text-neutral-400 mt-2">Xử lý văn bản dài cực tốt, hợp cho việc tóm tắt, phân tích tài
+                        liệu.</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl text-center opacity-0 animate-pop-in stagger-3">
+                    <h3 class="text-2xl font-bold">Gemini 2.5 Pro</h3>
+                    <p class="text-neutral-400 mt-2">Tích hợp sâu với Google, xử lý ngữ cảnh dài, đa phương thức
+                        mạnh.</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl text-center opacity-0 animate-pop-in stagger-4">
+                    <h3 class="text-2xl font-bold">Llama 3</h3>
+                    <p class="text-neutral-400 mt-2">Mã nguồn mở mạnh mẽ, linh hoạt cho các nhà phát triển.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold animate-fade-in-up">TRẢI NGHIỆM SỨC MẠNH CỦA AI</h2>
+            <p class="text-3xl mt-4 text-neutral-300 animate-fade-in-up stagger-1">Google AI Studio - Sân chơi AI của
+                riêng bạn</p>
+            <a href="https://aistudio.google.com" target="_blank"
+               class="mt-12 text-4xl font-mono p-4 bg-neutral-900 border border-neutral-700 rounded-lg inline-block animate-pop-in stagger-2 hover:bg-neutral-800 transition-colors">aistudio.google.com</a>
+            <p class="mt-8 text-8xl animate-pop-in stagger-3">🚀</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">CÓ GÌ TRONG AI STUDIO?</h2>
+            <ul class="space-y-6 text-2xl max-w-3xl mx-auto">
+                <li class="bg-neutral-800 p-6 rounded-lg flex items-center gap-6 opacity-0 animate-slide-in-left stagger-1">
+                    <span class="text-4xl">✍️</span>
+                    <div><strong>Freeform Prompt:</strong> Thử các prompt sáng tạo (viết thơ, kịch bản).</div>
+                </li>
+                <li class="bg-neutral-800 p-6 rounded-lg flex items-center gap-6 opacity-0 animate-slide-in-right stagger-2">
+                    <span class="text-4xl">🖼️</span>
+                    <div><strong>Image Prompt:</strong> Tải ảnh lên để AI mô tả, viết truyện.</div>
+                </li>
+                <li class="bg-neutral-800 p-6 rounded-lg flex items-center gap-6 opacity-0 animate-slide-in-left stagger-3">
+                    <span class="text-4xl">💬</span>
+                    <div><strong>Chat Prompt:</strong> Tạo một cuộc hội thoại liên tục.</div>
+                </li>
+                <li class="bg-neutral-800 p-6 rounded-lg flex items-center gap-6 opacity-0 animate-slide-in-right stagger-4">
+                    <span class="text-4xl">👨‍💻</span>
+                    <div><strong>Get Code Button:</strong> Chuyển mọi thứ thành mã lập trình.</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-5xl font-bold text-center mb-8 animate-fade-in-up">Chỉ Dẫn Hệ Thống (System Instruction)</h2>
+            <p class="text-2xl text-center text-neutral-400 mb-8 animate-fade-in-up stagger-1">Ra lệnh cho AI biết <strong class="text-white">"NÓ LÀ AI"</strong> và cần hành xử thế nào <strong class="text-white">TRƯỚC KHI</strong> bạn bắt đầu chat.</p>
+            <div class="code-block text-base animate-fade-in-up stagger-2 max-w-4xl mx-auto">
+                <strong class="text-teal-300">// VÍ DỤ VỀ SYSTEM INSTRUCTION //</strong>
+                <br><br>
+                Bạn là một chuyên gia tuyển dụng nhân sự tại các công ty công nghệ lớn.
+                <br><br>
+                <strong>Quy tắc của bạn:</strong>
+                <br>- Đưa ra những nhận xét thẳng thắn, chuyên nghiệp.
+                <br>- Phân tích CV dựa trên các từ khóa quan trọng về kỹ năng và kinh nghiệm.
+                <br>- Luôn đề xuất 3 câu hỏi phỏng vấn dựa trên thông tin trong CV.
+                <br>- Giao tiếp bằng tiếng Việt.
+            </div>
+            <p class="mt-8 text-xl text-center animate-fade-in-up stagger-3">➡️ Giúp AI trả lời <strong class="gradient-text">nhất quán</strong> và <strong class="gradient-text">đúng vai trò</strong> bạn muốn.</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">Tinh Chỉnh "Tính Cách" Của AI</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-neutral-800/50 border border-rose-500/30 p-8 rounded-xl opacity-0 animate-slide-in-left stagger-1">
+                    <h3 class="text-3xl font-bold text-rose-400 mb-4 flex items-center gap-3">🔥 Temperature</h3>
+                    <p class="text-xl"><strong>(Độ "Sáng Tạo")</strong></p>
+                    <p class="text-lg mt-2 text-neutral-300">Quyết định mức độ ngẫu nhiên của câu trả lời.</p>
+                    <ul class="list-disc list-inside space-y-2 text-lg mt-4">
+                        <li><strong>Thấp (gần 0):</strong> An toàn, dễ đoán, phù hợp cho việc trả lời factual.</li>
+                        <li><strong>Cao (gần 1):</strong> Sáng tạo, bất ngờ, phù hợp cho brainstorming, viết lách.</li>
+                    </ul>
+                </div>
+                <div class="bg-neutral-800/50 border border-sky-500/30 p-8 rounded-xl opacity-0 animate-slide-in-right stagger-2">
+                    <h3 class="text-3xl font-bold text-sky-400 mb-4 flex items-center gap-3">🎯 Top-P</h3>
+                    <p class="text-xl"><strong>(Độ "Tập Trung")</strong></p>
+                    <p class="text-lg mt-2 text-neutral-300">Giới hạn các từ mà AI có thể chọn để trả lời.</p>
+                    <ul class="list-disc list-inside space-y-2 text-lg mt-4">
+                        <li><strong>Thấp:</strong> Ít lựa chọn từ hơn, câu trả lời an toàn và phổ biến.</li>
+                        <li><strong>Cao (gần 1):</strong> Nhiều lựa chọn từ hơn, cho phép các từ hiếm xuất hiện.</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="mt-8 text-xl text-center text-amber-300 animate-fade-in-up stagger-3">💡 Gợi ý: Thường chỉ cần chỉnh Temperature là đủ!</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">Vượt Qua Giới Hạn Văn Bản</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-neutral-800 p-8 rounded-xl opacity-0 animate-pop-in stagger-1">
+                    <p class="text-6xl mb-4">🎙️</p>
+                    <h3 class="text-2xl font-bold text-indigo-300">Chế độ "Live"</h3>
+                    <p class="text-neutral-400 mt-2">Trò chuyện trực tiếp, tương tác hai chiều với Gemini bằng giọng nói.</p>
+                </div>
+                <div class="bg-neutral-800 p-8 rounded-xl opacity-0 animate-pop-in stagger-2">
+                    <p class="text-6xl mb-4">🎨</p>
+                    <h3 class="text-2xl font-bold text-pink-300">Tạo Ảnh Bằng Chữ</h3>
+                    <p class="text-neutral-400 mt-2">Miêu tả ý tưởng của bạn, và AI sẽ "vẽ" nó thành một bức ảnh độc đáo.</p>
+                </div>
+                <div class="bg-neutral-800 p-8 rounded-xl opacity-0 animate-pop-in stagger-3">
+                    <p class="text-6xl mb-4">🎬</p>
+                    <h3 class="text-2xl font-bold text-teal-300">Tạo Video (Mới)</h3>
+                    <p class="text-neutral-400 mt-2">Biến prompt hoặc hình ảnh tĩnh thành những đoạn video ngắn ấn tượng.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold animate-fade-in-up">WORKSHOP</h2>
+            <p class="text-4xl mt-4 gradient-text font-bold animate-fade-in-up stagger-1">TẠO GAME ĐẦU TAY TRONG 5
+                PHÚT</p>
+            <div class="mt-12 text-2xl space-y-4 animate-fade-in-up stagger-2">
+                <p><strong>Mục tiêu:</strong> Dùng 1 câu lệnh để AI tạo ra game "Rắn săn mồi".</p>
+                <p><strong>Yêu cầu:</strong> Không cần biết code!</p>
+            </div>
+            <div class="text-8xl mt-8 animate-pop-in stagger-3">🎮</div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-5xl font-bold text-center mb-8 animate-fade-in-up">CÂU LỆNH "MA THUẬT"</h2>
+            <div class="code-block text-base animate-fade-in-up stagger-1">
+                Hãy đóng vai một lập trình viên front-end chuyên nghiệp.
+                <br><br>
+                Viết code cho một trang web hoàn chỉnh chỉ trong một file `index.html` duy nhất. Không sử dụng bất kỳ
+                file bên ngoài nào. Toàn bộ CSS và JavaScript phải được viết bên trong file HTML.
+                <br><br>
+                <strong>Nhiệm vụ:</strong> Tạo ra một game "Rắn săn mồi" (Snake game) đơn giản.
+                <br><br>
+                <strong>Yêu cầu:</strong>
+                <br>- Game phải có thể chơi được ngay trên trình duyệt.
+                <br>- Sử dụng các phím mũi tên để điều khiển.
+                <br>- Có hiển thị điểm số.
+                <br>- Giao diện phải sạch sẽ, hiện đại và có màu sắc.
+                <br><br>
+                Hãy bắt đầu bằng `&lt;!DOCTYPE html&gt;` và kết thúc bằng `&lt;/html&gt;`. Chỉ xuất ra code, không giải
+                thích gì thêm.
+            </div>
+            <button id="copy-prompt-btn"
+                    class="mt-4 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                Copy Prompt
+            </button>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-6xl font-bold animate-fade-in-up">SHOW SẢN PHẨM!</h2>
+            <p class="text-2xl mt-4 text-neutral-400 animate-fade-in-up stagger-1">Cùng xem và bình luận các trang
+                web/game các bạn vừa tạo ra.</p>
+            <div class="mt-12 grid md:grid-cols-3 gap-6 text-lg">
+                <div class="opacity-0 animate-pop-in stagger-2">💡 AI đã làm tốt điều gì?</div>
+                <div class="opacity-0 animate-pop-in stagger-3">🔧 Có thể cải thiện gì ở prompt?</div>
+                <div class="opacity-0 animate-pop-in stagger-4">🚀 Ý tưởng tiếp theo của bạn là gì?</div>
+            </div>
+            <div class="text-8xl mt-8 animate-pop-in stagger-5">🏆</div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-6xl font-bold text-center mb-12 animate-fade-in-up">NHỮNG GÌ CẦN MANG VỀ</h2>
+            <div class="space-y-8 max-w-3xl mx-auto">
+                <div class="flex items-start gap-6 text-2xl opacity-0 animate-fade-in-up stagger-1">
+                    <div class="text-5xl">🛠️</div>
+                    <div><strong>AI là một công cụ, không phải phép màu.</strong> Nó mạnh mẽ nhưng cần người sử dụng
+                        thông minh.
+                    </div>
+                </div>
+                <div class="flex items-start gap-6 text-2xl opacity-0 animate-fade-in-up stagger-2">
+                    <div class="text-5xl">🔑</div>
+                    <div><strong>Kỹ năng "ra lệnh" (Prompting) là chìa khóa</strong> để khai thác tối đa sức mạnh của
+                        AI.
+                    </div>
+                </div>
+                <div class="flex items-start gap-6 text-2xl opacity-0 animate-fade-in-up stagger-3">
+                    <div class="text-5xl">🎓</div>
+                    <div><strong>Hãy liên tục thử nghiệm và học hỏi.</strong> Thế giới AI thay đổi mỗi ngày, thái độ cởi
+                        mở sẽ giúp bạn luôn bắt kịp.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h2 class="text-8xl font-black animate-fade-in-up">CẢM ƠN!</h2>
+            <p class="text-4xl mt-4 gradient-text font-bold animate-fade-in-up stagger-1">Q&A - Hỏi gì đáp nấy</p>
+            <div class="mt-12 text-xl text-neutral-400 animate-fade-in-up stagger-2">
+                <a href="https://www.facebook.com/evoschoolecopark" target="_blank" class="text-2xl hover:text-indigo-400 transition-colors">
+                    Facebook: fb.com/evoschoolecopark
+                </a>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<button id="prev-btn" class="nav-button">← Trước</button>
+<button id="next-btn" class="nav-button">Tiếp →</button>
+<div id="slide-counter"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const slideCounter = document.getElementById('slide-counter');
+        const copyPromptBtn = document.getElementById('copy-prompt-btn');
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
             });
-            
-            // Initial setup
-            if(slides.length > 0) {
-                showSlide(0);
+            currentSlide = index;
+            updateNav();
+        }
+
+        function updateNav() {
+            // Update counter
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Update buttons
+            if (currentSlide === 0) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'block';
+            }
+
+            if (currentSlide === totalSlides - 1) {
+                nextBtn.textContent = 'Kết thúc';
+            } else {
+                nextBtn.textContent = 'Tiếp →';
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Event Listeners
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
             }
         });
-    </script>
+
+        // Copy prompt button functionality
+        if (copyPromptBtn) {
+            copyPromptBtn.addEventListener('click', () => {
+                const promptText = `Hãy đóng vai một lập trình viên front-end chuyên nghiệp.
+
+Viết code cho một trang web hoàn chỉnh chỉ trong một file \`index.html\` duy nhất. Không sử dụng bất kỳ file bên ngoài nào. Toàn bộ CSS và JavaScript phải được viết bên trong file HTML.
+
+Nhiệm vụ: Tạo ra một game "Rắn săn mồi" (Snake game) đơn giản.
+
+Yêu cầu:
+- Game phải có thể chơi được ngay trên trình duyệt.
+- Sử dụng các phím mũi tên để điều khiển.
+- Có hiển thị điểm số.
+- Giao diện phải sạch sẽ, hiện đại và có màu sắc.
+
+Hãy bắt đầu bằng \`<!DOCTYPE html>\` và kết thúc bằng \`</html>\`. Chỉ xuất ra code, không giải thích gì thêm.`;
+
+                navigator.clipboard.writeText(promptText).then(() => {
+                    copyPromptBtn.textContent = 'Đã copy!';
+                    setTimeout(() => {
+                        copyPromptBtn.textContent = 'Copy Prompt';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Không thể copy: ', err);
+                    alert('Copy thất bại!');
+                });
+            });
+        }
+
+
+        // Initial setup
+        showSlide(0);
+    });
+</script>
 </body>
 </html>
