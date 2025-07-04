@@ -776,7 +776,7 @@
 
             if (copyPromptBtn) {
                 copyPromptBtn.addEventListener('click', () => {
-                    const promptText = `Hãy đóng vai một lập trình viên front-end chuyên nghiệp.\n\nViết code cho một trang web hoàn chỉnh chỉ trong một file \`index.html\` duy nhất. Không sử dụng bất kỳ file bên ngoài nào, không dùng link CDN. Toàn bộ CSS và JavaScript phải được viết bên trong thẻ <style> và <script> của file HTML.\n\nNhiệm vụ: Tạo ra một game "Rắn săn mồi" (Snake game) đơn giản.\n\nYêu cầu:\n- Game phải có thể chơi được ngay trên trình duyệt.\n- Điều khiển bằng các phím mũi tên.\n- Hiển thị điểm số.\n- Giao diện sạch sẽ, hiện đại, có màu sắc (xanh và cam).\n\nHãy bắt đầu bằng \`<!DOCTYPE html>\` và kết thúc bằng \`</html>\`. Chỉ xuất ra code, không giải thích gì thêm.`;
+                    const promptText = `Hãy đóng vai một lập trình viên front-end javascript chuyên nghiệp. Có kiến thức lập trình game, giao diện, đồ họa bằng javascript\n\nViết code cho một trang web hoàn chỉnh chỉ trong một file \`index.html\` duy nhất. Không sử dụng bất kỳ file bên ngoài nào nhưng có thể sử dụng link CDN, thư viện bên ngoài (link CDN stable nhất) để xây dựng game, giao diện, ... với javascript và css. Toàn bộ CSS và JavaScript phải được viết bên trong thẻ <style> và <script> của file HTML.\n\nNhiệm vụ: Tạo ra một game "Rắn săn mồi" (Snake game) đơn giản.\n\nYêu cầu:\n- Game phải có thể chơi được ngay trên trình duyệt.\n- Điều khiển bằng các phím mũi tên.\n- Hiển thị điểm số.\n- Giao diện sạch sẽ, hiện đại, có màu sắc (xanh và cam).\n\nHãy xuất ra 1 file index.html duy nhất. Chỉ xuất ra code, không giải thích gì thêm.`;
 
                     // Using the Clipboard API
                     navigator.clipboard.writeText(promptText).then(() => {
