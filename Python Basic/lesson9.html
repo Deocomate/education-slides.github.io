@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi Học: Khám Phá Thư Viện Random trong Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f5f3ff;
+            /* Violet 50 */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4f46e5;
+            /* Indigo 600 */
+            color: #e0e7ff;
+            /* Indigo 100 */
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #4338ca;
+            /* Indigo 700 */
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #a7f3d0;
+            /* Emerald 200 */
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        .code-block .keyword {
+            color: #93c5fd;
+        }
+
+        .code-block .string {
+            color: #fde047;
+        }
+
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        .code-block .function {
+            color: #d8b4fe;
+        }
+
+        .code-block .def-name {
+            color: #67e8f9;
+        }
+
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+        .code-block .boolean {
+            color: #fdbb74;
+        }
+
+        /* Customizations for Lesson - Violet/Indigo theme */
+        .text-theme-700 {
+            color: #5b21b6;
+        }
+
+        /* Violet 700 */
+        .text-theme-600 {
+            color: #6d28d9;
+        }
+
+        /* Violet 600 */
+        .bg-theme-500 {
+            background-color: #7c3aed;
+        }
+
+        /* Violet 500 */
+        .hover\:bg-theme-700:hover {
+            background-color: #5b21b6;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Bài Giảng: Thư Viện Random trong Python</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Khám Phá Sức Mạnh Của Sự Ngẫu Nhiên</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Làm chủ thư viện <code>random</code> trong Python</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/7C3AED/FFFFFF?text=Python+Random"
+                        alt="[Hình ảnh Python và xúc xắc]" class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Tạo ra sự bất ngờ và thú vị cho chương trình của bạn!
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Why use random? -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Tại Sao Cần Đến Sự Ngẫu Nhiên?</h3>
+                <p class="mb-4 text-lg">Trong lập trình, không phải lúc nào chúng ta cũng muốn mọi thứ diễn ra theo một
+                    kịch bản cố định. Sự ngẫu nhiên giúp chương trình trở nên sinh động, khó đoán và có nhiều ứng dụng
+                    thực tế.</p>
+                <p class="mb-2 text-lg font-medium">Thư viện <code>random</code> giúp chúng ta:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><strong>Xây dựng trò chơi:</strong> Tung xúc xắc, chia bài, tạo quái vật ngẫu nhiên, tạo bản đồ...
+                    </li>
+                    <li><strong>Mô phỏng (Simulation):</strong> Mô phỏng các sự kiện trong đời thực như thời tiết, giao
+                        thông, thị trường chứng khoán.</li>
+                    <li><strong>Bảo mật:</strong> Tạo mật khẩu ngẫu nhiên, mã OTP, mã token...</li>
+                    <li><strong>Khoa học dữ liệu:</strong> Lấy mẫu dữ liệu ngẫu nhiên từ một tập dữ liệu lớn để phân
+                        tích.</li>
+                    <li><strong>Nghệ thuật:</strong> Tạo ra các tác phẩm nghệ thuật, âm nhạc ngẫu nhiên.</li>
+                </ul>
+                <div class="bg-violet-100 p-6 rounded-lg border-l-4 border-violet-500 mt-6">
+                    <p class="text-lg text-violet-800"><i class="fas fa-lightbulb mr-2"></i><strong>Thực tế:</strong>
+                        Máy tính không thể tạo ra sự ngẫu nhiên "thật sự". Nó chỉ tạo ra các con số "giả ngẫu nhiên"
+                        (pseudo-random) từ một công thức toán học phức tạp, nhưng đủ tốt cho hầu hết các ứng dụng.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: How to use -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Bắt Đầu Sử Dụng</h3>
+                <p class="mb-4 text-lg">Thư viện <code>random</code> được tích hợp sẵn trong Python, chúng ta không cần
+                    cài đặt gì thêm. Để sử dụng, chỉ cần "nhập khẩu" (import) nó vào đầu chương trình.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Sau khi đã import, chúng ta có thể gọi các hàm trong thư viện này bằng cú pháp
+                    <code>random.ten_ham()</code>.
+                </p>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">Các Hàm Cơ Bản Nhất</h4>
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <div class="bg-gray-50 p-4 rounded-lg shadow">
+                        <h5 class="font-bold text-xl text-gray-800 mb-2"><code>random.randint(a, b)</code></h5>
+                        <p>Trả về một số nguyên ngẫu nhiên trong khoảng từ <code>a</code> đến <code>b</code> (bao gồm cả
+                            a và b). Đây là hàm được dùng nhiều nhất!</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg shadow">
+                        <h5 class="font-bold text-xl text-gray-800 mb-2"><code>random.choice(sequence)</code></h5>
+                        <p>Chọn một phần tử ngẫu nhiên từ một chuỗi, list, hoặc tuple.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: randint -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Tạo Số Nguyên Ngẫu Nhiên</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3"><code>random.randint(a, b)</code></h4>
+                <p class="mb-4 text-lg">Hàm này giống như việc bạn tung một con xúc xắc có các mặt từ <code>a</code> đến
+                    <code>b</code>.
+                </p>
+                <p class="mb-2 font-medium">Ví dụ: Tung một con xúc xắc 6 mặt.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="comment"># Tung xúc xắc 1 lần</span>
+<span class="variable">ket_qua</span> <span class="operator">=</span> random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">6</span>)
+<span class="function">print</span>(<span class="string">f"Bạn đã tung được mặt: {ket_qua}"</span>)
+
+<span class="comment"># Lấy một số ngẫu nhiên từ 1 đến 100</span>
+<span class="variable">so_may_man</span> <span class="operator">=</span> random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>)
+<span class="function">print</span>(<span class="string">f"Con số may mắn hôm nay là: {so_may_man}"</span>)
+</code></pre>
+                </div>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">Các hàm tạo số khác</h4>
+                <ul class="list-disc list-inside pl-4 text-gray-700 space-y-2">
+                    <li><code>random.random()</code>: Trả về một số thực (float) ngẫu nhiên trong khoảng [0.0, 1.0).
+                    </li>
+                    <li><code>random.uniform(a, b)</code>: Trả về một số thực ngẫu nhiên trong khoảng [a, b].</li>
+                </ul>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="comment"># Lấy một số thực từ 0.0 đến 1.0</span>
+<span class="variable">xac_suat</span> <span class="operator">=</span> random.<span class="function">random</span>()
+<span class="function">print</span>(<span class="string">f"Xác suất ngẫu nhiên: {xac_suat}"</span>)
+
+<span class="comment"># Lấy nhiệt độ ngẫu nhiên từ 25.5 đến 35.5 độ C</span>
+<span class="variable">nhiet_do</span> <span class="operator">=</span> random.<span class="function">uniform</span>(<span class="number">25.5</span>, <span class="number">35.5</span>)
+<span class="function">print</span>(<span class="string">f"Nhiệt độ hiện tại (ước tính): {nhiet_do:.2f}°C"</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: choice -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Lựa Chọn Từ Danh Sách</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3"><code>random.choice(sequence)</code></h4>
+                <p class="mb-4 text-lg">Hàm này cho phép bạn chọn ngẫu nhiên một phần tử từ một tập hợp (ví dụ: một
+                    list hoặc một tuple).</p>
+                <p class="mb-2 font-medium">Ví dụ: Chọn một bạn học sinh để trả bài.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="variable">danh_sach_lop</span> <span class="operator">=</span> [<span class="string">"An"</span>, <span class="string">"Bình"</span>, <span class="string">"Cúc"</span>, <span class="string">"Dũng"</span>, <span class="string">"Giang"</span>]
+
+<span class="variable">ban_len_bang</span> <span class="operator">=</span> random.<span class="function">choice</span>(<span class="variable">danh_sach_lop</span>)
+<span class="function">print</span>(<span class="string">f"Mời bạn {ban_len_bang} lên bảng!"</span>)
+
+<span class="variable">mon_an_trua_nay</span> <span class="operator">=</span> [<span class="string">"Phở"</span>, <span class="string">"Bún chả"</span>, <span class="string">"Cơm rang"</span>, <span class="string">"Bánh mì"</span>]
+<span class="variable">lua_chon</span> <span class="operator">=</span> random.<span class="function">choice</span>(<span class="variable">mon_an_trua_nay</span>)
+<span class="function">print</span>(<span class="string">f"Trưa nay ăn gì? Hay là ăn '{lua_chon}' nhé!"</span>)
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Hàm này cực kỳ hữu ích khi bạn muốn chương trình có những lựa chọn hoặc hành vi
+                    khác nhau một cách ngẫu nhiên.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: shuffle, sample -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Xáo Trộn và Lấy Mẫu</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3"><code>random.shuffle(list)</code></h4>
+                <p class="mb-4 text-lg">Hàm này dùng để xáo trộn vị trí các phần tử trong một list. Lưu ý: nó thay đổi
+                    trực tiếp list ban đầu và không trả về giá trị gì (return <code>None</code>).</p>
+                <p class="mb-2 font-medium">Ví dụ: Trộn một bộ bài.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="variable">bo_bai</span> <span class="operator">=</span> [<span class="string">"A"</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="string">"J"</span>, <span class="string">"Q"</span>, <span class="string">"K"</span>]
+<span class="function">print</span>(<span class="string">f"Bộ bài ban đầu: {bo_bai}"</span>)
+
+random.<span class="function">shuffle</span>(<span class="variable">bo_bai</span>) <span class="comment"># Xáo trộn list bo_bai</span>
+<span class="function">print</span>(<span class="string">f"Bộ bài sau khi trộn: {bo_bai}"</span>)
+</code></pre>
+                </div>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6"><code>random.sample(sequence, k)</code></h4>
+                <p class="mb-4 text-lg">Lấy ra <code>k</code> phần tử <strong>duy nhất</strong> và ngẫu nhiên từ một
+                    sequence để tạo thành một list mới. Nó không làm thay đổi sequence ban đầu.</p>
+                <p class="mb-2 font-medium">Ví dụ: Lấy 5 số trúng thưởng từ 1 đến 45.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="variable">day_so</span> <span class="operator">=</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">46</span>) <span class="comment"># Các số từ 1 đến 45</span>
+<span class="variable">ket_qua_xo_so</span> <span class="operator">=</span> random.<span class="function">sample</span>(<span class="variable">day_so</span>, <span class="variable">k</span><span class="operator">=</span><span class="number">5</span>)
+
+<span class="function">print</span>(<span class="string">"Kết quả xổ số hôm nay là:"</span>, <span class="variable">ket_qua_xo_so</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: seed -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Nâng Cao: Reproducible Randomness (Tính Tái
+                    Tạo)</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3"><code>random.seed(a)</code></h4>
+                <p class="mb-4 text-lg">Đôi khi, đặc biệt là lúc gỡ lỗi (debug) hoặc làm thí nghiệm, chúng ta muốn kết
+                    quả "ngẫu nhiên" lặp lại giống hệt nhau mỗi lần chạy chương trình.</p>
+                <p class="mb-2 text-lg">Hàm <code>random.seed()</code> giúp ta làm điều này. Nó khởi tạo "hạt giống"
+                    (seed) cho bộ tạo số ngẫu nhiên. Miễn là "hạt giống" giống nhau, chuỗi số ngẫu nhiên được tạo ra sau
+                    đó sẽ luôn giống nhau.</p>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="comment"># Đặt một "hạt giống" cố định</span>
+random.<span class="function">seed</span>(<span class="number">42</span>)
+
+<span class="function">print</span>(random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>)) <span class="comment"># Sẽ luôn in ra 82</span>
+<span class="function">print</span>(random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>)) <span class="comment"># Sẽ luôn in ra 15</span>
+<span class="function">print</span>(random.<span class="function">random</span>())  <span class="comment"># Sẽ luôn in ra 0.15155988578493137</span>
+
+<span class="function">print</span>(<span class="string">"---"</span>)
+
+<span class="comment"># Nếu đặt lại cùng một seed, chuỗi số sẽ lặp lại y hệt</span>
+random.<span class="function">seed</span>(<span class="number">42</span>)
+<span class="function">print</span>(random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>)) <span class="comment"># Lại là 82</span>
+<span class="function">print</span>(random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>)) <span class="comment"># Lại là 15</span>
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg"><strong>Khi nào dùng?</strong> Khi bạn muốn chia sẻ code của mình và đảm bảo
+                    người khác nhận được kết quả ngẫu nhiên y hệt bạn để kiểm tra.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Exercise 1 -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7. Bài Tập Thực Hành</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: Trò Chơi "Đoán Số" (Kinh điển)</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Dựa trên bài thi cuối khóa, hãy hoàn thiện trò chơi
+                    đoán số.</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Chương trình sẽ tự động tạo ra một số bí mật ngẫu nhiên từ 1 đến 100 bằng
+                        <code>random.randint()</code>.
+                    </li>
+                    <li>Sử dụng vòng lặp <code>while</code> để cho người dùng đoán.</li>
+                    <li>Sau mỗi lần đoán, cho biết số của người dùng "lớn hơn" hay "nhỏ hơn" số bí mật.</li>
+                    <li>Khi đoán đúng, in ra số lần đã đoán và kết thúc trò chơi.</li>
+                </ol>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="variable">so_bi_mat</span> <span class="operator">=</span> random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>)
+<span class="variable">so_lan_doan</span> <span class="operator">=</span> <span class="number">0</span>
+<span class="variable">doan_dung</span> <span class="operator">=</span> <span class="boolean">False</span>
+
+<span class="function">print</span>(<span class="string">"Chào mừng bạn đến với trò chơi Đoán Số!"</span>)
+<span class="function">print</span>(<span class="string">"Tôi đã nghĩ ra một số từ 1 đến 100."</span>)
+
+<span class="keyword">while not</span> <span class="variable">doan_dung</span>:
+    <span class="keyword">try</span>:
+        <span class="variable">so_doan</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Mời bạn đoán một số: "</span>))
+        <span class="variable">so_lan_doan</span> <span class="operator">+=</span> <span class="number">1</span>
+
+        <span class="keyword">if</span> <span class="variable">so_doan</span> <span class="operator">&lt;</span> <span class="variable">so_bi_mat</span>:
+            <span class="function">print</span>(<span class="string">"Số bạn đoán nhỏ hơn số bí mật."</span>)
+        <span class="keyword">elif</span> <span class="variable">so_doan</span> <span class="operator">&gt;</span> <span class="variable">so_bi_mat</span>:
+            <span class="function">print</span>(<span class="string">"Số bạn đoán lớn hơn số bí mật."</span>)
+        <span class="keyword">else</span>:
+            <span class="variable">doan_dung</span> <span class="operator">=</span> <span class="boolean">True</span>
+            <span class="function">print</span>(<span class="string">f"Chúc mừng! Bạn đã đoán đúng số {so_bi_mat} sau {so_lan_doan} lần đoán."</span>)
+    <span class="keyword">except</span> <span class="class-name">ValueError</span>:
+        <span class="function">print</span>(<span class="string">"Vui lòng chỉ nhập số nguyên."</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Exercise 2 -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7. Bài Tập Thực Hành</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 2: Oẳn Tù Tì (Kéo, Búa, Bao)</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết chương trình cho phép người dùng chơi oẳn tù tì
+                    với máy tính.</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Tạo một list các lựa chọn: <code>['kéo', 'búa', 'bao']</code>.</li>
+                    <li>Cho người dùng nhập lựa chọn của họ.</li>
+                    <li>Máy tính sẽ chọn ngẫu nhiên một lựa chọn từ list trên bằng <code>random.choice()</code>.</li>
+                    <li>So sánh lựa chọn của người dùng và máy tính để quyết định thắng, thua, hoặc hòa.</li>
+                </ol>
+                <p class="mb-2 font-medium">Gợi ý logic thắng thua:</p>
+                <ul class="list-disc list-inside pl-4 text-gray-700">
+                    <li>Kéo thắng Bao</li>
+                    <li>Bao thắng Búa</li>
+                    <li>Búa thắng Kéo</li>
+                </ul>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+
+<span class="variable">lua_chon</span> <span class="operator">=</span> [<span class="string">'kéo'</span>, <span class="string">'búa'</span>, <span class="string">'bao'</span>]
+<span class="variable">may_chon</span> <span class="operator">=</span> random.<span class="function">choice</span>(<span class="variable">lua_chon</span>)
+<span class="variable">nguoi_chon</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Lựa chọn của bạn (kéo, búa, bao): "</span>).<span class="function">lower</span>()
+
+<span class="function">print</span>(<span class="string">f"Máy chọn: {may_chon}"</span>)
+<span class="function">print</span>(<span class="string">f"Bạn chọn: {nguoi_chon}"</span>)
+
+<span class="keyword">if</span> <span class="variable">nguoi_chon</span> <span class="operator">==</span> <span class="variable">may_chon</span>:
+    <span class="function">print</span>(<span class="string">"Hòa!"</span>)
+<span class="keyword">elif</span> (<span class="variable">nguoi_chon</span> <span class="operator">==</span> <span class="string">'kéo'</span> <span class="keyword">and</span> <span class="variable">may_chon</span> <span class="operator">==</span> <span class="string">'bao'</span>) <span class="keyword">or</span> \
+      (<span class="variable">nguoi_chon</span> <span class="operator">==</span> <span class="string">'bao'</span> <span class="keyword">and</span> <span class="variable">may_chon</span> <span class="operator">==</span> <span class="string">'búa'</span>) <span class="keyword">or</span> \
+      (<span class="variable">nguoi_chon</span> <span class="operator">==</span> <span class="string">'búa'</span> <span class="keyword">and</span> <span class="variable">may_chon</span> <span class="operator">==</span> <span class="string">'kéo'</span>):
+    <span class="function">print</span>(<span class="string">"Bạn thắng!"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Bạn thua!"</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Exercise 3 -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7. Bài Tập Thực Hành</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 3: Tạo Mật Khẩu Ngẫu Nhiên (Khó)</h4>
+                <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết một hàm <code>tao_mat_khau(do_dai)</code> để tạo
+                    ra một mật khẩu ngẫu nhiên có độ dài cho trước.</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Mật khẩu phải bao gồm chữ thường, chữ hoa, số, và ký tự đặc biệt.</li>
+                    <li>Tạo các chuỗi/list chứa các loại ký tự này.</li>
+                    <li>Sử dụng <code>random.choice()</code> để chọn ngẫu nhiên các ký tự từ các nhóm trên.</li>
+                    <li>Đảm bảo mật khẩu có ít nhất một ký tự từ mỗi nhóm.</li>
+                    <li>Sử dụng <code>random.shuffle()</code> để xáo trộn các ký tự đã chọn để mật khẩu khó đoán hơn.
+                    </li>
+                    <li>Hàm trả về mật khẩu dưới dạng một chuỗi.</li>
+                </ol>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> random
+<span class="keyword">import</span> string <span class="comment"># Thư viện chứa các chuỗi ký tự có sẵn</span>
+
+<span class="keyword">def</span> <span class="def-name">tao_mat_khau</span>(<span class="variable">do_dai</span><span class="operator">=</span><span class="number">12</span>):
+    <span class="keyword">if</span> <span class="variable">do_dai</span> <span class="operator">&lt;</span> <span class="number">4</span>:
+        <span class="keyword">return</span> <span class="string">"Độ dài quá ngắn, cần ít nhất 4 ký tự."</span>
+
+    <span class="comment"># 1. Định nghĩa các nhóm ký tự</span>
+    <span class="variable">chu_thuong</span> <span class="operator">=</span> string.ascii_lowercase <span class="comment"># 'abcde...'</span>
+    <span class="variable">chu_hoa</span> <span class="operator">=</span> string.ascii_uppercase <span class="comment"># 'ABCDE...'</span>
+    <span class="variable">chu_so</span> <span class="operator">=</span> string.digits          <span class="comment"># '01234...'</span>
+    <span class="variable">ky_tu_db</span> <span class="operator">=</span> <span class="string">'!@#$%^&amp;*()'</span>
+
+    <span class="comment"># 2. Đảm bảo có ít nhất 1 ký tự mỗi loại</span>
+    <span class="variable">mat_khau_list</span> <span class="operator">=</span> [
+        random.<span class="function">choice</span>(<span class="variable">chu_thuong</span>),
+        random.<span class="function">choice</span>(<span class="variable">chu_hoa</span>),
+        random.<span class="function">choice</span>(<span class="variable">chu_so</span>),
+        random.<span class="function">choice</span>(<span class="variable">ky_tu_db</span>)
+    ]
+
+    <span class="comment"># 3. Điền phần còn lại của mật khẩu</span>
+    <span class="variable">toan_bo_ky_tu</span> <span class="operator">=</span> <span class="variable">chu_thuong</span> <span class="operator">+</span> <span class="variable">chu_hoa</span> <span class="operator">+</span> <span class="variable">chu_so</span> <span class="operator">+</span> <span class="variable">ky_tu_db</span>
+    <span class="keyword">for</span> <span class="variable">_</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="variable">do_dai</span> <span class="operator">-</span> <span class="number">4</span>):
+        <span class="variable">mat_khau_list</span>.<span class="function">append</span>(random.<span class="function">choice</span>(<span class="variable">toan_bo_ky_tu</span>))
+
+    <span class="comment"># 4. Xáo trộn list để tăng độ khó đoán</span>
+    random.<span class="function">shuffle</span>(<span class="variable">mat_khau_list</span>)
+
+    <span class="comment"># 5. Ghép list thành chuỗi và trả về</span>
+    <span class="keyword">return</span> <span class="string">""</span>.<span class="function">join</span>(<span class="variable">mat_khau_list</span>)
+
+<span class="comment"># Tạo và in mật khẩu</span>
+<span class="variable">mat_khau_moi</span> <span class="operator">=</span> <span class="def-name">tao_mat_khau</span>(<span class="number">16</span>)
+<span class="function">print</span>(<span class="string">f"Mật khẩu ngẫu nhiên của bạn là: {mat_khau_moi}"</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Summary -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">8. Tổng Kết Buổi Học</h3>
+                <p class="mb-4 text-lg">Hôm nay, chúng ta đã học được cách sử dụng các hàm quan trọng nhất trong thư viện
+                    <code>random</code>:
+                </p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><code>import random</code>: Bước đầu tiên để sử dụng thư viện.</li>
+                    <li><code>random.randint(a, b)</code>: Lấy số nguyên ngẫu nhiên. Hoàn hảo cho game tung xúc xắc,
+                        đoán số.</li>
+                    <li><code>random.choice(sequence)</code>: Chọn một phần tử ngẫu nhiên từ list. Tuyệt vời cho việc
+                        chọn lựa, ví dụ như máy tính chọn trong game Oẳn Tù Tì.</li>
+                    <li><code>random.shuffle(list)</code>: Xáo trộn một list. Cần thiết khi muốn thay đổi thứ tự ngẫu
+                        nhiên như trộn bài, trộn câu hỏi.</li>
+                    <li><code>random.sample(sequence, k)</code>: Lấy một mẫu gồm k phần tử duy nhất. Hữu ích khi cần
+                        chọn nhiều mục mà không lặp lại, như xổ số.</li>
+                    <li><code>random.seed(a)</code>: Tạo ra các kết quả "ngẫu nhiên" có thể lặp lại, phục vụ cho việc
+                        kiểm thử và gỡ lỗi.</li>
+                </ul>
+                <p class="text-lg mb-6 font-semibold">Nắm vững thư viện <code>random</code> sẽ mở ra cho bạn khả năng
+                    xây dựng các chương trình phức tạp, thú vị và giống với đời thực hơn!</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Q&A -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">9. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/5B21B6/FFFFFF?text=Q%26A"
+                        alt="[Hình ảnh Hỏi và Đáp]" class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Đừng ngần ngại hỏi về bất kỳ hàm nào hoặc các ý tưởng
+                    ứng dụng khác nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i !== index) {
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                } else {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
