@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Snake</title>
+    <style>
+        :root {
+            --primary-bg: #1a2a40;
+            /* Dark Blue */
+            --secondary-bg: #2a3a50;
+            /* Lighter Blue */
+            --accent-color: #ff8c00;
+            /* Vibrant Orange */
+            --text-color: #f0f0f0;
+            /* Off-white */
+            --border-color: #4a5a70;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--primary-bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-color);
+        }
+
+        #game-container {
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #score-container {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #score {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        #game-canvas {
+            background-color: var(--primary-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-container">
+        <h1>Snake</h1>
+        <div id="score-container">
+            Score: <span id="score">0</span>
+        </div>
+        <canvas id="game-canvas" width="400" height="400"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Game Constants and Variables ---
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            const scoreElement = document.getElementById('score');
+
+            const gridSize = 20;
+            const tileCount = canvas.width / gridSize;
+
+            // Colors
+            const SNAKE_COLOR = '#ff8c00'; // Orange
+            const FOOD_COLOR = '#ff8c00'; // Orange
+            const BG_COLOR = '#1a2a40'; // Dark Blue
+
+            // Game state
+            let snake;
+            let food;
+            let score;
+            let dx; // Direction x
+            let dy; // Direction y
+            let changingDirection;
+            let gameOver;
+            let gameStarted;
+
+            // --- Game Functions ---
+
+            /**
+             * Initializes or resets the game state.
+             */
+            function initializeGame() {
+                // Initial snake position and parts
+                snake = [
+                    { x: 10, y: 10 },
+                    { x: 9, y: 10 },
+                    { x: 8, y: 10 },
+                ];
+
+                // Initial direction (moving right)
+                dx = 1;
+                dy = 0;
+
+                score = 0;
+                scoreElement.textContent = score;
+
+                changingDirection = false;
+                gameOver = false;
+                gameStarted = false;
+
+                generateFood();
+                draw();
+                drawStartMessage();
+            }
+
+            /**
+             * The main game loop.
+             */
+            function gameLoop() {
+                if (gameOver) {
+                    drawGameOver();
+                    return;
+                }
+
+                changingDirection = false;
+
+                setTimeout(() => {
+                    clearCanvas();
+                    moveSnake();
+                    draw();
+                    gameLoop();
+                }, 100);
+            }
+
+            /**
+             * Clears the canvas for the next frame.
+             */
+            function clearCanvas() {
+                ctx.fillStyle = BG_COLOR;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            /**
+             * Draws all game elements on the canvas.
+             */
+            function draw() {
+                drawSnake();
+                drawFood();
+            }
+
+            /**
+             * Draws the snake on the canvas.
+             */
+            function drawSnake() {
+                ctx.fillStyle = SNAKE_COLOR;
+                snake.forEach(part => {
+                    ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
+                });
+            }
+
+            /**
+             * Draws the food on the canvas.
+             */
+            function drawFood() {
+                ctx.fillStyle = FOOD_COLOR;
+                ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+            }
+
+            /**
+             * Updates the snake's position and checks for collisions.
+             */
+            function moveSnake() {
+                const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+                snake.unshift(head);
+
+                if (checkCollision(head)) {
+                    gameOver = true;
+                    gameStarted = false;
+                    return;
+                }
+
+                const hasEatenFood = head.x === food.x && head.y === food.y;
+                if (hasEatenFood) {
+                    score += 10;
+                    scoreElement.textContent = score;
+                    generateFood();
+                } else {
+                    snake.pop();
+                }
+            }
+
+            /**
+             * Checks for wall or self-collision.
+             * @param {object} head - The snake's head coordinates.
+             * @returns {boolean} - True if a collision occurred, false otherwise.
+             */
+            function checkCollision(head) {
+                // Wall collision
+                if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                    return true;
+                }
+                // Self-collision
+                for (let i = 1; i < snake.length; i++) {
+                    if (head.x === snake[i].x && head.y === snake[i].y) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            /**
+             * Generates a new food item at a random location.
+             */
+            function generateFood() {
+                let newFoodPosition;
+                do {
+                    newFoodPosition = {
+                        x: Math.floor(Math.random() * tileCount),
+                        y: Math.floor(Math.random() * tileCount),
+                    };
+                } while (isFoodOnSnake(newFoodPosition));
+
+                food = newFoodPosition;
+            }
+
+            /**
+             * Checks if a given position is on the snake's body.
+             * @param {object} position - The position to check.
+             * @returns {boolean} - True if the position is on the snake.
+             */
+            function isFoodOnSnake(position) {
+                return snake.some(part => part.x === position.x && part.y === position.y);
+            }
+
+            /**
+             * Handles keyboard input to change the snake's direction.
+             * @param {KeyboardEvent} event - The keydown event object.
+             */
+            function handleKeyDown(event) {
+                if (!gameStarted && !gameOver) {
+                    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                        gameStarted = true;
+                        gameLoop();
+                    }
+                }
+
+                if (gameOver) {
+                    initializeGame();
+                    return;
+                }
+
+                if (changingDirection) return;
+                changingDirection = true;
+
+                const keyPressed = event.key;
+
+                // Prevent reversing direction
+                const goingUp = dy === -1;
+                const goingDown = dy === 1;
+                const goingLeft = dx === -1;
+                const goingRight = dx === 1;
+
+                if (keyPressed === 'ArrowUp' && !goingDown) { dx = 0; dy = -1; }
+                if (keyPressed === 'ArrowDown' && !goingUp) { dx = 0; dy = 1; }
+                if (keyPressed === 'ArrowLeft' && !goingRight) { dx = -1; dy = 0; }
+                if (keyPressed === 'ArrowRight' && !goingLeft) { dx = 1; dy = 0; }
+            }
+
+            /**
+             * Displays the "Game Over" message on the canvas.
+             */
+            function drawGameOver() {
+                ctx.fillStyle = 'rgba(42, 58, 80, 0.8)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#f0f0f0';
+                ctx.font = '50px "Segoe UI", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 20);
+
+                ctx.font = '20px "Segoe UI", sans-serif';
+                ctx.fillText('Press any key to restart', canvas.width / 2, canvas.height / 2 + 20);
+            }
+
+            /**
+             * Displays the initial start message.
+             */
+            function drawStartMessage() {
+                ctx.fillStyle = 'rgba(42, 58, 80, 0.8)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#f0f0f0';
+                ctx.font = '30px "Segoe UI", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Press an arrow key', canvas.width / 2, canvas.height / 2 - 10);
+                ctx.fillText('to start!', canvas.width / 2, canvas.height / 2 + 30);
+            }
+
+
+            // --- Event Listeners and Initialisation ---
+            document.addEventListener('keydown', handleKeyDown);
+            initializeGame();
+        });
+    </script>
+
+</body>
+
+</html>

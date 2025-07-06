@@ -152,13 +152,17 @@
         ]
     },
     {
-        "category": "AI trại hè",
+        "category": "Using AI Crash Corse",
         "icon": "fas fa-mobile-alt",
         "color": "purple",
         "lessons": [
             {
-                "title": "Slide bài giảng",
+                "title": "Slide English",
                 "url": "./AI Course High School/index.html"
+            },
+            {
+                "title": "Slide Vietnamese",
+                "url": "./AI Course High School/vn.html"
             }
         ]
     },
