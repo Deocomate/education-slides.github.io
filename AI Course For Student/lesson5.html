@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 5: Sáng Tạo Trình Chiếu với AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .prompt-block {
+            background-color: #f3f4f6;
+            border-left: 4px solid #4f46e5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            word-wrap: break-word;
+        }
+
+        .response-block {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .note-block {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .code-block {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        img.slide-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">Bài 5: Sáng Tạo Trình Chiếu với AI</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Slide Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Slide Tiếp <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 w-full sm:w-auto text-center sm:text-left sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Welcome -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-4">Bài 5: Sáng Tạo Trình Chiếu</h2>
+                <p class="text-6xl font-bold text-indigo-500 mb-8">với Trí Tuệ Nhân Tạo</p>
+                <img src="https://placehold.co/600x350/6366f1/ffffff?text=AI+Powered+Slides"
+                    alt="AI tạo slide" class="slide-image mx-auto">
+                <p class="mt-10 text-xl text-gray-700">Biến ý tưởng thành bài thuyết trình ấn tượng chỉ trong vài phút!
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Mục tiêu buổi học -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">🎯 Mục Tiêu Buổi Học</h3>
+                <div class="space-y-4 text-lg max-w-2xl mx-auto">
+                    <div class="bg-indigo-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-robot text-2xl text-indigo-500 mr-4 mt-1"></i>
+                        <span>Hiểu cách AI giúp tạo slide nhanh và hiệu quả.</span>
+                    </div>
+                    <div class="bg-green-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-tools text-2xl text-green-500 mr-4 mt-1"></i>
+                        <span>Làm quen với các công cụ AI tạo slide phổ biến (Gamma, Beautiful.ai,...).</span>
+                    </div>
+                    <div class="bg-yellow-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-file-code text-2xl text-yellow-500 mr-4 mt-1"></i>
+                        <span>Nắm vững câu lệnh "tối thượng" để AI tự viết code HTML cho slide.</span>
+                    </div>
+                    <div class="bg-pink-50 p-5 rounded-lg shadow-md flex items-start">
+                        <i class="fas fa-lightbulb text-2xl text-pink-500 mr-4 mt-1"></i>
+                        <span>Thực hành tạo một bài thuyết trình hoàn chỉnh bằng AI.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Tại sao dùng AI tạo slide? -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">Tại sao phải "nhờ" AI làm slide?</h3>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-6 text-xl">
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-green-500 text-3xl mr-4"></i>
+                            <p><strong>Tiết kiệm thời gian:</strong> Từ ý tưởng đến slide hoàn chỉnh chỉ trong vài phút.
+                            </p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-lightbulb text-yellow-500 text-3xl mr-4"></i>
+                            <p><strong>Khơi nguồn sáng tạo:</strong> AI gợi ý nội dung, cấu trúc và hình ảnh độc đáo.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-palette text-blue-500 text-3xl mr-4"></i>
+                            <p><strong>Thiết kế chuyên nghiệp:</strong> Tự động căn chỉnh bố cục, màu sắc hài hòa.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="https://placehold.co/400x350/34d399/ffffff?text=Idea+%E2%86%92+AI+%E2%86%92+Slides"
+                            alt="Quy trình làm slide với AI" class="slide-image mx-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Các công cụ AI phổ biến -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-8 text-center">Các "Phù Thủy" Tạo Slide</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-purple-50 p-6 rounded-lg shadow text-center">
+                        <h4 class="text-2xl font-bold text-purple-700 mb-3">Gamma.app</h4>
+                        <p>Chỉ cần nhập chủ đề, Gamma sẽ tự động tạo ra một bài thuyết trình hoàn chỉnh với đầy đủ nội dung và hình ảnh minh họa.</p>
+                        <img src="https://placehold.co/300x200/c084fc/ffffff?text=Gamma.app" alt="Gamma.app" class="mx-auto mt-4 rounded-lg">
+                    </div>
+                    <div class="bg-sky-50 p-6 rounded-lg shadow text-center">
+                        <h4 class="text-2xl font-bold text-sky-700 mb-3">Beautiful.ai</h4>
+                        <p>Tập trung vào thiết kế, giúp bạn tạo ra những slide có bố cục đẹp mắt, chuyên nghiệp một cách tự động.</p>
+                        <img src="https://placehold.co/300x200/7dd3fc/ffffff?text=Beautiful.ai" alt="Beautiful.ai" class="mx-auto mt-4 rounded-lg">
+                    </div>
+                </div>
+                 <div class="note-block mt-8">
+                    <p class="font-semibold text-yellow-800"><i class="fas fa-star mr-2"></i>Và tất nhiên... các AI đa năng như <strong>Gemini</strong> hay <strong>ChatGPT</strong> có thể giúp chúng ta làm được nhiều hơn thế, kể cả việc viết code!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Từ nội dung đến code -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-cogs text-6xl text-indigo-500 mb-6"></i>
+                <h3 class="text-4xl font-semibold text-gray-800 mb-6">Không chỉ là nội dung, AI còn có thể viết Code!</h3>
+                <p class="text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                    Thay vì chỉ yêu cầu AI viết dàn ý, chúng ta có thể yêu cầu nó tạo ra một file <strong>HTML hoàn chỉnh</strong>, có đầy đủ giao diện và chức năng, giống hệt như bài giảng bạn đang xem.
+                </p>
+                <img src="https://placehold.co/600x300/818cf8/ffffff?text=Prompt+%E2%86%92+HTML+Code" alt="Prompt to HTML Code" class="slide-image mx-auto mt-8">
+            </div>
+        </div>
+
+        <!-- Slide 6: Câu lệnh "Tối thượng" -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-4 text-center">Câu Lệnh "Tối Thượng" Tạo Slide HTML</h3>
+                <p class="text-center text-lg mb-4">Đây là "thần chú" để biến ý tưởng của bạn thành một trang web trình chiếu. Hãy sao chép, thay đổi chủ đề và xem điều kỳ diệu xảy ra!</p>
+                <div class="prompt-block text-sm">
+                    <p>Hãy tạo cho tôi một file HTML duy nhất để làm slide thuyết trình về chủ đề <strong>"Lợi ích của việc đọc sách"</strong>.
+                    <br><br>
+                    <strong>Yêu cầu kỹ thuật:</strong>
+                    <br>- Sử dụng Tailwind CSS từ CDN để có giao diện đẹp.
+                    <br>- Sử dụng Google Fonts với font 'Be Vietnam Pro'.
+                    <br>- Tích hợp Font Awesome từ CDN cho các biểu tượng.
+                    <br>- Viết mã JavaScript để điều khiển slide bằng nút "Trước" và "Sau".
+                    <br>- Toàn bộ code (HTML, CSS, JS) phải nằm trong một file duy nhất.
+                    <br><br>
+                    <strong>Yêu cầu nội dung và thiết kế:</strong>
+                    <br>- Tạo 5 slide: Tiêu đề, Mục tiêu, Lợi ích 1 (Tăng kiến thức), Lợi ích 2 (Giảm căng thẳng), và Tổng kết.
+                    <br>- Thiết kế phải hiện đại, sạch sẽ, màu chủ đạo là màu xanh dương (#3b82f6).
+                    <br>- Mỗi slide nội dung cần có tiêu đề, 3 gạch đầu dòng, và một biểu tượng Font Awesome liên quan.
+                    <br>- Sử dụng hình ảnh placeholder từ placehold.co cho slide tiêu đề.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Phân tích câu lệnh -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">"Giải Phẫu" Câu Lệnh Mẫu</h3>
+                <p class="text-center text-lg mb-6">Một câu lệnh tốt cần phải thật chi tiết. Hãy xem chúng ta đã yêu cầu những gì:</p>
+                <div class="space-y-3 text-lg">
+                    <div class="bg-blue-100 p-4 rounded-lg"><strong><i class="fas fa-bullseye mr-2"></i>Mục tiêu chính:</strong> Tạo file HTML thuyết trình về "Lợi ích của việc đọc sách".</div>
+                    <div class="bg-green-100 p-4 rounded-lg"><strong><i class="fas fa-cogs mr-2"></i>Yêu cầu kỹ thuật:</strong> Chỉ định rõ công nghệ (Tailwind, Google Fonts, JS) và cấu trúc file.</div>
+                    <div class="bg-yellow-100 p-4 rounded-lg"><strong><i class="fas fa-list-alt mr-2"></i>Yêu cầu nội dung:</strong> Nêu rõ số lượng và chủ đề của từng slide.</div>
+                    <div class="bg-purple-100 p-4 rounded-lg"><strong><i class="fas fa-palette mr-2"></i>Yêu cầu thiết kế:</strong> Mô tả phong cách, màu sắc, bố cục và các yếu tố hình ảnh (icon, ảnh placeholder).</div>
+                </div>
+                 <div class="note-block mt-6">
+                    <p class="font-semibold"><i class="fas fa-lightbulb mr-2"></i>Mẹo: Càng chi tiết, AI càng hiểu rõ và cho ra kết quả gần với mong muốn của bạn nhất!</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Thử thách thực hành -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper text-center">
+                <i class="fas fa-laptop-code text-6xl text-indigo-500 mb-6"></i>
+                <h2 class="text-5xl font-bold text-indigo-700 mb-6">Thử Thách Sáng Tạo</h2>
+                <p class="text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">Bây giờ đến lượt bạn! Hãy sử dụng câu lệnh mẫu, thay đổi chủ đề và tạo ra bài thuyết trình của riêng mình.</p>
+                <img src="https://placehold.co/500x300/818cf8/ffffff?text=Your+Turn+to+Create!" alt="Thực hành" class="slide-image mx-auto">
+            </div>
+        </div>
+
+        <!-- Slide 9: Gợi ý chủ đề -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-semibold text-indigo-600 mb-6 text-center">Gợi Ý Chủ Đề Cho Bạn</h3>
+                <p class="text-center text-lg mb-6">Hãy chọn một chủ đề bạn yêu thích và sửa lại câu lệnh ở slide trước:</p>
+                <div class="grid md:grid-cols-2 gap-6 text-xl">
+                    <div class="bg-green-50 p-6 rounded-lg shadow-md text-center">
+                        <i class="fas fa-paw text-4xl text-green-600 mb-3"></i>
+                        <h4 class="font-bold">Chăm sóc thú cưng</h4>
+                    </div>
+                     <div class="bg-yellow-50 p-6 rounded-lg shadow-md text-center">
+                        <i class="fas fa-gamepad text-4xl text-yellow-600 mb-3"></i>
+                        <h4 class="font-bold">Trò chơi yêu thích của tôi</h4>
+                    </div>
+                     <div class="bg-blue-50 p-6 rounded-lg shadow-md text-center">
+                        <i class="fas fa-plane text-4xl text-blue-600 mb-3"></i>
+                        <h4 class="font-bold">Địa điểm du lịch mơ ước</h4>
+                    </div>
+                     <div class="bg-red-50 p-6 rounded-lg shadow-md text-center">
+                        <i class="fas fa-utensils text-4xl text-red-600 mb-3"></i>
+                        <h4 class="font-bold">Món ăn ngon nhất Việt Nam</h4>
+                    </div>
+                </div>
+                <div class="note-block mt-8">
+                    <p><strong>Nhiệm vụ:</strong> Sao chép câu lệnh mẫu, thay <strong>"Lợi ích của việc đọc sách"</strong> bằng chủ đề bạn chọn, và dán vào Gemini/ChatGPT để xem kết quả!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Tổng kết -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center text-center">
+                <h2 class="text-5xl font-bold text-indigo-700 mb-8">Tổng Kết Buổi Học</h2>
+                <div class="text-xl text-gray-700 space-y-5 max-w-3xl text-left bg-gray-50 p-8 rounded-lg shadow">
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Chúng ta đã biết cách <strong>dùng AI để tạo slide</strong> một cách nhanh chóng.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Chúng ta đã khám phá ra sức mạnh của việc <strong>yêu cầu AI viết code</strong> cho bài thuyết trình.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Chúng ta đã nắm được "bí kíp" viết một <strong>câu lệnh chi tiết</strong> để có kết quả như ý.</p>
+                    <p><i class="fas fa-check-circle text-green-500 mr-3"></i>Quan trọng nhất: Bạn đã có thể <strong>tự tạo ra một bài thuyết trình HTML</strong> của riêng mình!</p>
+                </div>
+                <div
+                    class="mt-12 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-6 rounded-r-lg shadow-lg w-full max-w-3xl">
+                    <h4 class="text-2xl font-bold mb-2">Buổi học kết thúc!</h4>
+                    <p class="text-lg">Hãy tiếp tục sáng tạo và khám phá những khả năng vô hạn của AI!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prevSlide');
+            const nextButton = document.getElementById('nextSlide');
+            const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+            const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                totalSlidesNumDisplay.textContent = slides.length;
+            } else {
+                if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+                if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            }
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.style.display = 'flex';
+                        setTimeout(() => slide.classList.add('active'), 10);
+                    } else {
+                        slide.classList.remove('active');
+                        setTimeout(() => {
+                            if (!slide.classList.contains('active')) {
+                                slide.style.display = 'none';
+                            }
+                        }, 500); // Must match the transition duration in CSS
+                    }
+                });
+                if (currentSlideNumDisplay) {
+                    currentSlideNumDisplay.textContent = index + 1;
+                }
+                updateNavButtons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function updateNavButtons() {
+                if (!prevButton || !nextButton) return;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+            }
+
+            // Setup navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        showSlide(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                });
+            }
+
+            // Initial setup
+            if (slides.length > 0) {
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+</body>
+
+</html>
