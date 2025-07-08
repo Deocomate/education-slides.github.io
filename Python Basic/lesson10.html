@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi Học: Lập Trình Game với AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f0f8ff;
+            /* Alice Blue */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #2563eb;
+            /* Blue 600 */
+            color: #dbeafe;
+            /* Blue 100 */
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #1d4ed8;
+            /* Blue 700 */
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #a7f3d0;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .prompt-block {
+            background-color: #fffbeb;
+            /* Yellow 50 */
+            color: #78350f;
+            /* Yellow 900 */
+            border-left: 4px solid #f59e0b;
+            /* Amber 500 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-block strong {
+            color: #b45309;
+            /* Amber 700 */
+        }
+
+
+        /* Customizations for Lesson - Blue/Orange theme */
+        .text-theme-700 {
+            color: #1d4ed8;
+        }
+
+        /* Blue 700 */
+        .text-theme-600 {
+            color: #2563eb;
+        }
+
+        /* Blue 600 */
+        .bg-theme-500 {
+            background-color: #3b82f6;
+        }
+
+        /* Blue 500 */
+        .hover\:bg-theme-700:hover {
+            background-color: #1d4ed8;
+        }
+
+        .text-highlight {
+            color: #f97316;
+            /* Orange 500 */
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Bài Giảng: Lập Trình Game với AI</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Lập Trình Game Bằng AI</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Biến ý tưởng thành game trong 5 phút!</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/3B82F6/FFFFFF?text=AI+Game+Dev" alt="[Hình ảnh AI và Game]"
+                        class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Hôm nay, chúng ta sẽ học cách "ra lệnh" cho AI để tạo
+                    ra sản phẩm của riêng mình.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Why AI for Coding -->
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Tại Sao Dùng AI Để Lập Trình?</h3>
+                <p class="mb-4 text-lg">Trí tuệ nhân tạo (AI) không chỉ dùng để viết văn hay vẽ tranh. Nó đang trở thành
+                    một <strong class="text-highlight">trợ lý lập trình</strong> cực kỳ mạnh mẽ.</p>
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-blue-100 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-xl text-blue-800 mb-2"><i class="fas fa-rocket mr-2"></i>Tạo sản phẩm
+                            siêu tốc</h4>
+                        <p>Từ ý tưởng đến một game có thể chơi được chỉ trong vài phút, thay vì vài ngày hoặc vài tuần.
+                        </p>
+                    </div>
+                    <div class="bg-green-100 p-4 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-xl text-green-800 mb-2"><i class="fas fa-lightbulb mr-2"></i>Học hỏi
+                            nhanh hơn</h4>
+                        <p>Xem cách AI giải quyết vấn đề và tạo ra code giúp bạn học được các kỹ thuật và cú pháp mới.
+                        </p>
+                    </div>
+                    <div class="bg-yellow-100 p-4 rounded-lg border-l-4 border-yellow-500">
+                        <h4 class="font-bold text-xl text-yellow-800 mb-2"><i class="fas fa-brain mr-2"></i>Vượt qua
+                            giới hạn</h4>
+                        <p>Bạn không cần phải là chuyên gia về đồ họa hay vật lý game. AI có thể xử lý những phần phức
+                            tạp đó giúp bạn.</p>
+                    </div>
+                    <div class="bg-purple-100 p-4 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="font-bold text-xl text-purple-800 mb-2"><i class="fas fa-code mr-2"></i>Tập trung vào
+                            sáng tạo</h4>
+                        <p>Thay vì lo lắng về từng dòng code, bạn có thể tập trung vào ý tưởng, luật chơi và trải nghiệm
+                            người dùng.</p>
+                    </div>
+                </div>
+                <p class="text-center text-xl mt-8 font-semibold text-gray-700">AI sẽ không thay thế lập trình viên, nó
+                    sẽ <span class="text-theme-600">trao quyền cho họ</span>.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: What is a Prompt -->
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Prompt - "Thần Chú" Dành Cho AI</h3>
+                <p class="mb-4 text-lg">Giao tiếp với AI không giống như viết code. Chúng ta dùng ngôn ngữ tự nhiên
+                    thông qua một thứ gọi là <strong>Prompt</strong>.</p>
+                <p class="mb-4 text-lg"><strong>Prompt là gì?</strong> Đó là một câu lệnh, một yêu cầu, một đoạn mô tả
+                    chi tiết mà bạn đưa cho AI để nó thực hiện một nhiệm vụ.</p>
+
+                <div class="grid md:grid-cols-2 gap-8 mt-6">
+                    <div class="bg-red-100 p-6 rounded-lg border-2 border-red-300">
+                        <h4 class="font-bold text-xl text-red-800 mb-2">Prompt Tệ Garbage In 🗑️</h4>
+                        <p class="italic">"Làm cho tôi một cái game."</p>
+                        <p class="mt-4">➡️ <strong>Kết quả:</strong> AI không biết làm game gì, giao diện ra sao, luật
+                            chơi thế nào. Kết quả sẽ rất chung chung và vô dụng.</p>
+                    </div>
+                    <div class="bg-green-100 p-6 rounded-lg border-2 border-green-400">
+                        <h4 class="font-bold text-xl text-green-800 mb-2">Prompt Tốt Quality In ✨</h4>
+                        <p class="italic">"Tạo game Rắn săn mồi bằng HTML, CSS, JS. Dùng phím mũi tên để điều khiển. Có
+                            hiển thị điểm. Giao diện hiện đại, màu xanh và cam."</p>
+                        <p class="mt-4">➡️ <strong>Kết quả:</strong> AI có đủ thông tin để tạo ra một sản phẩm gần như
+                            hoàn chỉnh và đúng ý bạn.</p>
+                    </div>
+                </div>
+                <p class="text-center text-2xl mt-8 font-semibold text-gray-700">Chất lượng của Prompt <span
+                        class="text-highlight">quyết định</span> chất lượng của sản phẩm.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Google AI Studio Intro -->
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Sân Chơi Của Chúng Ta: Google AI Studio</h3>
+                <p class="mb-4 text-lg">Hôm nay, chúng ta sẽ sử dụng một công cụ miễn phí và cực mạnh từ Google để thực
+                    hành. Đó là <strong class="text-highlight">Google AI Studio</strong>.</p>
+                <div class="flex justify-center my-4">
+                    <img src="https://placehold.co/600x350/f0f8ff/1D4ED8?text=Google+AI+Studio"
+                        alt="[Giao diện Google AI Studio]" class="shadow-lg rounded-lg border">
+                </div>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">Tại sao lại là AI Studio?</h4>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><strong>Miễn phí:</strong> Bạn chỉ cần một tài khoản Google để sử dụng.</li>
+                    <li><strong>Mạnh mẽ:</strong> Được trang bị các mô hình AI mới nhất của Google (Gemini).</li>
+                    <li><strong>Trực quan:</strong> Giao diện đơn giản, dễ dàng thử nghiệm và chỉnh sửa prompt.</li>
+                    <li><strong>Lấy Code Dễ Dàng:</strong> Có nút "Get Code" để chuyển đổi ý tưởng của bạn thành code
+                        Python, JavaScript, và nhiều hơn nữa.</li>
+                </ul>
+                <p class="text-center mt-4"><a href="https://aistudio.google.com/" target="_blank"
+                        class="text-blue-600 font-bold hover:underline">Truy cập: aistudio.google.com</a></p>
+            </div>
+        </div>
+
+        <!-- Slide 5: The Magic Prompt Structure -->
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Công Thức Tạo Game "Bất Bại"</h3>
+                <p class="mb-4 text-lg">Để tạo game, chúng ta sẽ dùng một prompt có cấu trúc rõ ràng. Hãy coi đây là
+                    "khuôn mẫu vàng" cho mọi yêu cầu tạo game.</p>
+
+                <div class="prompt-block text-lg">
+                    <p class="mb-2"><strong>1. Đóng vai (Persona):</strong> "Hãy hành động như một lập trình viên
+                        front-end chuyên nghiệp..."</p>
+                    <p class="mb-2"><strong>2. Yêu cầu (Action):</strong> "Viết code cho một trang web hoàn chỉnh trong
+                        một file `index.html` duy nhất."</p>
+                    <p class="mb-2"><strong>3. Bối cảnh & Luật chơi (Context):</strong> "Nhiệm vụ: Tạo game [Tên game].
+                        Luật chơi: [Mô tả luật chơi]. Điều khiển: [Cách điều khiển]. Giao diện: [Mô tả giao diện, màu
+                        sắc...]"</p>
+                    <p><strong>4. Định dạng (Format):</strong> "Chỉ xuất ra code, không giải thích gì thêm."</p>
+                </div>
+
+                <p class="mt-6 text-lg">Bằng cách điền thông tin vào các mục <strong>[Tên game], [Luật chơi], [Cách điều
+                        khiển], [Giao diện]</strong>, bạn có thể tạo ra vô số game khác nhau!</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Example 1: Snake Game -->
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Ví Dụ 1: Game Rắn Săn Mồi (Snake)</h3>
+                <p class="mb-4 text-lg">Áp dụng công thức vừa học, đây là prompt hoàn chỉnh để tạo game Rắn Săn Mồi.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>Hãy hành động như một lập trình viên front-end chuyên nghiệp với kiến thức về lập trình game, UI, và đồ họa bằng JavaScript.
+
+Viết code cho một trang web hoàn chỉnh trong một file `index.html` duy nhất. Không sử dụng file bên ngoài, nhưng có thể dùng CDN cho các thư viện ổn định. Toàn bộ CSS và JavaScript phải nằm trong thẻ &lt;style&gt; và &lt;script&gt;.
+
+Nhiệm vụ: Tạo một game "Rắn săn mồi" đơn giản.
+
+Yêu cầu:
+- Game phải chơi được trực tiếp trên trình duyệt.
+- Điều khiển bằng các phím mũi tên.
+- Hiển thị điểm số.
+- Giao diện phải sạch sẽ, hiện đại và nhiều màu sắc (dùng màu xanh dương và cam).
+
+Chỉ xuất ra một file index.html duy nhất. Chỉ xuất code, không giải thích gì thêm.</code></pre>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <img src="https://placehold.co/400x220/3B82F6/FFFFFF?text=Snake+Game"
+                        alt="[Hình ảnh game Rắn săn mồi]" class="shadow-md rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Example 2: Pong Game -->
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Ví Dụ 2: Game Pong Cổ Điển</h3>
+                <p class="mb-4 text-lg">Chỉ cần thay đổi phần "Nhiệm vụ" và "Yêu cầu", chúng ta có một game hoàn toàn
+                    mới.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>Hãy hành động như một lập trình viên front-end chuyên nghiệp... (giữ nguyên phần đầu)
+
+Nhiệm vụ: Tạo một game "Pong" hai người chơi.
+
+Yêu cầu:
+- Game phải chơi được trực tiếp trên trình duyệt.
+- Người chơi 1 (bên trái) điều khiển bằng phím 'W' (lên) và 'S' (xuống).
+- Người chơi 2 (bên phải) điều khiển bằng phím Mũi tên lên và Mũi tên xuống.
+- Hiển thị điểm số cho cả hai người chơi.
+- Giao diện tối giản, phong cách retro (đen và trắng).
+
+Chỉ xuất ra một file index.html duy nhất... (giữ nguyên phần cuối)</code></pre>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <img src="https://placehold.co/400x220/1F2937/FFFFFF?text=Pong+Game" alt="[Hình ảnh game Pong]"
+                        class="shadow-md rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Example 3: Block Breaker -->
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Ví Dụ 3: Game Đập Gạch (Block Breaker)</h3>
+                <p class="mb-4 text-lg">Cùng thử một game phức tạp hơn với nhiều đối tượng hơn.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>Hãy hành động như một lập trình viên front-end chuyên nghiệp... (giữ nguyên phần đầu)
+
+Nhiệm vụ: Tạo một game "Đập gạch" (Block Breaker).
+
+Yêu cầu:
+- Game phải chơi được trực tiếp trên trình duyệt.
+- Có một thanh trượt ở dưới, điều khiển bằng chuột hoặc phím mũi tên trái/phải.
+- Một quả bóng nảy xung quanh.
+- Một dàn gạch ở trên. Khi bóng chạm vào gạch, gạch biến mất và người chơi được điểm.
+- Hiển thị điểm số và số mạng còn lại.
+- Giao diện rực rỡ, nhiều màu sắc cho các viên gạch.
+
+Chỉ xuất ra một file index.html duy nhất... (giữ nguyên phần cuối)</code></pre>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <img src="https://placehold.co/400x220/EC4899/FFFFFF?text=Block+Breaker"
+                        alt="[Hình ảnh game đập gạch]" class="shadow-md rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: More Game Ideas -->
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Thêm Ý Tưởng Game Khác</h3>
+                <p class="mb-4 text-lg">Với cùng một công thức, bạn có thể tạo ra rất nhiều game khác. Hãy thử thay đổi
+                    các yêu cầu để tạo ra:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-4 text-lg">
+                    <li>
+                        <strong>Flappy Bird:</strong>
+                        <p class="text-base text-gray-600 italic ml-4">Yêu cầu: "Một con chim bay ngang. Nhấn phím cách
+                            để nó bay lên. Phải tránh các cột ống nước màu xanh lá cây. Giao diện giống game gốc."</p>
+                    </li>
+                    <li>
+                        <strong>Tic-Tac-Toe (Cờ Caro 3x3):</strong>
+                        <p class="text-base text-gray-600 italic ml-4">Yêu cầu: "Game cờ caro trên lưới 3x3 cho 2 người
+                            chơi. Người chơi thay phiên nhau click vào ô. Khi có 3 ký tự (X hoặc O) thẳng hàng, game kết
+                            thúc và thông báo người thắng."</p>
+                    </li>
+                    <li>
+                        <strong>Space Invaders:</strong>
+                        <p class="text-base text-gray-600 italic ml-4">Yêu cầu: "Một con tàu vũ trụ ở dưới, di chuyển
+                            trái phải và bắn đạn lên trên. Một hàng quân địch ngoài hành tinh di chuyển qua lại ở trên
+                            và từ từ đi xuống. Giao diện pixel art."</p>
+                    </li>
+                </ul>
+                <p class="text-center text-xl mt-8 font-semibold text-gray-700">Sự sáng tạo của bạn là <span
+                        class="text-highlight">giới hạn duy nhất</span>!</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: How to Run -->
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Biến Code Thành Game: 3 Bước Đơn Giản</h3>
+                <p class="mb-4 text-lg">Sau khi AI tạo ra code, làm thế nào để chạy nó? Rất đơn giản!</p>
+                <div class="grid md:grid-cols-3 gap-8 text-center text-lg mt-8">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="w-24 h-24 rounded-full bg-theme-500 text-white flex items-center justify-center text-4xl font-bold mb-4">
+                            1</div>
+                        <h4 class="text-2xl font-bold mb-2">Sao Chép Code</h4>
+                        <p class="text-slate-600">Trong Google AI Studio, sao chép TOÀN BỘ khối code mà AI đã tạo.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="w-24 h-24 rounded-full bg-theme-500 text-white flex items-center justify-center text-4xl font-bold mb-4">
+                            2</div>
+                        <h4 class="text-2xl font-bold mb-2">Mở Trình Biên Dịch</h4>
+                        <p class="text-slate-600">Truy cập trang web:</p>
+                        <a href="https://onecompiler.com/html/" target="_blank"
+                            class="font-mono text-blue-600 hover:underline mt-2">onecompiler.com/html</a>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="w-24 h-24 rounded-full bg-theme-500 text-white flex items-center justify-center text-4xl font-bold mb-4">
+                            3</div>
+                        <h4 class="text-2xl font-bold mb-2">Dán và Chạy</h4>
+                        <p class="text-slate-600">Xóa code có sẵn, dán code của bạn vào và nhấn nút "Run".</p>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <img src="https://i.imgur.com/7gKkHco.png" alt="[Hướng dẫn sử dụng OneCompiler]"
+                        class="max-w-4xl mx-auto rounded-lg shadow-lg border-2 border-slate-200"
+                        onerror="this.onerror=null;this.src='https://placehold.co/1000x300/F0F8FF/1E293B?text=OneCompiler+Interface';">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Workshop -->
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">7. Giờ Thực Hành!</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/F97316/FFFFFF?text=Workshop" alt="[Hình ảnh workshop]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Thử thách: Sáng tạo game của riêng bạn!
+                </h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Hãy sử dụng công thức đã học, thay đổi các yêu cầu
+                    (tên game, luật chơi, màu sắc) để tạo ra một trò chơi độc đáo. Ai sẽ tạo ra game thú vị nhất?</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Summary -->
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">8. Tóm Tắt Buổi Học</h3>
+                <p class="mb-4 text-lg">Hôm nay, chúng ta đã học được những điều cốt lõi để biến AI thành công cụ sáng
+                    tạo game:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><strong>AI là trợ lý:</strong> Nó giúp chúng ta hiện thực hóa ý tưởng một cách nhanh chóng.</li>
+                    <li><strong>Prompt là chìa khóa:</strong> Một prompt chi tiết, rõ ràng sẽ cho ra kết quả tốt.</li>
+                    <li><strong>Công thức tạo game:</strong> Sử dụng cấu trúc Persona - Action - Context - Format để "ra
+                        lệnh" cho AI một cách hiệu quả.</li>
+                    <li><strong>Thực hành liên tục:</strong> Đừng ngại thử nghiệm với các ý tưởng game và các prompt
+                        khác nhau.</li>
+                </ul>
+                <p class="text-lg mb-6 font-semibold">Bạn không cần phải là một lập trình viên giỏi để tạo ra một sản
+                    phẩm. Bạn chỉ cần là một người <span class="text-highlight">ra lệnh giỏi</span>.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Q&A -->
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">9. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/1D4ED8/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Hãy hỏi ngay để làm chủ công cụ mạnh mẽ này nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i !== index) {
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                } else {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
