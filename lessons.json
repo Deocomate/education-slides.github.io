@@ -39,13 +39,12 @@
             {
                 "title": "Lesson 9: Thư viện Random",
                 "url": "./Python Basic/lesson9.html"
-            },{
+            },
+            {
                 "title": "Lesson 10: Lập trình game với AI",
                 "url": "./Python Basic/lesson10.html"
             }
         ]
-        
-        
     },
     {
         "category": "Web Basic (VN)",
@@ -119,28 +118,26 @@
         "color": "purple",
         "lessons": [
             {
-                "title": "Lesson 1: Làm quen với AI, học cách sử dụng Chat GPT",
+                "title": "Lesson: Làm quen với AI, học cách sử dụng Chat GPT",
                 "url": "./AI Course For Student/lesson1.html"
             },
             {
-                "title": "Lesson 2: Chắt lọc thông tin với AI",
+                "title": "Lesson: Chắt lọc thông tin với AI",
                 "url": "./AI Course For Student/lesson2.html"
             },
             {
-                "title": "Lesson 3: Cá nhân hóa Kiến thức với AI",
+                "title": "Lesson: Cá nhân hóa Kiến thức với AI",
                 "url": "./AI Course For Student/lesson3.html"
             },
             {
-                "title": "Lesson 4: Tạo ảnh với AI",
+                "title": "Lesson: Tạo ảnh với AI",
                 "url": "./AI Course For Student/lesson4.html"
             },
             {
-                "title": "Lesson 5: Tạo slide với AI",
+                "title": "Lesson: Tạo slide với AI",
                 "url": "./AI Course For Student/lesson5.html"
             }
         ]
-
-        
     },
     {
         "category": "SQL Learning",
@@ -175,24 +172,5 @@
                 "url": "./AI Course High School/vn.html"
             }
         ]
-    },
-    {
-        "category": "Hau",
-        "icon": "fas fa-mobile-alt",
-        "color": "purple",
-        "lessons": [
-            {
-                "title": "Slide cuối môn mobile",
-                "url": "./Hau/mobile/index.html"
-            },
-            {
-                "title": "Slide cuối môn KHMT và CNPM",
-                "url": "./Hau/khmt/index.html"
-            }
-        ]
     }
 ]
-
-
-
-
