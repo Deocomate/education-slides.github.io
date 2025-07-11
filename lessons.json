@@ -47,6 +47,21 @@
         ]
     },
     {
+        "category": "Python Advanced",
+        "icon": "fab fa-python",
+        "color": "blue",
+        "lessons": [
+            {
+                "title": "Lesson 1: Numpy, Pandas và Scikit learn",
+                "url": "./Python Advance/lesson1.html"
+            },
+            {
+                "title": "Lesson 2: Trực quan hóa dữ liệu với matplotlib",
+                "url": "./Python Advance/lesson2.html"
+            }
+        ]
+    },
+    {
         "category": "Web Basic (VN)",
         "icon": "fas fa-code",
         "color": "green",
@@ -151,10 +166,6 @@
             {
                 "title": "Lesson 2: Cú pháp CRUD với SQL",
                 "url": "./Sql/lesson2.html"
-            },
-            {
-                "title": "Lesson 3: Thư viện matplotlib",
-                "url": "./Sql/lesson3.html"
             }
         ]
     },

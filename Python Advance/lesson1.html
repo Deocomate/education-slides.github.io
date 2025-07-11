@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 1: Nền Tảng Khoa Học Dữ Liệu - NumPy & Pandas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3e8ff;
+            /* Light purple background */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        .code-block .keyword {
+            color: #c084fc;
+        }
+
+        .code-block .string {
+            color: #fde047;
+        }
+
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        .code-block .function {
+            color: #67e8f9;
+        }
+
+        .code-block .class-name {
+            color: #a5b4fc;
+        }
+
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.375rem;
+        }
+
+        .text-theme-700 {
+            color: #6b21a8;
+        }
+
+        .text-theme-600 {
+            color: #7e22ce;
+        }
+
+        .bg-theme-500 {
+            background-color: #9333ea;
+        }
+
+        .hover\:bg-theme-700:hover {
+            background-color: #7e22ce;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 1: Nền Tảng Khoa Học Dữ Liệu</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-5xl font-bold text-center text-theme-700 mb-6">Buổi 1: Nền Tảng Khoa Học Dữ Liệu</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Làm chủ NumPy và Pandas - Bộ công cụ thiết yếu trước
+                    khi trực quan hóa với Matplotlib.</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/500x300/9333EA/FFFFFF?text=NumPy+%2B+Pandas"
+                        alt="[Hình ảnh về NumPy và Pandas]" class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Chào mừng các bạn đến với khóa học Python Advance!</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Tại sao không phải Matplotlib ngay?</h3>
+                <p class="mb-4 text-lg">Trực quan hóa dữ liệu (với Matplotlib) là quá trình <span
+                        class="font-semibold">biểu diễn</span> dữ liệu. Nhưng trước khi biểu diễn, chúng ta cần phải có
+                    dữ liệu và xử lý nó. Đó chính là lúc NumPy và Pandas tỏa sáng.</p>
+                <div class="text-center my-6">
+                    <p class="text-2xl font-bold text-gray-800">Pandas</p>
+                    <i class="fas fa-arrow-down text-3xl text-theme-600 my-2"></i>
+                    <p class="text-2xl font-bold text-gray-800">NumPy</p>
+                    <i class="fas fa-arrow-down text-3xl text-theme-600 my-2"></i>
+                    <p class="text-2xl font-bold text-gray-800">Matplotlib</p>
+                </div>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><b>Pandas:</b> Giúp ta <span class="font-semibold text-purple-700">nạp, làm sạch và cấu
+                            trúc</span> dữ liệu từ các file (CSV, Excel...). Nó giống như người đầu bếp sơ chế nguyên
+                        liệu.</li>
+                    <li><b>NumPy:</b> Cung cấp nền tảng cho các <span class="font-semibold text-purple-700">phép tính
+                            toán số học hiệu suất cao</span>. Đây là "lò nướng" mạnh mẽ để xử lý các con số.</li>
+                    <li><b>Matplotlib:</b> Là công cụ để <span class="font-semibold text-purple-700">trình bày "món
+                            ăn"</span> (dữ liệu đã xử lý) một cách đẹp mắt và dễ hiểu.</li>
+                </ul>
+                <p class="mt-6 text-lg bg-yellow-100 p-4 rounded-lg border-l-4 border-yellow-500">Học theo trình tự này
+                    giúp bạn hiểu rõ <span class="font-semibold">luồng làm việc của một nhà khoa học dữ liệu</span>: từ
+                    dữ liệu thô đến thông tin chi tiết có giá trị.</p>
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Cài đặt Môi trường</h3>
+                <p class="mb-4 text-lg">Chúng ta sẽ cần 3 thư viện chính cho giai đoạn nền tảng này. Hãy mở Terminal
+                    (hoặc Command Prompt) và cài đặt chúng.</p>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cài đặt NumPy:</h4>
+                <p class="mb-2 text-lg">Thư viện cốt lõi cho tính toán khoa học, cung cấp đối tượng mảng đa chiều mạnh
+                    mẽ.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>pip install numpy</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cài đặt Pandas:</h4>
+                <p class="mb-2 text-lg">Thư viện "dao Thụy Sĩ" cho việc xử lý và phân tích dữ liệu dạng bảng.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>pip install pandas</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Cài đặt Scikit-learn (để lấy data mẫu):</h4>
+                <p class="mb-2 text-lg">Thư viện học máy hàng đầu, chứa nhiều bộ dữ liệu mẫu tiện lợi để thực hành.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code>pip install scikit-learn</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-bold text-theme-700 mb-6 text-center">I. NumPy - Trái tim của Tính toán Số</h3>
+                <p class="mb-4 text-lg">Tại sao chúng ta không dùng List của Python? Dù linh hoạt, List trở nên <span
+                        class="font-semibold">chậm chạp và cồng kềnh</span> khi thực hiện các phép toán trên lượng lớn
+                    dữ liệu số.</p>
+                <p class="mb-4 text-lg"><b>NumPy (Numerical Python)</b> giải quyết vấn đề này bằng một cấu trúc dữ liệu
+                    mới: <b class="text-purple-700">ndarray</b> (mảng n-chiều).</p>
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-red-100 p-6 rounded-lg border-l-4 border-red-500">
+                        <h4 class="font-bold text-xl text-red-800 mb-2">Python List (Chậm)</h4>
+                        <p>Thực hiện phép toán trên từng phần tử bằng vòng lặp.</p>
+                        <img src="https://placehold.co/400x200/FEE2E2/DC2626?text=Looping+over+a+List"
+                            alt="[Python List]" class="mt-4 shadow-md">
+                    </div>
+                    <div class="bg-green-100 p-6 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-xl text-green-800 mb-2">NumPy Array (Nhanh)</h4>
+                        <p>Thực hiện phép toán trên toàn bộ mảng cùng một lúc (vectorization).</p>
+                        <img src="https://placehold.co/400x200/D1FAE5/10B981?text=Vectorized+Operation"
+                            alt="[NumPy Array]" class="mt-4 shadow-md">
+                    </div>
+                </div>
+                <p class="mt-8 text-lg">Ưu điểm của NumPy Array: <b class="text-purple-700">Nhanh hơn, tiết kiệm bộ nhớ
+                        hơn, và cú pháp ngắn gọn hơn nhiều</b>.</p>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.1. Tạo NumPy Array</h3>
+                <p class="mb-4 text-lg">Cách phổ biến nhất là chuyển đổi từ list. Theo quy ước, chúng ta luôn import
+                    NumPy với bí danh `np`.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Tạo array 1 chiều từ list</span>
+list_1d = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+arr_1d = np.array(list_1d)
+<span class="function">print</span>(f<span class="string">"Array 1D: {arr_1d}"</span>)
+
+<span class="comment"># Tạo array 2 chiều từ list lồng nhau (ma trận)</span>
+list_2d = [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]
+arr_2d = np.array(list_2d)
+<span class="function">print</span>(f<span class="string">"Array 2D:\n{arr_2d}"</span>)</code></pre>
+                </div>
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Các hàm tạo array đặc biệt:</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># Tạo array gồm các số 0</span>
+zeros_arr = np.zeros((<span class="number">2</span>, <span class="number">3</span>)) <span class="comment"># 2 hàng, 3 cột</span>
+<span class="function">print</span>(f<span class="string">"Array toàn số 0:\n{zeros_arr}"</span>)
+
+<span class="comment"># Tạo array gồm các số 1</span>
+ones_arr = np.ones((<span class="number">3</span>, <span class="number">2</span>))
+<span class="function">print</span>(f<span class="string">"Array toàn số 1:\n{ones_arr}"</span>)
+
+<span class="comment"># Tạo array với một dãy số</span>
+range_arr = np.arange(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>) <span class="comment"># Bắt đầu từ 0, kết thúc trước 10, bước nhảy 2</span>
+<span class="function">print</span>(f<span class="string">"Array từ arange: {range_arr}"</span>)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.2. Vectorization - Sức mạnh của NumPy</h3>
+                <p class="mb-4 text-lg">Đây là khái niệm quan trọng nhất. Vectorization cho phép thực hiện các phép toán
+                    trên toàn bộ array mà không cần dùng vòng lặp `for`.</p>
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">So sánh: Nhân mỗi phần tử với 2</h4>
+                <div class="grid md:grid-cols-2 gap-6 mt-2">
+                    <div>
+                        <p class="font-semibold text-lg mb-2">Dùng Python List:</p>
+                        <div class="code-block-container">
+                            <pre class="code-block"><code>data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+result = []
+<span class="keyword">for</span> item <span class="keyword">in</span> data:
+    result.append(item * <span class="number">2</span>)
+<span class="comment"># result -> [2, 4, 6, 8, 10]</span></code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-lg mb-2">Dùng NumPy Array:</p>
+                        <div class="code-block-container">
+                            <pre class="code-block"><code>arr = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])
+result = arr * <span class="number">2</span>
+<span class="comment"># result -> array([ 2,  4,  6,  8, 10])</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-4 text-lg">Cú pháp của NumPy không chỉ <span class="font-semibold">ngắn gọn hơn</span> mà
+                    còn <span class="font-semibold text-red-600">nhanh hơn gấp nhiều lần</span> vì các phép toán được
+                    thực thi bằng mã C đã được tối ưu hóa ở tầng thấp.</p>
+                <p class="mt-4 text-lg">Tất cả các phép toán cơ bản (`+`, `-`, `*`, `/`, `**`) đều hoạt động theo cơ chế
+                    này.</p>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.3. Indexing & Slicing</h3>
+                <p class="mb-4 text-lg">Truy cập và lấy ra các phần tử từ array cũng tương tự như list, nhưng mạnh mẽ
+                    hơn cho các array đa chiều.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre
+                        class="code-block"><code>arr_2d = np.array([
+    [<span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>], 
+    [<span class="number">20</span>, <span class="number">21</span>, <span class="number">22</span>], 
+    [<span class="number">30</span>, <span class="number">31</span>, <span class="number">32</span>]
+])
+
+<span class="comment"># Lấy một phần tử: [hàng, cột]</span>
+element = arr_2d[<span class="number">1</span>, <span class="number">2</span>] <span class="comment"># Hàng 1 (hàng thứ 2), Cột 2 (cột thứ 3) -> 22</span>
+<span class="function">print</span>(f<span class="string">"Phần tử ở [1, 2]: {element}"</span>)
+
+<span class="comment"># Slicing: Lấy một phần của array</span>
+<span class="comment"># Lấy 2 hàng đầu tiên, và cột từ 1 trở đi</span>
+sub_arr = arr_2d[:<span class="number">2</span>, <span class="number">1</span>:]
+<span class="function">print</span>(f<span class="string">"Slice [0:2, 1:]:\n{sub_arr}"</span>)
+<span class="comment"># Output:</span>
+<span class="comment"># [[11, 12],</span>
+<span class="comment">#  [21, 22]]</span>
+
+<span class="comment"># Lấy toàn bộ cột thứ 2 (index 1)</span>
+column_1 = arr_2d[:, <span class="number">1</span>]
+<span class="function">print</span>(f<span class="string">"Cột 1: {column_1}"</span>) <span class="comment"># -> array([11, 21, 31])</span></code></pre>
+                </div>
+                <p class="mt-4 text-lg">Hiểu rõ cách slicing là cực kỳ quan trọng để chuẩn bị dữ liệu cho Matplotlib, ví
+                    dụ: lấy ra một cột dữ liệu để làm trục X và một cột khác làm trục Y.</p>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-bold text-theme-700 mb-6 text-center">II. Pandas - Công cụ Xử lý Dữ liệu Vượt
+                    trội</h3>
+                <p class="mb-4 text-lg">NumPy rất mạnh với các con số, nhưng nó không có khái niệm về "tên cột", "tên
+                    hàng" hay các kiểu dữ liệu hỗn hợp (số, chữ, ngày tháng). Dữ liệu trong thực tế thường ở dạng bảng,
+                    giống như một file Excel hay CSV.</p>
+                <p class="mb-4 text-lg"><b>Pandas</b> được xây dựng trên nền tảng NumPy để giải quyết bài toán này. Nó
+                    cung cấp 2 cấu trúc dữ liệu chính:</p>
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-blue-100 p-6 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-xl text-blue-800 mb-2">Series</h4>
+                        <p>Một mảng 1 chiều có nhãn (index). Giống như một cột trong file Excel.</p>
+                    </div>
+                    <div class="bg-green-100 p-6 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-xl text-green-800 mb-2">DataFrame</h4>
+                        <p>Một cấu trúc 2 chiều dạng bảng có nhãn cho cả hàng và cột. Đây là "ngôi sao" của Pandas.</p>
+                    </div>
+                </div>
+                <div class="flex justify-center my-6">
+                    <img src="https://placehold.co/600x250/EFF6FF/3B82F6?text=DataFrame:+Rows,+Columns,+Data"
+                        alt="[DataFrame]" class="shadow-lg">
+                </div>
+                <p class="mt-4 text-lg text-center">Tóm lại: Nếu dữ liệu của bạn có dạng bảng, <b
+                        class="text-purple-700">hãy dùng Pandas</b>.</p>
+            </div>
+        </div>
+
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.1. Nạp dữ liệu với Pandas</h3>
+                <p class="mb-4 text-lg">Đây là chức năng quan trọng và được sử dụng nhiều nhất. Pandas có thể đọc dữ
+                    liệu từ rất nhiều định dạng, phổ biến nhất là CSV.</p>
+                <p class="mb-2 text-lg">Giả sử chúng ta có file `diem_thi.csv` với nội dung:</p>
+                <pre class="bg-gray-100 p-2 rounded text-sm">ten,toan,ly,hoa
+An,8,7,9
+Binh,9,8,8
+Cuong,5,6,7</pre>
+                <p class="mb-2 text-lg mt-4">Chúng ta sẽ dùng `pd.read_csv()` để đọc file này vào một DataFrame.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="keyword">try</span>:
+    <span class="comment"># Đọc file csv, Pandas tự động nhận diện dòng đầu là header</span>
+    df = pd.read_csv(<span class="string">'diem_thi.csv'</span>)
+    
+    <span class="comment"># In ra toàn bộ DataFrame</span>
+    <span class="function">print</span>(df)
+<span class="keyword">except</span> FileNotFoundError:
+    <span class="function">print</span>(<span class="string">"Không tìm thấy file diem_thi.csv!"</span>)</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Chỉ với một dòng lệnh, toàn bộ dữ liệu từ file đã được nạp vào một cấu trúc bảng
+                    ngăn nắp, sẵn sàng để phân tích.</p>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.2. Khám phá DataFrame</h3>
+                <p class="mb-4 text-lg">Sau khi nạp dữ liệu, bước đầu tiên luôn là "nhìn qua" xem dữ liệu có gì. Pandas
+                    cung cấp các hàm rất tiện lợi:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><code class="bg-gray-200 px-2 py-1 rounded">.head()</code>: Xem 5 dòng đầu tiên.</li>
+                    <li><code class="bg-gray-200 px-2 py-1 rounded">.tail()</code>: Xem 5 dòng cuối cùng.</li>
+                    <li><code class="bg-gray-200 px-2 py-1 rounded">.info()</code>: Xem thông tin tổng quan (số dòng, số
+                        cột, kiểu dữ liệu...).</li>
+                    <li><code class="bg-gray-200 px-2 py-1 rounded">.describe()</code>: Xem thống kê mô tả cho các cột
+                        số (giá trị trung bình, min, max...).</li>
+                </ul>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="comment"># Giả sử df đã được nạp từ slide trước</span>
+
+<span class="function">print</span>(<span class="string">"--- 5 Dòng đầu tiên ---"</span>)
+<span class="function">print</span>(df.head())
+
+<span class="function">print</span>(<span class="string">"\n--- Thông tin tổng quan ---"</span>)
+df.info()
+
+<span class="function">print</span>(<span class="string">"\n--- Thống kê mô tả ---"</span>)
+<span class="function">print</span>(df.describe())
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.3. Chọn và Lọc Dữ liệu</h3>
+                <p class="mb-4 text-lg">Đây là bước chuẩn bị dữ liệu quan trọng trước khi vẽ biểu đồ. Chúng ta cần chọn
+                    ra đúng những cột, những dòng dữ liệu mà mình muốn phân tích.</p>
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Chọn Cột (Selecting Columns):</h4>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># Chọn một cột -> trả về một Series</span>
+diem_toan = df[<span class="string">'toan'</span>]
+<span class="function">print</span>(diem_toan)
+
+<span class="comment"># Chọn nhiều cột -> trả về một DataFrame mới</span>
+diem_tu_nhien = df[[<span class="string">'ten'</span>, <span class="string">'ly'</span>, <span class="string">'hoa'</span>]]
+<span class="function">print</span>(diem_tu_nhien)</code></pre>
+                </div>
+
+                <h4 class="text-xl font-medium text-gray-800 mt-6 mb-2">Lọc Dòng (Filtering Rows):</h4>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># Lọc những sinh viên có điểm toán trên 7</span>
+sv_gioi_toan = df[df[<span class="string">'toan'</span>] > <span class="number">7</span>]
+<span class="function">print</span>(sv_gioi_toan)
+
+<span class="comment"># Lọc với điều kiện phức tạp: điểm toán > 8 VÀ điểm hóa > 8</span>
+sv_xuat_sac = df[(df[<span class="string">'toan'</span>] > <span class="number">8</span>) & (df[<span class="string">'hoa'</span>] > <span class="number">8</span>)]
+<span class="function">print</span>(sv_xuat_sac)</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-yellow-100 p-4 rounded-lg border-l-4 border-yellow-500">Kỹ năng lọc này giúp
+                    ta trả lời các câu hỏi như: "Top 10 quốc gia sản xuất nhiều phim nhất là gì?", "Doanh thu thay đổi
+                    qua các năm như thế nào?". Kết quả của việc lọc này chính là <span class="font-semibold">dữ liệu đầu
+                        vào cho Matplotlib</span>.</p>
+            </div>
+        </div>
+
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-4xl font-bold text-theme-700 mb-6 text-center">III. Nguồn Dữ liệu Mẫu từ Scikit-learn
+                </h3>
+                <p class="mb-4 text-lg">Đôi khi, chúng ta chỉ muốn thực hành nhanh một khái niệm mà không muốn mất công
+                    tìm và tải file CSV. Thư viện Học máy `scikit-learn` cung cấp sẵn nhiều bộ dữ liệu kinh điển.</p>
+                <p class="mb-4 text-lg">Chúng ta sẽ không học về Machine Learning hôm nay, mà chỉ <span
+                        class="font-semibold">tận dụng kho dữ liệu</span> của nó.</p>
+                <div class="flex justify-center my-6">
+                    <img src="https://scikit-learn.org/stable/_static/scikit-learn-logo-small.png"
+                        alt="[scikit-learn logo]" class="shadow-lg" style="max-width: 200px">
+                </div>
+                <p class="mb-2 text-lg"><b>Ví dụ:</b> Bộ dữ liệu hoa Iris (hoa diên vĩ), chứa thông tin về chiều dài,
+                    chiều rộng của cánh hoa và đài hoa của 3 loài Iris khác nhau. Đây là bộ dữ liệu "Hello World" của
+                    ngành khoa học dữ liệu.</p>
+            </div>
+        </div>
+
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5.1. Nạp và Chuyển đổi dữ liệu từ Scikit-learn
+                </h3>
+                <p class="mb-4 text-lg">Dữ liệu từ `scikit-learn` được lưu trong một đối tượng đặc biệt gọi là "Bunch".
+                    Việc của chúng ta là nạp nó và chuyển thành một Pandas DataFrame quen thuộc để dễ dàng thao tác.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Nạp bộ dữ liệu</span>
+iris_bundle = load_iris()
+
+<span class="comment"># Dữ liệu Bunch có các key hữu ích như 'data', 'target', 'feature_names'</span>
+<span class="comment"># Chuyển thành DataFrame của Pandas để dễ thao tác</span>
+iris_df = pd.DataFrame(data=iris_bundle.data, columns=iris_bundle.feature_names)
+
+<span class="comment"># Thêm cột 'species' (loài hoa) vào DataFrame</span>
+iris_df[<span class="string">'species'</span>] = iris_bundle.target_names[iris_bundle.target]
+
+<span class="function">print</span>(iris_df.head()) <span class="comment"># In ra 5 dòng đầu tiên của bộ dữ liệu hoa Iris</span>
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Bây giờ, `iris_df` là một DataFrame hoàn chỉnh. Chúng ta có thể dùng tất cả các
+                    kỹ năng Pandas đã học (lọc, chọn, describe...) trên bộ dữ liệu này, và sau đó dùng nó để vẽ biểu đồ
+                    với Matplotlib (ví dụ: vẽ biểu đồ phân tán giữa chiều dài và chiều rộng cánh hoa).</p>
+            </div>
+        </div>
+
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Tóm Tắt & Hướng đi tiếp theo</h3>
+                <p class="mb-4 text-lg">Hôm nay, chúng ta đã xây dựng một nền tảng cực kỳ vững chắc cho hành trình làm
+                    việc với dữ liệu:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><b>Hiểu được "Tại sao":</b> Biết rõ vai trò của từng thư viện trong hệ sinh thái khoa học dữ
+                        liệu của Python.</li>
+                    <li><b>Làm chủ NumPy:</b> Nắm vững cách tạo array, thực hiện các phép toán vector hóa hiệu suất cao,
+                        và truy cập dữ liệu bằng indexing/slicing.</li>
+                    <li><b>Thành thạo Pandas:</b> Có khả năng nạp dữ liệu từ file, khám phá, làm sạch, và quan trọng
+                        nhất là <span class="font-semibold">lọc và chọn ra dữ liệu cần thiết</span> cho việc phân tích.
+                    </li>
+                    <li><b>Biết cách lấy dữ liệu mẫu:</b> Sử dụng `scikit-learn` như một nguồn dữ liệu tiện lợi để thực
+                        hành.</li>
+                </ul>
+                <p class="text-xl mb-6 font-semibold bg-green-100 p-6 rounded-lg border-l-4 border-green-500">Chúng ta
+                    đã hoàn thành xuất sắc khâu <b class="text-green-800">chuẩn bị và sơ chế nguyên liệu (dữ liệu)</b>.
+                    Buổi học tiếp theo, chúng ta sẽ chính thức trở thành những "nghệ sĩ", dùng Matplotlib để biến những
+                    dữ liệu này thành các biểu đồ trực quan, sinh động và đầy ý nghĩa.</p>
+            </div>
+        </div>
+
+        <div id="slide-15" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">7. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/6B21A8/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Đừng ngần ngại đặt câu hỏi về NumPy, Pandas hay bất cứ
+                    điều gì chúng ta đã học hôm nay nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.style.display = 'none';
+                slide.classList.remove('active');
+            });
+
+            if (slides[index]) {
+                slides[index].style.display = 'flex';
+                setTimeout(() => {
+                    slides[index].classList.add('active');
+                }, 10);
+            }
+
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('pre.code-block, .code-block code');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Initial load
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            if (totalSlidesNumDisplay) totalSlidesNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>

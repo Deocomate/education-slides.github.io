@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 2: Khám Phá Titanic với Matplotlib</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3e8ff;
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        .code-block .keyword {
+            color: #c084fc;
+        }
+
+        .code-block .string {
+            color: #fde047;
+        }
+
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        .code-block .function {
+            color: #67e8f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9em;
+        }
+
+        th,
+        td {
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+        }
+
+        .text-theme-700 {
+            color: #6b21a8;
+        }
+
+        .text-theme-600 {
+            color: #7e22ce;
+        }
+
+        .bg-theme-500 {
+            background-color: #9333ea;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 2: Khám Phá Titanic với Matplotlib</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"><i
+                        class="fas fa-arrow-left mr-1"></i> Trước</button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">Sau
+                    <i class="fas fa-arrow-right ml-1"></i></button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">Slide <span id="currentSlideNum">1</span> /
+                <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-5xl font-bold text-center text-theme-700 mb-6">Buổi 2: Khám Phá Titanic</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Dùng Matplotlib để tìm ra những câu chuyện ẩn sau
+                    thảm kịch lịch sử.</p>
+                <div class="flex justify-center my-8"><img
+                        src="https://placehold.co/600x300/9333EA/FFFFFF?text=Titanic+Data+Story" alt="[Titanic]"
+                        class="shadow-lg rounded-lg"></div>
+            </div>
+        </div>
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Mục tiêu Buổi 2</h3>
+                <p class="mb-4 text-lg">Từ Buổi 1, chúng ta đã có nền tảng vững chắc về <b>Pandas</b> và <b>NumPy</b>.
+                </p>
+                <p class="mb-4 text-lg">Hôm nay, chúng ta sẽ áp dụng các kỹ năng đó vào một bộ dữ liệu thực tế nổi tiếng
+                    - <b>Titanic</b> - và dùng <b>Matplotlib</b> để trả lời các câu hỏi:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li>Những yếu tố nào ảnh hưởng đến khả năng sống sót của hành khách?</li>
+                    <li>Cấu trúc nhân khẩu học của hành khách trên tàu như thế nào? (tuổi, giới tính, hạng vé)</li>
+                    <li>Liệu có quy tắc "phụ nữ và trẻ em đi trước" thật sự được áp dụng?</li>
+                </ul>
+                <div class="bg-gray-100 p-6 rounded-lg text-center mt-8">
+                    <p class="text-2xl font-semibold text-gray-800">Titanic Dataset</p><i
+                        class="fas fa-arrow-down text-3xl text-blue-500 my-2"></i>
+                    <p class="text-2xl font-semibold text-gray-800">Pandas (Làm sạch, Chuẩn bị)</p><i
+                        class="fas fa-arrow-down text-3xl text-purple-600 my-2"></i>
+                    <p class="text-2xl font-semibold text-theme-700">Matplotlib (Phân tích, Tìm kiếm sự thật)</p>
+                </div>
+            </div>
+        </div>
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Cài đặt & Chuẩn bị</h3>
+                <p class="mb-4 text-lg">Để tiện lợi cho việc lấy dữ liệu Titanic, chúng ta sẽ cài đặt thêm thư viện
+                    <b>Seaborn</b>. Seaborn là một thư viện trực quan hóa cao cấp hơn được xây dựng trên Matplotlib, và
+                    nó cung cấp sẵn một số bộ dữ liệu kinh điển.
+                </p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code>pip install seaborn</code></pre>
+                </div>
+                <p class="mt-4 text-lg">Tất nhiên, chúng ta vẫn cần các thư viện đã quen thuộc:</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code>pip install pandas matplotlib</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Nạp và Làm sạch dữ liệu Titanic</h3>
+                <p class="mb-4 text-lg">Dữ liệu thực tế hiếm khi hoàn hảo. Bộ dữ liệu Titanic có một số giá trị bị thiếu
+                    (null), đặc biệt ở cột `age`. Đây là cơ hội để chúng ta thực hiện một bước làm sạch dữ liệu quan
+                    trọng.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i
+                                class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+
+<span class="comment"># Nạp dữ liệu từ thư viện Seaborn</span>
+titanic_df = sns.load_dataset(<span class="string">'titanic'</span>)
+
+<span class="comment"># Kiểm tra các giá trị thiếu</span>
+<span class="function">print</span>(<span class="string">"Số giá trị thiếu ban đầu:"</span>)
+<span class="function">print</span>(titanic_df.isnull().sum())
+
+<span class="comment"># Xử lý giá trị thiếu ở cột 'age' bằng cách điền giá trị trung vị (median)</span>
+age_median = titanic_df[<span class="string">'age'</span>].median()
+titanic_df[<span class="string">'age'</span>].fillna(age_median, inplace=<span class="keyword">True</span>)
+
+<span class="comment"># Xóa các cột không cần thiết cho phân tích của chúng ta</span>
+titanic_df.drop([<span class="string">'deck'</span>, <span class="string">'embark_town'</span>, <span class="string">'alive'</span>], axis=<span class="number">1</span>, inplace=<span class="keyword">True</span>)
+
+<span class="comment"># Điền các giá trị thiếu còn lại</span>
+titanic_df.dropna(inplace=<span class="keyword">True</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.1. Khám phá dữ liệu sau khi làm sạch</h3>
+                <p class="mb-4 text-lg">Bây giờ, hãy xem dữ liệu của chúng ta trông như thế nào. Các cột quan trọng:</p>
+                <ul class="list-disc list-inside text-lg">
+                    <li><b>survived</b>: Sống sót (0 = Không, 1 = Có)</li>
+                    <li><b>pclass</b>: Hạng vé (1 = Hạng 1, 2 = Hạng 2, 3 = Hạng 3)</li>
+                    <li><b>sex</b>: Giới tính</li>
+                    <li><b>age</b>: Tuổi</li>
+                    <li><b>fare</b>: Giá vé</li>
+                </ul>
+                <p class="font-semibold text-lg mt-4">5 dòng đầu tiên (`titanic_df.head()`):</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>survived</th>
+                            <th>pclass</th>
+                            <th>sex</th>
+                            <th>age</th>
+                            <th>fare</th>
+                            <th>...</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>3</td>
+                            <td>male</td>
+                            <td>22.0</td>
+                            <td>7.25</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>female</td>
+                            <td>38.0</td>
+                            <td>71.2833</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>3</td>
+                            <td>female</td>
+                            <td>26.0</td>
+                            <td>7.925</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>female</td>
+                            <td>35.0</td>
+                            <td>53.1</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>3</td>
+                            <td>male</td>
+                            <td>35.0</td>
+                            <td>8.05</td>
+                            <td>...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.1. Biểu đồ cột: Sống hay chết?</h3>
+                <p class="mb-2 text-lg"><b>Câu hỏi:</b> Tỷ lệ hành khách sống sót và thiệt mạng là bao nhiêu?</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># Đếm số lượng mỗi giá trị trong cột 'survived'</span>
+survival_counts = titanic_df[<span class="string">'survived'</span>].value_counts()
+survival_counts.index = [<span class="string">'Thiệt mạng'</span>, <span class="string">'Sống sót'</span>] <span class="comment"># Đổi tên cho dễ hiểu</span>
+
+plt.figure(figsize=(<span class="number">7</span>, <span class="number">6</span>))
+survival_counts.plot(kind=<span class="string">'bar'</span>, color=[<span class="string">'#ef4444'</span>, <span class="string">'#22c55e'</span>])
+plt.title(<span class="string">'Phân bố số lượng Sống sót vs. Thiệt mạng'</span>)
+plt.ylabel(<span class="string">'Số lượng hành khách'</span>)
+plt.xticks(rotation=<span class="number">0</span>)
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-green-100 p-4 rounded-lg border-l-4 border-green-500">🔎 <b>Chúng ta thấy
+                        gì?</b> Biểu đồ cho thấy một sự thật đáng buồn là số lượng hành khách thiệt mạng (khoảng 550
+                    người) nhiều hơn đáng kể so với số người sống sót (khoảng 340 người). Tỷ lệ sống sót chỉ khoảng 38%.
+                    Đây là cái nhìn tổng quan đầu tiên về quy mô của thảm kịch.</p>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.2. Biểu đồ cột: Giới tính có phải là yếu tố
+                    quyết định?</h3>
+                <p class="mb-2 text-lg"><b>Câu hỏi:</b> Tỷ lệ sống sót giữa nam và nữ khác nhau như thế nào?</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># Nhóm theo giới tính và tính tỷ lệ sống sót trung bình</span>
+survival_by_sex = titanic_df.groupby(<span class="string">'sex'</span>)[<span class="string">'survived'</span>].mean() * <span class="number">100</span>
+
+plt.figure(figsize=(<span class="number">7</span>, <span class="number">6</span>))
+survival_by_sex.plot(kind=<span class="string">'bar'</span>, color=[<span class="string">'#fb7185'</span>, <span class="string">'#60a5fa'</span>])
+plt.title(<span class="string">'Tỷ lệ sống sót theo Giới tính (%)'</span>)
+plt.ylabel(<span class="string">'Tỷ lệ sống sót (%)'</span>)
+plt.xlabel(<span class="string">'Giới tính'</span>)
+plt.xticks(rotation=<span class="number">0</span>)
+plt.ylim(<span class="number">0</span>, <span class="number">100</span>)
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-green-100 p-4 rounded-lg border-l-4 border-green-500">🔎 <b>Chúng ta thấy
+                        gì?</b> Đây là một trong những khám phá quan trọng nhất. Biểu đồ cho thấy sự khác biệt rất lớn:
+                    <b>gần 75% hành khách nữ sống sót</b>, trong khi con số này ở nam giới chỉ là <b>dưới 19%</b>. Điều
+                    này chứng tỏ quy tắc "ưu tiên phụ nữ và trẻ em" đã được áp dụng rất mạnh mẽ trong cuộc sơ tán.
+                </p>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.3. Histogram: Phân bố độ tuổi hành khách</h3>
+                <p class="mb-2 text-lg"><b>Câu hỏi:</b> Độ tuổi của các hành khách trên tàu được phân bố như thế nào?
+                </p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code>plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))
+plt.hist(titanic_df[<span class="string">'age'</span>], bins=<span class="number">20</span>, color=<span class="string">'#a855f7'</span>, edgecolor=<span class="string">'white'</span>)
+plt.title(<span class="string">'Phân bố độ tuổi của Hành khách'</span>)
+plt.xlabel(<span class="string">'Tuổi'</span>)
+plt.ylabel(<span class="string">'Số lượng hành khách'</span>)
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-green-100 p-4 rounded-lg border-l-4 border-green-500">🔎 <b>Chúng ta thấy
+                        gì?</b> Phần lớn hành khách trên tàu là những người trẻ tuổi, tập trung đông nhất ở độ tuổi từ
+                    20 đến 35. Có một lượng đáng kể trẻ em dưới 10 tuổi, nhưng số lượng người cao tuổi (trên 60) lại khá
+                    ít. Điều này cho ta một bức tranh tổng thể về nhân khẩu học trên con tàu định mệnh.</p>
+            </div>
+        </div>
+
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4.4. Biểu đồ hộp: Tuổi và Hạng vé</h3>
+                <p class="mb-2 text-lg"><b>Câu hỏi:</b> Phân bố độ tuổi của hành khách ở các hạng vé khác nhau có gì đặc
+                    biệt?</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code>sns.boxplot(x=<span class="string">'pclass'</span>, y=<span class="string">'age'</span>, data=titanic_df)
+plt.title(<span class="string">'Phân bố tuổi theo từng Hạng vé'</span>)
+plt.xlabel(<span class="string">'Hạng vé'</span>)
+plt.ylabel(<span class="string">'Tuổi'</span>)
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-green-100 p-4 rounded-lg border-l-4 border-green-500">🔎 <b>Chúng ta thấy
+                        gì?</b> Biểu đồ hộp cho thấy một xu hướng rõ ràng: <b>hành khách ở hạng vé càng cao thì càng lớn
+                        tuổi</b>. Hành khách hạng 1 (pclass=1) có độ tuổi trung vị cao nhất (khoảng 37 tuổi), trong khi
+                    hành khách hạng 3 có độ tuổi trung vị thấp nhất (khoảng 28 tuổi). Điều này có thể phản ánh sự khác
+                    biệt về kinh tế và địa vị xã hội giữa các nhóm hành khách.</p>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">5. Thử thách của bạn</h3>
+                <div class="flex justify-center mb-8"><img
+                        src="https://placehold.co/400x250/6B21A8/FFFFFF?text=Your+Turn!" alt="[Hình ảnh Thực hành]"
+                        class="shadow-md rounded-lg"></div>
+                <p class="text-xl text-center text-gray-700 mb-4">Giờ là lúc bạn tự mình khám phá. Hãy vận dụng kiến
+                    thức đã học để trả lời các câu hỏi sau.</p>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bài toán 1 📝</h3>
+                <p class="mb-4 text-lg"><b>Yêu cầu:</b> "Sử dụng biểu đồ tròn để thể hiện cơ cấu hành khách theo hạng vé
+                    (`pclass`)."</p>
+                <div class="bg-yellow-100 p-6 rounded-lg border-l-4 border-yellow-500 mt-8">
+                    <h4 class="font-bold text-xl text-yellow-800 mb-2">Gợi ý</h4>
+                    <p class="text-lg">Chúng ta cần thể hiện <b>tỷ lệ phần trăm</b> của các phần trong một tổng thể.
+                        Loại biểu đồ nào là phù hợp?</p>
+                    <p class="text-lg mt-2">Bạn sẽ cần dùng `value_counts()` để đếm số lượng hành khách mỗi hạng vé
+                        trước khi vẽ.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-12" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bài toán 2 📝</h3>
+                <p class="mb-4 text-lg"><b>Yêu cầu:</b> "So sánh tỷ lệ sống sót theo từng hạng vé (`pclass`). Liệu tiền
+                    có mua được mạng sống?"</p>
+                <div class="bg-yellow-100 p-6 rounded-lg border-l-4 border-yellow-500 mt-8">
+                    <h4 class="font-bold text-xl text-yellow-800 mb-2">Gợi ý</h4>
+                    <p class="text-lg">Tương tự như bài toán so sánh tỷ lệ sống sót theo giới tính, chúng ta cần <b>so
+                            sánh</b> một <b>tỷ lệ</b> giữa các <b>hạng mục</b>.</p>
+                    <p class="text-lg mt-2">Hãy dùng `groupby()` để nhóm theo `pclass` và tính giá trị `mean()` của cột
+                        `survived`.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-13" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Lời giải - Bài toán 1 ✅</h3>
+                <p class="mb-2 text-lg"><b>Biểu đồ phù hợp:</b> Biểu đồ Tròn (Pie Chart).</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># Bước 1 & 2: Import và nạp dữ liệu (đã thực hiện)</span>
+
+<span class="comment"># Bước 3: Chuẩn bị dữ liệu</span>
+pclass_counts = titanic_df[<span class="string">'pclass'</span>].value_counts()
+
+<span class="comment"># Bước 4: Vẽ biểu đồ</span>
+plt.figure(figsize=(<span class="number">8</span>, <span class="number">8</span>))
+plt.pie(pclass_counts, labels=pclass_counts.index, autopct=<span class="string">'%1.1f%%'</span>, startangle=<span class="number">90</span>, colors=[<span class="string">'#f87171'</span>, <span class="string">'#fbbf24'</span>, <span class="string">'#34d399'</span>])
+plt.title(<span class="string">'Cơ cấu Hành khách theo Hạng vé'</span>)
+plt.axis(<span class="string">'equal'</span>)
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-green-100 p-4 rounded-lg border-l-4 border-green-500">🔎 <b>Phân tích:</b>
+                    Biểu đồ tròn cho thấy một sự chênh lệch lớn về số lượng hành khách giữa các hạng vé. <b>Hành khách
+                        hạng 3 chiếm gần một nửa (49.4%) tổng số hành khách</b>, trong khi hành khách hạng 1 chỉ chiếm
+                    khoảng 24.2%. Điều này phản ánh cơ cấu kinh tế của xã hội thời đó.</p>
+            </div>
+        </div>
+
+        <div id="slide-14" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Lời giải - Bài toán 2 ✅</h3>
+                <p class="mb-2 text-lg"><b>Biểu đồ phù hợp:</b> Biểu đồ Cột (Bar Chart).</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># Bước 1 & 2: Import và nạp dữ liệu (đã thực hiện)</span>
+
+<span class="comment"># Bước 3: Chuẩn bị dữ liệu</span>
+survival_by_pclass = titanic_df.groupby(<span class="string">'pclass'</span>)[<span class="string">'survived'</span>].mean() * <span class="number">100</span>
+
+<span class="comment"># Bước 4: Vẽ biểu đồ</span>
+plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))
+survival_by_pclass.plot(kind=<span class="string">'bar'</span>, color=[<span class="string">'#34d399'</span>, <span class="string">'#60a5fa'</span>, <span class="string">'#f87171'</span>])
+plt.title(<span class="string">'Tỷ lệ sống sót theo Hạng vé (%)'</span>)
+plt.xlabel(<span class="string">'Hạng vé'</span>)
+plt.ylabel(<span class="string">'Tỷ lệ sống sót (%)'</span>)
+plt.xticks(rotation=<span class="number">0</span>)
+plt.ylim(<span class="number">0</span>, <span class="number">100</span>)
+plt.show()
+</code></pre>
+                </div>
+                <p class="mt-4 text-lg bg-green-100 p-4 rounded-lg border-l-4 border-green-500">🔎 <b>Phân tích:</b>
+                    Biểu đồ trả lời một cách dứt khoát: <b>tiền bạc có ảnh hưởng rất lớn đến cơ hội sống sót</b>. Tỷ lệ
+                    sống sót của hành khách hạng 1 là cao nhất (hơn 60%), giảm dần ở hạng 2 (khoảng 47%) và thấp thảm
+                    hại ở hạng 3 (chỉ khoảng 24%). Vị trí của các khoang thuyền và sự ưu tiên trong sơ tán có thể là
+                    nguyên nhân chính dẫn đến sự khác biệt này.</p>
+            </div>
+        </div>
+
+        <div id="slide-15" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Tổng kết</h3>
+                <p class="mb-4 text-lg">Qua việc phân tích bộ dữ liệu Titanic, chúng ta đã thấy được sức mạnh của việc
+                    trực quan hóa dữ liệu:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><b>Biến số liệu thành câu chuyện:</b> Chúng ta không chỉ nhìn vào con số mà còn thấy được câu
+                        chuyện về sự phân biệt giàu nghèo, về quy tắc ưu tiên trên biển.</li>
+                    <li><b>Trả lời câu hỏi:</b> Mỗi biểu đồ giúp trả lời một câu hỏi phân tích cụ thể, từ "bao nhiêu?"
+                        đến "tại sao?".</li>
+                    <li><b>Làm sạch dữ liệu là bước bắt buộc:</b> Đã thấy được tầm quan trọng của việc xử lý các giá trị
+                        thiếu trước khi phân tích.</li>
+                    <li><b>Chọn đúng biểu đồ là chìa khóa:</b> Biểu đồ cột dùng để so sánh, biểu đồ tròn cho cơ cấu,
+                        histogram cho phân bố, và biểu đồ hộp để so sánh các phân bố.</li>
+                </ul>
+                <p class="text-xl mb-6 font-semibold">Bạn đã có đủ công cụ để trở thành một "thám tử dữ liệu". Hãy áp
+                    dụng chúng vào những bộ dữ liệu khác!</p>
+            </div>
+        </div>
+        <div id="slide-16" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">7. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8"><img src="https://placehold.co/300x200/6B21A8/FFFFFF?text=Q%26A"
+                        alt="[Hình ảnh Hỏi và Đáp]" class="shadow-md rounded-lg"></div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+            </div>
+        </div>
+    </div>
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        let currentSlide = 0;
+        if (slides.length > 0) { totalSlidesNumDisplay.textContent = slides.length; }
+        function showSlide(index) {
+            slides.forEach((slide) => { slide.style.display = 'none'; slide.classList.remove('active'); });
+            if (slides[index]) { slides[index].style.display = 'flex'; setTimeout(() => { slides[index].classList.add('active'); }, 10); }
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => { if (currentSlide > 0) { currentSlide--; showSlide(currentSlide); } });
+            nextButton.addEventListener('click', () => { if (currentSlide < slides.length - 1) { currentSlide++; showSlide(currentSlide); } });
+        }
+        function copyCode(buttonElement) {
+            const codeElement = buttonElement.closest('.code-block-container').querySelector('pre.code-block');
+            if (codeElement) {
+                navigator.clipboard.writeText(codeElement.innerText).then(() => {
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => { buttonElement.innerHTML = originalText; }, 1500);
+                }).catch(err => console.error('Không thể sao chép code: ', err));
+            }
+        }
+        if (slides.length > 0) { showSlide(currentSlide); }
+    </script>
+</body>
+
+</html>
