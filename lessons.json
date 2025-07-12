@@ -43,8 +43,15 @@
             {
                 "title": "Lesson 10: Lập trình game với AI",
                 "url": "./Python Basic/lesson10.html"
+            },
+            {
+                "title": "Bài kiểm tra số 2",
+                "url": "./Python Basic/test2.html"
             }
         ]
+
+
+        
     },
     {
         "category": "Python Advanced",

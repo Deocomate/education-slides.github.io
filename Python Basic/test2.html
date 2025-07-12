@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Kiểm Tra Kiến Thức Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        .question-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .option-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-label:hover {
+            background-color: #f7fafc;
+            border-color: #4a5568;
+        }
+
+        input[type="radio"]:checked+.option-label {
+            background-color: #ebf8ff;
+            border-color: #4299e1;
+        }
+
+        .correct {
+            background-color: #c6f6d5 !important;
+            border-color: #38a169 !important;
+        }
+
+        .incorrect {
+            background-color: #fed7d7 !important;
+            border-color: #e53e3e !important;
+        }
+
+        .correct-answer-text {
+            color: #2f855a;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Bài Kiểm Tra Kiến Thức Python</h1>
+            <p class="mt-2 text-md text-gray-600">Kiểm tra sự hiểu biết của bạn về lập trình Python từ cơ bản đến nâng
+                cao.</p>
+        </header>
+
+        <form id="quizForm">
+            <!-- Phần Trắc Nghiệm -->
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b-2 border-blue-500 pb-2">I. Phần Trắc Nghiệm
+            </h2>
+
+            <!-- Questions will be injected here by JavaScript -->
+            <div id="multiple-choice-questions"></div>
+
+            <!-- Phần Tự Luận -->
+            <h2 class="text-2xl font-semibold mt-10 mb-4 text-gray-800 border-b-2 border-green-500 pb-2">II. Phần Tự
+                Luận</h2>
+
+            <!-- Essay questions will be injected here -->
+            <div id="essay-questions"></div>
+
+            <!-- Submit Button -->
+            <div class="mt-8 text-center">
+                <button type="button" id="submitBtn"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                    Kiểm Tra Đáp Án
+                </button>
+            </div>
+
+            <!-- Result Display -->
+            <div id="result" class="mt-8 text-center text-2xl font-semibold"></div>
+            <p id="essay-note" class="text-center text-gray-600 mt-2"></p>
+        </form>
+    </div>
+
+    <script>
+        const quizData = {
+            multipleChoice: [
+                {
+                    question: "1. Đâu là output của đoạn mã sau: `print(3 * 'ab' + 'c')`?",
+                    options: ["abababc", "ab ab ab c", "9abc", "Lỗi cú pháp"],
+                    answer: "abababc"
+                },
+                {
+                    question: "2. Ký hiệu nào được dùng để viết chú thích trên một dòng trong Python?",
+                    options: ["//", "/* ... */", "#", "<!-- ... -->"],
+                    answer: "#"
+                },
+                {
+                    question: "3. Kết quả của `10 / 4` và `10 // 4` lần lượt là gì?",
+                    options: ["2.5 và 2", "2 và 2.5", "2.5 và 2.0", "2 và 2"],
+                    answer: "2.5 và 2"
+                },
+                {
+                    question: "4. Phương thức nào dùng để thêm một phần tử vào cuối một danh sách (list)?",
+                    options: [".add()", ".insert()", ".push()", ".append()"],
+                    answer: ".append()"
+                },
+                {
+                    question: "5. Lệnh nào sau đây sẽ tạo ra lỗi?",
+                    options: ["`'Hello' + 'World'`", "`'Age: ' + 25`", "`[1, 2] + [3, 4]`", "`'Hi ' * 3`"],
+                    answer: "`'Age: ' + 25`"
+                },
+                {
+                    question: "6. Output của đoạn mã sau là gì? `for i in range(1, 5, 2): print(i, end=' ')`",
+                    options: ["1 2 3 4 5", "1 3 5", "1 3", "2 4"],
+                    answer: "1 3"
+                },
+                {
+                    question: "7. Sự khác biệt chính giữa tuple và list là gì?",
+                    options: ["Tuple không thể chứa các phần tử trùng lặp", "Tuple không thể thay đổi (immutable), list có thể thay đổi (mutable)", "List không thể chứa các kiểu dữ liệu khác nhau", "List được sắp xếp, tuple thì không"],
+                    answer: "Tuple không thể thay đổi (immutable), list có thể thay đổi (mutable)"
+                },
+                {
+                    question: "8. Làm thế nào để truy cập giá trị của key `'city'` trong dictionary: `person = {'name': 'John', 'city': 'New York'}`?",
+                    options: ["`person.city`", "`person['city']`", "`person.get('city')`", "Cả b và c đều đúng"],
+                    answer: "Cả b và c đều đúng"
+                },
+                {
+                    question: "9. Output của đoạn mã sau là gì? `my_set = {1, 2, 3}; my_set.add(2); print(my_set)`",
+                    options: ["{1, 2, 3, 2}", "{1, 2, 3}", "[1, 2, 3]", "Lỗi"],
+                    answer: "{1, 2, 3}"
+                },
+                {
+                    question: "10. Cú pháp `lambda a, b: a + b` dùng để làm gì?",
+                    options: ["Định nghĩa một hàm thông thường", "Tạo một generator", "Tạo một hàm ẩn danh (anonymous function)", "Khai báo một biến"],
+                    answer: "Tạo một hàm ẩn danh (anonymous function)"
+                },
+                {
+                    question: "11. Output của đoạn mã sau là gì? `print([i**2 for i in range(4)])`",
+                    options: ["[0, 1, 4, 9]", "[1, 4, 9, 16]", "[0, 1, 2, 3]", "[1, 2, 3, 4]"],
+                    answer: "[0, 1, 4, 9]"
+                },
+                {
+                    question: "12. Khối lệnh `try...except` dùng để làm gì?",
+                    options: ["Tối ưu hóa hiệu năng", "Lặp qua một chuỗi", "Xử lý ngoại lệ (exceptions)", "Định nghĩa một class"],
+                    answer: "Xử lý ngoại lệ (exceptions)"
+                },
+                {
+                    question: "13. Decorator trong Python là gì?",
+                    options: ["Một biến toàn cục", "Một cách để trang trí giao diện dòng lệnh", "Một hàm nhận một hàm khác làm đối số, mở rộng hành vi của nó mà không sửa đổi tường minh", "Một kiểu dữ liệu tích hợp sẵn"],
+                    answer: "Một hàm nhận một hàm khác làm đối số, mở rộng hành vi của nó mà không sửa đổi tường minh"
+                },
+                {
+                    question: "14. `*args` và `**kwargs` trong định nghĩa hàm có ý nghĩa gì?",
+                    options: ["Bắt buộc phải có các đối số tên là 'args' và 'kwargs'", "Cho phép hàm nhận một số lượng đối số vị trí và đối số từ khóa tùy ý", "Dùng để thực hiện các phép toán con trỏ", "Chỉ dùng trong các phương thức của class"],
+                    answer: "Cho phép hàm nhận một số lượng đối số vị trí và đối số từ khóa tùy ý"
+                },
+                {
+                    question: "15. Generator trong Python hoạt động như thế nào?",
+                    options: ["Tạo ra tất cả các giá trị cùng một lúc và lưu vào bộ nhớ", "Tạo ra các giá trị một cách lười biếng (lazily), từng giá trị một khi được yêu cầu", "Là một tên gọi khác của list comprehension", "Chỉ có thể tạo ra số nguyên"],
+                    answer: "Tạo ra các giá trị một cách lười biếng (lazily), từng giá trị một khi được yêu cầu"
+                }
+            ],
+            essay: [
+                {
+                    id: 1,
+                    question: "1. Trình bày sự khác biệt giữa toán tử `==` và `is` trong Python. Cho ví dụ minh họa cho mỗi trường hợp."
+                },
+                {
+                    id: 2,
+                    question: "2. Viết một hàm Python tên là `count_word_frequency` nhận vào một chuỗi văn bản và trả về một dictionary, trong đó key là các từ trong văn bản và value là số lần xuất hiện của từ đó. Ví dụ: `count_word_frequency('hello world hello')` sẽ trả về `{'hello': 2, 'world': 1}`."
+                },
+                {
+                    id: 3,
+                    question: "3. Bạn được giao nhiệm vụ sử dụng AI để tạo một trò chơi đơn giản. Hãy sử dụng một công cụ AI tạo sinh (như Google AI Studio, ChatGPT,...) và mô tả các bước thực hiện của bạn:\n a) Nêu ý tưởng cốt lõi của trò chơi bạn muốn tạo (ví dụ: Rắn săn mồi, Flappy Bird, Tic-tac-toe,...).\n b) Viết một prompt (câu lệnh) hoàn chỉnh mà bạn sẽ đưa cho AI để yêu cầu nó tạo ra toàn bộ mã nguồn của trò chơi đó trong một file HTML duy nhất (bao gồm cả HTML, CSS, và JavaScript).\n c) Giải thích ngắn gọn tại sao bạn lại cấu trúc prompt của mình như vậy để có được kết quả tốt nhất từ AI."
+                }
+            ]
+        };
+
+        const mcContainer = document.getElementById('multiple-choice-questions');
+        const essayContainer = document.getElementById('essay-questions');
+
+        // Load Multiple Choice Questions
+        quizData.multipleChoice.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-card';
+            questionDiv.innerHTML = `
+                <p class="font-semibold mb-4">${q.question}</p>
+                <div class="space-y-2" id="q${index}">
+                    ${q.options.map((option, i) => `
+                        <div>
+                            <input type="radio" name="q${index}" id="q${index}o${i}" value="${option}" class="hidden">
+                            <label for="q${index}o${i}" class="option-label">
+                                <span class="font-mono text-sm bg-gray-100 rounded px-2 py-1 mr-2">${String.fromCharCode(97 + i)}</span> ${option}
+                            </label>
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="feedback${index}" class="mt-3 text-sm"></div>
+            `;
+            mcContainer.appendChild(questionDiv);
+        });
+
+        // Load Essay Questions
+        quizData.essay.forEach(q => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-card';
+            questionDiv.innerHTML = `
+                <label for="essay${q.id}" class="font-semibold mb-4 block">${q.question.replace(/\n/g, '<br>')}</label>
+                <textarea id="essay${q.id}" name="essay${q.id}" rows="8" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
+            `;
+            essayContainer.appendChild(questionDiv);
+        });
+
+        const submitBtn = document.getElementById('submitBtn');
+        const resultDiv = document.getElementById('result');
+        const essayNote = document.getElementById('essay-note');
+
+        submitBtn.addEventListener('click', () => {
+            let score = 0;
+            quizData.multipleChoice.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                const feedbackDiv = document.getElementById(`feedback${index}`);
+                const optionLabels = document.querySelectorAll(`#q${index} label`);
+
+                // Reset feedback
+                feedbackDiv.innerHTML = '';
+                optionLabels.forEach(label => {
+                    label.classList.remove('correct', 'incorrect');
+                });
+
+                if (selectedOption) {
+                    const selectedLabel = document.querySelector(`label[for="${selectedOption.id}"]`);
+                    if (selectedOption.value === q.answer) {
+                        score++;
+                        selectedLabel.classList.add('correct');
+                    } else {
+                        selectedLabel.classList.add('incorrect');
+                        const correctOptionValue = q.answer;
+                        const correctOptionInput = document.querySelector(`input[name="q${index}"][value="${correctOptionValue}"]`);
+                        if (correctOptionInput) {
+                            const correctLabel = document.querySelector(`label[for="${correctOptionInput.id}"]`);
+                            correctLabel.classList.add('correct');
+                            feedbackDiv.innerHTML = `<span class="correct-answer-text">Đáp án đúng là: ${q.answer}</span>`;
+                        }
+                    }
+                } else {
+                    // If no answer is selected, show the correct answer
+                    const correctOptionValue = q.answer;
+                    const correctOptionInput = document.querySelector(`input[name="q${index}"][value="${correctOptionValue}"]`);
+                    if (correctOptionInput) {
+                        const correctLabel = document.querySelector(`label[for="${correctOptionInput.id}"]`);
+                        correctLabel.classList.add('correct');
+                        feedbackDiv.innerHTML = `<span class="correct-answer-text">Bạn chưa chọn đáp án. Đáp án đúng là: ${q.answer}</span>`;
+                    }
+                }
+            });
+
+            resultDiv.textContent = `Bạn đã trả lời đúng ${score}/${quizData.multipleChoice.length} câu trắc nghiệm.`;
+            essayNote.textContent = 'Phần tự luận cần được giáo viên chấm thủ công.';
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+    </script>
+</body>
+
+</html>
