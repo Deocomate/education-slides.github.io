@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi 14: Ôn Tập Toàn Diện & Luyện Thi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #fffaf0;
+            /* Floral White */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #d97706;
+            /* Amber 600 */
+            color: #fefce8;
+            /* Yellow 50 */
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #b45309;
+            /* Amber 700 */
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #a7f3d0;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5);
+        }
+
+        .code-block .comment {
+            color: #6ee7b7;
+        }
+
+        .code-block .keyword {
+            color: #93c5fd;
+        }
+
+        .code-block .string {
+            color: #fde047;
+        }
+
+        .code-block .number {
+            color: #fdbb74;
+        }
+
+        .code-block .function {
+            color: #d8b4fe;
+        }
+
+        .code-block .def-name {
+            color: #67e8f9;
+        }
+
+        .code-block .operator {
+            color: #fda4af;
+        }
+
+        .code-block .boolean {
+            color: #fdbb74;
+        }
+
+        .code-block .class-name {
+            color: #a5b4fc;
+        }
+
+        /* Customizations for Lesson 14 - Amber/Orange theme */
+        .text-theme-700 {
+            color: #b45309;
+        }
+
+        /* Amber 700 */
+        .text-theme-600 {
+            color: #d97706;
+        }
+
+        /* Amber 600 */
+        .bg-theme-500 {
+            background-color: #f59e0b;
+        }
+
+        /* Amber 500 */
+        .hover\:bg-theme-700:hover {
+            background-color: #b45309;
+        }
+
+        .text-highlight {
+            color: #ef4444;
+        }
+
+        /* Red 500 */
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 14: Ôn Tập Toàn Diện & Luyện Thi</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide"
+                    class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi 14: Ôn Tập Toàn Diện & Luyện Thi
+                </h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Hệ thống hóa kiến thức và chinh phục bài thi cuối
+                    khóa!</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/F59E0B/FFFFFF?text=Final+Review"
+                        alt="[Hình ảnh Ôn tập cuối khóa]" class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Đây là buổi học quan trọng nhất để củng cố tất cả
+                    những gì bạn đã học.</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Nhìn Lại Hành Trình</h3>
+                <p class="mb-6 text-lg">Chúng ta đã đi một chặng đường dài! Hãy cùng nhìn lại các cột mốc kiến thức quan
+                    trọng đã chinh phục:</p>
+                <div class="space-y-4">
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-rocket text-theme-600 mr-3"></i> <strong>Buổi 1:</strong> Nền tảng Python
+                        (Biến, Kiểu dữ liệu, Toán tử, Nhập/Xuất).</p>
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-code-branch text-theme-600 mr-3"></i> <strong>Buổi 2:</strong> Rẽ nhánh (Lệnh
+                        điều kiện <code>if-elif-else</code>).</p>
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-sync-alt text-theme-600 mr-3"></i> <strong>Buổi 3-4:</strong> Sức mạnh vòng
+                        lặp (<code>for</code>, <code>while</code>) và <strong>List</strong>.</p>
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-book text-theme-600 mr-3"></i> <strong>Buổi 5:</strong> Cấu trúc dữ liệu
+                        <strong>Dictionary</strong> & làm việc với file <strong>JSON</strong>.</p>
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-cogs text-theme-600 mr-3"></i> <strong>Buổi 7:</strong> Tổ chức code với
+                        <strong>Hàm (Function)</strong>.</p>
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-dice text-theme-600 mr-3"></i> <strong>Buổi 9:</strong> Yếu tố bất ngờ với thư
+                        viện <strong>Random</strong>.</p>
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-gamepad text-theme-600 mr-3"></i> <strong>Buổi 10:</strong> Sáng tạo game với
+                        <strong>AI & Pygame</strong>.</p>
+                    <p class="text-xl p-3 bg-gray-50 rounded-md shadow-sm"><i
+                            class="fas fa-project-diagram text-theme-600 mr-3"></i> <strong>Buổi 8 & các bài
+                            tập:</strong> Xây dựng <strong>dự án thực tế</strong> hoàn chỉnh.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Cốt Lõi Lập Trình</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">a. Biến, Kiểu Dữ Liệu và Toán tử</h4>
+                <p class="mb-4 text-lg">Mọi chương trình đều bắt đầu từ việc lưu trữ và thao tác dữ liệu. Luôn nhớ:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Dùng <code>input()</code> để lấy dữ liệu từ người dùng (luôn là chuỗi).</li>
+                    <li>Ép kiểu dữ liệu bằng <code>int()</code>, <code>float()</code> khi cần tính toán.</li>
+                    <li>Sử dụng f-string <code>f"..."</code> để in kết quả một cách linh hoạt.</li>
+                </ul>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">b. Luồng Điều Khiển (if/for/while)</h4>
+                <p class="mb-4 text-lg">Đây là "bộ não" của chương trình, quyết định code sẽ chạy như thế nào.</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li><code>if-elif-else</code>: Để chương trình đưa ra quyết định.</li>
+                    <li><code>for item in list:</code>: Khi bạn biết chính xác số lần lặp (duyệt qua danh sách).</li>
+                    <li><code>while condition:</code>: Khi bạn muốn lặp cho đến khi một điều kiện không còn đúng.</li>
+                </ul>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>
+<span class="keyword">while</span> <span class="variable">count</span> <span class="operator">&lt;</span> <span class="number">5</span>:
+    <span class="keyword">if</span> <span class="variable">count</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">==</span> <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">f"{count} là số chẵn"</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">f"{count} là số lẻ"</span>)
+    <span class="variable">count</span> <span class="operator">+=</span> <span class="number">1</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. "Thùng Chứa" Dữ Liệu</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">a. Danh sách (List) - Dữ liệu có thứ tự</h4>
+                <p class="mb-4 text-lg">Dùng khi thứ tự các phần tử là quan trọng. Các thao tác cần nhớ:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Truy cập: <code>my_list[0]</code>, <code>my_list[-1]</code></li>
+                    <li>Thêm: <code>my_list.append(item)</code></li>
+                    <li>Xóa: <code>my_list.remove(item)</code> hoặc <code>my_list.pop(index)</code></li>
+                    <li>Duyệt: <code>for item in my_list:</code></li>
+                </ul>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">b. Từ điển (Dictionary) - Dữ liệu có nhãn</h4>
+                <p class="mb-4 text-lg">Dùng khi bạn muốn lưu trữ dữ liệu có cấu trúc dưới dạng <code>key: value</code>.
+                </p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Truy cập: <code>my_dict['ten']</code></li>
+                    <li>Thêm/Sửa: <code>my_dict['tuoi'] = 25</code></li>
+                    <li>Xóa: <code>del my_dict['thanh_pho']</code></li>
+                    <li>Duyệt: <code>for key, value in my_dict.items():</code></li>
+                </ul>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">c. List của Dictionary - Cấu trúc Vàng</h4>
+                <p class="mb-4 text-lg">Cấu trúc mạnh mẽ nhất để quản lý một danh sách các đối tượng phức tạp (sinh
+                    viên, sản phẩm...).</p>
+                <div class="code-block-container">
+                    <pre
+                        class="code-block"><code><span class="variable">danh_sach_sv</span> <span class="operator">=</span> [
+    {<span class="string">'ten'</span>: <span class="string">'An'</span>, <span class="string">'diem'</span>: <span class="number">9</span>},
+    {<span class="string">'ten'</span>: <span class="string">'Bình'</span>, <span class="string">'diem'</span>: <span class="number">8</span>}
+]
+<span class="function">print</span>(<span class="variable">danh_sach_sv</span>[<span class="number">0</span>][<span class="string">'ten'</span>])  <span class="comment"># Output: An</span></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Tổ Chức và Lưu Trữ</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">a. Hàm (Function) - Nguyên tắc DRY</h4>
+                <p class="mb-4 text-lg"><strong>Don't Repeat Yourself</strong> (Đừng Lặp Lại Chính Mình). Gói các đoạn
+                    code lặp lại vào hàm để tái sử dụng, giúp chương trình gọn gàng, dễ đọc và dễ sửa lỗi.</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code><span class="comment"># Thay vì viết code tính toán ở nhiều nơi...</span>
+<span class="keyword">def</span> <span class="def-name">tinh_trung_binh</span>(<span class="variable">numbers</span>):
+    <span class="keyword">if not</span> <span class="variable">numbers</span>:
+        <span class="keyword">return</span> <span class="number">0</span>
+    <span class="keyword">return</span> <span class="function">sum</span>(<span class="variable">numbers</span>) / <span class="function">len</span>(<span class="variable">numbers</span>)
+
+<span class="variable">diem_toan</span> <span class="operator">=</span> [<span class="number">8</span>, <span class="number">9</span>, <span class="number">7</span>]
+<span class="function">print</span>(<span class="string">f"TB Toán: {tinh_trung_binh(diem_toan)}"</span>)</code></pre>
+                </div>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">b. File I/O với JSON</h4>
+                <p class="mb-4 text-lg">Cách tốt nhất để lưu trữ dữ liệu có cấu trúc (như list của dictionary) một cách
+                    bền vững.</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li><strong>Luôn dùng <code>with open(...)</code></strong> để file tự động đóng.</li>
+                    <li><strong><code>json.load(f)</code></strong>: Đọc từ file JSON và chuyển thành đối tượng Python.
+                    </li>
+                    <li><strong><code>json.dump(data, f, indent=4)</code></strong>: Ghi đối tượng Python vào file JSON.
+                    </li>
+                    <li><strong>Luôn nhớ <code>encoding='utf-8'</code></strong> khi làm việc với tiếng Việt.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h3 class="text-4xl font-semibold text-center text-theme-700 mb-6">Phần II: Luyện Tập Tổng Hợp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/F97316/FFFFFF?text=Practice+Time"
+                        alt="[Hình ảnh của Workshop]" class="shadow-md rounded-lg">
+                </div>
+                <p class="text-center text-xl text-gray-700">Hãy vận dụng tất cả kiến thức đã học để giải quyết các bài
+                    toán sau đây.</p>
+                <p class="text-center text-gray-600 mt-4 text-lg">Đây là cơ hội tuyệt vời để bạn tự kiểm tra và củng cố
+                    kỹ năng trước bài thi cuối khóa!</p>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bài Tập Luyện Tập (Dễ)</h3>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: FizzBuzz kinh điển</h4>
+                <p class="mb-4 text-lg">Viết chương trình in ra các số từ 1 đến 100. Tuy nhiên:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Với các số chia hết cho 3, in ra "Fizz" thay vì số đó.</li>
+                    <li>Với các số chia hết cho 5, in ra "Buzz" thay vì số đó.</li>
+                    <li>Với các số chia hết cho cả 3 và 5, in ra "FizzBuzz".</li>
+                </ul>
+                <p class="text-sm text-gray-500"><strong>Gợi ý:</strong> Dùng vòng lặp
+                    <code>for i in range(1, 101)</code> và câu lệnh <code>if-elif-else</code>. Lưu ý kiểm tra trường hợp
+                    chia hết cho cả 3 và 5 trước tiên.</p>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">Bài 2: Thống kê danh sách</h4>
+                <p class="mb-4 text-lg">Viết một hàm nhận vào một danh sách các con số. Hàm này sẽ trả về một dictionary
+                    chứa các thông tin sau:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li><code>'so_lon_nhat'</code>: Số lớn nhất trong danh sách.</li>
+                    <li><code>'so_nho_nhat'</code>: Số nhỏ nhất.</li>
+                    <li><code>'trung_binh'</code>: Giá trị trung bình của các số.</li>
+                </ul>
+                <p class="text-sm text-gray-500"><strong>Gợi ý:</strong> Sử dụng các hàm tích hợp sẵn như
+                    <code>max()</code>, <code>min()</code>, <code>sum()</code>, và <code>len()</code>.</p>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bài Tập Luyện Tập (Trung Bình)</h3>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 3: Đảo ngược chuỗi</h4>
+                <p class="mb-4 text-lg">Viết một hàm nhận vào một chuỗi và trả về chuỗi đó sau khi đã đảo ngược thứ tự
+                    các ký tự <strong>mà không sử dụng slicing <code>[::-1]</code></strong>.</p>
+                <p class="text-sm text-gray-500"><strong>Gợi ý:</strong> Dùng vòng lặp duyệt qua chuỗi ban đầu, xây dựng
+                    một chuỗi mới bằng cách cộng dồn ký tự vào <strong>phía trước</strong> chuỗi mới.
+                    (<code>chuoi_moi = ky_tu + chuoi_moi</code>)</p>
+                <div class="code-block-container">
+                    <pre
+                        class="code-block"><code><span class="function">print</span>(dao_nguoc(<span class="string">"python"</span>)) <span class="comment"># Output mong muốn: "nohtyp"</span></code></pre>
+                </div>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">Bài 4: Sổ liên lạc đơn giản</h4>
+                <p class="mb-4 text-lg">Viết chương trình quản lý một sổ liên lạc đơn giản (lưu trong bộ nhớ, không cần
+                    file). Chương trình cho phép:</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Thêm một liên lạc mới (tên, số điện thoại).</li>
+                    <li>Tìm kiếm số điện thoại khi biết tên.</li>
+                    <li>Hiển thị toàn bộ danh bạ.</li>
+                </ul>
+                <p class="text-sm text-gray-500"><strong>Gợi ý:</strong> Dùng một list chứa các dictionary. Viết các hàm
+                    riêng cho từng chức năng: <code>them_lien_lac()</code>, <code>tim_so_dien_thoai()</code>,
+                    <code>hien_thi_danh_ba()</code>.</p>
+            </div>
+        </div>
+
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Bài Tập Luyện Tập (Khó)</h3>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 5: Ứng dụng To-Do List với File JSON</h4>
+                <p class="mb-4 text-lg">Đây là bài tập tổng hợp toàn diện nhất! Hãy xây dựng một chương trình quản lý
+                    danh sách công việc (To-Do List) hoàn chỉnh với các yêu cầu sau:</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li><strong>Cấu trúc dữ liệu:</strong> Sử dụng một list chứa các dictionary. Mỗi dictionary đại diện
+                        cho một công việc và có các key: <code>'ten_cong_viec'</code> (chuỗi) và
+                        <code>'trang_thai'</code> (chuỗi, có thể là 'chưa hoàn thành' hoặc 'đã hoàn thành').</li>
+                    <li><strong>Lưu trữ bền vững:</strong> Chương trình phải có khả năng đọc dữ liệu từ file
+                        <code>todolist.json</code> khi khởi động và ghi lại toàn bộ danh sách công việc vào file đó khi
+                        thoát.</li>
+                    <li><strong>Chức năng (viết thành các hàm riêng):</strong>
+                        <ul class="list-disc list-inside ml-6 mt-2">
+                            <li>Hiển thị tất cả công việc cùng với trạng thái của chúng.</li>
+                            <li>Thêm một công việc mới (mặc định trạng thái là 'chưa hoàn thành').</li>
+                            <li>Đánh dấu một công việc là 'đã hoàn thành' (dựa vào tên hoặc số thứ tự).</li>
+                            <li>Xóa một công việc khỏi danh sách.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Giao diện:</strong> Một menu dòng lệnh rõ ràng để người dùng có thể chọn các chức năng.
+                    </li>
+                </ol>
+                <p class="text-sm text-gray-500"><strong>Gợi ý:</strong> Bắt đầu bằng việc viết hàm <code>main()</code>
+                    với vòng lặp <code>while True</code> và menu, sau đó xây dựng từng hàm chức năng một. Đừng quên gọi
+                    hàm tải dữ liệu ở đầu và hàm lưu dữ liệu trước khi thoát.</p>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Chuẩn Bị Cho Bài Thi Cuối Khóa</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/4F46E5/FFFFFF?text=Exam+Tips" alt="[Hình ảnh Mẹo thi cử]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <ul class="space-y-4 text-lg">
+                    <li class="flex items-start">
+                        <i class="fas fa-book-open text-theme-600 mt-1 mr-3"></i>
+                        <span><strong>Đọc kỹ đề:</strong> Dành thời gian hiểu rõ yêu cầu của từng câu hỏi trước khi bắt
+                            tay vào code. Yêu cầu đầu vào là gì? Định dạng đầu ra mong muốn là gì?</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-pencil-ruler text-theme-600 mt-1 mr-3"></i>
+                        <span><strong>Lên kế hoạch nhỏ:</strong> Với các bài toán lớn, hãy suy nghĩ xem bạn cần những
+                            biến nào, những hàm nào, và luồng chạy của chương trình sẽ ra sao. Viết ra giấy hoặc comment
+                            trước khi code.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-bug text-theme-600 mt-1 mr-3"></i>
+                        <span><strong>Kiểm thử liên tục:</strong> Chạy code thường xuyên để kiểm tra từng phần nhỏ. Đừng
+                            viết một chương trình dài rồi mới chạy lần đầu. Hãy thử với các ví dụ trong đề bài.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-history text-theme-600 mt-1 mr-3"></i>
+                        <span><strong>Ôn lại các bài tập cũ:</strong> Xem lại các bài tập đã làm, đặc biệt là dự án quản
+                            lý. Các dạng bài thi sẽ tương tự.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-heart text-theme-600 mt-1 mr-3"></i>
+                        <span><strong>Giữ bình tĩnh:</strong> Nếu gặp lỗi, hãy đọc kỹ thông báo lỗi. Nó thường chỉ cho
+                            bạn biết vấn đề nằm ở đâu. Nếu bí, hãy chuyển sang câu khác và quay lại sau.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">7. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/9333EA/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Đây là cơ hội cuối cùng để làm rõ mọi thắc
+                    mắc trước bài kiểm tra!</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Chúc các bạn ôn tập tốt và đạt kết quả cao trong buổi
+                    thi tới!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i !== index) {
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                } else {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
