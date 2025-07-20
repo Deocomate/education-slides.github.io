@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buổi Học: Tự Động Hóa với PyAutoGUI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f0fdfa;
+            /* Teal-50 */
+        }
+
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #0891b2; /* Cyan 600 */
+            color: #ecfeff; /* Cyan 50 */
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #0e7490; /* Cyan 700 */
+        }
+
+        .copy-button .fa-copy { margin-right: 0.375rem; }
+        .copy-button .fa-check { margin-right: 0.375rem; color: #a7f3d0; }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .copy-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.5);
+        }
+
+        .code-block .comment { color: #6ee7b7; }
+        .code-block .keyword { color: #93c5fd; }
+        .code-block .string { color: #fde047; }
+        .code-block .number { color: #fdbb74; }
+        .code-block .function { color: #d8b4fe; }
+        .code-block .def-name { color: #67e8f9; }
+        .code-block .operator { color: #fda4af; }
+        .code-block .boolean { color: #fdbb74; }
+
+        /* Customizations for Lesson - Cyan/Slate theme */
+        .text-theme-700 { color: #0e7490; } /* Cyan 700 */
+        .text-theme-600 { color: #0891b2; } /* Cyan 600 */
+        .bg-theme-500 { background-color: #06b6d4; } /* Cyan 500 */
+        .hover\:bg-theme-700:hover { background-color: #0e7490; }
+        .text-highlight { color: #f59e0b; } /* Amber 500 */
+        .border-warning { border-left: 4px solid #f59e0b; }
+        .bg-warning-light { background-color: #fffbeb; }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 11: Tự Động Hóa với PyAutoGUI</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide" class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
+                </button>
+                <button id="nextSlide" class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
+                Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 slide-container">
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper justify-center flex flex-col">
+                <h2 class="text-4xl font-bold text-center text-theme-700 mb-6">Buổi 11: Tự Động Hóa Mọi Thứ Với PyAutoGUI</h2>
+                <p class="text-2xl text-center text-gray-600 mb-12">Điều khiển chuột và bàn phím bằng Python</p>
+                <div class="flex justify-center my-8">
+                    <img src="https://placehold.co/400x250/06B6D4/FFFFFF?text=PyAutoGUI"
+                        alt="[Hình ảnh Tự động hóa]" class="shadow-lg rounded-lg">
+                </div>
+                <p class="text-center mt-8 text-lg text-gray-700">Hãy để máy tính làm những công việc nhàm chán giúp bạn!</p>
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. PyAutoGUI Là Gì và Tại Sao Nó Hữu Ích?</h3>
+                <p class="mb-4 text-lg"><strong>PyAutoGUI</strong> là một thư viện Python cho phép bạn điều khiển chuột và bàn phím một cách tự động. Nó giống như có một con robot vô hình đang sử dụng máy tính thay bạn.</p>
+                
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-6">Ứng dụng thực tế:</h4>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><i class="fas fa-tasks mr-2 text-theme-600"></i><strong>Tự động hóa các tác vụ lặp đi lặp lại:</strong> Sao chép, dán file, điền form, gửi email hàng loạt...</li>
+                    <li><i class="fas fa-bug mr-2 text-theme-600"></i><strong>Kiểm thử phần mềm (Testing):</strong> Tự động click vào các nút, nhập dữ liệu để kiểm tra xem chương trình có hoạt động đúng không.</li>
+                    <li><i class="fas fa-robot mr-2 text-theme-600"></i><strong>Tạo Bot cho game hoặc ứng dụng:</strong> Tự động "cày game" hoặc thực hiện các thao tác đơn giản.</li>
+                    <li><i class="fas fa-pen-nib mr-2 text-theme-600"></i><strong>Thao tác đồ họa:</strong> Tự động vẽ vời trong các phần mềm như Paint.</li>
+                </ul>
+                <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500 mt-6">
+                    <p class="text-lg text-blue-800"><i class="fas fa-lightbulb mr-2"></i><strong>Nguyên tắc:</strong> Bất cứ thứ gì bạn có thể làm bằng chuột và bàn phím, PyAutoGUI cũng có thể làm được.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Cài Đặt và Chuẩn Bị</h3>
+                <p class="mb-4 text-lg">PyAutoGUI là một thư viện bên ngoài, vì vậy chúng ta cần cài đặt nó bằng <strong>pip</strong>.</p>
+                <p class="mb-2 font-medium">Mở Terminal (hoặc Command Prompt trên Windows) và gõ lệnh:</p>
+                <div class="code-block-container">
+                    <pre class="code-block"><code>pip install pyautogui</code></pre>
+                </div>
+                
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">🚨 CẢNH BÁO AN TOÀN - CỰC KỲ QUAN TRỌNG! 🚨</h4>
+                <p class="mb-4 text-lg">Một khi script PyAutoGUI bắt đầu chạy, nó sẽ chiếm quyền điều khiển chuột và bàn phím của bạn. Nếu code bị lỗi, bạn có thể mất kiểm soát máy tính!</p>
+                <div class="bg-warning-light p-6 rounded-lg border-warning">
+                    <p class="text-lg font-bold text-yellow-800">Luôn ghi nhớ "Phanh Khẩn Cấp":</p>
+                    <p class="mt-2 text-lg text-yellow-900">Di chuyển chuột thật nhanh vào <strong>góc trên cùng bên trái</strong> của màn hình. Thao tác này sẽ kích hoạt tính năng an toàn (Failsafe) và dừng chương trình ngay lập tức.</p>
+                </div>
+                 <p class="mt-4 text-sm text-gray-500"><strong>Lưu ý cho macOS:</strong> Bạn có thể cần cấp quyền "Accessibility" cho Terminal hoặc VS Code trong System Settings để PyAutoGUI hoạt động.</p>
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Điều Khiển Chuột: Vị Trí & Di Chuyển</h3>
+                <p class="mb-4 text-lg">Trước tiên, hãy tìm hiểu cách Python "nhìn" màn hình của bạn và cách di chuyển con trỏ chuột.</p>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2">a. Tọa độ màn hình</h4>
+                <p class="mb-2 text-lg">Màn hình được đo bằng một hệ tọa độ (x, y), với gốc <strong>(0, 0)</strong> ở góc trên cùng bên trái.</p>
+                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li><code>pyautogui.size()</code>: Trả về kích thước màn hình (chiều rộng, chiều cao).</li>
+                    <li><code>pyautogui.position()</code>: Trả về vị trí hiện tại của con trỏ chuột (x, y).</li>
+                </ul>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-4">b. Di chuyển chuột</h4>
+                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li><code>pyautogui.moveTo(x, y, duration=s)</code>: Di chuyển chuột đến tọa độ (x, y) trong <code>s</code> giây.</li>
+                    <li><code>pyautogui.moveRel(xOffset, yOffset, duration=s)</code>: Di chuyển chuột một khoảng tương đối so với vị trí hiện tại.</li>
+                </ul>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pyautogui
+<span class="keyword">import</span> time
+
+<span class="comment"># Lấy kích thước màn hình</span>
+<span class="variable">screenWidth</span>, <span class="variable">screenHeight</span> <span class="operator">=</span> pyautogui.<span class="function">size</span>()
+<span class="function">print</span>(<span class="string">f"Kích thước màn hình: {screenWidth} x {screenHeight}"</span>)
+
+<span class="comment"># Di chuyển đến giữa màn hình trong 2 giây</span>
+pyautogui.<span class="function">moveTo</span>(<span class="variable">screenWidth</span> / <span class="number">2</span>, <span class="variable">screenHeight</span> / <span class="number">2</span>, <span class="variable">duration</span><span class="operator">=</span><span class="number">2</span>)
+
+<span class="comment"># Lấy vị trí hiện tại</span>
+<span class="variable">currentX</span>, <span class="variable">currentY</span> <span class="operator">=</span> pyautogui.<span class="function">position</span>()
+<span class="function">print</span>(<span class="string">f"Vị trí hiện tại: {currentX}, {currentY}"</span>)
+
+<span class="comment"># Di chuyển xuống dưới 100 pixels</span>
+pyautogui.<span class="function">moveRel</span>(<span class="number">0</span>, <span class="number">100</span>, <span class="variable">duration</span><span class="operator">=</span><span class="number">1</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-5" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3.1. Điều Khiển Chuột: Click, Kéo, Lăn</h3>
+                <p class="mb-4 text-lg">Sau khi di chuyển, chúng ta cần thực hiện các hành động.</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><code>pyautogui.click()</code>: Click chuột trái tại vị trí hiện tại. (Có thể truyền tọa độ <code>(x, y)</code> vào).</li>
+                    <li><code>pyautogui.doubleClick()</code>: Click đúp.</li>
+                    <li><code>pyautogui.rightClick()</code>: Click chuột phải.</li>
+                    <li><code>pyautogui.dragTo(x, y, duration=s)</code>: Nhấn giữ chuột trái và kéo đến vị trí (x, y).</li>
+                    <li><code>pyautogui.scroll(pixels)</code>: Lăn chuột (số dương để cuộn lên, số âm để cuộn xuống).</li>
+                </ul>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-6">Ví dụ: Tự động vẽ một hình vuông trong Paint</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pyautogui
+<span class="keyword">import</span> time
+
+<span class="comment"># Cho bạn 5 giây để mở và focus vào cửa sổ Paint</span>
+<span class="function">print</span>(<span class="string">"Mở Paint và đặt bút vẽ sẵn sàng trong 5 giây..."</span>)
+time.<span class="function">sleep</span>(<span class="number">5</span>)
+
+<span class="comment"># Bắt đầu vẽ</span>
+pyautogui.<span class="function">moveTo</span>(<span class="number">300</span>, <span class="number">300</span>, <span class="variable">duration</span><span class="operator">=</span><span class="number">1</span>)
+<span class="variable">distance</span> <span class="operator">=</span> <span class="number">200</span>
+pyautogui.<span class="function">dragRel</span>(<span class="variable">distance</span>, <span class="number">0</span>, <span class="variable">duration</span><span class="operator">=</span><span class="number">1</span>)   <span class="comment"># Vẽ cạnh phải</span>
+pyautogui.<span class="function">dragRel</span>(<span class="number">0</span>, <span class="variable">distance</span>, <span class="variable">duration</span><span class="operator">=</span><span class="number">1</span>)   <span class="comment"># Vẽ cạnh dưới</span>
+pyautogui.<span class="function">dragRel</span>(<span class="operator">-</span><span class="variable">distance</span>, <span class="number">0</span>, <span class="variable">duration</span><span class="operator">=</span><span class="number">1</span>) <span class="comment"># Vẽ cạnh trái</span>
+pyautogui.<span class="function">dragRel</span>(<span class="number">0</span>, <span class="operator">-</span><span class="variable">distance</span>, <span class="variable">duration</span><span class="operator">=</span><span class="number">1</span>) <span class="comment"># Vẽ cạnh trên</span>
+
+<span class="function">print</span>(<span class="string">"Đã vẽ xong!"</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-6" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Điều Khiển Bàn Phím</h3>
+                <p class="mb-4 text-lg">PyAutoGUI cho phép bạn mô phỏng việc gõ phím và sử dụng các phím tắt.</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><code>pyautogui.write('text')</code>: Gõ một chuỗi ký tự.</li>
+                    <li><code>pyautogui.press('key')</code>: Nhấn và thả một phím đơn (ví dụ: 'enter', 'f1', 'left').</li>
+                    <li><code>pyautogui.hotkey('ctrl', 'c')</code>: Nhấn giữ các phím theo thứ tự, sau đó thả ra theo thứ tự ngược lại (tổ hợp phím).</li>
+                </ul>
+
+                 <h4 class="text-xl font-medium text-gray-700 mb-2 mt-6">Ví dụ: Tự động mở Notepad và viết "Hello World"</h4>
+                 <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pyautogui
+<span class="keyword">import</span> time
+
+<span class="comment"># Cho 3 giây để bạn chuẩn bị</span>
+time.<span class="function">sleep</span>(<span class="number">3</span>)
+
+<span class="comment"># 1. Mở Run (Windows + R)</span>
+pyautogui.<span class="function">hotkey</span>(<span class="string">'win'</span>, <span class="string">'r'</span>)
+time.<span class="function">sleep</span>(<span class="number">1</span>) <span class="comment"># Chờ hộp thoại Run xuất hiện</span>
+
+<span class="comment"># 2. Gõ 'notepad' và nhấn Enter</span>
+pyautogui.<span class="function">write</span>(<span class="string">'notepad'</span>)
+pyautogui.<span class="function">press</span>(<span class="string">'enter'</span>)
+time.<span class="function">sleep</span>(<span class="number">2</span>) <span class="comment"># Chờ Notepad mở ra</span>
+
+<span class="comment"># 3. Gõ nội dung</span>
+pyautogui.<span class="function">write</span>(<span class="string">'Hello, World! Python is automating this.'</span>, <span class="variable">interval</span><span class="operator">=</span><span class="number">0.1</span>)
+
+<span class="function">print</span>(<span class="string">"Đã viết xong!"</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-7" class="slide">
+             <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Nhận Dạng Hình Ảnh - "Đôi Mắt" Của Robot</h3>
+                <p class="mb-4 text-lg">Đây là tính năng mạnh mẽ nhất của PyAutoGUI! Thay vì dùng tọa độ cố định (dễ bị sai khi thay đổi độ phân giải), chúng ta có thể ra lệnh cho script <strong>tìm một hình ảnh cụ thể</strong> trên màn hình và tương tác với nó.</p>
+                <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2 text-lg">
+                    <li><code>pyautogui.screenshot()</code>: Chụp ảnh màn hình.</li>
+                    <li><code>pyautogui.locateOnScreen('image.png')</code>: Tìm vị trí của file `image.png` trên màn hình. Trả về tọa độ (left, top, width, height) hoặc `None` nếu không tìm thấy.</li>
+                    <li><code>pyautogui.center(coords)</code>: Lấy tọa độ tâm của vùng được `locateOnScreen` trả về.</li>
+                </ul>
+
+                <h4 class="text-xl font-medium text-gray-700 mb-2 mt-6">Ví dụ: Tự động tìm và click vào nút Start của Windows</h4>
+                 <p class="text-lg"><strong>Bước 1:</strong> Chụp một ảnh nhỏ của nút Start và lưu lại với tên `start_button.png` trong cùng thư mục với file Python.</p>
+                 <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pyautogui
+<span class="keyword">import</span> time
+
+<span class="function">print</span>(<span class="string">"Đang tìm nút Start..."</span>)
+<span class="comment"># Tìm vị trí của ảnh trên màn hình</span>
+<span class="variable">start_button_location</span> <span class="operator">=</span> pyautogui.<span class="function">locateOnScreen</span>(<span class="string">'start_button.png'</span>, <span class="variable">confidence</span><span class="operator">=</span><span class="number">0.8</span>)
+
+<span class="keyword">if</span> <span class="variable">start_button_location</span>:
+    <span class="comment"># Lấy tọa độ tâm của nút</span>
+    <span class="variable">start_button_center</span> <span class="operator">=</span> pyautogui.<span class="function">center</span>(<span class="variable">start_button_location</span>)
+    <span class="function">print</span>(<span class="string">f"Đã tìm thấy nút Start tại: {start_button_center}"</span>)
+    
+    <span class="comment"># Click vào đó</span>
+    pyautogui.<span class="function">click</span>(<span class="variable">start_button_center</span>)
+    <span class="function">print</span>(<span class="string">"Đã click!"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Không tìm thấy nút Start trên màn hình."</span>)
+</code></pre>
+                </div>
+                <p class="mt-2 text-sm text-gray-500"><strong>Lưu ý:</strong> Tham số `confidence=0.8` giúp tìm kiếm linh hoạt hơn, chấp nhận sự khác biệt nhỏ về màu sắc. Cần `pip install opencv-python` để dùng.</p>
+            </div>
+        </div>
+
+        <div id="slide-8" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Dự Án Thực Tế: Bot Chơi Game T-Rex Runner</h3>
+                <p class="mb-4 text-lg">Hãy kết hợp mọi thứ đã học để tạo một con bot chơi game khủng long của Chrome khi mất mạng.</p>
+                <p class="mb-2 font-medium text-xl">Logic hoạt động:</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700 space-y-2">
+                    <li>Xác định một vùng nhỏ phía trước con khủng long để "quan sát".</li>
+                    <li>Liên tục chụp ảnh màn hình của vùng đó.</li>
+                    <li>Kiểm tra xem trong ảnh chụp có pixel nào là màu của chướng ngại vật (màu tối) không.</li>
+                    <li>Nếu có, nhấn phím cách (space) để nhảy.</li>
+                </ol>
+
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="keyword">import</span> pyautogui
+<span class="keyword">import</span> time
+
+<span class="function">print</span>(<span class="string">"Mở game T-Rex (chrome://dino) và chuẩn bị trong 5 giây..."</span>)
+time.<span class="function">sleep</span>(<span class="number">5</span>)
+pyautogui.<span class="function">press</span>(<span class="string">'space'</span>) <span class="comment"># Bắt đầu game</span>
+
+<span class="comment"># Vùng màn hình để quan sát (thay đổi tọa độ cho phù hợp với màn hình của bạn)</span>
+<span class="variable">REGION</span> <span class="operator">=</span> (<span class="number">500</span>, <span class="number">520</span>, <span class="number">150</span>, <span class="number">80</span>) 
+<span class="variable">OBSTACLE_COLOR</span> <span class="operator">=</span> (<span class="number">83</span>, <span class="number">83</span>, <span class="number">83</span>) <span class="comment"># Màu xám của chướng ngại vật</span>
+
+<span class="keyword">while</span> <span class="boolean">True</span>:
+    <span class="comment"># Chụp ảnh vùng quan sát</span>
+    <span class="variable">screenshot</span> <span class="operator">=</span> pyautogui.<span class="function">screenshot</span>(<span class="variable">region</span><span class="operator">=</span><span class="variable">REGION</span>)
+    
+    <span class="comment"># Duyệt qua các pixel trong ảnh</span>
+    <span class="keyword">for</span> <span class="variable">x</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="variable">REGION</span>[<span class="number">2</span>], <span class="number">5</span>): <span class="comment"># Bước nhảy 5px để nhanh hơn</span>
+        <span class="keyword">for</span> <span class="variable">y</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="variable">REGION</span>[<span class="number">3</span>], <span class="number">5</span>):
+            <span class="comment"># Nếu tìm thấy pixel có màu giống chướng ngại vật</span>
+            <span class="keyword">if</span> <span class="variable">screenshot</span>.<span class="function">getpixel</span>((<span class="variable">x</span>, <span class="variable">y</span>)) <span class="operator">==</span> <span class="variable">OBSTACLE_COLOR</span>:
+                pyautogui.<span class="function">press</span>(<span class="string">'space'</span>) <span class="comment"># Nhảy!</span>
+                time.<span class="function">sleep</span>(<span class="number">0.1</span>) <span class="comment"># Chờ một chút trước khi check lại</span>
+                <span class="keyword">break</span> <span class="comment"># Thoát vòng lặp trong</span>
+        <span class="keyword">else</span>:
+            <span class="keyword">continue</span>
+        <span class="keyword">break</span> <span class="comment"># Thoát vòng lặp ngoài</span>
+</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-9" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7. Bài Tập Luyện Tập</h3>
+                
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 1: Tự động tìm kiếm Google (Dễ)</h4>
+                <p class="mb-4 text-lg">Viết một script tự động:</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
+                    <li>Mở một trình duyệt web (bạn phải tự mở và focus vào trước).</li>
+                    <li>Click vào thanh địa chỉ.</li>
+                    <li>Gõ "google.com" và nhấn Enter.</li>
+                    <li>Chờ trang web tải xong (dùng `time.sleep()`).</li>
+                    <li>Gõ "Học Python thật vui" vào ô tìm kiếm và nhấn Enter.</li>
+                </ol>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">Bài 2: Tự động "Spam" Tin Nhắn (Trung bình)</h4>
+                <p class="mb-4 text-lg">Viết một script:</p>
+                 <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
+                    <li>Cho bạn 5 giây để click vào ô chat của một ứng dụng nhắn tin (Messenger, Zalo...).</li>
+                    <li>Sử dụng vòng lặp để gửi một tin nhắn ("Hello from Python!") 10 lần.</li>
+                    <li>Mỗi lần gửi xong, nhấn Enter và chờ 1 giây.</li>
+                 </ul>
+                 <p class="text-sm font-bold text-red-600">Lưu ý: Hãy thử nghiệm với chính mình, không spam người khác!</p>
+
+                 <h4 class="text-2xl font-medium text-gray-700 mb-3 mt-8">Bài 3: Bot Tự động Click "Cookie" (Khó)</h4>
+                <p class="mb-4 text-lg">Truy cập vào game <a href="https://orteil.dashnet.org/cookieclicker/" target="_blank" class="text-blue-600 hover:underline">Cookie Clicker</a>. Viết một script:</p>
+                <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
+                    <li>Chụp ảnh cái bánh cookie lớn và lưu lại.</li>
+                    <li>Viết script tìm ảnh cookie đó trên màn hình bằng `locateOnScreen`.</li>
+                    <li>Sử dụng vòng lặp `while True` để liên tục click vào tâm của cái bánh cookie.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div id="slide-10" class="slide">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">8. Tổng Kết Buổi Học</h3>
+                <p class="mb-4 text-lg">Hôm nay, chúng ta đã học cách biến Python thành một công cụ tự động hóa mạnh mẽ:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-gray-700 space-y-3 text-lg">
+                    <li><strong>Cài đặt và An toàn:</strong> Biết cách cài đặt PyAutoGUI và quan trọng hơn là biết cách dừng script khẩn cấp.</li>
+                    <li><strong>Điều khiển chuột:</strong> Di chuyển (<code>moveTo</code>, <code>moveRel</code>), click (<code>click</code>), kéo thả (<code>dragTo</code>) và lăn chuột (<code>scroll</code>).</li>
+                    <li><strong>Điều khiển bàn phím:</strong> Gõ chữ (<code>write</code>), nhấn phím (<code>press</code>) và sử dụng tổ hợp phím (<code>hotkey</code>).</li>
+                    <li><strong>Nhận dạng hình ảnh:</strong> Tính năng "thần kỳ" <code>locateOnScreen</code> cho phép script "nhìn" và tương tác với các thành phần đồ họa, giúp script ổn định và thông minh hơn.</li>
+                    <li><strong>Ứng dụng thực tế:</strong> Áp dụng tất cả kiến thức để xây dựng một con bot chơi game tự động.</li>
+                </ul>
+                <p class="text-lg mb-6 font-semibold">Tư duy tự động hóa là một kỹ năng giá trị. Hãy nghĩ xem trong công việc hàng ngày của bạn, có tác vụ nào nhàm chán và lặp lại không? Rất có thể PyAutoGUI sẽ giúp được bạn!</p>
+            </div>
+        </div>
+
+        <div id="slide-11" class="slide">
+            <div class="slide-content-wrapper flex flex-col justify-center items-center">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6 text-center">9. Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/0E7490/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
+                        class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Bạn có ý tưởng tự động hóa nào muốn chia sẻ không?</h4>
+                <p class="text-center text-gray-600 mt-4 text-lg">Hãy đặt câu hỏi nếu có bất kỳ thắc mắc nào nhé!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const currentSlideNumDisplay = document.getElementById('currentSlideNum');
+        const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
+        
+        let currentSlide = 0;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i !== index) {
+                    setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                            slide.style.display = 'none';
+                        }
+                    }, 400);
+                } else {
+                    slide.style.display = 'flex';
+                    setTimeout(() => {
+                        slide.classList.add('active');
+                    }, 10);
+                }
+            });
+            currentSlideNumDisplay.textContent = index + 1;
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
+
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
+    </script>
+
+</body>
+
+</html>
