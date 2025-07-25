@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Knowledge Summary: Session 1 & 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-block {
+            background-color: #1E293B; /* slate-800 */
+            color: #E2E8F0; /* slate-200 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .inline-code {
+            background-color: #E2E8F0; /* slate-200 */
+            color: #1E293B; /* slate-800 */
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .dark .inline-code {
+            background-color: #334155; /* slate-700 */
+            color: #F1F5F9; /* slate-100 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+
+    <div class="container mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-sky-600 dark:text-sky-400">Python For Beginners</h1>
+            <p class="mt-4 text-lg text-slate-600 dark:text-slate-400">Core Concepts Summary for Sessions 1 & 2</p>
+        </header>
+
+        <main class="space-y-12">
+
+            <!-- 1. Variables and Data Types -->
+            <section id="variables-types">
+                <h2 class="text-3xl font-bold border-l-4 border-sky-500 pl-4 mb-6">1. Variables and Data Types</h2>
+                <div class="space-y-6 text-lg leading-relaxed">
+                    <p>
+                        A <strong>variable</strong> is like a labeled box used to store data. You can name a variable (following rules) and assign it a value.
+                    </p>
+                    <p>Python has many <strong>data types</strong>, but here are the 4 most basic ones:</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li><strong class="text-sky-500">Integer (<span class="inline-code">int</span>):</strong> Whole numbers like -1, 0, 5, 100.</li>
+                        <li><strong class="text-sky-500">Float (<span class="inline-code">float</span>):</strong> Numbers with a decimal part, like 3.14, -0.5.</li>
+                        <li><strong class="text-sky-500">String (<span class="inline-code">str</span>):</strong> Text, enclosed in single quotes <code class="inline-code">''</code> or double quotes <code class="inline-code">""</code>.</li>
+                        <li><strong class="text-sky-500">Boolean (<span class="inline-code">bool</span>):</strong> Has only two values: <code class="inline-code">True</code> or <code class="inline-code">False</code>.</li>
+                    </ul>
+                    <h3 class="text-2xl font-semibold pt-4">Basic Functions:</h3>
+                    <p>
+                        We use built-in functions to interact with the user and process data.
+                    </p>
+                    <div class="code-block">
+<pre><code># 1. print(): Used to display data on the screen
+print("Welcome to Python!")
+
+# 2. input(): Used to get data from the user (always returns a string - str)
+name = input("Please enter your name: ")
+print("Hello,", name)
+
+# 3. Type Casting: Converting data from one type to another
+# Since input() always returns a string, we need to cast it for calculations
+age_str = input("How old are you? ")
+age_int = int(age_str) # Cast to an integer
+
+height_str = input("How tall are you in meters? (e.g., 1.75) ")
+height_float = float(height_str) # Cast to a float
+
+# Print the casted results
+print("So next year you will be", age_int + 1, "years old.")
+print("Your height is:", height_float, "m.")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Operators -->
+            <section id="operators">
+                <h2 class="text-3xl font-bold border-l-4 border-sky-500 pl-4 mb-6">2. Operators</h2>
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4">a. Arithmetic Operators</h3>
+                        <p class="mb-4">Used to perform mathematical calculations.</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-slate-100 dark:bg-slate-800">
+                                    <tr>
+                                        <th class="p-3 border border-slate-300 dark:border-slate-600">Operator</th>
+                                        <th class="p-3 border border-slate-300 dark:border-slate-600">Name</th>
+                                        <th class="p-3 border border-slate-300 dark:border-slate-600">Example (a=10, b=3)</th>
+                                        <th class="p-3 border border-slate-300 dark:border-slate-600">Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-3 border border-slate-300 dark:border-slate-600"><code class="inline-code">+</code></td><td class="p-3 border border-slate-300 dark:border-slate-600">Addition</td><td class="p-3 border border-slate-300 dark:border-slate-600">a + b</td><td class="p-3 border border-slate-300 dark:border-slate-600">13</td></tr>
+                                    <tr><td class="p-3 border border-slate-300 dark:border-slate-600"><code class="inline-code">-</code></td><td class="p-3 border border-slate-300 dark:border-slate-600">Subtraction</td><td class="p-3 border border-slate-300 dark:border-slate-600">a - b</td><td class="p-3 border border-slate-300 dark:border-slate-600">7</td></tr>
+                                    <tr><td class="p-3 border border-slate-300 dark:border-slate-600"><code class="inline-code">*</code></td><td class="p-3 border border-slate-300 dark:border-slate-600">Multiplication</td><td class="p-3 border border-slate-300 dark:border-slate-600">a * b</td><td class="p-3 border border-slate-300 dark:border-slate-600">30</td></tr>
+                                    <tr><td class="p-3 border border-slate-300 dark:border-slate-600"><code class="inline-code">/</code></td><td class="p-3 border border-slate-300 dark:border-slate-600">Division</td><td class="p-3 border border-slate-300 dark:border-slate-600">a / b</td><td class="p-3 border border-slate-300 dark:border-slate-600">3.333...</td></tr>
+                                    <tr><td class="p-3 border border-slate-300 dark:border-slate-600"><code class="inline-code">%</code></td><td class="p-3 border border-slate-300 dark:border-slate-600">Modulus (remainder)</td><td class="p-3 border border-slate-300 dark:border-slate-600">a % b</td><td class="p-3 border border-slate-300 dark:border-slate-600">1</td></tr>
+                                    <tr><td class="p-3 border border-slate-300 dark:border-slate-600"><code class="inline-code">**</code></td><td class="p-3 border border-slate-300 dark:border-slate-600">Exponentiation</td><td class="p-3 border border-slate-300 dark:border-slate-600">a ** b</td><td class="p-3 border border-slate-300 dark:border-slate-600">1000</td></tr>
+                                    <tr><td class="p-3 border border-slate-300 dark:border-slate-600"><code class="inline-code">//</code></td><td class="p-3 border border-slate-300 dark:border-slate-600">Floor Division</td><td class="p-3 border border-slate-300 dark:border-slate-600">a // b</td><td class="p-3 border border-slate-300 dark:border-slate-600">3</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-semibold mb-4">b. Comparison Operators</h3>
+                        <p class="mb-4">Used to compare two values, the result is always <code class="inline-code">True</code> or <code class="inline-code">False</code>.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow"><code class="inline-code">==</code> : Equal</div>
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow"><code class="inline-code">!=</code> : Not equal</div>
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow"><code class="inline-code">></code> : Greater than</div>
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow"><code class="inline-code"><</code> : Less than</div>
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow"><code class="inline-code">>=</code> : Greater than or equal to</div>
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg shadow"><code class="inline-code"><=</code> : Less than or equal to</div>
+                        </div>
+                        <div class="code-block mt-4">
+<pre><code>x = 10
+y = 5
+print(x > y)   # Result: True
+print(x == 10) # Result: True
+print(y != 5)  # Result: False</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Conditional Statements -->
+            <section id="conditionals">
+                <h2 class="text-3xl font-bold border-l-4 border-sky-500 pl-4 mb-6">3. Conditional Statements: if / elif / else</h2>
+                <div class="space-y-6 text-lg leading-relaxed">
+                    <p>
+                        Helps the program "make decisions", executing different blocks of code based on whether a condition is true or false.
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li><strong class="text-sky-500"><code class="inline-code">if</code>:</strong> If the condition is true, execute the code block inside.</li>
+                        <li><strong class="text-sky-500"><code class="inline-code">elif</code>:</strong> (else if) If the <code class="inline-code">if</code> condition is false, check this next condition. You can have multiple <code class="inline-code">elif</code>s.</li>
+                        <li><strong class="text-sky-500"><code class="inline-code">else</code>:</strong> If all of the above conditions are false, execute this code block.</li>
+                    </ul>
+                    <div class="code-block">
+<pre><code>score = float(input("Enter your score: "))
+
+if score >= 8.0:
+    print("You are an Excellent student!")
+elif score >= 6.5:
+    print("You are a Good student!")
+elif score >= 5.0:
+    print("You are an Average student.")
+else:
+    print("You need to try harder!")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Loops -->
+            <section id="loops">
+                <h2 class="text-3xl font-bold border-l-4 border-sky-500 pl-4 mb-6">4. Loops</h2>
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4">a. The for Loop</h3>
+                        <p>Used to iterate over a sequence of elements (e.g., numbers in a range). Often used when the number of iterations is known beforehand.</p>
+                        <p>The <code class="inline-code">range(n)</code> function generates a sequence of numbers from 0 to n-1.</p>
+                        <div class="code-block">
+<pre><code># Print numbers from 0 to 4
+print("For loop:")
+for i in range(5):
+    print("Current number is:", i)
+
+# range(start, stop) -> iterates from start to stop-1
+# Print numbers from 2 to 6
+for num in range(2, 7):
+    print(num)</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4">b. The while Loop</h3>
+                        <p>Used to repeat a block of code AS LONG AS a condition is true. Often used when the number of iterations is not known beforehand.</p>
+                        <p class="text-amber-500 font-semibold">Note: There must be a change within the loop that can make the condition <code class="inline-code">False</code>, otherwise it will cause an <strong class="text-red-500">infinite loop</strong>!</p>
+                        <div class="code-block">
+<pre><code># Countdown from 5 to 1
+print("\nWhile loop:")
+count = 5
+while count > 0:
+    print("Countdown:", count)
+    count = count - 1 # Change the condition variable, very important!
+
+print("Blast off!")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Exercises -->
+            <section id="exercises">
+                <h2 class="text-3xl font-bold border-l-4 border-sky-500 pl-4 mb-6">5. Homework Exercises</h2>
+                <p class="text-lg mb-6">Complete the following exercises on your own to reinforce your knowledge. Don't be afraid to experiment and make mistakes; it's the best way to learn programming!</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 1: Personal Information</h4>
+                        <p>Write a program that asks the user for their Name and Year of Birth. Then, calculate their age and print a welcome message containing both their name and age.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 2: Rectangle Area</h4>
+                        <p>Write a program that asks the user for the length and width of a rectangle. Calculate and print its area.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 3: Even or Odd Checker</h4>
+                        <p>Write a program that asks the user for an integer. Check if the number is even or odd and print the result.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 4: Temperature Converter</h4>
+                        <p>Write a program to convert Celsius to Fahrenheit. Ask the user for a temperature in Celsius. Formula: F = (C * 9/5) + 32.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 5: Find the Largest Number</h4>
+                        <p>Write a program that asks the user for 3 different numbers. Find and print the largest of the three.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 6: Simple Calculator</h4>
+                        <p>Write a program that asks the user for 2 numbers and an operator (+, -, *, /). Perform the corresponding calculation and print the result.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 7: Print a Sequence</h4>
+                        <p>Use a <code class="inline-code">for</code> loop to print all numbers from 1 to 10.</p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 8: Sum of Positive Numbers</h4>
+                        <p>Using a <code class="inline-code">while</code> loop, write a program that lets the user continuously enter numbers. The program should sum them up until the user enters 0, at which point it stops and prints the final sum.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 9: Factorial Calculator</h4>
+                        <p>Write a program that asks the user for a positive integer N. Calculate and print N! (N factorial). Example: 5! = 1 * 2 * 3 * 4 * 5 = 120.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-600 dark:text-sky-400">Exercise 10: Multiplication Table</h4>
+                        <p>Write a program that asks the user for a number from 2 to 9. Print the multiplication table for that number (e.g., 7 x 1 = 7, 7 x 2 = 14, ..., 7 x 10 = 70).</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 pt-6 border-t border-slate-300 dark:border-slate-700">
+            <p class="text-slate-500">Happy coding and hope you master Python soon!</p>
+        </footer>
+    </div>
+
+</body>
+</html>
