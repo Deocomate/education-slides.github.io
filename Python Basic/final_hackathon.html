@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề Thi Cuối Khóa Python Cơ Bản</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+
+        .question-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid transparent;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        .level-medium { border-color: #f59e0b; } /* Amber 500 */
+        .level-hard { border-color: #ef4444; } /* Red 500 */
+        .level-expert { border-color: #8b5cf6; } /* Violet 500 */
+
+        .terminal {
+            background-color: #1f2937; /* Gray 800 */
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 1px solid #374151; /* Gray 700 */
+            overflow: hidden;
+        }
+        .terminal-header {
+            background-color: #374151; /* Gray 700 */
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .terminal-header span {
+            display: block;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+        }
+        .terminal-header .red { background-color: #f87171; } /* Red 400 */
+        .terminal-header .yellow { background-color: #fbbd23; } /* Amber 400 */
+        .terminal-header .green { background-color: #34d399; } /* Emerald 400 */
+        
+        .terminal-body {
+            color: #e5e7eb; /* Gray 200 */
+            padding: 1rem 1.25rem;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .terminal-body .comment { color: #9ca3af; } /* Gray 400 */
+        
+        .timer-container {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        #timer.ticking {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.95;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <div class="timer-container bg-gray-800 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">
+                <i class="fa-brands fa-python mr-2"></i>
+                Bài Thi Cuối Khóa Python
+            </h1>
+            <div id="timer" class="ticking text-2xl font-bold bg-indigo-500 px-4 py-2 rounded-lg">
+                <i class="fa-regular fa-clock mr-2"></i>
+                <span id="time">02:00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto p-4 md:p-8">
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-700 mb-2">Thông tin bài thi</h2>
+            <p class="text-gray-600"><strong class="font-semibold">Thời gian làm bài:</strong> 120 phút</p>
+            <p class="text-gray-600"><strong class="font-semibold">Nội dung:</strong> 10 câu hỏi lập trình Python thực hành.</p>
+            <p class="text-gray-600"><strong class="font-semibold">Hướng dẫn:</strong> Học viên đọc kỹ đề bài và viết code Python để giải quyết vấn đề. Chương trình cần xử lý đúng các trường hợp ví dụ và các trường hợp tương tự.</p>
+        </div>
+
+        <!-- PHẦN CÂU HỎI -->
+        <div class="space-y-8">
+            <!-- Câu 1 -->
+            <div class="question-card level-medium">
+                <h3 class="text-xl font-bold text-gray-800">Câu 1: Kiểm Tra Chuỗi Palindrome (Trung bình)</h3>
+                <p class="mt-2 text-gray-600">Viết một hàm `is_palindrome(s)` nhận vào một chuỗi `s` và trả về `True` nếu chuỗi đó là palindrome (đọc xuôi và ngược đều giống nhau), và `False` nếu không phải. Hàm không phân biệt chữ hoa/thường và bỏ qua các ký tự không phải là chữ cái.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Ví dụ:</span><br>
+is_palindrome("A man, a plan, a canal: Panama")  <span class="comment"># Output: True</span><br>
+is_palindrome("race a car")                     <span class="comment"># Output: False</span><br>
+is_palindrome("madam")                          <span class="comment"># Output: True</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 2 -->
+            <div class="question-card level-medium">
+                <h3 class="text-xl font-bold text-gray-800">Câu 2: Lọc Phần Tử Duy Nhất (Trung bình)</h3>
+                <p class="mt-2 text-gray-600">Viết một hàm `unique_elements(input_list)` nhận vào một danh sách (list) và trả về một danh sách mới chỉ chứa các phần tử duy nhất từ danh sách ban đầu, giữ nguyên thứ tự xuất hiện lần đầu tiên.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Ví dụ:</span><br>
+unique_elements([1, 2, 3, 2, 1, 5, 4, 5])  <span class="comment"># Output: [1, 2, 3, 5, 4]</span><br>
+unique_elements(['a', 'b', 'a', 'c', 'b'])  <span class="comment"># Output: ['a', 'b', 'c']</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 3 -->
+            <div class="question-card level-medium">
+                <h3 class="text-xl font-bold text-gray-800">Câu 3: Tìm Cặp Số Có Tổng Cho Trước (Trung bình)</h3>
+                <p class="mt-2 text-gray-600">Viết một hàm `find_sum_pairs(numbers, target)` nhận vào một danh sách các số `numbers` và một số nguyên `target`. Hàm sẽ tìm và trả về một danh sách chứa các cặp số (dưới dạng tuple) từ `numbers` có tổng bằng `target`.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Ví dụ:</span><br>
+find_sum_pairs([2, 7, 11, 15, 3, 6], 9)  <span class="comment"># Output: [(2, 7), (3, 6)]</span><br>
+find_sum_pairs([1, 2, 3, 4, 5], 10)     <span class="comment"># Output: []</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 4 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 4: Sắp Xếp Danh Sách Sinh Viên (Khó)</h3>
+                <p class="mt-2 text-gray-600">Bạn có một danh sách các dictionary, mỗi dictionary chứa thông tin của một sinh viên (`ten` và `diem_tb`). Viết một hàm `sort_students(student_list)` nhận vào danh sách này và trả về một danh sách mới đã được sắp xếp theo điểm trung bình (diem_tb) giảm dần.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Dữ liệu đầu vào:</span><br>
+students = [<br>
+&nbsp;&nbsp;{'ten': 'An', 'diem_tb': 8.5},<br>
+&nbsp;&nbsp;{'ten': 'Binh', 'diem_tb': 9.2},<br>
+&nbsp;&nbsp;{'ten': 'Cuong', 'diem_tb': 7.8}<br>
+]<br>
+<span class="comment"># Output mong muốn:</span><br>
+[<br>
+&nbsp;&nbsp;{'ten': 'Binh', 'diem_tb': 9.2},<br>
+&nbsp;&nbsp;{'ten': 'An', 'diem_tb': 8.5},<br>
+&nbsp;&nbsp;{'ten': 'Cuong', 'diem_tb': 7.8}<br>
+]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 5 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 5: Đếm Tần Suất Từ Trong File (Khó)</h3>
+                <p class="mt-2 text-gray-600">Viết một chương trình đọc nội dung từ file `vanban.txt`. Chương trình sẽ đếm tần suất xuất hiện của mỗi từ (không phân biệt hoa/thường, bỏ qua dấu câu cơ bản như phẩy, chấm) và in ra 5 từ xuất hiện nhiều nhất cùng số lần xuất hiện của chúng.</p>
+                 <p class="mt-2 text-gray-600">Tạo file <code>vanban.txt</code> với nội dung sau để chạy thử:</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Nội dung file vanban.txt:</span><br>
+Python is a great language. Learning Python is fun, and Python is versatile.<br>
+<span class="comment"># Output mong muốn (thứ tự có thể khác):</span><br>
+python: 3<br>
+is: 3<br>
+a: 1<br>
+great: 1<br>
+language: 1
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 6 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 6: Lọc Dữ Liệu Sản Phẩm Từ JSON (Khó)</h3>
+                <p class="mt-2 text-gray-600">Bạn có một file `products.json` chứa danh sách các sản phẩm. Viết một hàm `filter_products(min_price, max_price, category)` để lọc và trả về danh sách các sản phẩm có giá nằm trong khoảng `[min_price, max_price]` và thuộc danh mục `category`.</p>
+                <p class="mt-2 text-gray-600">Tạo file <code>products.json</code> với nội dung sau để chạy thử:</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Nội dung file products.json (rút gọn):</span><br>
+[<br>
+&nbsp;&nbsp;{"ten": "Laptop A", "gia": 25000, "danhmuc": "Electronics"},<br>
+&nbsp;&nbsp;{"ten": "Book B", "gia": 500, "danhmuc": "Books"},<br>
+&nbsp;&nbsp;{"ten": "Phone C", "gia": 20000, "danhmuc": "Electronics"},<br>
+&nbsp;&nbsp;{"ten": "Headphones D", "gia": 3000, "danhmuc": "Electronics"}<br>
+]<br>
+<span class="comment"># Ví dụ gọi hàm:</span><br>
+filter_products(10000, 30000, "Electronics")<br>
+<span class="comment"># Output mong muốn:</span><br>
+[<br>
+&nbsp;&nbsp;{"ten": "Laptop A", "gia": 25000, "danhmuc": "Electronics"},<br>
+&nbsp;&nbsp;{"ten": "Phone C", "gia": 20000, "danhmuc": "Electronics"}<br>
+]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Câu 7 -->
+            <div class="question-card level-hard">
+                <h3 class="text-xl font-bold text-gray-800">Câu 7: Tạo Bảng Bingo Ngẫu Nhiên (Khó)</h3>
+                <p class="mt-2 text-gray-600">Viết một hàm `create_bingo_card()` để tạo và trả về một bảng Bingo 5x5 (dưới dạng list của list). Quy tắc:</p>
+                 <ul class="list-disc list-inside mt-2 text-gray-600">
+                    <li>Cột 1 (B): 5 số ngẫu nhiên từ 1-15.</li>
+                    <li>Cột 2 (I): 5 số ngẫu nhiên từ 16-30.</li>
+                    <li>Cột 3 (N): 4 số ngẫu nhiên từ 31-45, và ô chính giữa là chuỗi "FREE".</li>
+                    <li>Cột 4 (G): 5 số ngẫu nhiên từ 46-60.</li>
+                    <li>Cột 5 (O): 5 số ngẫu nhiên từ 61-75.</li>
+                </ul>
+                <p class="mt-2 text-gray-600">Hàm cần trả về một list 5x5, trong đó mỗi list con là một hàng của bảng Bingo.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Output mong muốn (số liệu là ngẫu nhiên, cấu trúc phải đúng):</span><br>
+[<br>
+&nbsp;&nbsp;[5, 18, 33, 50, 71],<br>
+&nbsp;&nbsp;[12, 25, 40, 58, 62],<br>
+&nbsp;&nbsp;[8, 20, 'FREE', 48, 68],<br>
+&nbsp;&nbsp;[2, 29, 38, 55, 75],<br>
+&nbsp;&nbsp;[15, 16, 42, 60, 65]<br>
+]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 8 -->
+            <div class="question-card level-expert">
+                <h3 class="text-xl font-bold text-gray-800">Câu 8: Kiểm Tra Ma Trận Sudoku (Rất khó)</h3>
+                <p class="mt-2 text-gray-600">Viết một hàm `is_valid_sudoku(board)` nhận vào một ma trận 9x9 (list của list) đại diện cho một bảng Sudoku. Hàm trả về `True` nếu bảng hợp lệ, `False` nếu không. Một bảng hợp lệ khi:</p>
+                <ul class="list-disc list-inside mt-2 text-gray-600">
+                    <li>Mỗi hàng chỉ chứa các số từ 1-9 một lần duy nhất.</li>
+                    <li>Mỗi cột chỉ chứa các số từ 1-9 một lần duy nhất.</li>
+                </ul>
+                <p class="mt-2 text-gray-600">(Không cần kiểm tra các khối 3x3 cho bài toán này).</p>
+                 <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Bảng hợp lệ (ví dụ):</span><br>
+valid_board = [<br>
+&nbsp;&nbsp;[5,3,4,6,7,8,9,1,2],<br>
+&nbsp;&nbsp;[6,7,2,1,9,5,3,4,8],<br>
+&nbsp;&nbsp;... (các hàng khác cũng hợp lệ)<br>
+]<br>
+is_valid_sudoku(valid_board) <span class="comment"># Output: True</span><br><br>
+<span class="comment"># Bảng không hợp lệ (số 8 lặp lại ở hàng đầu):</span><br>
+invalid_board = [<br>
+&nbsp;&nbsp;[8,3,4,6,7,8,9,1,2],<br>
+&nbsp;&nbsp;...<br>
+]<br>
+is_valid_sudoku(invalid_board) <span class="comment"># Output: False</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 9 -->
+            <div class="question-card level-expert">
+                <h3 class="text-xl font-bold text-gray-800">Câu 9: Nén Chuỗi Ký Tự (Rất khó)</h3>
+                <p class="mt-2 text-gray-600">Viết một hàm `compress_string(s)` để nén một chuỗi ký tự. Ví dụ, chuỗi "AAABBCDD" sẽ được nén thành "A3B2C1D2". Nếu chuỗi nén không ngắn hơn chuỗi gốc, hàm sẽ trả về chuỗi gốc.</p>
+                <div class="terminal">
+                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="terminal-body">
+<span class="comment"># Ví dụ:</span><br>
+compress_string("AAABBCDD")  <span class="comment"># Output: "A3B2C1D2"</span><br>
+compress_string("ABC")       <span class="comment"># Output: "ABC" (vì "A1B1C1" dài hơn)</span><br>
+compress_string("aabcccccaaa") <span class="comment"># Output: "a2b1c5a3"</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu 10 -->
+            <div class="question-card level-expert">
+                <h3 class="text-xl font-bold text-gray-800">Câu 10: Quản Lý Kho Hàng (Tổng hợp)</h3>
+                <p class="mt-2 text-gray-600">Xây dựng một chương trình quản lý kho hàng nhỏ dựa trên file `kho_hang.json`. Chương trình cần có các chức năng sau được tổ chức thành các hàm riêng biệt:</p>
+                <ul class="list-disc list-inside mt-2 text-gray-700">
+                    <li>Tải/Lưu dữ liệu từ file `kho_hang.json`.</li>
+                    <li>Thêm sản phẩm mới (tên, số lượng, đơn giá).</li>
+                    <li>Thực hiện bán hàng: người dùng nhập tên sản phẩm và số lượng muốn bán. Chương trình sẽ kiểm tra xem có đủ hàng không, nếu có thì trừ số lượng, tính tổng tiền và cập nhật lại kho.</li>
+                    <li>Hiển thị toàn bộ kho hàng.</li>
+                </ul>
+                 <p class="mt-2 text-gray-600">Hãy thiết kế một menu dòng lệnh cho người dùng tương tác.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Set countdown timer for 120 minutes (120 * 60 seconds)
+        const startingMinutes = 120;
+        let time = startingMinutes * 60;
+
+        const countdownEl = document.getElementById('time');
+        const timerDiv = document.getElementById('timer');
+
+        function updateCountdown() {
+            const hours = Math.floor(time / 3600);
+            let minutes = Math.floor((time % 3600) / 60);
+            let seconds = time % 60;
+
+            // Add leading zero if needed
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            let displayHours = hours < 10 ? '0' + hours : hours;
+
+            countdownEl.innerHTML = `${displayHours}:${minutes}:${seconds}`;
+
+            if (time > 0) {
+                time--;
+            } else {
+                countdownEl.innerHTML = "HẾT GIỜ!";
+                timerDiv.classList.remove('ticking');
+                clearInterval(timerInterval);
+                // Optionally disable the page or show a popup
+                alert("Đã hết thời gian làm bài!");
+            }
+        }
+
+        const timerInterval = setInterval(updateCountdown, 1000);
+
+        // Initial call to display time immediately
+        updateCountdown();
+    </script>
+</body>
+</html>
