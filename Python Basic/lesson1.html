@@ -4,83 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buổi 1: Lập Trình Python Cơ Bản</title>
+    <title>Buổi 1: Nhập Môn Lập Trình Python (Nâng Cao)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
+            background-color: #f3f4f6;
         }
 
-        .slide {
-            min-height: 80vh;
-            /* Chiều cao tối thiểu cho slide */
-            scroll-snap-align: start;
-            scroll-margin-top: 60px;
-            /* Khoảng cách với thanh điều hướng cố định */
-        }
-
-        .code-block {
-            background-color: #2d3748;
-            /* Màu nền tối cho khối code */
-            color: #e2e8f0;
-            /* Màu chữ sáng */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            /* Giữ nguyên định dạng và xuống dòng */
-            word-wrap: break-word;
-            /* Tự động ngắt từ dài */
-            font-size: 0.9em;
-        }
-
-        .code-block .comment {
-            color: #9ae6b4;
-            /* Màu xanh lá cho comment */
-        }
-
-        .code-block .keyword {
-            color: #63b3ed;
-            /* Màu xanh dương cho từ khóa */
-        }
-
-        .code-block .string {
-            color: #faf089;
-            /* Màu vàng cho chuỗi */
-        }
-
-        .code-block .number {
-            color: #f6ad55;
-            /* Màu cam cho số */
-        }
-
-        .code-block .function {
-            color: #d6bcfa;
-            /* Màu tím cho tên hàm */
-        }
-
-        /* Custom scrollbar for a cleaner look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* Fixed navigation bar */
         #navbar {
             position: sticky;
             top: 0;
@@ -89,609 +23,567 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* Smooth transition for slide visibility */
-        .slide-content {
+        .slide-container {
+            padding-top: 1rem;
+        }
+
+        .slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: calc(100vh - 120px);
             display: none;
-            animation: fadeIn 0.5s ease-in-out;
+            /* Sửa từ flex thành none ban đầu */
+            flex-direction: column;
         }
 
-        .slide-content.active {
-            display: block;
+        .slide.active {
+            display: flex;
+            /* Chỉ active slide mới là flex */
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .slide-content-wrapper {
+            flex-grow: 1;
         }
+
+        .code-block-container {
+            position: relative;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: #334155;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .copy-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #718096;
+        }
+
+        .copy-button .fa-copy {
+            margin-right: 0.375rem;
+        }
+
+        .copy-button .fa-check {
+            margin-right: 0.375rem;
+            color: #48bb78;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-block .comment { color: #6ee7b7; }
+        .code-block .keyword { color: #93c5fd; }
+        .code-block .string { color: #fde047; }
+        .code-block .number { color: #fdbb74; }
+        .code-block .function { color: #d8b4fe; }
+        .code-block .operator { color: #fda4af; }
+        .code-block .boolean { color: #fdbb74; }
+
+        /* Theme Colors (Green) */
+        .text-theme-700 { color: #047857; } /* emerald-700 */
+        .text-theme-600 { color: #059669; } /* emerald-600 */
+        .bg-theme-500 { background-color: #10b981; } /* emerald-500 */
+        .hover\:bg-theme-700:hover { background-color: #047857; } /* emerald-700 */
     </style>
 </head>
 
-<body class="bg-gray-100 text-gray-800">
+<body class="text-gray-800">
 
-    <nav id="navbar" class="p-4 mb-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-blue-600">Python Buổi 1</h1>
-            <div>
-                <button id="prevSlide"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5 inline-block mr-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                    Trước
+    <nav id="navbar" class="p-4">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl font-bold text-theme-600">Buổi 1: Nhập Môn Lập Trình Python (Nâng Cao)</h1>
+            <div class="flex items-center mt-2 sm:mt-0">
+                <button id="prevSlide" class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow mr-2 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left mr-1"></i> Trước
                 </button>
-                <button id="nextSlide"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    Sau
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5 inline-block ml-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
+                <button id="nextSlide" class="bg-theme-500 hover:bg-theme-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Sau <i class="fas fa-arrow-right ml-1"></i>
                 </button>
             </div>
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-gray-600 mt-2 sm:mt-0 ml-0 sm:ml-4">
                 Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum"></span>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4">
-        <div id="slide-1" class="slide-content active bg-white p-8 rounded-lg shadow-lg slide">
-            <h2 class="text-4xl font-bold text-center text-blue-700 mb-6">Buổi 1: Giới Thiệu Lập Trình Python</h2>
-            <p class="text-2xl text-center text-gray-600 mb-12">Biến, Kiểu dữ liệu, Toán tử và Nhập/Xuất Cơ Bản</p>
-            <div class="flex justify-center">
-                <img src="https://placehold.co/400x250/3B82F6/FFFFFF?text=Python+Programming"
-                    alt="[Hình ảnh Lập trình Python]" class="rounded-lg shadow-md">
-            </div>
-            <p class="text-center mt-8 text-lg text-gray-700">Chào mừng các bạn đến với buổi học đầu tiên về Python!</p>
-        </div>
-
-        <div id="slide-2" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">1. Biến (Variables) trong Python</h3>
-            <p class="mb-4 text-lg">Biến là một tên được đặt cho một vị trí trong bộ nhớ máy tính, dùng để lưu trữ dữ
-                liệu. Bạn có thể coi biến như một chiếc hộp có nhãn, bên trong chứa một giá trị nào đó.</p>
-            <p class="mb-2 font-medium">Quy tắc đặt tên biến:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
-                <li>Tên biến có thể chứa chữ cái (a-z, A-Z), số (0-9) và dấu gạch dưới (_).</li>
-                <li>Tên biến không được bắt đầu bằng số.</li>
-                <li>Tên biến phân biệt chữ hoa, chữ thường (<code>myVar</code> khác <code>myvar</code>).</li>
-                <li>Không dùng các từ khóa của Python làm tên biến (ví dụ: <code>if</code>, <code>else</code>,
-                    <code>for</code>, <code>while</code>,...).
-                </li>
-                <li>Nên đặt tên biến có ý nghĩa, dễ hiểu (ví dụ: <code>ten_hoc_vien</code>,
-                    <code>diem_trung_binh</code>). Quy ước phổ biến là dùng chữ thường và dấu gạch dưới (snake_case).
-                </li>
-            </ul>
-            <p class="mb-2 font-medium">Ví dụ:</p>
-            <div class="code-block">
-                <span class="comment"># Khai báo biến và gán giá trị</span><br>
-                <span class="variable">ten_hoc_vien</span> = <span class="string">"Nguyễn Văn An"</span><br>
-                <span class="variable">tuoi</span> = <span class="number">20</span><br>
-                <span class="variable">diem_python</span> = <span class="number">8.5</span><br><br>
-                <span class="comment"># In giá trị của biến</span><br>
-                <span class="function">print</span>(<span class="variable">ten_hoc_vien</span>) <span class="comment">#
-                    Output: Nguyễn Văn An</span><br>
-                <span class="function">print</span>(<span class="variable">tuoi</span>) <span class="comment"># Output:
-                    20</span>
+    <div class="container mx-auto p-4 slide-container">
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide">
+            <div class="slide-content-wrapper text-center my-auto">
+                <h2 class="text-5xl font-bold text-theme-700 mb-6">Buổi 1: Nhập Môn Lập Trình Python</h2>
+                <p class="text-2xl text-gray-600 mb-12">Từ những khái niệm cơ bản đến việc điều khiển luồng chương trình.</p>
+                <div class="flex justify-center my-8">
+                     <div class="p-8 bg-gray-100 rounded-xl shadow-inner">
+                        <p class="text-2xl text-gray-700">"The journey of a thousand miles begins with a single step."</p>
+                        <p class="text-lg text-gray-500 mt-2">- Lão Tử -</p>
+                     </div>
+                </div>
+                <p class="text-center mt-8 text-xl text-gray-700">Hãy cùng nhau xây dựng những chương trình thông minh hơn!</p>
             </div>
         </div>
 
-        <div id="slide-3" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">2. Kiểu Dữ Liệu (Data Types)</h3>
-            <p class="mb-4 text-lg">Kiểu dữ liệu xác định loại giá trị mà một biến có thể lưu trữ và các thao tác có thể
-                thực hiện trên giá trị đó. Python có nhiều kiểu dữ liệu tích hợp sẵn.</p>
-            <p class="mb-2 font-medium">Một số kiểu dữ liệu cơ bản thường dùng:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
-                <li><strong>Số nguyên (Integer - <code>int</code>):</strong> Dùng để lưu trữ các số nguyên (không có
-                    phần thập phân). Ví dụ: <code>10</code>, <code>-5</code>, <code>0</code>.</li>
-                <li><strong>Số thực (Floating-point - <code>float</code>):</strong> Dùng để lưu trữ các số có phần thập
-                    phân. Ví dụ: <code>3.14</code>, <code>-0.5</code>, <code>2.0</code>.</li>
-                <li><strong>Chuỗi ký tự (String - <code>str</code>):</strong> Dùng để lưu trữ văn bản, được đặt trong
-                    dấu nháy đơn (<code>'</code>) hoặc nháy kép (<code>"</code>). Ví dụ: <code>"Xin chào"</code>,
-                    <code>'Python'</code>.
-                </li>
-                <li><strong>Logic (Boolean - <code>bool</code>):</strong> Dùng để lưu trữ giá trị đúng/sai
-                    (<code>True</code> hoặc <code>False</code>). (Sẽ tìm hiểu kỹ hơn ở các buổi sau).</li>
-            </ul>
-            <p class="mb-2 font-medium">Python là ngôn ngữ kiểu động, nghĩa là bạn không cần khai báo tường minh kiểu dữ
-                liệu của biến. Python sẽ tự động xác định kiểu dữ liệu dựa trên giá trị được gán.</p>
-            <div class="code-block">
-                <span class="variable">x</span> = <span class="number">10</span> <span class="comment"># x là kiểu
-                    int</span><br>
-                <span class="variable">y</span> = <span class="number">3.14</span> <span class="comment"># y là kiểu
-                    float</span><br>
-                <span class="variable">ten</span> = <span class="string">"Alice"</span> <span class="comment"># ten là
-                    kiểu str</span><br>
-                <span class="variable">la_sinh_vien</span> = <span class="keyword">True</span> <span class="comment">#
-                    la_sinh_vien là kiểu bool</span><br><br>
-                <span class="comment"># Kiểm tra kiểu dữ liệu của biến bằng hàm type()</span><br>
-                <span class="function">print</span>(<span class="function">type</span>(<span class="variable">x</span>))
-                <span class="comment"># Output: &lt;class 'int'&gt;</span><br>
-                <span class="function">print</span>(<span class="function">type</span>(<span class="variable">y</span>))
-                <span class="comment"># Output: &lt;class 'float'&gt;</span><br>
-                <span class="function">print</span>(<span class="function">type</span>(<span
-                    class="variable">ten</span>)) <span class="comment"># Output: &lt;class 'str'&gt;</span>
+        <!-- Slide 2: What is Programming & Why Python? -->
+        <div class="slide" id="slide-2">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">1. Tổng Quan</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Lập trình là gì?</h4>
+                <p class="mb-6 text-lg bg-gray-100 p-4 rounded-lg">
+                    Là quá trình <strong class="text-theme-700">"chỉ dẫn"</strong> hay <strong class="text-theme-700">"ra lệnh"</strong> cho máy tính thực hiện một công việc cụ thể nào đó thông qua một ngôn ngữ mà máy tính có thể hiểu.
+                </p>
+
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Tại sao lại chọn Python?</h4>
+                <ul class="list-disc list-inside pl-4 text-lg space-y-3">
+                    <li><strong class="text-emerald-600">Dễ Đọc, Dễ Học:</strong> Cú pháp của Python rất trong sáng, gần gũi với ngôn ngữ tự nhiên, giúp người mới bắt đầu tiếp cận dễ dàng.</li>
+                    <li><strong class="text-emerald-600">Cộng Đồng Lớn Mạnh:</strong> Gặp khó khăn? Sẽ luôn có người sẵn sàng giúp đỡ bạn trên các diễn đàn như Stack Overflow, Reddit...</li>
+                    <li><strong class="text-emerald-600">Ứng Dụng Rộng Rãi:</strong> Từ phát triển web, phân tích dữ liệu, trí tuệ nhân tạo (AI) cho đến tự động hóa, Python đều có thể "cân" tất.</li>
+                </ul>
+                 <div class="flex justify-center mt-8">
+                    <img src="https://placehold.co/500x200/10B981/FFFFFF?text=Welcome+to+Python!" alt="[Hình ảnh chào mừng đến với Python]" class="shadow-md rounded-lg">
+                </div>
             </div>
         </div>
 
-        <div id="slide-4" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">2.1. Kiểu Dữ Liệu Số Nguyên (<code>int</code>)</h3>
-            <p class="mb-4 text-lg">Kiểu <code>int</code> (integer) dùng để biểu diễn các số nguyên, không có phần thập
-                phân.</p>
-            <p class="mb-2 font-medium">Ví dụ:</p>
-            <div class="code-block">
-                <span class="variable">so_luong_sach</span> = <span class="number">150</span><br>
-                <span class="variable">nam_hien_tai</span> = <span class="number">2024</span><br>
-                <span class="variable">nhiet_do_am</span> = <span class="number">-10</span><br><br>
+        <!-- Slide 3: Variables -->
+        <div class="slide" id="slide-3">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2. Biến (Variables)</h3>
+                <p class="mb-4 text-lg">Hãy tưởng tượng biến là một <strong class="text-theme-700">"chiếc hộp"</strong> có dán nhãn, dùng để lưu trữ dữ liệu.</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-lg space-y-2">
+                    <li><strong>Nhãn hộp</strong> chính là <strong>tên biến</strong>.</li>
+                    <li><strong>Thứ bên trong hộp</strong> chính là <strong>giá trị</strong> của biến.</li>
+                </ul>
+                <p class="mb-2 text-lg font-medium">Phép gán (=)</p>
+                <p class="mb-4 text-lg">Chúng ta dùng dấu <code>=</code> để "bỏ" giá trị vào "hộp".</p>
 
-                <span class="function">print</span>(<span class="string">"Số lượng sách:"</span>, <span
-                    class="variable">so_luong_sach</span>) <span class="comment"># Output: Số lượng sách: 150</span><br>
-                <span class="function">print</span>(<span class="string">"Kiểu dữ liệu của nam_hien_tai:"</span>, <span
-                    class="function">type</span>(<span class="variable">nam_hien_tai</span>)) <span class="comment">#
-                    Output: Kiểu dữ liệu của nam_hien_tai: &lt;class 'int'&gt;</span>
+                <div class="code-block-container">
+                    <div class="code-block-header">
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button>
+                    </div>
+                    <pre class="code-block"><code><span class="comment"># Gán chuỗi "Nguyễn Văn An" vào biến `ten_hoc_vien`</span>
+<span class="variable">ten_hoc_vien</span> <span class="operator">=</span> <span class="string">"Nguyễn Văn An"</span>
+
+<span class="comment"># Gán số 20 vào biến `tuoi`</span>
+<span class="variable">tuoi</span> <span class="operator">=</span> <span class="number">20</span>
+
+<span class="comment"># Gán số 8.5 vào biến `diem_trung_binh`</span>
+<span class="variable">diem_trung_binh</span> <span class="operator">=</span> <span class="number">8.5</span></code></pre>
+                </div>
             </div>
         </div>
 
-        <div id="slide-5" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">2.2. Kiểu Dữ Liệu Số Thực (<code>float</code>)</h3>
-            <p class="mb-4 text-lg">Kiểu <code>float</code> (floating-point number) dùng để biểu diễn các số thực, tức
-                là các số có phần thập phân.</p>
-            <p class="mb-2 font-medium">Ví dụ:</p>
-            <div class="code-block">
-                <span class="variable">pi</span> = <span class="number">3.14159</span><br>
-                <span class="variable">diem_trung_binh</span> = <span class="number">7.85</span><br>
-                <span class="variable">gia_xang</span> = <span class="number">25000.0</span> <span class="comment">#
-                    Cũng là float dù phần thập phân là .0</span><br><br>
-
-                <span class="function">print</span>(<span class="string">"Giá trị Pi:"</span>, <span
-                    class="variable">pi</span>) <span class="comment"># Output: Giá trị Pi: 3.14159</span><br>
-                <span class="function">print</span>(<span class="string">"Kiểu dữ liệu của diem_trung_binh:"</span>,
-                <span class="function">type</span>(<span class="variable">diem_trung_binh</span>)) <span
-                    class="comment"># Output: Kiểu dữ liệu của diem_trung_binh: &lt;class 'float'&gt;</span>
+        <!-- Slide 4: Variable Naming Rules -->
+        <div class="slide" id="slide-4">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">2.1. Quy Tắc Đặt Tên Biến</h3>
+                <p class="mb-4 text-lg">Để code dễ đọc và tránh lỗi, hãy tuân thủ các quy tắc sau:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h4 class="text-xl font-semibold text-green-800 mb-2">Nên làm</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Bắt đầu bằng chữ cái hoặc dấu gạch dưới <code>_</code>.</li>
+                            <li>Chỉ chứa chữ cái, số, và dấu gạch dưới (A-z, 0-9, và _).</li>
+                            <li>Dùng <code>snake_case</code> cho tên biến có nhiều từ (ví dụ: <code>diem_trung_binh</code>).</li>
+                            <li>Tên biến có ý nghĩa, gợi tả (ví dụ: <code>user_name</code> thay vì <code>un</code>).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <h4 class="text-xl font-semibold text-red-800 mb-2">Không nên làm</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Bắt đầu bằng số (ví dụ: <code>1_so</code>).</li>
+                            <li>Chứa ký tự đặc biệt (ví dụ: <code>ten-hoc-vien</code>, <code>diem$</code>).</li>
+                            <li>Dùng tên trùng với từ khóa của Python (ví dụ: <code>class</code>, <code>if</code>, <code>for</code>).</li>
+                        </ul>
+                    </div>
+                </div>
+                 <p class="mt-6 text-lg font-semibold">Lưu ý quan trọng: Tên biến có <strong class="text-red-600">phân biệt chữ hoa - chữ thường</strong>.</p>
+                 <p class="text-lg"><code>age</code>, <code>Age</code> và <code>AGE</code> là ba biến hoàn toàn khác nhau.</p>
             </div>
         </div>
 
-        <div id="slide-6" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">2.3. Kiểu Dữ Liệu Chuỗi (<code>str</code>)</h3>
-            <p class="mb-4 text-lg">Kiểu <code>str</code> (string) dùng để biểu diễn văn bản hoặc một dãy các ký tự.
-                Chuỗi được đặt trong dấu nháy đơn (<code>'...'</code>) hoặc dấu nháy kép (<code>"..."</code>).</p>
-            <p class="mb-2 font-medium">Ví dụ:</p>
-            <div class="code-block">
-                <span class="variable">loi_chao</span> = <span class="string">"Xin chào các bạn!"</span><br>
-                <span class="variable">ten_sach</span> = <span class="string">'Lập trình Python cơ bản'</span><br>
-                <span class="variable">dia_chi</span> = <span class="string">"123 Đường ABC, Quận XYZ"</span><br><br>
-
-                <span class="function">print</span>(<span class="variable">loi_chao</span>) <span class="comment">#
-                    Output: Xin chào các bạn!</span><br>
-                <span class="function">print</span>(<span class="string">"Kiểu dữ liệu của ten_sach:"</span>, <span
-                    class="function">type</span>(<span class="variable">ten_sach</span>)) <span class="comment">#
-                    Output: Kiểu dữ liệu của ten_sach: &lt;class 'str'&gt;</span><br><br>
-
-                <span class="comment"># Nối chuỗi (Concatenation)</span><br>
-                <span class="variable">ho</span> = <span class="string">"Trần"</span><br>
-                <span class="variable">ten</span> = <span class="string">"Văn"</span><br>
-                <span class="variable">dem</span> = <span class="string">"Bình"</span><br>
-                <span class="variable">ho_ten</span> = <span class="variable">ho</span> + <span class="string">"
-                    "</span> + <span class="variable">ten</span> + <span class="string">" "</span> + <span
-                    class="variable">dem</span><br>
-                <span class="function">print</span>(<span class="string">"Họ và tên:"</span>, <span
-                    class="variable">ho_ten</span>) <span class="comment"># Output: Họ và tên: Trần Văn Bình</span>
+        <!-- Slide 5: Data Types -->
+        <div class="slide" id="slide-5">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">3. Kiểu Dữ Liệu (Data Types) Cơ Bản</h3>
+                <p class="mb-4 text-lg">Mỗi giá trị trong Python đều có một "kiểu" nhất định. Dưới đây là các kiểu cơ bản nhất:</p>
+                <ul class="list-none space-y-4">
+                    <li class="bg-blue-50 p-3 rounded-lg"><strong>Số nguyên (Integer - <code>int</code>):</strong> Các số nguyên, không có phần thập phân. Ví dụ: <code>10</code>, <code>-5</code>, <code>1000</code>.</li>
+                    <li class="bg-yellow-50 p-3 rounded-lg"><strong>Số thực (Float - <code>float</code>):</strong> Các số có phần thập phân. Ví dụ: <code>3.14</code>, <code>9.8</code>, <code>-0.5</code>.</li>
+                    <li class="bg-purple-50 p-3 rounded-lg"><strong>Chuỗi (String - <code>str</code>):</strong> Dãy các ký tự, được đặt trong dấu nháy đơn <code>' '</code> hoặc nháy kép <code>" "</code>. Ví dụ: <code>"Xin chào"</code>, <code>'Python'</code>.</li>
+                    <li class="bg-green-50 p-3 rounded-lg"><strong>Boolean (<code>bool</code>):</strong> Chỉ có hai giá trị: <code>True</code> (Đúng) hoặc <code>False</code> (Sai). Cực kỳ quan trọng cho việc ra quyết định.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 6: print(), input() and Type Casting -->
+        <div class="slide" id="slide-6">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">4. Tương Tác & Chuyển Đổi</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">`print()`, `input()` và Ép Kiểu</h4>
+                <p class="mb-2 text-lg"><code>print()</code>: In dữ liệu ra màn hình.</p>
+                <p class="mb-2 text-lg"><code>input()</code>: Nhận dữ liệu từ người dùng (luôn trả về kiểu <code>str</code>).</p>
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-4 rounded-md" role="alert">
+                    <p>Vì <code>input()</code> luôn trả về chuỗi, ta cần <strong>ép kiểu</strong> (dùng <code>int()</code>, <code>float()</code>) để biến nó thành số và tính toán.</p>
+                </div>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">so_tuoi_nhap</span> <span class="operator">=</span> <span class="function">input</span>(<span class="string">"Nhập tuổi của bạn: "</span>)
+<span class="variable">so_tuoi</span> <span class="operator">=</span> <span class="function">int</span>(<span class="variable">so_tuoi_nhap</span>)
+<span class="function">print</span>(<span class="string">f"Năm sau bạn sẽ {so_tuoi + 1} tuổi."</span>)</code></pre>
+                </div>
             </div>
         </div>
 
-        <div id="slide-7" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">3. Toán Tử (Operators) trong Python</h3>
-            <h4 class="text-2xl font-medium text-gray-700 mb-3">3.1. Toán Tử Số Học</h4>
-            <p class="mb-4 text-lg">Toán tử số học được sử dụng để thực hiện các phép toán toán học.</p>
-            <table class="w-full table-auto border-collapse border border-gray-300 mb-4">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 px-4 py-2">Toán tử</th>
-                        <th class="border border-gray-300 px-4 py-2">Tên</th>
-                        <th class="border border-gray-300 px-4 py-2">Ví dụ (a=10, b=3)</th>
-                        <th class="border border-gray-300 px-4 py-2">Kết quả</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>+</code></td>
-                        <td class="border border-gray-300 px-4 py-2">Cộng</td>
-                        <td class="border border-gray-300 px-4 py-2"><code>a + b</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>13</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>-</code></td>
-                        <td class="border border-gray-300 px-4 py-2">Trừ</td>
-                        <td class="border border-gray-300 px-4 py-2"><code>a - b</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>7</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>*</code></td>
-                        <td class="border border-gray-300 px-4 py-2">Nhân</td>
-                        <td class="border border-gray-300 px-4 py-2"><code>a * b</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>30</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>/</code></td>
-                        <td class="border border-gray-300 px-4 py-2">Chia (kết quả là float)</td>
-                        <td class="border border-gray-300 px-4 py-2"><code>a / b</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>3.333...</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>//</code></td>
-                        <td class="border border-gray-300 px-4 py-2">Chia lấy phần nguyên</td>
-                        <td class="border border-gray-300 px-4 py-2"><code>a // b</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>3</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>%</code></td>
-                        <td class="border border-gray-300 px-4 py-2">Chia lấy phần dư (Modulo)</td>
-                        <td class="border border-gray-300 px-4 py-2"><code>a % b</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>1</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>**</code></td>
-                        <td class="border border-gray-300 px-4 py-2">Lũy thừa</td>
-                        <td class="border border-gray-300 px-4 py-2"><code>a ** b</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>1000</code> (10<sup>3</sup>)</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="code-block">
-                <span class="variable">a</span> = <span class="number">10</span><br>
-                <span class="variable">b</span> = <span class="number">3</span><br><br>
-                <span class="function">print</span>(<span class="string">"a + b ="</span>, <span
-                    class="variable">a</span> + <span class="variable">b</span>) <span class="comment"># Output: a + b =
-                    13</span><br>
-                <span class="function">print</span>(<span class="string">"a / b ="</span>, <span
-                    class="variable">a</span> / <span class="variable">b</span>) <span class="comment"># Output: a / b =
-                    3.3333333333333335</span><br>
-                <span class="function">print</span>(<span class="string">"a // b ="</span>, <span
-                    class="variable">a</span> // <span class="variable">b</span>) <span class="comment"># Output: a // b
-                    = 3</span><br>
-                <span class="function">print</span>(<span class="string">"a % b ="</span>, <span
-                    class="variable">a</span> % <span class="variable">b</span>) <span class="comment"># Output: a % b =
-                    1</span>
+        <!-- Slide 7: Arithmetic Operators -->
+        <div class="slide" id="slide-7">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">5. Toán Tử Số Học</h3>
+                <p class="mb-4 text-lg">Các phép toán cơ bản để xử lý số liệu:</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border rounded-lg">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left">Toán tử</th>
+                                <th class="py-2 px-4 border-b text-left">Tên gọi</th>
+                                <th class="py-2 px-4 border-b text-left">Ví dụ (a=10, b=3)</th>
+                                <th class="py-2 px-4 border-b text-left">Kết quả</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="py-2 px-4 border-b"><code>+</code>, <code>-</code>, <code>*</code></td><td class="py-2 px-4 border-b">Cộng, Trừ, Nhân</td><td class="py-2 px-4 border-b"><code>a + b</code></td><td class="py-2 px-4 border-b"><code>13</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code>/</code></td><td class="py-2 px-4 border-b">Chia</td><td class="py-2 px-4 border-b"><code>a / b</code></td><td class="py-2 px-4 border-b"><code>3.333...</code> (luôn ra float)</td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code>//</code></td><td class="py-2 px-4 border-b">Chia lấy phần nguyên</td><td class="py-2 px-4 border-b"><code>a // b</code></td><td class="py-2 px-4 border-b"><code>3</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code>%</code></td><td class="py-2 px-4 border-b">Chia lấy phần dư (modulo)</td><td class="py-2 px-4 border-b"><code>a % b</code></td><td class="py-2 px-4 border-b"><code>1</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code>**</code></td><td class="py-2 px-4 border-b">Lũy thừa</td><td class="py-2 px-4 border-b"><code>a ** b</code></td><td class="py-2 px-4 border-b"><code>1000</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div id="slide-8" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">3.2. Phép Gán Giá Trị (Assignment Operator)</h3>
-            <p class="mb-4 text-lg">Toán tử gán chính là dấu bằng (<code>=</code>). Nó được sử dụng để gán giá trị cho
-                biến.</p>
-            <div class="code-block">
-                <span class="variable">x</span> = <span class="number">5</span> <span class="comment"># Gán giá trị 5
-                    cho biến x</span><br>
-                <span class="variable">y</span> = <span class="variable">x</span> + <span class="number">2</span> <span
-                    class="comment"># Gán kết quả của (x + 2) cho biến y (y sẽ là 7)</span><br><br>
-                <span class="function">print</span>(<span class="string">"Giá trị của x:"</span>, <span
-                    class="variable">x</span>) <span class="comment"># Output: Giá trị của x: 5</span><br>
-                <span class="function">print</span>(<span class="string">"Giá trị của y:"</span>, <span
-                    class="variable">y</span>) <span class="comment"># Output: Giá trị của y: 7</span>
-            </div>
-            <p class="mt-4 mb-2 font-medium">Toán tử gán kết hợp (Compound Assignment Operators):</p>
-            <p class="mb-4 text-lg">Python cung cấp các toán tử gán kết hợp để viết code ngắn gọn hơn.</p>
-            <table class="w-full table-auto border-collapse border border-gray-300 mb-4">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 px-4 py-2">Toán tử</th>
-                        <th class="border border-gray-300 px-4 py-2">Tương đương với</th>
-                        <th class="border border-gray-300 px-4 py-2">Ví dụ (cho x = 5)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>x += 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x = x + 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x</code> sẽ là <code>7</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>x -= 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x = x - 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x</code> sẽ là <code>3</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>x *= 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x = x * 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x</code> sẽ là <code>10</code></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><code>x /= 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x = x / 2</code></td>
-                        <td class="border border-gray-300 px-4 py-2"><code>x</code> sẽ là <code>2.5</code></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="code-block">
-                <span class="variable">count</span> = <span class="number">0</span><br>
-                <span class="variable">count</span> += <span class="number">1</span> <span class="comment"># Tương đương
-                    count = count + 1</span><br>
-                <span class="function">print</span>(<span class="string">"Count:"</span>, <span
-                    class="variable">count</span>) <span class="comment"># Output: Count: 1</span><br><br>
-                <span class="variable">total</span> = <span class="number">100</span><br>
-                <span class="variable">total</span> -= <span class="number">10</span> <span class="comment"># Tương
-                    đương total = total - 10</span><br>
-                <span class="function">print</span>(<span class="string">"Total:"</span>, <span
-                    class="variable">total</span>) <span class="comment"># Output: Total: 90</span>
+        <!-- Slide 8: Comparison Operators -->
+        <div class="slide" id="slide-8">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6. Toán Tử So Sánh</h3>
+                <p class="mb-4 text-lg">Dùng để so sánh hai giá trị. Kết quả của phép so sánh luôn là <code>True</code> hoặc <code>False</code> (kiểu <code>bool</code>).</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border rounded-lg">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left">Toán tử</th>
+                                <th class="py-2 px-4 border-b text-left">Ý nghĩa</th>
+                                <th class="py-2 px-4 border-b text-left">Ví dụ (x=5)</th>
+                                <th class="py-2 px-4 border-b text-left">Kết quả</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="py-2 px-4 border-b"><code>==</code></td><td class="py-2 px-4 border-b">Bằng</td><td class="py-2 px-4 border-b"><code>x == 5</code></td><td class="py-2 px-4 border-b"><code>True</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code>!=</code></td><td class="py-2 px-4 border-b">Không bằng</td><td class="py-2 px-4 border-b"><code>x != 5</code></td><td class="py-2 px-4 border-b"><code>False</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code>></code></td><td class="py-2 px-4 border-b">Lớn hơn</td><td class="py-2 px-4 border-b"><code>x > 10</code></td><td class="py-2 px-4 border-b"><code>False</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code><</code></td><td class="py-2 px-4 border-b">Nhỏ hơn</td><td class="py-2 px-4 border-b"><code>x < 10</code></td><td class="py-2 px-4 border-b"><code>True</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code>>=</code></td><td class="py-2 px-4 border-b">Lớn hơn hoặc bằng</td><td class="py-2 px-4 border-b"><code>x >= 5</code></td><td class="py-2 px-4 border-b"><code>True</code></td></tr>
+                            <tr><td class="py-2 px-4 border-b"><code><=</code></td><td class="py-2 px-4 border-b">Nhỏ hơn hoặc bằng</td><td class="py-2 px-4 border-b"><code>x <= 4</code></td><td class="py-2 px-4 border-b"><code>False</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div id="slide-9" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">4. Hàm <code>print()</code> - Xuất Dữ Liệu</h3>
-            <p class="mb-4 text-lg">Hàm <code>print()</code> được sử dụng để hiển thị (in) dữ liệu ra màn hình console.
-            </p>
-            <p class="mb-2 font-medium">Cách sử dụng:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
-                <li>In một chuỗi ký tự: <code>print("Xin chào!")</code></li>
-                <li>In giá trị của biến: <code>print(ten_bien)</code></li>
-                <li>In nhiều giá trị (các giá trị cách nhau bởi dấu phẩy, mặc định sẽ có khoảng trắng giữa chúng khi
-                    in): <code>print("Tên:", ten, "Tuổi:", tuoi)</code></li>
-                <li>Định dạng chuỗi (f-string - cách hiện đại và dễ đọc):
-                    <code>print(f"Bạn {ten} năm nay {tuoi} tuổi.")</code>
-                </li>
-            </ul>
-            <div class="code-block">
-                <span class="variable">ten</span> = <span class="string">"Mai"</span><br>
-                <span class="variable">tuoi</span> = <span class="number">25</span><br><br>
+        <!-- Slide 9: Logical Operators -->
+        <div class="slide" id="slide-9">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">6.1. Toán Tử Logic</h3>
+                <p class="mb-4 text-lg">Dùng để kết hợp nhiều điều kiện (biểu thức boolean) lại với nhau.</p>
+                <ul class="list-none space-y-4">
+                    <li class="bg-gray-50 p-3 rounded-lg"><strong><code>and</code> (Và):</strong> Trả về <code>True</code> chỉ khi <strong>tất cả</strong> các điều kiện đều <code>True</code>.</li>
+                    <li class="bg-gray-50 p-3 rounded-lg"><strong><code>or</code> (Hoặc):</strong> Trả về <code>True</code> nếu có <strong>ít nhất một</strong> điều kiện là <code>True</code>.</li>
+                    <li class="bg-gray-50 p-3 rounded-lg"><strong><code>not</code> (Phủ định):</strong> Đảo ngược giá trị boolean (<code>True</code> thành <code>False</code> và ngược lại).</li>
+                </ul>
+                <div class="code-block-container mt-6">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">diem</span> <span class="operator">=</span> <span class="number">8.5</span>
+<span class="variable">co_di_hoc_day_du</span> <span class="operator">=</span> <span class="boolean">True</span>
 
-                <span class="comment"># In chuỗi cố định</span><br>
-                <span class="function">print</span>(<span class="string">"Chào mừng đến với Python!"</span>)<br>
-                <span class="comment"># Output: Chào mừng đến với Python!</span><br><br>
+<span class="comment"># Ví dụ với 'and'</span>
+<span class="variable">duoc_len_lop</span> <span class="operator">=</span> <span class="variable">diem</span> <span class="operator">>=</span> <span class="number">5.0</span> <span class="keyword">and</span> <span class="variable">co_di_hoc_day_du</span>
+<span class="function">print</span>(<span class="string">f"Được lên lớp: {duoc_len_lop}"</span>)  <span class="comment"># True</span>
 
-                <span class="comment"># In giá trị biến</span><br>
-                <span class="function">print</span>(<span class="variable">ten</span>)<br>
-                <span class="comment"># Output: Mai</span><br><br>
-
-                <span class="comment"># In nhiều giá trị</span><br>
-                <span class="function">print</span>(<span class="string">"Tên của bạn là:"</span>, <span
-                    class="variable">ten</span>, <span class="string">", bạn"</span>, <span
-                    class="variable">tuoi</span>, <span class="string">"tuổi."</span>)<br>
-                <span class="comment"># Output: Tên của bạn là: Mai , bạn 25 tuổi.</span><br><br>
-
-                <span class="comment"># Sử dụng f-string (khuyến khích)</span><br>
-                <span class="function">print</span>(<span class="string">f"Xin chào {ten}, bạn năm nay {tuoi}
-                    tuổi."</span>)<br>
-                <span class="comment"># Output: Xin chào Mai, bạn năm nay 25 tuổi.</span><br><br>
-
-                <span class="variable">so_a</span> = <span class="number">10</span><br>
-                <span class="variable">so_b</span> = <span class="number">20</span><br>
-                <span class="function">print</span>(<span class="string">f"Tổng của {so_a} và {so_b} là {so_a +
-                    so_b}"</span>)<br>
-                <span class="comment"># Output: Tổng của 10 và 20 là 30</span>
+<span class="comment"># Ví dụ với 'or'</span>
+<span class="variable">can_phu_huynh</span> <span class="operator">=</span> <span class="variable">diem</span> <span class="operator"><</span> <span class="number">5.0</span> <span class="keyword">or not</span> <span class="variable">co_di_hoc_day_du</span>
+<span class="function">print</span>(<span class="string">f"Cần phụ huynh: {can_phu_huynh}"</span>) <span class="comment"># False</span></code></pre>
+                </div>
             </div>
         </div>
 
-        <div id="slide-10" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">5. Hàm <code>input()</code> - Nhập Dữ Liệu</h3>
-            <p class="mb-4 text-lg">Hàm <code>input()</code> được sử dụng để nhận dữ liệu từ người dùng qua bàn phím.
-            </p>
-            <p class="mb-2 font-medium">Đặc điểm quan trọng:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700">
-                <li>Hàm <code>input()</code> luôn trả về một chuỗi (<code>str</code>), ngay cả khi người dùng nhập số.
-                </li>
-                <li>Bạn có thể truyền một chuỗi vào hàm <code>input()</code> để hiển thị lời nhắc cho người dùng. Ví dụ:
-                    <code>input("Nhập tên của bạn: ")</code>
-                </li>
-                <li>Để sử dụng giá trị nhập vào dưới dạng số (<code>int</code> hoặc <code>float</code>), bạn cần ép kiểu
-                    (chuyển đổi kiểu) bằng hàm <code>int()</code> hoặc <code>float()</code>.</li>
-            </ul>
-            <div class="code-block">
-                <span class="comment"># Nhập tên người dùng</span><br>
-                <span class="variable">ten_nguoi_dung</span> = <span class="function">input</span>(<span
-                    class="string">"Vui lòng nhập tên của bạn: "</span>)<br>
-                <span class="function">print</span>(<span class="string">f"Xin chào, {ten_nguoi_dung}!"</span>)<br><br>
+        <!-- Slide 10: Conditional Statements (if/elif/else) -->
+        <div class="slide" id="slide-10">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">7. Câu Lệnh Điều Kiện: `if`, `elif`, `else`</h3>
+                <p class="mb-4 text-lg">Đây là công cụ giúp chương trình của bạn "ra quyết định", thực hiện các hành động khác nhau dựa trên các điều kiện khác nhau.</p>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">diem_thi</span> <span class="operator">=</span> <span class="function">float</span>(<span class="function">input</span>(<span class="string">"Nhập điểm thi của bạn: "</span>))
 
-                <span class="comment"># Nhập tuổi và ép kiểu sang int</span><br>
-                <span class="variable">chuoi_tuoi</span> = <span class="function">input</span>(<span class="string">"Bạn
-                    bao nhiêu tuổi? "</span>)<br>
-                <span class="variable">tuoi_nguoi_dung</span> = <span class="function">int</span>(<span
-                    class="variable">chuoi_tuoi</span>) <span class="comment"># Ép kiểu sang số nguyên</span><br>
-                <span class="function">print</span>(<span class="string">f"Vậy là bạn {tuoi_nguoi_dung} tuổi. Sang năm
-                    bạn sẽ {tuoi_nguoi_dung + 1} tuổi."</span>)<br><br>
-
-                <span class="comment"># Nhập điểm trung bình và ép kiểu sang float</span><br>
-                <span class="variable">diem_tb_str</span> = <span class="function">input</span>(<span
-                    class="string">"Nhập điểm trung bình của bạn: "</span>)<br>
-                <span class="variable">diem_tb</span> = <span class="function">float</span>(<span
-                    class="variable">diem_tb_str</span>) <span class="comment"># Ép kiểu sang số thực</span><br>
-                <span class="function">print</span>(<span class="string">f"Điểm trung bình của bạn là:
-                    {diem_tb}"</span>)
+<span class="keyword">if</span> <span class="variable">diem_thi</span> <span class="operator">>=</span> <span class="number">9.0</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Xếp loại: Xuất sắc"</span>)
+<span class="keyword">elif</span> <span class="variable">diem_thi</span> <span class="operator">>=</span> <span class="number">8.0</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Xếp loại: Giỏi"</span>)
+<span class="keyword">elif</span> <span class="variable">diem_thi</span> <span class="operator">>=</span> <span class="number">6.5</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Xếp loại: Khá"</span>)
+<span class="keyword">elif</span> <span class="variable">diem_thi</span> <span class="operator">>=</span> <span class="number">5.0</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Xếp loại: Trung bình"</span>)
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">"Xếp loại: Yếu - Cần cố gắng hơn!"</span>)</code></pre>
+                </div>
+                <p class="mt-4 text-lg"><strong>Luồng hoạt động:</strong> Python sẽ kiểm tra các điều kiện từ trên xuống dưới. Ngay khi một điều kiện <code>if</code> hoặc <code>elif</code> là <code>True</code>, khối lệnh tương ứng sẽ được thực thi và toàn bộ cấu trúc sẽ kết thúc. Nếu không có điều kiện nào đúng, khối lệnh của <code>else</code> sẽ được thực thi.</p>
             </div>
-            <p class="mt-4 text-orange-600 font-semibold">Lưu ý: Nếu người dùng nhập văn bản khi bạn cố gắng ép kiểu
-                sang <code>int()</code> hoặc <code>float()</code>, chương trình sẽ báo lỗi (<code>ValueError</code>). Xử
-                lý lỗi sẽ được học ở các buổi sau.</p>
         </div>
-
-        <div id="slide-11" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">6. Ví dụ Tổng Hợp 1: Tính Tuổi</h3>
-            <p class="mb-4 text-lg">Yêu cầu: Viết chương trình nhập vào năm sinh của một người, sau đó tính và in ra
-                tuổi của người đó (giả sử năm hiện tại là 2024).</p>
-            <div class="code-block">
-                <span class="variable">nam_hien_tai</span> = <span class="number">2024</span><br><br>
-
-                <span class="comment"># Nhập năm sinh từ người dùng</span><br>
-                <span class="variable">chuoi_nam_sinh</span> = <span class="function">input</span>(<span
-                    class="string">"Nhập năm sinh của bạn: "</span>)<br><br>
-
-                <span class="comment"># Ép kiểu năm sinh sang số nguyên</span><br>
-                <span class="variable">nam_sinh</span> = <span class="function">int</span>(<span
-                    class="variable">chuoi_nam_sinh</span>)<br><br>
-
-                <span class="comment"># Tính tuổi</span><br>
-                <span class="variable">tuoi</span> = <span class="variable">nam_hien_tai</span> - <span
-                    class="variable">nam_sinh</span><br><br>
-
-                <span class="comment"># In kết quả</span><br>
-                <span class="function">print</span>(<span class="string">f"Bạn năm nay {tuoi} tuổi."</span>)
-            </div>
-            <p class="mt-4 text-lg"><strong>Thử chạy chương trình:</strong></p>
-            <p class="text-gray-700">Nếu bạn nhập năm sinh là <code>1995</code>, kết quả sẽ là:
-                <code>Bạn năm nay 29 tuổi.</code>
-            </p>
-        </div>
-
-        <div id="slide-12" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">7. Ví dụ Tổng Hợp 2: Chào Hỏi Cá Nhân</h3>
-            <p class="mb-4 text-lg">Yêu cầu: Viết chương trình nhập vào tên và thành phố của một người, sau đó in ra một
-                lời chào cá nhân hóa.</p>
-            <div class="code-block">
-                <span class="comment"># Nhập tên từ người dùng</span><br>
-                <span class="variable">ten</span> = <span class="function">input</span>(<span class="string">"Nhập tên
-                    của bạn: "</span>)<br><br>
-
-                <span class="comment"># Nhập thành phố từ người dùng</span><br>
-                <span class="variable">thanh_pho</span> = <span class="function">input</span>(<span class="string">"Bạn
-                    đến từ thành phố nào? "</span>)<br><br>
-
-                <span class="comment"># In lời chào cá nhân hóa</span><br>
-                <span class="function">print</span>(<span class="string">f"Chào bạn {ten}! Rất vui được biết bạn đến từ
-                    {thanh_pho}."</span>)
-            </div>
-            <p class="mt-4 text-lg"><strong>Thử chạy chương trình:</strong></p>
-            <p class="text-gray-700">Nếu bạn nhập tên là <code>Lan</code> và thành phố là <code>Hà Nội</code>, kết quả
-                sẽ là: <code>Chào bạn Lan! Rất vui được biết bạn đến từ Hà Nội.</code></p>
-        </div>
-
-        <div id="slide-13" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-green-600 mb-4">8. Bài Tập Thực Hành</h3>
-            <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài tập 1: Thông Tin Cá Nhân</h4>
-            <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết một chương trình Python thực hiện các bước sau:</p>
-            <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
-                <li>Yêu cầu người dùng nhập vào <strong>tên</strong> của họ.</li>
-                <li>Yêu cầu người dùng nhập vào <strong>tuổi</strong> của họ.</li>
-                <li>Yêu cầu người dùng nhập vào <strong>tên trường đại học</strong> (hoặc trường học/công ty) của họ.
-                </li>
-                <li>In ra một câu tổng hợp thông tin, ví dụ: "Chào bạn [Tên], bạn [Tuổi] tuổi và đang học/làm việc tại
-                    [Tên trường]."</li>
-            </ol>
-            <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
-            <div class="code-block">
-                <span class="comment"># Input mẫu:</span><br>
-                <span class="comment"># Tên: An</span><br>
-                <span class="comment"># Tuổi: 21</span><br>
-                <span class="comment"># Trường: Đại học Bách Khoa</span><br><br>
-                <span class="comment"># Output mong muốn:</span><br>
-                <span class="string">"Chào bạn An, bạn 21 tuổi và đang học/làm việc tại Đại học Bách Khoa."</span>
+        
+        <!-- Slide 11: String Manipulation -->
+        <div class="slide" id="slide-11">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">8. Thao Tác Chuỗi Nâng Cao</h3>
+                <p class="mb-4 text-lg">Chuỗi không chỉ để lưu trữ mà còn có thể được biến đổi mạnh mẽ.</p>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Cắt chuỗi (Slicing)</h4>
+                <p class="mb-2 text-lg">Lấy một phần của chuỗi bằng cú pháp <code>[start:stop]</code>. <code>start</code> là vị trí bắt đầu (bao gồm), <code>stop</code> là vị trí kết thúc (không bao gồm).</p>
+                 <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">loi_chao</span> <span class="operator">=</span> <span class="string">"Xin chào các bạn!"</span>
+<span class="function">print</span>(<span class="variable">loi_chao</span>[<span class="number">0</span>:<span class="number">3</span>])  <span class="comment"># In ra "Xin"</span>
+<span class="function">print</span>(<span class="variable">loi_chao</span>[<span class="number">4</span>:<span class="number">8</span>])  <span class="comment"># In ra "chào"</span>
+<span class="function">print</span>(<span class="variable">loi_chao</span>[<span class="number">10</span>:]) <span class="comment"># In ra "các bạn!" (từ vị trí 10 đến hết)</span></code></pre>
+                </div>
+                <h4 class="text-2xl font-medium text-gray-700 mt-4 mb-3">Một số phương thức hữu ích</h4>
+                 <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">ten_file</span> <span class="operator">=</span> <span class="string">"  BaiTap.Py  "</span>
+<span class="function">print</span>(<span class="variable">ten_file</span>.<span class="function">lower</span>())         <span class="comment"># "  baitap.py  "</span>
+<span class="function">print</span>(<span class="variable">ten_file</span>.<span class="function">upper</span>())         <span class="comment"># "  BAITAP.PY  "</span>
+<span class="function">print</span>(<span class="variable">ten_file</span>.<span class="function">strip</span>())         <span class="comment"># "BaiTap.Py" (xóa khoảng trắng ở đầu và cuối)</span>
+<span class="function">print</span>(<span class="variable">ten_file</span>.<span class="function">replace</span>(<span class="string">'Py'</span>, <span class="string">'Python'</span>)) <span class="comment"># "  BaiTap.Python  "</span></code></pre>
+                </div>
             </div>
         </div>
 
-        <div id="slide-14" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-green-600 mb-4">8. Bài Tập Thực Hành (Tiếp theo)</h3>
-            <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài tập 2: Tính Diện Tích Hình Chữ Nhật</h4>
-            <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết một chương trình Python thực hiện các bước sau:</p>
-            <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
-                <li>Yêu cầu người dùng nhập vào <strong>chiều dài</strong> của hình chữ nhật (có thể là số thực).</li>
-                <li>Yêu cầu người dùng nhập vào <strong>chiều rộng</strong> của hình chữ nhật (có thể là số thực).</li>
-                <li>Tính <strong>diện tích</strong> của hình chữ nhật theo công thức: Diện tích = Chiều dài * Chiều
-                    rộng.</li>
-                <li>In ra diện tích đã tính được, kèm theo thông tin rõ ràng.</li>
-            </ol>
-            <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
-            <div class="code-block">
-                <span class="comment"># Input mẫu:</span><br>
-                <span class="comment"># Chiều dài: 10.5</span><br>
-                <span class="comment"># Chiều rộng: 5.2</span><br><br>
-                <span class="comment"># Output mong muốn:</span><br>
-                <span class="string">"Diện tích hình chữ nhật với chiều dài 10.5 và chiều rộng 5.2 là: 54.6"</span>
+        <!-- Slide 12: Exercises -->
+        <div class="slide" id="slide-12">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">9. Bài Tập Thực Hành</h3>
+                <p class="text-2xl text-center text-gray-600 mb-12">Áp dụng kiến thức mới để giải quyết vấn đề!</p>
+                <div class="space-y-6">
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">(Dễ) Máy tính đơn giản</h4>
+                        <p>Viết chương trình yêu cầu người dùng nhập vào 2 số, sau đó in ra tổng, hiệu, tích, thương của 2 số đó.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">(Trung bình) Kiểm tra chẵn lẻ</h4>
+                        <p>Viết chương trình yêu cầu người dùng nhập vào một số nguyên. Sử dụng toán tử chia lấy dư (<code>%</code>) và câu lệnh <code>if-else</code> để xác định và in ra màn hình số đó là số chẵn hay số lẻ.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">(Khó) Phân loại học lực</h4>
+                        <p>Viết chương trình yêu cầu người dùng nhập điểm (thang 10). Dựa vào điểm số, sử dụng cấu trúc <code>if-elif-else</code> để in ra xếp loại tương ứng: Xuất sắc (>=9), Giỏi (>=8), Khá (>=6.5), Trung bình (>=5), Yếu (<5).</p>
+                    </div>
+                     <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">(Rất khó) Kiểm tra năm nhuận</h4>
+                        <p>Viết chương trình nhập vào một năm. Kiểm tra xem năm đó có phải là năm nhuận hay không. Gợi ý: Năm nhuận là năm chia hết cho 4 nhưng không chia hết cho 100, hoặc là năm chia hết cho 400.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 13: Exercise Solutions -->
+        <div class="slide" id="slide-13">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Gợi ý & Lời giải</h3>
+                <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài 2: Kiểm tra chẵn lẻ</h4>
+                <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">so</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập một số nguyên: "</span>))
+
+<span class="keyword">if</span> <span class="variable">so</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"{so} là số chẵn."</span>)
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"{so} là số lẻ."</span>)</code></pre>
+                </div>
+                
+                <h4 class="text-2xl font-medium text-gray-700 mt-6 mb-3">Bài 4: Kiểm tra năm nhuận</h4>
+                 <div class="code-block-container">
+                    <div class="code-block-header"><button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Sao chép</button></div>
+                    <pre class="code-block"><code><span class="variable">nam</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Nhập vào một năm: "</span>))
+
+<span class="comment"># Sử dụng toán tử logic để kết hợp các điều kiện</span>
+<span class="keyword">if</span> (<span class="variable">nam</span> <span class="operator">%</span> <span class="number">4</span> <span class="operator">==</span> <span class="number">0</span> <span class="keyword">and</span> <span class="variable">nam</span> <span class="operator">%</span> <span class="number">100</span> <span class="operator">!=</span> <span class="number">0</span>) <span class="keyword">or</span> (<span class="variable">nam</span> <span class="operator">%</span> <span class="number">400</span> <span class="operator">==</span> <span class="number">0</span>)<span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"Năm {nam} là một năm nhuận."</span>)
+<span class="keyword">else</span><span class="operator">:</span>
+    <span class="function">print</span>(<span class="string">f"Năm {nam} không phải là năm nhuận."</span>)</code></pre>
+                </div>
             </div>
         </div>
 
-        <div id="slide-15" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-green-600 mb-4">8. Bài Tập Thực Hành (Tiếp theo)</h3>
-            <h4 class="text-2xl font-medium text-gray-700 mb-3">Bài tập 3: Chuyển Đổi Tiền Tệ (Đơn Giản)</h4>
-            <p class="mb-2 text-lg"><strong>Yêu cầu:</strong> Viết một chương trình Python thực hiện các bước sau:</p>
-            <ol class="list-decimal list-inside mb-4 pl-4 text-gray-700">
-                <li>Yêu cầu người dùng nhập vào một số tiền bằng <strong>USD</strong> (Đô la Mỹ).</li>
-                <li>Giả sử tỉ giá cố định là <strong>1 USD = 23500 VND</strong>.</li>
-                <li>Tính số tiền tương ứng bằng <strong>VND</strong> (Việt Nam Đồng).</li>
-                <li>In ra số tiền đã quy đổi.</li>
-            </ol>
-            <p class="mb-2 font-medium">Ví dụ output mong muốn:</p>
-            <div class="code-block">
-                <span class="comment"># Input mẫu:</span><br>
-                <span class="comment"># Số tiền USD: 50</span><br><br>
-                <span class="comment"># Output mong muốn:</span><br>
-                <span class="string">"50 USD tương đương với 1175000 VND."</span>
+        <!-- Slide 14: Summary -->
+        <div class="slide" id="slide-14">
+            <div class="slide-content-wrapper">
+                <h3 class="text-3xl font-semibold text-theme-600 mb-4">Tổng Kết Buổi 1</h3>
+                <p class="mb-4 text-lg">Chúc mừng! Bạn đã hoàn thành một buổi học đầy đủ kiến thức. Hôm nay chúng ta đã học:</p>
+                <ul class="list-disc list-inside mb-6 pl-4 text-lg space-y-3">
+                    <li><strong>Kiến thức nền tảng:</strong> Biến, các kiểu dữ liệu (<code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>), hàm <code>print()</code>/<code>input()</code>, ép kiểu.</li>
+                    <li><strong>Các loại toán tử:</strong> Số học, so sánh, và logic.</li>
+                    <li><strong>Điều khiển luồng chương trình:</strong> Sử dụng <code>if</code>, <code>elif</code>, và <code>else</code> để tạo ra các chương trình thông minh, có khả năng ra quyết định.</li>
+                    <li><strong>Xử lý chuỗi:</strong> Cắt chuỗi và sử dụng các phương thức cơ bản.</li>
+                </ul>
+                <p class="text-xl font-semibold">Bạn đã có đủ công cụ để viết những chương trình phức tạp hơn, có thể giải quyết các bài toán logic. Đây là nền tảng cực kỳ vững chắc cho các bài học tiếp theo!</p>
+                <div class="flex justify-center mt-8">
+                    <img src="https://placehold.co/400x200/059669/FFFFFF?text=Great+Progress!" alt="[Hình ảnh tiến bộ vượt bậc]" class="shadow-md rounded-lg">
+                </div>
             </div>
         </div>
 
-        <div id="slide-16" class="slide-content bg-white p-8 rounded-lg shadow-lg slide">
-            <h3 class="text-3xl font-semibold text-blue-600 mb-4">9. Tóm Tắt và Câu Hỏi</h3>
-            <p class="mb-4 text-lg">Trong buổi học hôm nay, chúng ta đã tìm hiểu về:</p>
-            <ul class="list-disc list-inside mb-4 pl-4 text-gray-700 space-y-2">
-                <li><strong>Biến:</strong> Cách đặt tên và lưu trữ dữ liệu.</li>
-                <li><strong>Kiểu dữ liệu cơ bản:</strong> <code>int</code> (số nguyên), <code>float</code> (số thực),
-                    <code>str</code> (chuỗi).
-                </li>
-                <li><strong>Toán tử:</strong> Toán tử số học (<code>+</code>, <code>-</code>, <code>*</code>,
-                    <code>/</code>, <code>//</code>, <code>%</code>, <code>**</code>) và toán tử gán (<code>=</code>,
-                    <code>+=</code>, ...).
-                </li>
-                <li><strong>Hàm <code>print()</code>:</strong> Để xuất (in) dữ liệu ra màn hình.</li>
-                <li><strong>Hàm <code>input()</code>:</strong> Để nhập dữ liệu từ người dùng và tầm quan trọng của việc
-                    ép kiểu.</li>
-            </ul>
-            <p class="text-lg mb-6">Đây là những kiến thức nền tảng rất quan trọng để tiếp tục hành trình học lập trình
-                Python của bạn!</p>
-            <div class="flex justify-center mb-8">
-                <img src="https://placehold.co/300x200/10B981/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]"
-                    class="rounded-lg shadow-md">
+        <!-- Slide 15: Q&A -->
+        <div class="slide" id="slide-15">
+            <div class="slide-content-wrapper text-center my-auto">
+                <h3 class="text-4xl font-semibold text-theme-700 mb-6">Hỏi & Đáp</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="https://placehold.co/300x200/047857/FFFFFF?text=Q%26A" alt="[Hình ảnh Hỏi và Đáp]" class="shadow-md rounded-lg">
+                </div>
+                <h4 class="text-2xl font-semibold text-center text-gray-700">Các bạn có câu hỏi nào không?</h4>
+                <p class="text-center text-gray-600 mt-4">Đừng ngần ngại đặt câu hỏi nhé!</p>
             </div>
-            <h4 class="text-2xl font-semibold text-center text-green-600">Bạn có câu hỏi nào không?</h4>
         </div>
 
     </div>
 
     <script>
-        const slides = document.querySelectorAll('.slide-content');
+        const slides = Array.from(document.querySelectorAll('.slide'));
         const prevButton = document.getElementById('prevSlide');
         const nextButton = document.getElementById('nextSlide');
         const currentSlideNumDisplay = document.getElementById('currentSlideNum');
         const totalSlidesNumDisplay = document.getElementById('totalSlidesNum');
-
+        
         let currentSlide = 0;
-        totalSlidesNumDisplay.textContent = slides.length;
+        if (slides.length > 0) {
+            totalSlidesNumDisplay.textContent = slides.length;
+        }
 
         function showSlide(index) {
             slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.add('active');
-                } else {
-                    slide.classList.remove('active');
+                slide.classList.remove('active');
+                if (i !== index) {
+                   // Delay hiding to allow for fade-out transition
+                   setTimeout(() => {
+                        if (!slide.classList.contains('active')) {
+                           slide.style.display = 'none';
+                        }
+                   }, 400);
                 }
             });
+            
+            const slideToShow = slides[index];
+            if (slideToShow) {
+                slideToShow.style.display = 'flex';
+                // A tiny delay to ensure display property is set before adding class
+                setTimeout(() => {
+                    slideToShow.classList.add('active');
+                }, 10);
+            }
+
             currentSlideNumDisplay.textContent = index + 1;
             updateNavButtons();
+
+            // Scroll to top of slide content after navigation
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function updateNavButtons() {
+            if (!prevButton || !nextButton) return;
             prevButton.disabled = currentSlide === 0;
             nextButton.disabled = currentSlide === slides.length - 1;
         }
 
-        prevButton.addEventListener('click', () => {
-            if (currentSlide > 0) {
-                currentSlide--;
-                showSlide(currentSlide);
-            }
-        });
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
 
-        nextButton.addEventListener('click', () => {
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                showSlide(currentSlide);
-            }
-        });
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+        }
 
-        // Initialize first slide
-        showSlide(currentSlide);
+        function copyCode(buttonElement) {
+            const codeBlockContainer = buttonElement.closest('.code-block-container');
+            const codeElement = codeBlockContainer.querySelector('.code-block');
+            if (codeElement) {
+                const codeToCopy = codeElement.innerText || codeElement.textContent;
+
+                const textarea = document.createElement('textarea');
+                textarea.value = codeToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i> Đã chép!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalText;
+                    }, 1500);
+                } catch (err) {
+                    console.error('Không thể sao chép code: ', err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Initial load
+        if (slides.length > 0) {
+            showSlide(currentSlide);
+        } else {
+            if (currentSlideNumDisplay) currentSlideNumDisplay.textContent = '0';
+            updateNavButtons();
+        }
     </script>
 
 </body>
