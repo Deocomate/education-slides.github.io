@@ -11,7 +11,8 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
+            background-color: #f3f4f6;
+            /* Light gray background */
         }
 
         .question-card {
@@ -29,37 +30,69 @@
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07);
         }
 
-        .level-medium { border-color: #f59e0b; } /* Amber 500 */
-        .level-hard { border-color: #ef4444; } /* Red 500 */
-        .level-expert { border-color: #8b5cf6; } /* Violet 500 */
+        /* Thêm style cho câu hỏi dễ */
+        .level-easy {
+            border-color: #34d399;
+        }
+
+        /* Emerald 400 */
+        .level-medium {
+            border-color: #f59e0b;
+        }
+
+        /* Amber 500 */
+        .level-hard {
+            border-color: #ef4444;
+        }
+
+        /* Red 500 */
 
         .terminal {
-            background-color: #1f2937; /* Gray 800 */
+            background-color: #1f2937;
+            /* Gray 800 */
             border-radius: 0.5rem;
             margin-top: 1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border: 1px solid #374151; /* Gray 700 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #374151;
+            /* Gray 700 */
             overflow: hidden;
         }
+
         .terminal-header {
-            background-color: #374151; /* Gray 700 */
+            background-color: #374151;
+            /* Gray 700 */
             padding: 0.5rem 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
+
         .terminal-header span {
             display: block;
             width: 0.75rem;
             height: 0.75rem;
             border-radius: 50%;
         }
-        .terminal-header .red { background-color: #f87171; } /* Red 400 */
-        .terminal-header .yellow { background-color: #fbbd23; } /* Amber 400 */
-        .terminal-header .green { background-color: #34d399; } /* Emerald 400 */
-        
+
+        .terminal-header .red {
+            background-color: #f87171;
+        }
+
+        /* Red 400 */
+        .terminal-header .yellow {
+            background-color: #fbbd23;
+        }
+
+        /* Amber 400 */
+        .terminal-header .green {
+            background-color: #34d399;
+        }
+
+        /* Emerald 400 */
+
         .terminal-body {
-            color: #e5e7eb; /* Gray 200 */
+            color: #e5e7eb;
+            /* Gray 200 */
             padding: 1rem 1.25rem;
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             white-space: pre-wrap;
@@ -67,23 +100,31 @@
             font-size: 0.9em;
             line-height: 1.6;
         }
-        .terminal-body .comment { color: #9ca3af; } /* Gray 400 */
-        
+
+        .terminal-body .comment {
+            color: #9ca3af;
+        }
+
+        /* Gray 400 */
+
         .timer-container {
             position: sticky;
             top: 0;
             z-index: 50;
         }
-        
+
         #timer.ticking {
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
                 opacity: 1;
             }
+
             50% {
                 transform: scale(1.05);
                 opacity: 0.95;
@@ -111,208 +152,215 @@
         <div class="bg-white p-6 rounded-lg shadow-md mb-8">
             <h2 class="text-2xl font-bold text-gray-700 mb-2">Thông tin bài thi</h2>
             <p class="text-gray-600"><strong class="font-semibold">Thời gian làm bài:</strong> 120 phút</p>
-            <p class="text-gray-600"><strong class="font-semibold">Nội dung:</strong> 10 câu hỏi lập trình Python thực hành.</p>
-            <p class="text-gray-600"><strong class="font-semibold">Hướng dẫn:</strong> Học viên đọc kỹ đề bài và viết code Python để giải quyết vấn đề. Chương trình cần xử lý đúng các trường hợp ví dụ và các trường hợp tương tự.</p>
+            <p class="text-gray-600"><strong class="font-semibold">Nội dung:</strong> 10 câu hỏi trắc nghiệm và 5 bài
+                tập lập trình Python cơ bản.</p>
+            <p class="text-gray-600"><strong class="font-semibold">Hướng dẫn:</strong> Học viên đọc kỹ đề bài, chọn đáp
+                án cho phần trắc nghiệm và viết code Python để giải quyết các bài tập thực hành.</p>
         </div>
 
-        <!-- PHẦN CÂU HỎI -->
-        <div class="space-y-8">
-            <!-- Câu 1 -->
-            <div class="question-card level-medium">
-                <h3 class="text-xl font-bold text-gray-800">Câu 1: Kiểm Tra Chuỗi Palindrome (Trung bình)</h3>
-                <p class="mt-2 text-gray-600">Viết một hàm `is_palindrome(s)` nhận vào một chuỗi `s` và trả về `True` nếu chuỗi đó là palindrome (đọc xuôi và ngược đều giống nhau), và `False` nếu không phải. Hàm không phân biệt chữ hoa/thường và bỏ qua các ký tự không phải là chữ cái.</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Ví dụ:</span><br>
-is_palindrome("A man, a plan, a canal: Panama")  <span class="comment"># Output: True</span><br>
-is_palindrome("race a car")                     <span class="comment"># Output: False</span><br>
-is_palindrome("madam")                          <span class="comment"># Output: True</span>
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-indigo-500 pb-2">Phần I: Trắc Nghiệm (2
+                điểm)</h2>
+            <div class="space-y-6">
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">1. Đâu là cách khai báo một biến kiểu chuỗi (string) hợp lệ trong
+                        Python?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q1" class="mr-2"> A. `my_name = "John"`</label></div>
+                        <div><label><input type="radio" name="q1" class="mr-2"> B. `my_name = 'John'`</label></div>
+                        <div><label><input type="radio" name="q1" class="mr-2"> C. `my_name = """John"""`</label></div>
+                        <div><label><input type="radio" name="q1" class="mr-2"> D. Tất cả đều đúng</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">2. Kết quả của `print(10 / 3)` là gì?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q2" class="mr-2"> A. `3`</label></div>
+                        <div><label><input type="radio" name="q2" class="mr-2"> B. `3.333...`</label></div>
+                        <div><label><input type="radio" name="q2" class="mr-2"> C. `3.0`</label></div>
+                        <div><label><input type="radio" name="q2" class="mr-2"> D. Lỗi</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">3. Kết quả của `print(10 // 3)` là gì?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q3" class="mr-2"> A. `3`</label></div>
+                        <div><label><input type="radio" name="q3" class="mr-2"> B. `3.333...`</label></div>
+                        <div><label><input type="radio" name="q3" class="mr-2"> C. `1`</label></div>
+                        <div><label><input type="radio" name="q3" class="mr-2"> D. `3.0`</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">4. Lệnh nào dùng để nhận dữ liệu nhập từ bàn phím của người dùng?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q4" class="mr-2"> A. `get()`</label></div>
+                        <div><label><input type="radio" name="q4" class="mr-2"> B. `read()`</label></div>
+                        <div><label><input type="radio" name="q4" class="mr-2"> C. `input()`</label></div>
+                        <div><label><input type="radio" name="q4" class="mr-2"> D. `scan()`</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">5. Cho `my_list = [1, 2, 3, 4]`. Lệnh nào sẽ thêm số `5` vào cuối danh
+                        sách?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q5" class="mr-2"> A. `my_list.add(5)`</label></div>
+                        <div><label><input type="radio" name="q5" class="mr-2"> B. `my_list.append(5)`</label></div>
+                        <div><label><input type="radio" name="q5" class="mr-2"> C. `my_list.push(5)`</label></div>
+                        <div><label><input type="radio" name="q5" class="mr-2"> D. `my_list.insert(5)`</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">6. Kiểu dữ liệu nào sau đây không thể thay đổi giá trị (immutable)?
+                    </p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q6" class="mr-2"> A. List</label></div>
+                        <div><label><input type="radio" name="q6" class="mr-2"> B. Dictionary</label></div>
+                        <div><label><input type="radio" name="q6" class="mr-2"> C. Tuple</label></div>
+                        <div><label><input type="radio" name="q6" class="mr-2"> D. Set</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">7. Đâu là toán tử so sánh "không bằng"?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q7" class="mr-2"> A. `<>`</label></div>
+                        <div><label><input type="radio" name="q7" class="mr-2"> B. `!=`</label></div>
+                        <div><label><input type="radio" name="q7" class="mr-2"> C. `!==`</label></div>
+                        <div><label><input type="radio" name="q7" class="mr-2"> D. `is not`</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">8. Vòng lặp `for i in range(5):` sẽ lặp bao nhiêu lần?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q8" class="mr-2"> A. 4 lần</label></div>
+                        <div><label><input type="radio" name="q8" class="mr-2"> B. 5 lần</label></div>
+                        <div><label><input type="radio" name="q8" class="mr-2"> C. 6 lần</label></div>
+                        <div><label><input type="radio" name="q8" class="mr-2"> D. 0 lần</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">9. Cho `x = 5`. Câu lệnh `if x > 5:` sẽ thực thi khối lệnh bên trong
+                        nó hay không?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q9" class="mr-2"> A. Có</label></div>
+                        <div><label><input type="radio" name="q9" class="mr-2"> B. Không</label></div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <p class="font-semibold mb-2">10. Để chuyển đổi một chuỗi `s = "123"` thành số nguyên, ta dùng lệnh
+                        nào?</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div><label><input type="radio" name="q10" class="mr-2"> A. `integer(s)`</label></div>
+                        <div><label><input type="radio" name="q10" class="mr-2"> B. `s.to_int()`</label></div>
+                        <div><label><input type="radio" name="q10" class="mr-2"> C. `int(s)`</label></div>
+                        <div><label><input type="radio" name="q10" class="mr-2"> D. `convert.integer(s)`</label></div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Câu 2 -->
-            <div class="question-card level-medium">
-                <h3 class="text-xl font-bold text-gray-800">Câu 2: Lọc Phần Tử Duy Nhất (Trung bình)</h3>
-                <p class="mt-2 text-gray-600">Viết một hàm `unique_elements(input_list)` nhận vào một danh sách (list) và trả về một danh sách mới chỉ chứa các phần tử duy nhất từ danh sách ban đầu, giữ nguyên thứ tự xuất hiện lần đầu tiên.</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Ví dụ:</span><br>
-unique_elements([1, 2, 3, 2, 1, 5, 4, 5])  <span class="comment"># Output: [1, 2, 3, 5, 4]</span><br>
-unique_elements(['a', 'b', 'a', 'c', 'b'])  <span class="comment"># Output: ['a', 'b', 'c']</span>
+        <div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-indigo-500 pb-2">Phần II: Thực Hành (8
+                điểm)</h2>
+            <div class="space-y-8">
+                <div class="question-card level-easy">
+                    <h3 class="text-xl font-bold text-gray-800">Câu 1: Chào hỏi người dùng (Dễ)</h3>
+                    <p class="mt-2 text-gray-600">Viết một chương trình yêu cầu người dùng nhập tên của họ, sau đó in ra
+                        một câu chào hỏi kèm theo tên của họ.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                                class="green"></span></div>
+                        <div class="terminal-body">
+                            <span class="comment"># Ví dụ:</span><br>
+                            <span class="comment">> Nhập tên của bạn: An</span><br>
+                            <br>
+                            <span class="comment"># Output mong muốn:</span><br>
+                            Xin chào, An!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card level-easy">
+                    <h3 class="text-xl font-bold text-gray-800">Câu 2: Tính tuổi (Dễ)</h3>
+                    <p class="mt-2 text-gray-600">Viết một chương trình yêu cầu người dùng nhập vào năm sinh. Chương
+                        trình sẽ tính và in ra số tuổi của người dùng (giả sử năm hiện tại là 2025).</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                                class="green"></span></div>
+                        <div class="terminal-body">
+                            <span class="comment"># Ví dụ:</span><br>
+                            <span class="comment">> Nhập năm sinh của bạn: 2000</span><br>
+                            <br>
+                            <span class="comment"># Output mong muốn:</span><br>
+                            Bạn năm nay 25 tuổi.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card level-easy">
+                    <h3 class="text-xl font-bold text-gray-800">Câu 3: Kiểm tra chẵn lẻ (Dễ)</h3>
+                    <p class="mt-2 text-gray-600">Viết một chương trình yêu cầu người dùng nhập một số nguyên. Chương
+                        trình sẽ kiểm tra và in ra màn hình cho biết số đó là số chẵn hay số lẻ.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                                class="green"></span></div>
+                        <div class="terminal-body">
+                            <span class="comment"># Ví dụ 1:</span><br>
+                            <span class="comment">> Nhập một số nguyên: 10</span><br>
+                            <br>
+                            <span class="comment"># Output mong muốn:</span><br>
+                            10 là số chẵn.<br><br>
+                            <span class="comment"># Ví dụ 2:</span><br>
+                            <span class="comment">> Nhập một số nguyên: 7</span><br>
+                            <br>
+                            <span class="comment"># Output mong muốn:</span><br>
+                            7 là số lẻ.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card level-easy">
+                    <h3 class="text-xl font-bold text-gray-800">Câu 4: Tính tổng danh sách (Dễ)</h3>
+                    <p class="mt-2 text-gray-600">Cho một danh sách các số: `numbers = [10, 25, 5, 8, 12]`. Viết chương
+                        trình tính tổng tất cả các phần tử trong danh sách và in kết quả ra màn hình.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                                class="green"></span></div>
+                        <div class="terminal-body">
+                            <span class="comment"># Dữ liệu đầu vào (code):</span><br>
+                            numbers = [10, 25, 5, 8, 12]<br>
+                            <br>
+                            <span class="comment"># Output mong muốn:</span><br>
+                            Tổng của danh sách là: 60
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card level-medium">
+                    <h3 class="text-xl font-bold text-gray-800">Câu 5: In bảng cửu chương (Trung bình)</h3>
+                    <p class="mt-2 text-gray-600">Viết chương trình yêu cầu người dùng nhập một số nguyên từ 1 đến 9.
+                        Chương trình sẽ in ra bảng cửu chương tương ứng với số đó.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span
+                                class="green"></span></div>
+                        <div class="terminal-body">
+                            <span class="comment"># Ví dụ:</span><br>
+                            <span class="comment">> Nhập một số (1-9): 7</span><br>
+                            <br>
+                            <span class="comment"># Output mong muốn:</span><br>
+                            7 x 1 = 7<br>
+                            7 x 2 = 14<br>
+                            7 x 3 = 21<br>
+                            7 x 4 = 28<br>
+                            7 x 5 = 35<br>
+                            7 x 6 = 42<br>
+                            7 x 7 = 49<br>
+                            7 x 8 = 56<br>
+                            7 x 9 = 63<br>
+                            7 x 10 = 70
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Câu 3 -->
-            <div class="question-card level-medium">
-                <h3 class="text-xl font-bold text-gray-800">Câu 3: Tìm Cặp Số Có Tổng Cho Trước (Trung bình)</h3>
-                <p class="mt-2 text-gray-600">Viết một hàm `find_sum_pairs(numbers, target)` nhận vào một danh sách các số `numbers` và một số nguyên `target`. Hàm sẽ tìm và trả về một danh sách chứa các cặp số (dưới dạng tuple) từ `numbers` có tổng bằng `target`.</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Ví dụ:</span><br>
-find_sum_pairs([2, 7, 11, 15, 3, 6], 9)  <span class="comment"># Output: [(2, 7), (3, 6)]</span><br>
-find_sum_pairs([1, 2, 3, 4, 5], 10)     <span class="comment"># Output: []</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Câu 4 -->
-            <div class="question-card level-hard">
-                <h3 class="text-xl font-bold text-gray-800">Câu 4: Sắp Xếp Danh Sách Sinh Viên (Khó)</h3>
-                <p class="mt-2 text-gray-600">Bạn có một danh sách các dictionary, mỗi dictionary chứa thông tin của một sinh viên (`ten` và `diem_tb`). Viết một hàm `sort_students(student_list)` nhận vào danh sách này và trả về một danh sách mới đã được sắp xếp theo điểm trung bình (diem_tb) giảm dần.</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Dữ liệu đầu vào:</span><br>
-students = [<br>
-&nbsp;&nbsp;{'ten': 'An', 'diem_tb': 8.5},<br>
-&nbsp;&nbsp;{'ten': 'Binh', 'diem_tb': 9.2},<br>
-&nbsp;&nbsp;{'ten': 'Cuong', 'diem_tb': 7.8}<br>
-]<br>
-<span class="comment"># Output mong muốn:</span><br>
-[<br>
-&nbsp;&nbsp;{'ten': 'Binh', 'diem_tb': 9.2},<br>
-&nbsp;&nbsp;{'ten': 'An', 'diem_tb': 8.5},<br>
-&nbsp;&nbsp;{'ten': 'Cuong', 'diem_tb': 7.8}<br>
-]
-                    </div>
-                </div>
-            </div>
-
-            <!-- Câu 5 -->
-            <div class="question-card level-hard">
-                <h3 class="text-xl font-bold text-gray-800">Câu 5: Đếm Tần Suất Từ Trong File (Khó)</h3>
-                <p class="mt-2 text-gray-600">Viết một chương trình đọc nội dung từ file `vanban.txt`. Chương trình sẽ đếm tần suất xuất hiện của mỗi từ (không phân biệt hoa/thường, bỏ qua dấu câu cơ bản như phẩy, chấm) và in ra 5 từ xuất hiện nhiều nhất cùng số lần xuất hiện của chúng.</p>
-                 <p class="mt-2 text-gray-600">Tạo file <code>vanban.txt</code> với nội dung sau để chạy thử:</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Nội dung file vanban.txt:</span><br>
-Python is a great language. Learning Python is fun, and Python is versatile.<br>
-<span class="comment"># Output mong muốn (thứ tự có thể khác):</span><br>
-python: 3<br>
-is: 3<br>
-a: 1<br>
-great: 1<br>
-language: 1
-                    </div>
-                </div>
-            </div>
-
-            <!-- Câu 6 -->
-            <div class="question-card level-hard">
-                <h3 class="text-xl font-bold text-gray-800">Câu 6: Lọc Dữ Liệu Sản Phẩm Từ JSON (Khó)</h3>
-                <p class="mt-2 text-gray-600">Bạn có một file `products.json` chứa danh sách các sản phẩm. Viết một hàm `filter_products(min_price, max_price, category)` để lọc và trả về danh sách các sản phẩm có giá nằm trong khoảng `[min_price, max_price]` và thuộc danh mục `category`.</p>
-                <p class="mt-2 text-gray-600">Tạo file <code>products.json</code> với nội dung sau để chạy thử:</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Nội dung file products.json (rút gọn):</span><br>
-[<br>
-&nbsp;&nbsp;{"ten": "Laptop A", "gia": 25000, "danhmuc": "Electronics"},<br>
-&nbsp;&nbsp;{"ten": "Book B", "gia": 500, "danhmuc": "Books"},<br>
-&nbsp;&nbsp;{"ten": "Phone C", "gia": 20000, "danhmuc": "Electronics"},<br>
-&nbsp;&nbsp;{"ten": "Headphones D", "gia": 3000, "danhmuc": "Electronics"}<br>
-]<br>
-<span class="comment"># Ví dụ gọi hàm:</span><br>
-filter_products(10000, 30000, "Electronics")<br>
-<span class="comment"># Output mong muốn:</span><br>
-[<br>
-&nbsp;&nbsp;{"ten": "Laptop A", "gia": 25000, "danhmuc": "Electronics"},<br>
-&nbsp;&nbsp;{"ten": "Phone C", "gia": 20000, "danhmuc": "Electronics"}<br>
-]
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Câu 7 -->
-            <div class="question-card level-hard">
-                <h3 class="text-xl font-bold text-gray-800">Câu 7: Tạo Bảng Bingo Ngẫu Nhiên (Khó)</h3>
-                <p class="mt-2 text-gray-600">Viết một hàm `create_bingo_card()` để tạo và trả về một bảng Bingo 5x5 (dưới dạng list của list). Quy tắc:</p>
-                 <ul class="list-disc list-inside mt-2 text-gray-600">
-                    <li>Cột 1 (B): 5 số ngẫu nhiên từ 1-15.</li>
-                    <li>Cột 2 (I): 5 số ngẫu nhiên từ 16-30.</li>
-                    <li>Cột 3 (N): 4 số ngẫu nhiên từ 31-45, và ô chính giữa là chuỗi "FREE".</li>
-                    <li>Cột 4 (G): 5 số ngẫu nhiên từ 46-60.</li>
-                    <li>Cột 5 (O): 5 số ngẫu nhiên từ 61-75.</li>
-                </ul>
-                <p class="mt-2 text-gray-600">Hàm cần trả về một list 5x5, trong đó mỗi list con là một hàng của bảng Bingo.</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Output mong muốn (số liệu là ngẫu nhiên, cấu trúc phải đúng):</span><br>
-[<br>
-&nbsp;&nbsp;[5, 18, 33, 50, 71],<br>
-&nbsp;&nbsp;[12, 25, 40, 58, 62],<br>
-&nbsp;&nbsp;[8, 20, 'FREE', 48, 68],<br>
-&nbsp;&nbsp;[2, 29, 38, 55, 75],<br>
-&nbsp;&nbsp;[15, 16, 42, 60, 65]<br>
-]
-                    </div>
-                </div>
-            </div>
-
-            <!-- Câu 8 -->
-            <div class="question-card level-expert">
-                <h3 class="text-xl font-bold text-gray-800">Câu 8: Kiểm Tra Ma Trận Sudoku (Rất khó)</h3>
-                <p class="mt-2 text-gray-600">Viết một hàm `is_valid_sudoku(board)` nhận vào một ma trận 9x9 (list của list) đại diện cho một bảng Sudoku. Hàm trả về `True` nếu bảng hợp lệ, `False` nếu không. Một bảng hợp lệ khi:</p>
-                <ul class="list-disc list-inside mt-2 text-gray-600">
-                    <li>Mỗi hàng chỉ chứa các số từ 1-9 một lần duy nhất.</li>
-                    <li>Mỗi cột chỉ chứa các số từ 1-9 một lần duy nhất.</li>
-                </ul>
-                <p class="mt-2 text-gray-600">(Không cần kiểm tra các khối 3x3 cho bài toán này).</p>
-                 <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Bảng hợp lệ (ví dụ):</span><br>
-valid_board = [<br>
-&nbsp;&nbsp;[5,3,4,6,7,8,9,1,2],<br>
-&nbsp;&nbsp;[6,7,2,1,9,5,3,4,8],<br>
-&nbsp;&nbsp;... (các hàng khác cũng hợp lệ)<br>
-]<br>
-is_valid_sudoku(valid_board) <span class="comment"># Output: True</span><br><br>
-<span class="comment"># Bảng không hợp lệ (số 8 lặp lại ở hàng đầu):</span><br>
-invalid_board = [<br>
-&nbsp;&nbsp;[8,3,4,6,7,8,9,1,2],<br>
-&nbsp;&nbsp;...<br>
-]<br>
-is_valid_sudoku(invalid_board) <span class="comment"># Output: False</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Câu 9 -->
-            <div class="question-card level-expert">
-                <h3 class="text-xl font-bold text-gray-800">Câu 9: Nén Chuỗi Ký Tự (Rất khó)</h3>
-                <p class="mt-2 text-gray-600">Viết một hàm `compress_string(s)` để nén một chuỗi ký tự. Ví dụ, chuỗi "AAABBCDD" sẽ được nén thành "A3B2C1D2". Nếu chuỗi nén không ngắn hơn chuỗi gốc, hàm sẽ trả về chuỗi gốc.</p>
-                <div class="terminal">
-                    <div class="terminal-header"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-                    <div class="terminal-body">
-<span class="comment"># Ví dụ:</span><br>
-compress_string("AAABBCDD")  <span class="comment"># Output: "A3B2C1D2"</span><br>
-compress_string("ABC")       <span class="comment"># Output: "ABC" (vì "A1B1C1" dài hơn)</span><br>
-compress_string("aabcccccaaa") <span class="comment"># Output: "a2b1c5a3"</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Câu 10 -->
-            <div class="question-card level-expert">
-                <h3 class="text-xl font-bold text-gray-800">Câu 10: Quản Lý Kho Hàng (Tổng hợp)</h3>
-                <p class="mt-2 text-gray-600">Xây dựng một chương trình quản lý kho hàng nhỏ dựa trên file `kho_hang.json`. Chương trình cần có các chức năng sau được tổ chức thành các hàm riêng biệt:</p>
-                <ul class="list-disc list-inside mt-2 text-gray-700">
-                    <li>Tải/Lưu dữ liệu từ file `kho_hang.json`.</li>
-                    <li>Thêm sản phẩm mới (tên, số lượng, đơn giá).</li>
-                    <li>Thực hiện bán hàng: người dùng nhập tên sản phẩm và số lượng muốn bán. Chương trình sẽ kiểm tra xem có đủ hàng không, nếu có thì trừ số lượng, tính tổng tiền và cập nhật lại kho.</li>
-                    <li>Hiển thị toàn bộ kho hàng.</li>
-                </ul>
-                 <p class="mt-2 text-gray-600">Hãy thiết kế một menu dòng lệnh cho người dùng tương tác.</p>
-            </div>
-
         </div>
     </div>
 
@@ -353,4 +401,5 @@ compress_string("aabcccccaaa") <span class="comment"># Output: "a2b1c5a3"</span>
         updateCountdown();
     </script>
 </body>
+
 </html>
