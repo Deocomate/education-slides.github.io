@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming Homework (Advanced)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #homework-content,
+            #homework-content * {
+                visibility: visible;
+            }
+
+            #homework-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            #export-btn-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-4 sm:p-6 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Export Button -->
+        <div id="export-btn-container" class="mb-6 text-center">
+            <button id="export-pdf"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                Export to PDF
+            </button>
+        </div>
+
+        <!-- Homework Content -->
+        <div id="homework-content" class="bg-white p-8 sm:p-10 rounded-xl shadow-lg border border-gray-200">
+            <header class="text-center border-b pb-6 mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Python Programming Homework</h1>
+                <p class="text-md text-gray-500 mt-2">Topic: Advanced Fundamentals & Problem Solving</p>
+            </header>
+
+            <main class="space-y-10">
+                <!-- Question 1 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">1. Conditionals: BMI Calculator</h2>
+                    <p class="mb-2">Write a program that calculates the Body Mass Index (BMI) and categorizes it.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Declare variables for `weight_kg` and `height_m`.</li>
+                        <li>Calculate BMI using the formula: `BMI = weight_kg / (height_m * height_m)`.</li>
+                        <li>Use `if-elif-else` to print the category:
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                                <li>BMI < 18.5: "Underweight" </li>
+                                <li>18.5 <= BMI < 25: "Normal weight" </li>
+                                <li>25 <= BMI < 30: "Overweight" </li>
+                                <li>BMI >= 30: "Obesity"</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">2. Loops & Conditionals: Prime Number Checker
+                    </h2>
+                    <p class="mb-2">Write a script to determine if a given integer is a prime number.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>A prime number is a number greater than 1 that has no positive divisors other than 1 and
+                            itself.</li>
+                        <li>Declare a variable `num` (e.g., 29).</li>
+                        <li>Use a `for` loop to check for divisors from 2 up to the square root of the number.</li>
+                        <li>Print whether the number is prime or not.</li>
+                        <li><strong>Hint:</strong> If you find any divisor, you can stop checking and conclude it's not
+                            prime.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">3. Loops: Fibonacci Sequence</h2>
+                    <p class="mb-2">Write a program to generate the first `n` numbers of the Fibonacci sequence.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>The sequence starts with 0 and 1. Each subsequent number is the sum of the two preceding
+                            ones (0, 1, 1, 2, 3, 5, 8, ...).</li>
+                        <li>Declare a variable `n_terms` for how many numbers to generate (e.g., 10).</li>
+                        <li>Use a loop to calculate and print each number in the sequence.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">4. Nested Loops: Print a Pattern</h2>
+                    <p class="mb-2">Write a program using nested loops to print a right-angled triangle pattern of
+                        stars.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>For a given number of rows `n` (e.g., 5), the output should be:
+                            <pre class="bg-gray-100 p-2 rounded-md mt-2">*<br>**<br>***<br>****<br>*****</pre>
+                        </li>
+                        <li>The outer loop will iterate through the rows, and the inner loop will print the stars for
+                            each row.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">5. Lists & Loops: Find Common Elements</h2>
+                    <p class="mb-2">Given two lists, write a program to find all elements that are present in both
+                        lists, without duplicates.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Start with two lists: `list_a = [1, 2, 3, 4, 5]` and `list_b = [4, 5, 6, 7, 8]`.</li>
+                        <li>Create a new empty list `common_elements`.</li>
+                        <li>Iterate through one list and check if each element exists in the second list.</li>
+                        <li>Print the `common_elements` list.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">6. Strings & Lists: Palindrome Checker</h2>
+                    <p class="mb-2">Write a script to check if a given string is a palindrome.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>A palindrome is a word or phrase that reads the same forwards and backward (e.g., "madam",
+                            "level").</li>
+                        <li>Declare a string variable `text` (e.g., "racecar").</li>
+                        <li>Compare the string with its reverse.</li>
+                        <li>Print whether the string is a palindrome or not.</li>
+                        <li><strong>Hint:</strong> You can reverse a string using slicing: `string[::-1]`.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">7. Lists & Logic: Find the Second Largest
+                        Number</h2>
+                    <p class="mb-2">Write a program to find the second-largest number in a list of unique numbers.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Start with a list: `scores = [88, 95, 72, 100, 91, 85]`.</li>
+                        <li>Do not use sorting functions like `sort()`.</li>
+                        <li>Track the largest and second-largest numbers as you iterate through the list.</li>
+                        <li>Print the second-largest number.</li>
+                        <li><strong>Hint:</strong> Initialize two variables, `largest` and `second_largest`, to very
+                            small numbers (or the first two elements). Update them as you loop through the list.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">8. Lists: Remove Duplicates</h2>
+                    <p class="mb-2">Given a list with duplicate elements, create a new list containing only the unique
+                        elements in their original order.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Start with a list: `items = [1, 2, "apple", 2, 3, "banana", "apple"]`.</li>
+                        <li>Create a new empty list `unique_items`.</li>
+                        <li>Iterate through the original list. For each item, add it to `unique_items` only if it's not
+                            already there.</li>
+                        <li>Print the `unique_items` list.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">9. Nested Lists: Matrix Transposition</h2>
+                    <p class="mb-2">Write a program to transpose a 2D list (a matrix).</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Start with a matrix: `matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]`.</li>
+                        <li>The transpose should be: `[[1, 4, 7], [2, 5, 8], [3, 6, 9]]`.</li>
+                        <li>Use nested loops to iterate through rows and columns to create the new transposed matrix.
+                        </li>
+                        <li>Print the resulting transposed matrix.</li>
+                    </ul>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question-item">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">10. Challenge: Caesar Cipher Encoder</h2>
+                    <p class="mb-2">Implement a simple Caesar cipher, which shifts each letter in a string by a fixed
+                        number of places.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Create a string `message = "hello world"` and an integer `shift = 3`.</li>
+                        <li>Iterate through each character in the message.</li>
+                        <li>If the character is a letter, shift it by the given amount (wrapping around from 'z' to
+                            'a'). Non-letters should remain unchanged.</li>
+                        <li>The result for the example should be "khoor zruog".</li>
+                        <li><strong>Hint:</strong> The `ord()` function gets the ASCII value of a character, and `chr()`
+                            converts it back. You'll need to handle wrapping for the alphabet.</li>
+                    </ul>
+                </div>
+            </main>
+
+            <footer class="text-center border-t pt-6 mt-10">
+                <p class="font-semibold text-gray-700">--- END OF HOMEWORK ---</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('export-pdf').addEventListener('click', () => {
+            const homeworkContent = document.getElementById('homework-content');
+            const { jsPDF } = window.jspdf;
+
+            const buttonContainer = document.getElementById('export-btn-container');
+            buttonContainer.style.display = 'none';
+
+            html2canvas(homeworkContent, {
+                scale: 2,
+                useCORS: true
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'p',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+                const ratio = canvasWidth / canvasHeight;
+
+                let imgWidth = pdfWidth - 20;
+                let imgHeight = imgWidth / ratio;
+
+                // Handle content that might be longer than one page
+                let position = 10;
+                if (imgHeight > pdfHeight - 20) {
+                    imgHeight = pdfHeight - 20; // Fit to page height with margin
+                    imgWidth = imgHeight * ratio;
+                }
+                const x = (pdfWidth - imgWidth) / 2;
+
+                pdf.addImage(imgData, 'PNG', x, position, imgWidth, imgHeight);
+                let heightLeft = canvas.height * (imgWidth / canvas.width) - (pdfHeight - 20);
+
+                while (heightLeft > 0) {
+                    position = - (pdfHeight - 20);
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', x, position, imgWidth, imgHeight);
+                    heightLeft -= (pdfHeight - 20);
+                }
+
+                pdf.save('Python_Homework_Advanced.pdf');
+
+                buttonContainer.style.display = 'block';
+            }).catch(err => {
+                console.error("Error creating PDF:", err);
+                buttonContainer.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+
+</html>
