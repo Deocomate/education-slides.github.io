@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Bài Tập Python Về Hàm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .exercise-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .code-block {
+            background-color: #1E293B;
+            color: #E2E8F0;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            white-space: pre-wrap;
+        }
+
+        .hint-content {
+            display: none;
+            background-color: #FEFCE8;
+            /* yellow-50 */
+            border-left: 4px solid #FACC15;
+            /* yellow-400 */
+            color: #713F12;
+            /* yellow-900 */
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900">10 Bài Tập Python Về Hàm</h1>
+            <p class="mt-4 text-lg text-slate-600">Luyện tập kỹ năng viết hàm trong Python từ cơ bản đến nâng cao.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Bài tập 1 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 1: Lời Chào Đơn Giản</h2>
+                <p class="mb-4">Viết hàm <code>chao_mung()</code> không có tham số, khi gọi hàm sẽ in ra màn hình chuỗi
+                    "Chào mừng bạn đến với Python!".</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">chao_mung()</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">Chào mừng bạn đến với Python!</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Sử dụng từ khóa <code>def</code> để định nghĩa một hàm. Bên trong hàm, dùng hàm
+                        <code>print()</code> để hiển thị chuỗi ra màn hình.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bài tập 2 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 2: Hàm Có Tham Số</h2>
+                <p class="mb-4">Viết hàm <code>chao_ban(ten)</code> nhận vào một tham số là <code>ten</code> (kiểu
+                    chuỗi) và in ra lời chào cá nhân, ví dụ: "Xin chào, An!".</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">chao_ban("An")</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">Xin chào, An!</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Hàm của bạn cần một tham số trong cặp dấu ngoặc đơn <code>()</code>. Bạn có thể dùng f-string
+                        (<code>f"Xin chào, {ten}!"</code>) để dễ dàng ghép chuỗi.</p>
+                </div>
+            </div>
+
+            <!-- Bài tập 3 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 3: Hàm Có Giá Trị Trả Về</h2>
+                <p class="mb-4">Viết hàm <code>tinh_tong(a, b)</code> nhận vào hai số <code>a</code> và <code>b</code>,
+                    sau đó <strong>trả về</strong> tổng của chúng.</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">ket_qua = tinh_tong(5, 7)
+                    print(ket_qua)</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">12</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Sử dụng từ khóa <code>return</code> để trả về một giá trị từ hàm. Kết quả của phép tính
+                        <code>a + b</code> sẽ được trả về.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bài tập 4 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 4: Kết Hợp If-Else</h2>
+                <p class="mb-4">Viết hàm <code>kiem_tra_chan_le(so)</code> nhận vào một số nguyên và trả về chuỗi "Số
+                    chẵn" nếu số đó là số chẵn, ngược lại trả về "Số lẻ".</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">print(kiem_tra_chan_le(10))
+                    print(kiem_tra_chan_le(7))</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">Số chẵn
+                    Số lẻ</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Sử dụng toán tử modulo <code>%</code> để kiểm tra số dư khi chia cho 2. Nếu
+                        <code>so % 2 == 0</code> thì đó là số chẵn. Dùng cấu trúc <code>if-else</code> để trả về chuỗi
+                        tương ứng.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bài tập 5 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 5: Kết Hợp Vòng Lặp</h2>
+                <p class="mb-4">Viết hàm <code>in_so(n)</code> nhận vào một số nguyên <code>n</code> và in ra các số từ
+                    1 đến <code>n</code>, mỗi số trên một dòng.</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">in_so(5)</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">1
+                    2
+                    3
+                    4
+                    5</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Sử dụng vòng lặp <code>for</code> kết hợp với hàm <code>range()</code>. Lưu ý rằng
+                        <code>range(1, n)</code> sẽ chỉ chạy đến <code>n-1</code>, bạn cần dùng
+                        <code>range(1, n + 1)</code>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bài tập 6 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 6: Trả Về Một Danh Sách</h2>
+                <p class="mb-4">Viết hàm <code>tao_danh_sach_binh_phuong(n)</code> nhận vào số nguyên <code>n</code> và
+                    trả về một danh sách (list) chứa bình phương của các số từ 1 đến <code>n</code>.</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">print(tao_danh_sach_binh_phuong(4))</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">[1, 4, 9, 16]</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Đầu tiên, hãy tạo một danh sách rỗng. Sau đó, dùng vòng lặp <code>for</code> để duyệt qua các số
+                        từ 1 đến <code>n</code>. Trong mỗi lần lặp, tính bình phương của số đó (<code>so * so</code>
+                        hoặc <code>so ** 2</code>) và dùng phương thức <code>.append()</code> để thêm vào danh sách.</p>
+                </div>
+            </div>
+
+            <!-- Bài tập 7 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 7: Tham Số Mặc Định</h2>
+                <p class="mb-4">Viết hàm <code>tinh_luy_thua(co_so, so_mu=2)</code>. Nếu chỉ truyền vào
+                    <code>co_so</code>, hàm sẽ tính bình phương. Nếu truyền cả hai, hàm sẽ tính <code>co_so</code> lũy
+                    thừa <code>so_mu</code>.
+                </p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">print(tinh_luy_thua(3, 4))
+                    print(tinh_luy_thua(5))</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">81
+                    25</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Khi định nghĩa hàm, bạn có thể gán giá trị mặc định cho tham số bằng dấu <code>=</code>. Sử dụng
+                        toán tử lũy thừa <code>**</code> để thực hiện phép tính.</p>
+                </div>
+            </div>
+
+            <!-- Bài tập 8 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-sky-600">Bài 8: Xử Lý Chuỗi</h2>
+                <p class="mb-4">Viết hàm <code>dem_nguyen_am(chuoi)</code> nhận vào một chuỗi và trả về số lượng các
+                    nguyên âm ('u', 'e', 'o', 'a', 'i') trong chuỗi đó (không phân biệt hoa thường).</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">print(dem_nguyen_am("Hello World"))</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">3</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Tạo một biến đếm bắt đầu từ 0. Dùng vòng lặp <code>for</code> để duyệt qua từng ký tự. Để xử lý
+                        không phân biệt hoa thường, hãy chuyển mỗi ký tự về chữ thường bằng phương thức
+                        <code>.lower()</code> trước khi so sánh. Nếu ký tự đó nằm trong chuỗi "ueoai", tăng biến đếm lên
+                        1.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bài tập 9 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-rose-600">Bài 9: Đệ Quy (Nâng cao)</h2>
+                <p class="mb-4">Viết hàm <code>tinh_giai_thua(n)</code> sử dụng <strong>đệ quy</strong> để tính giai
+                    thừa của một số nguyên không âm <code>n</code>. (Giai thừa của n là tích 1*2*...*n).</p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">print(tinh_giai_thua(5))</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">120</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Đệ quy là một hàm tự gọi lại chính nó. Bạn cần một "điểm dừng" (trường hợp cơ sở): nếu
+                        <code>n</code> bằng 0 hoặc 1, trả về 1. Nếu không, hàm sẽ trả về
+                        <code>n * tinh_giai_thua(n - 1)</code>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bài tập 10 -->
+            <div class="bg-white p-6 rounded-lg shadow-md exercise-card">
+                <h2 class="text-2xl font-bold mb-4 text-rose-600">Bài 10: Bài Toán Tổng Hợp (Nâng cao)</h2>
+                <p class="mb-4">Viết hàm <code>tim_so_nguyen_to(gioi_han)</code> nhận vào một số nguyên
+                    <code>gioi_han</code> và trả về một danh sách tất cả các số nguyên tố nhỏ hơn hoặc bằng
+                    <code>gioi_han</code>.
+                </p>
+
+                <h3 class="font-semibold mt-4 mb-2">Input:</h3>
+                <div class="code-block">print(tim_so_nguyen_to(20))</div>
+
+                <h3 class="font-semibold mt-4 mb-2">Output mong muốn:</h3>
+                <div class="code-block">[2, 3, 5, 7, 11, 13, 17, 19]</div>
+
+                <button onclick="toggleHint(this)"
+                    class="mt-4 bg-yellow-400 text-yellow-900 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors">Hiện
+                    Gợi Ý</button>
+                <div class="hint-content p-4 mt-2 rounded-md">
+                    <p>Cách tiếp cận tốt là tạo một hàm phụ, ví dụ <code>la_so_nguyen_to(so)</code>, để kiểm tra một số
+                        có phải là số nguyên tố không. Sau đó, trong hàm chính, bạn lặp từ 2 đến <code>gioi_han</code>,
+                        gọi hàm phụ này cho mỗi số và thêm vào danh sách kết quả nếu nó là số nguyên tố.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleHint(button) {
+            const hintContent = button.nextElementSibling;
+            if (hintContent.style.display === 'block') {
+                hintContent.style.display = 'none';
+                button.textContent = 'Hiện Gợi Ý';
+            } else {
+                hintContent.style.display = 'block';
+                button.textContent = 'Ẩn Gợi Ý';
+            }
+        }
+    </script>
+
+</body>
+
+</html>
