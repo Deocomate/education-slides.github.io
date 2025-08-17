@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng Hợp Kiến Thức Python Cơ Bản</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .code-block {
+            background-color: #2d3748; /* gray-800 */
+            color: #e2e8f0; /* gray-300 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .sidebar-link.active {
+            background-color: #4a5568; /* gray-700 */
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-64 bg-gray-900 text-white p-4 md:p-6 sticky top-0 md:h-screen">
+            <h1 class="text-2xl font-bold mb-6">Python Cơ Bản</h1>
+            <nav id="sidebar-nav">
+                <a href="#gioi-thieu" class="sidebar-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Giới thiệu</a>
+                <a href="#bien-kieu-du-lieu" class="sidebar-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Biến & Kiểu dữ liệu</a>
+                <a href="#toan-tu" class="sidebar-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Toán tử</a>
+                <a href="#cau-lenh-dieu-kien" class="sidebar-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Câu lệnh điều kiện</a>
+                <a href="#vong-lap" class="sidebar-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Vòng lặp</a>
+                <a href="#mang-list" class="sidebar-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Mảng (List)</a>
+                <a href="#vong-lap-ket-hop-mang" class="sidebar-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">Vòng lặp & Mảng</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10">
+            <!-- Giới thiệu -->
+            <section id="gioi-thieu" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2">Chào mừng đến với khóa tổng ôn Python!</h2>
+                <p class="mb-4 text-lg">Trang web này được tạo ra để giúp bạn hệ thống lại các kiến thức nền tảng quan trọng nhất trong ngôn ngữ lập trình Python. Hãy sử dụng menu bên trái để di chuyển đến các phần kiến thức bạn muốn ôn tập.</p>
+                <p class="text-lg">Mỗi phần đều có lý thuyết, ví dụ minh họa và bài tập thực hành để bạn củng cố kiến thức. Chúc bạn học tốt!</p>
+            </section>
+
+            <!-- Biến và Kiểu dữ liệu -->
+            <section id="bien-kieu-du-lieu" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">1. Biến và Kiểu dữ liệu</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Biến là gì?</h3>
+                        <p>Trong lập trình, biến giống như một chiếc hộp có nhãn dán, dùng để lưu trữ dữ liệu. Bạn có thể đặt tên cho "chiếc hộp" (tên biến) và bỏ vào đó một giá trị. Giá trị này có thể được thay đổi trong quá trình chương trình chạy.</p>
+                        <p class="mt-2"><strong>Quy tắc đặt tên biến:</strong></p>
+                        <ul class="list-disc list-inside ml-4">
+                            <li>Tên biến có thể chứa chữ cái (a-z, A-Z), số (0-9) và dấu gạch dưới (_).</li>
+                            <li>Tên biến không được bắt đầu bằng số.</li>
+                            <li>Tên biến phân biệt chữ hoa, chữ thường (`age` và `Age` là hai biến khác nhau).</li>
+                            <li>Nên đặt tên biến có ý nghĩa, dễ hiểu (ví dụ: `user_name`, `score` thay vì `x`, `y`).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Các kiểu dữ liệu cơ bản</h3>
+                        <p>Python có nhiều kiểu dữ liệu, dưới đây là những kiểu cơ bản nhất:</p>
+                        <ul class="list-disc list-inside ml-4 mt-2 space-y-2">
+                            <li><strong>Số nguyên (Integer - `int`):</strong> Các số nguyên, không có phần thập phân. Ví dụ: 10, -5, 0.</li>
+                            <li><strong>Số thực (Float - `float`):</strong> Các số có phần thập phân. Ví dụ: 3.14, -0.5, 2.0.</li>
+                            <li><strong>Chuỗi (String - `str`):</strong> Dãy các ký tự, được đặt trong dấu nháy đơn `'` hoặc nháy kép `"`. Ví dụ: "Hello Python", '123'.</li>
+                            <li><strong>Logic (Boolean - `bool`):</strong> Chỉ có hai giá trị: `True` (đúng) hoặc `False` (sai).</li>
+                        </ul>
+                        <p class="mt-4"><strong>Ví dụ:</strong></p>
+                        <pre class="code-block"><code># Khai báo biến và gán giá trị
+student_name = "Nguyễn Văn A"  # Kiểu str
+age = 18                     # Kiểu int
+score = 8.5                  # Kiểu float
+is_student = True            # Kiểu bool
+
+# In giá trị và kiểu dữ liệu của các biến
+print("Tên:", student_name, "- Kiểu:", type(student_name))
+print("Tuổi:", age, "- Kiểu:", type(age))
+print("Điểm:", score, "- Kiểu:", type(score))
+print("Là học sinh?:", is_student, "- Kiểu:", type(is_student))</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Bài tập thực hành</h3>
+                        <div class="bg-white p-4 rounded-lg shadow space-y-4">
+                            <div class="exercise">
+                                <p><strong>Bài 1 (Dễ):</strong> Khai báo 3 biến: `ten_sach` (kiểu chuỗi), `so_trang` (kiểu số nguyên), `gia_tien` (kiểu số thực). Gán giá trị cho chúng và in ra màn hình.</p>
+                            </div>
+                            <div class="exercise">
+                                <p><strong>Bài 2 (Trung bình):</strong> Viết chương trình yêu cầu người dùng nhập tên và năm sinh, sau đó tính tuổi của họ và in ra màn hình một câu chào mừng. (Gợi ý: dùng hàm `input()` để nhập và `int()` để chuyển chuỗi thành số).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Toán tử -->
+            <section id="toan-tu" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">2. Toán tử</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Toán tử số học</h3>
+                        <p>Dùng để thực hiện các phép toán cơ bản.</p>
+                        <pre class="code-block"><code>a = 10
+b = 3
+
+print("a + b =", a + b)    # Cộng: 13
+print("a - b =", a - b)    # Trừ: 7
+print("a * b =", a * b)    # Nhân: 30
+print("a / b =", a / b)    # Chia: 3.333...
+print("a // b =", a // b)   # Chia lấy phần nguyên: 3
+print("a % b =", a % b)     # Chia lấy phần dư: 1
+print("a ** b =", a ** b)   # Lũy thừa: 10^3 = 1000</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Toán tử so sánh</h3>
+                        <p>Dùng để so sánh hai giá trị, kết quả trả về là `True` hoặc `False`.</p>
+                        <pre class="code-block"><code>x = 5
+y = 8
+
+print("x == y:", x == y)  # Bằng: False
+print("x != y:", x != y)  # Không bằng: True
+print("x > y:", x > y)   # Lớn hơn: False
+print("x < y:", x < y)   # Nhỏ hơn: True
+print("x >= 5:", x >= 5)  # Lớn hơn hoặc bằng: True
+print("y <= 8:", y <= 8)  # Nhỏ hơn hoặc bằng: True</code></pre>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-semibold mb-2">Toán tử gán</h3>
+                        <p>Dùng để gán giá trị cho biến.</p>
+                        <pre class="code-block"><code>c = 15          # Gán giá trị 15 cho c
+c += 5          # Tương đương c = c + 5. Bây giờ c = 20
+c -= 2          # Tương đương c = c - 2. Bây giờ c = 18
+c *= 10         # Tương đương c = c * 10. Bây giờ c = 180
+print("Giá trị cuối của c là:", c)</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Bài tập thực hành</h3>
+                        <div class="bg-white p-4 rounded-lg shadow space-y-4">
+                            <div class="exercise">
+                                <p><strong>Bài 1 (Dễ):</strong> Viết chương trình tính diện tích hình chữ nhật khi biết chiều dài và chiều rộng (do người dùng nhập vào).</p>
+                            </div>
+                            <div class="exercise">
+                                <p><strong>Bài 2 (Trung bình):</strong> Viết chương trình kiểm tra một số nguyên nhập vào là số chẵn hay số lẻ. (Gợi ý: dùng toán tử chia lấy dư `%`).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Câu lệnh điều kiện -->
+            <section id="cau-lenh-dieu-kien" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">3. Câu lệnh điều kiện (if, elif, else)</h2>
+                <p class="mb-4">Câu lệnh điều kiện cho phép chương trình rẽ nhánh, thực hiện các khối lệnh khác nhau tùy thuộc vào một điều kiện có đúng (`True`) hay không.</p>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Cấu trúc `if`</h3>
+                        <p>Chỉ thực hiện khối lệnh nếu điều kiện đúng.</p>
+                        <pre class="code-block"><code>diem_thi = 8.0
+if diem_thi >= 5.0:
+    print("Bạn đã qua môn!")
+# Nếu diem_thi < 5.0, không có gì được in ra</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Cấu trúc `if-else`</h3>
+                        <p>Thực hiện khối lệnh `if` nếu điều kiện đúng, ngược lại thực hiện khối lệnh `else`.</p>
+                        <pre class="code-block"><code>nhiet_do = 15
+if nhiet_do > 25:
+    print("Trời nóng, nên bật điều hòa.")
+else:
+    print("Trời mát mẻ, không cần bật điều hòa.")</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Cấu trúc `if-elif-else`</h3>
+                        <p>Kiểm tra nhiều điều kiện một cách tuần tự. `elif` là viết tắt của "else if".</p>
+                        <pre class="code-block"><code>diem_trung_binh = 8.5
+
+if diem_trung_binh >= 8.0:
+    print("Xếp loại: Giỏi")
+elif diem_trung_binh >= 6.5:
+    print("Xếp loại: Khá")
+elif diem_trung_binh >= 5.0:
+    print("Xếp loại: Trung bình")
+else:
+    print("Xếp loại: Yếu")</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Bài tập thực hành</h3>
+                        <div class="bg-white p-4 rounded-lg shadow space-y-4">
+                            <div class="exercise">
+                                <p><strong>Bài 1 (Dễ):</strong> Viết chương trình nhập vào một số, kiểm tra xem số đó là số dương, số âm hay là số 0.</p>
+                            </div>
+                            <div class="exercise">
+                                <p><strong>Bài 2 (Khó):</strong> Viết chương trình tính tiền điện. Nhập vào số kWh tiêu thụ và tính tiền theo quy tắc:
+                                    <ul class="list-disc list-inside ml-4">
+                                        <li>Bậc 1: Từ 0-50 kWh: 1.678đ/kWh</li>
+                                        <li>Bậc 2: Từ 51-100 kWh: 1.734đ/kWh</li>
+                                        <li>Bậc 3: Từ 101 kWh trở lên: 2.014đ/kWh</li>
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vòng lặp -->
+            <section id="vong-lap" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">4. Vòng lặp</h2>
+                <p class="mb-4">Vòng lặp cho phép thực hiện lặp đi lặp lại một khối lệnh nhiều lần.</p>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Vòng lặp `for` và hàm `range()`</h3>
+                        <p>Vòng lặp `for` được sử dụng để lặp qua một chuỗi (ví dụ: list, string, range).</p>
+                        <p>Hàm `range(start, stop, step)` tạo ra một dãy số. `start` (không bắt buộc, mặc định là 0), `stop` (bắt buộc), `step` (không bắt buộc, mặc định là 1).</p>
+                        <pre class="code-block"><code># In các số từ 0 đến 4
+print("Các số từ 0 đến 4:")
+for i in range(5):  # Tương đương range(0, 5, 1)
+    print(i)
+
+# In các số chẵn từ 2 đến 10
+print("\nCác số chẵn từ 2 đến 10:")
+for i in range(2, 11, 2):
+    print(i)</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Vòng lặp `while`</h3>
+                        <p>Thực hiện khối lệnh miễn là điều kiện lặp còn đúng (`True`).</p>
+                        <pre class="code-block"><code># Đếm ngược từ 5 về 1
+count = 5
+while count > 0:
+    print(count)
+    count -= 1  # Rất quan trọng: phải có sự thay đổi để điều kiện dừng
+print("Bắt đầu!")</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Lệnh `break` và `continue`</h3>
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li><strong>`break`</strong>: Thoát khỏi vòng lặp ngay lập tức.</li>
+                            <li><strong>`continue`</strong>: Bỏ qua lần lặp hiện tại và chuyển sang lần lặp tiếp theo.</li>
+                        </ul>
+                        <pre class="code-block"><code># Ví dụ break: Tìm số đầu tiên chia hết cho 5 trong khoảng 1-10
+for i in range(1, 11):
+    if i % 5 == 0:
+        print("Tìm thấy số đầu tiên chia hết cho 5 là:", i)
+        break
+
+# Ví dụ continue: In ra các số không chia hết cho 3 trong khoảng 1-10
+for i in range(1, 11):
+    if i % 3 == 0:
+        continue
+    print(i, end=" ") # In trên cùng một dòng</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Bài tập thực hành</h3>
+                        <div class="bg-white p-4 rounded-lg shadow space-y-4">
+                            <div class="exercise">
+                                <p><strong>Bài 1 (Dễ):</strong> Viết chương trình in ra bảng cửu chương của một số n (n nhập từ bàn phím).</p>
+                            </div>
+                            <div class="exercise">
+                                <p><strong>Bài 2 (Trung bình):</strong> Viết chương trình tính tổng các số từ 1 đến n.</p>
+                            </div>
+                            <div class="exercise">
+                                <p><strong>Bài 3 (Khó):</strong> Viết chương trình đoán số. Máy tính sẽ "nghĩ" ra một số từ 1-100. Người dùng nhập số để đoán, máy tính sẽ trả lời "Lớn hơn" hoặc "Nhỏ hơn" cho đến khi người dùng đoán đúng.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Mảng (List) -->
+            <section id="mang-list" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">5. Mảng (List)</h2>
+                <p class="mb-4">List là một kiểu dữ liệu cho phép lưu trữ một tập hợp các giá trị (có thể khác kiểu dữ liệu) theo một thứ tự nhất định. Các phần tử trong list được đặt trong cặp dấu ngoặc vuông `[]` và cách nhau bởi dấu phẩy.</p>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Tạo và truy cập List</h3>
+                        <p>Chỉ số (index) của list bắt đầu từ 0.</p>
+                        <pre class="code-block"><code># Tạo một list
+trai_cay = ["táo", "chuối", "cam", "dâu"]
+print("List trái cây:", trai_cay)
+
+# Truy cập phần tử
+print("Phần tử đầu tiên:", trai_cay[0])  # táo
+print("Phần tử thứ ba:", trai_cay[2])   # cam
+print("Phần tử cuối cùng:", trai_cay[-1]) # dâu</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Thêm, sửa, xóa phần tử</h3>
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li><strong>Thêm:</strong> Dùng `append()` để thêm vào cuối, `insert()` để chèn vào vị trí cụ thể.</li>
+                            <li><strong>Sửa:</strong> Gán giá trị mới thông qua chỉ số.</li>
+                            <li><strong>Xóa:</strong> Dùng `remove()` để xóa giá trị cụ thể, `pop()` để xóa theo chỉ số, `del` để xóa theo chỉ số.</li>
+                        </ul>
+                        <pre class="code-block"><code>mon_hoc = ["Toán", "Lý", "Hóa"]
+print("List ban đầu:", mon_hoc)
+
+# Thêm phần tử
+mon_hoc.append("Sinh")
+print("Sau khi append:", mon_hoc)
+mon_hoc.insert(1, "Văn") # Chèn "Văn" vào vị trí index 1
+print("Sau khi insert:", mon_hoc)
+
+# Sửa phần tử
+mon_hoc[2] = "Anh" # Thay "Lý" bằng "Anh"
+print("Sau khi sửa:", mon_hoc)
+
+# Xóa phần tử
+mon_hoc.remove("Hóa") # Xóa giá trị "Hóa"
+print("Sau khi remove:", mon_hoc)
+
+phan_tu_bi_xoa = mon_hoc.pop(0) # Xóa phần tử ở index 0 ("Toán")
+print("Phần tử bị xóa:", phan_tu_bi_xoa)
+print("Sau khi pop:", mon_hoc)
+
+del mon_hoc[0] # Xóa phần tử còn lại đầu tiên ("Văn")
+print("Sau khi del:", mon_hoc)</code></pre>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-semibold mb-2">Bài tập thực hành</h3>
+                        <div class="bg-white p-4 rounded-lg shadow space-y-4">
+                            <div class="exercise">
+                                <p><strong>Bài 1 (Dễ):</strong> Tạo một list chứa tên 5 người bạn. Sau đó:
+                                    <ul class="list-decimal list-inside ml-4">
+                                        <li>In ra tên người bạn ở vị trí thứ 3.</li>
+                                        <li>Thêm một người bạn mới vào cuối danh sách.</li>
+                                        <li>Thay thế tên người bạn ở vị trí đầu tiên bằng một tên khác.</li>
+                                        <li>In ra list cuối cùng.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vòng lặp kết hợp với mảng -->
+            <section id="vong-lap-ket-hop-mang" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">6. Vòng lặp kết hợp với Mảng (List)</h2>
+                <p class="mb-4">Đây là một trong những ứng dụng phổ biến nhất của vòng lặp `for`: duyệt qua từng phần tử của một list để xử lý chúng.</p>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2">Duyệt qua các phần tử</h3>
+                        <pre class="code-block"><code># Ví dụ 1: In ra từng món ăn trong list
+thuc_don = ["Phở", "Bún chả", "Nem rán", "Cơm rang"]
+for mon_an in thuc_don:
+    print("Hôm nay ăn:", mon_an)
+
+# Ví dụ 2: Tính tổng các số trong một list
+diem_so = [7, 8, 9, 5, 10]
+tong_diem = 0
+for diem in diem_so:
+    tong_diem += diem
+
+print("Tổng điểm là:", tong_diem)
+# Tính điểm trung bình
+diem_trung_binh = tong_diem / len(diem_so) # len() trả về số phần tử của list
+print("Điểm trung bình là:", diem_trung_binh)</code></pre>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-semibold mb-2">Bài tập thực hành</h3>
+                        <div class="bg-white p-4 rounded-lg shadow space-y-4">
+                            <div class="exercise">
+                                <p><strong>Bài 1 (Dễ):</strong> Cho một list các số nguyên. Viết chương trình đếm xem có bao nhiêu số chẵn trong list đó.</p>
+                            </div>
+                            <div class="exercise">
+                                <p><strong>Bài 2 (Trung bình):</strong> Cho một list các số. Viết chương trình tìm ra số lớn nhất trong list mà không dùng hàm `max()`.</p>
+                            </div>
+                            <div class="exercise">
+                                <p><strong>Bài 3 (Khó):</strong> Viết chương trình cho phép người dùng nhập vào các sở thích, mỗi sở thích cách nhau bởi dấu phẩy. Sau đó, chương trình sẽ tách các sở thích ra, lưu vào một list và in ra từng sở thích trên một dòng riêng biệt.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.sidebar-link');
+            const sections = document.querySelectorAll('.content-section');
+
+            function showSection(hash) {
+                // Nếu không có hash, hiển thị phần giới thiệu
+                if (!hash) {
+                    hash = '#gioi-thieu';
+                }
+
+                sections.forEach(section => {
+                    if ('#' + section.id === hash) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+
+                links.forEach(link => {
+                    if (link.getAttribute('href') === hash) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+
+            // Xử lý khi click vào link sidebar
+            document.getElementById('sidebar-nav').addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    e.preventDefault();
+                    const hash = e.target.getAttribute('href');
+                    history.pushState(null, null, hash); // Cập nhật URL mà không reload trang
+                    showSection(hash);
+                    // Cuộn lên đầu trang trên mobile
+                    if (window.innerWidth < 768) {
+                        window.scrollTo(0, 0);
+                    }
+                }
+            });
+
+            // Xử lý nút back/forward của trình duyệt
+            window.addEventListener('popstate', function() {
+                showSection(window.location.hash);
+            });
+
+            // Hiển thị section ban đầu dựa trên URL
+            showSection(window.location.hash);
+        });
+    </script>
+
+</body>
+</html>
