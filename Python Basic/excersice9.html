@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Exercises for Students</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-3">Python Programming Challenges</h1>
+            <p class="text-lg text-gray-600">Practice your programming logic with hints and visual demonstrations.</p>
+        </header>
+
+        <main class="space-y-8">
+            <!-- ========== BASIC EXERCISES ========== -->
+
+            <!-- Exercise 1 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-blue-700">Exercise 1: Odd or Even?</h2>
+                    <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">Easy</span>
+                </div>
+                <div class="mt-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Write a
+                        function that takes an integer and checks if it's odd or even.</p>
+                </div>
+            </div>
+
+            <!-- Exercise 2 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-blue-700">Exercise 2: Sum of a List</h2>
+                    <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">Easy</span>
+                </div>
+                <div class="mt-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Given a list
+                        of integers, use a `for` loop to calculate the sum of all its elements.</p>
+                </div>
+            </div>
+
+            <!-- Exercise 3 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-amber-600">Exercise 3: Find the Largest Number</h2>
+                    <span class="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full">Medium</span>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Write a
+                        function that takes a list of numbers and returns the largest one without using the built-in
+                        `max()` function.</p>
+                    <div class="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg">
+                        <h3 class="font-semibold text-blue-800 flex items-center"><i
+                                class="fa-solid fa-lightbulb mr-2"></i>Hint</h3>
+                        <ul class="list-disc list-inside mt-2 text-blue-700">
+                            <li>Assume the first element is the largest, then loop through the remaining elements to
+                                compare.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 4 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-amber-600">Exercise 4: Multiplication Table</h2>
+                    <span class="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full">Medium</span>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Write a
+                        program that prints the multiplication tables from 2 to 9.</p>
+                    <div class="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg">
+                        <h3 class="font-semibold text-blue-800 flex items-center"><i
+                                class="fa-solid fa-lightbulb mr-2"></i>Hint</h3>
+                        <ul class="list-disc list-inside mt-2 text-blue-700">
+                            <li>You will need two nested `for` loops.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 5 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-amber-600">Exercise 5: Drawing a Random Polygon</h2>
+                    <span class="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full">Medium</span>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Write a
+                        function to draw a regular polygon with a random number of sides (from 3 to 8) and a random
+                        color.</p>
+                    <div class="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg">
+                        <h3 class="font-semibold text-blue-800 flex items-center"><i
+                                class="fa-solid fa-lightbulb mr-2"></i>Hint</h3>
+                        <ul class="list-disc list-inside mt-2 text-blue-700">
+                            <li>The turning angle for each vertex of an N-sided regular polygon is `360 / N`.</li>
+                            <li>Use the `random` library to pick the number of sides and the color.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== ADVANCED EXERCISES (WITH VISUALS) ========== -->
+
+            <!-- Exercise 6 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-red-600">Exercise 6: Drawing Nested Squares</h2>
+                    <span class="bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full">Hard</span>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Draw multiple
+                        squares, each rotated slightly from the previous one, to create a spiral effect.</p>
+
+                    <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 flex items-center mb-2"><i
+                                class="fa-solid fa-eye mr-2"></i>Result Preview</h3>
+                        <canvas id="demo-canvas-6" width="300" height="200"
+                            class="bg-white border rounded-md mx-auto block"></canvas>
+                    </div>
+
+                    <div class="mt-4 bg-gray-900 text-white rounded-md p-4">
+                        <h3 class="font-semibold text-gray-300 flex items-center mb-2"><i
+                                class="fa-solid fa-diagram-project mr-2"></i>Pseudocode / Logic</h3>
+                        <pre><code>loop 36 times:
+  // Draw one square
+  loop 4 times:
+    move_forward(150)
+    turn_right(90)
+  
+  // Rotate for the next square
+  turn_right(10)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 7 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-red-600">Exercise 7: Drawing a Circle from Squares</h2>
+                    <span class="bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full">Hard</span>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Write a
+                        function that draws a square, then call this function repeatedly, rotating slightly each time,
+                        to create a circular pattern.</p>
+                    <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 flex items-center mb-2"><i
+                                class="fa-solid fa-eye mr-2"></i>Result Preview</h3>
+                        <canvas id="demo-canvas-7" width="300" height="200"
+                            class="bg-black border rounded-md mx-auto block"></canvas>
+                    </div>
+                    <div class="mt-4 bg-gray-900 text-white rounded-md p-4">
+                        <h3 class="font-semibold text-gray-300 flex items-center mb-2"><i
+                                class="fa-solid fa-diagram-project mr-2"></i>Pseudocode / Logic</h3>
+                        <pre><code>function draw_square(turtle, length):
+  loop 4 times:
+    turtle.forward(length)
+    turtle.right(90)
+
+// Main program
+create a turtle
+loop 72 times:
+  call draw_square(my_turtle, 100)
+  my_turtle.right(5)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 8 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-red-600">Exercise 8: Turtle Race</h2>
+                    <span class="bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full">Hard</span>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Create a
+                        turtle race. Make multiple turtles, have them move forward by a random amount, and see which one
+                        reaches the finish line first.</p>
+                    <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 flex items-center mb-2"><i
+                                class="fa-solid fa-eye mr-2"></i>Preview (Starting Line)</h3>
+                        <canvas id="demo-canvas-8" width="300" height="200"
+                            class="bg-white border rounded-md mx-auto block"></canvas>
+                    </div>
+                    <div class="mt-4 bg-gray-900 text-white rounded-md p-4">
+                        <h3 class="font-semibold text-gray-300 flex items-center mb-2"><i
+                                class="fa-solid fa-diagram-project mr-2"></i>Pseudocode / Logic</h3>
+                        <pre><code>// Turtle setup
+create an empty list of turtles
+for i in range(6):
+  create a new_turtle, set its color, move to starting line
+  add new_turtle to the list of turtles
+
+// Start the race
+while the race is not over:
+  for each turtle in the list of turtles:
+    check if turtle has crossed the finish line
+    move_forward(a_random_distance)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 9 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg border-2 border-red-500">
+                <div class="flex justify-between items-start pb-4 border-b">
+                    <h2 class="text-2xl font-semibold text-gray-900">Exercise 9: Drawing the Vietnamese Flag 🇻🇳</h2>
+                    <span class="bg-gray-800 text-white text-sm font-medium px-3 py-1 rounded-full">Very Hard</span>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <p class="text-gray-700"><strong class="font-medium text-gray-900">Objective:</strong> Use the
+                        `turtle` library to draw the flag of Vietnam.</p>
+                    <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 flex items-center mb-2"><i
+                                class="fa-solid fa-eye mr-2"></i>Result Preview</h3>
+                        <canvas id="demo-canvas-9" width="300" height="200"
+                            class="border rounded-md mx-auto block"></canvas>
+                    </div>
+                    <div class="mt-4 bg-gray-900 text-white rounded-md p-4">
+                        <h3 class="font-semibold text-gray-300 flex items-center mb-2"><i
+                                class="fa-solid fa-diagram-project mr-2"></i>Pseudocode / Logic</h3>
+                        <pre><code>// --- Part 1: Draw the red background ---
+draw and fill a large red rectangle
+
+// --- Part 2: Draw the yellow star ---
+move to the center
+draw and fill a 5-pointed yellow star</code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 py-6 border-t">
+            <p class="text-gray-500">Happy coding and good luck to all students!</p>
+        </footer>
+    </div>
+
+    <!-- SCRIPT FOR CANVAS DEMONSTRATIONS -->
+    <script>
+        window.onload = function () {
+            drawSpiralSquares('demo-canvas-6');
+            drawCircleFromSquares('demo-canvas-7');
+            drawTurtleRaceSetup('demo-canvas-8');
+            drawVietnamFlag('demo-canvas-9');
+        };
+
+        // Function for Exercise 6
+        function drawSpiralSquares(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const size = 120;
+
+            ctx.strokeStyle = '#00529B'; // Blue color
+            ctx.lineWidth = 1.5;
+
+            for (let i = 0; i < 36; i++) {
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(i * 10 * Math.PI / 180);
+                ctx.strokeRect(-size / 2, -size / 2, size, size);
+                ctx.restore();
+            }
+        }
+
+        // Function for Exercise 7
+        function drawCircleFromSquares(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const size = 90;
+
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < 72; i++) {
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(i * 5 * Math.PI / 180);
+                ctx.strokeRect(-size / 2, -size / 2, size, size);
+                ctx.restore();
+            }
+        }
+
+        // Function for Exercise 8
+        function drawTurtleRaceSetup(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+            const startX = 20;
+
+            // Draw finish line
+            ctx.beginPath();
+            ctx.setLineDash([5, 3]);
+            ctx.moveTo(canvas.width - 20, 10);
+            ctx.lineTo(canvas.width - 20, canvas.height - 10);
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+
+            // Draw "turtles" (triangles)
+            for (let i = 0; i < colors.length; i++) {
+                const y = 25 + i * 30;
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.moveTo(startX, y);
+                ctx.lineTo(startX + 15, y + 5);
+                ctx.lineTo(startX, y + 10);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        // Function for Exercise 9
+        function drawVietnamFlag(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+
+            // Red background
+            ctx.fillStyle = '#DA251D';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Yellow star
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const outerRadius = 60;
+            const innerRadius = outerRadius / 2.5;
+
+            ctx.fillStyle = '#FFFF00';
+            ctx.beginPath();
+
+            for (let i = 0; i < 5; i++) {
+                let angle = (i * 72 - 90) * Math.PI / 180;
+                ctx.lineTo(centerX + outerRadius * Math.cos(angle), centerY + outerRadius * Math.sin(angle));
+                angle += (36 * Math.PI / 180);
+                ctx.lineTo(centerX + innerRadius * Math.cos(angle), centerY + innerRadius * Math.sin(angle));
+            }
+
+            ctx.closePath();
+            ctx.fill();
+        }
+
+    </script>
+
+</body>
+
+</html>
