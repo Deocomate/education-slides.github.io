@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hành Trình Huế 3 Ngày 2 Đêm - Trực Quan Lịch Trình</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Merriweather Sans"', 'ui-sans-serif', 'system-ui'],
+                        body: ['"Inter"', 'ui-sans-serif', 'system-ui']
+                    },
+                    colors: {
+                        imperial: {
+                            50: '#f9f7f3',
+                            100: '#f2ede3',
+                            200: '#e1d3bb',
+                            300: '#d0b892',
+                            400: '#b99763',
+                            500: '#a6783b',
+                            600: '#855d26',
+                            700: '#62441b',
+                            800: '#432d11',
+                            900: '#251808'
+                        }
+                    },
+                    boxShadow: {
+                        glow: '0 0 0 1px rgba(166,120,59,.15),0 4px 18px -2px rgba(0,0,0,.15)'
+                    },
+                    animation: {
+                        fadeIn: 'fadeIn .8s ease forwards',
+                        slideUp: 'slideUp .6s ease both',
+                        pulseSoft: 'pulseSoft 4s ease-in-out infinite',
+                        dash: 'dash 24s linear infinite'
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(18px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' }
+                        },
+                        pulseSoft: { '0%,100%': { opacity: .35 }, '50%': { opacity: .9 } },
+                        dash: {
+                            '0%': { strokeDashoffset: 1000 },
+                            '100%': { strokeDashoffset: 0 }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Scrollbar refinement */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f4f1ec;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c6a170;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a6783b;
+        }
+
+        .gradient-gold {
+            background: linear-gradient(135deg, #a6783b 0%, #d0b892 55%, #f2ede3 100%);
+        }
+
+        .backdrop-card {
+            backdrop-filter: blur(10px) saturate(150%);
+            background: linear-gradient(155deg, rgba(255, 255, 255, .85), rgba(255, 255, 255, .65));
+        }
+
+        .dark .backdrop-card {
+            background: linear-gradient(155deg, rgba(40, 31, 20, .85), rgba(40, 31, 20, .55));
+        }
+
+        .timeline-line:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            transform: translateX(-50%);
+            height: 100%;
+            background: linear-gradient(to bottom, #a6783b, #d0b892, #a6783b);
+            border-radius: 2px;
+            opacity: .25;
+        }
+
+        .day-anchor:target {
+            scroll-margin-top: 7rem;
+            animation: fadeIn .6s ease, pulseSoft 4s ease-in-out 1;
+            outline: 2px solid #a6783b;
+            outline-offset: 4px;
+            border-radius: .5rem;
+        }
+
+        .tag {
+            @apply text-xs font-medium px-2 py-1 rounded-full bg-imperial-100 text-imperial-700;
+        }
+
+        .dark .tag {
+            @apply bg-imperial-700 text-imperial-100;
+        }
+
+        .filter-active {
+            @apply bg-imperial-600 text-white shadow;
+        }
+    </style>
+</head>
+
+<body
+    class="font-body antialiased bg-imperial-50 text-stone-800 dark:bg-stone-950 dark:text-stone-100 transition-colors duration-500">
+    <!-- HEADER -->
+    <header class="relative overflow-hidden">
+        <div class="absolute inset-0 opacity-30 dark:opacity-25">
+            <svg class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="lg" x1="0" x2="1" y1="0" y2="1">
+                        <stop stop-color="#a6783b" offset="0" />
+                        <stop stop-color="#d0b892" offset=".5" />
+                        <stop stop-color="#432d11" offset="1" />
+                    </linearGradient>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#lg)" opacity=".07"></rect>
+                <g stroke="#a6783b" stroke-width="0.35" fill="none" stroke-dasharray="4 6">
+                    <circle cx="15%" cy="20%" r="90" class="animate-pulseSoft"></circle>
+                    <circle cx="85%" cy="70%" r="120" class="animate-pulseSoft" style="animation-delay:1.6s"></circle>
+                </g>
+            </svg>
+        </div>
+        <div class="max-w-7xl mx-auto px-5 pt-10 pb-16 relative z-10">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-end">
+                <div class="flex-1">
+                    <h1
+                        class="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight bg-clip-text text-transparent gradient-gold leading-tight animate-slideUp">
+                        Hành Trình Về Cố Đô<br class="hidden sm:block" />Huế 3 Ngày 2 Đêm
+                    </h1>
+                    <p class="mt-4 max-w-2xl text-lg text-stone-700 dark:text-stone-300 animate-fadeIn">
+                        Lịch trình tối ưu cân bằng giữa di sản - ẩm thực - nhịp sống an nhiên. Thiết kế để bạn trải
+                        nghiệm sâu mà vẫn thư thái.
+                    </p>
+                    <div class="mt-5 flex flex-wrap gap-3">
+                        <span class="tag">Tối ưu di chuyển</span>
+                        <span class="tag">Ẩm thực bản địa</span>
+                        <span class="tag">Trải nghiệm văn hóa</span>
+                        <span class="tag">Chi phí minh bạch</span>
+                    </div>
+                </div>
+                <div class="w-full lg:w-80">
+                    <div
+                        class="backdrop-card rounded-xl p-5 shadow-glow border border-imperial-200 dark:border-imperial-700 animate-slideUp">
+                        <h2 class="font-semibold mb-2 text-imperial-700 dark:text-imperial-200">Tổng Quan Nhanh</h2>
+                        <ul class="space-y-2 text-sm leading-relaxed">
+                            <li><strong>Thời lượng:</strong> 3 ngày 2 đêm</li>
+                            <li><strong>Phong cách:</strong> Văn hóa - Ẩm thực - Thư thái</li>
+                            <li><strong>Ngân sách ước tính:</strong> 3,135,000 - 4,345,000 VNĐ</li>
+                            <li><strong>Thời điểm lý tưởng:</strong> Tháng 2 - 4 & 8 - 11</li>
+                            <li><strong>Phương tiện linh hoạt:</strong> Grab / Taxi + Xe máy + Xích lô</li>
+                        </ul>
+                        <div class="mt-4 flex gap-2">
+                            <button id="btnToggleDark"
+                                class="flex-1 text-sm font-medium px-3 py-2 rounded-lg bg-imperial-600 text-white hover:bg-imperial-700 transition">Dark
+                                / Light</button>
+                            <button id="btnPrint"
+                                class="flex-1 text-sm font-medium px-3 py-2 rounded-lg border border-imperial-400 text-imperial-700 hover:bg-imperial-600 hover:text-white dark:text-imperial-200 dark:border-imperial-500 transition">In
+                                / PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION BAR -->
+    <nav
+        class="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-stone-900/70 border-b border-imperial-200 dark:border-imperial-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-5 py-3 flex flex-wrap items-center gap-3 text-sm">
+            <a href="#tongquan"
+                class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Tổng quan</a>
+            <a href="#chi-phi"
+                class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Chi phí</a>
+            <a href="#lich-trinh"
+                class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Lịch trình</a>
+            <a href="#ngay-1"
+                class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Ngày 1</a>
+            <a href="#ngay-2"
+                class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Ngày 2</a>
+            <a href="#ngay-3"
+                class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Ngày 3</a>
+            <a href="#am-thuc" class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Ẩm
+                thực</a>
+            <a href="#cafe" class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Cà
+                phê</a>
+            <a href="#qua" class="navlink font-medium text-stone-700 hover:text-imperial-600 dark:text-stone-300">Quà
+                mang về</a>
+            <div class="ml-auto flex gap-2">
+                <button id="btnFilterAll"
+                    class="px-3 py-1.5 rounded-md text-xs font-semibold bg-imperial-600 text-white">All</button>
+                <button data-filter="heritage"
+                    class="filter-btn px-3 py-1.5 rounded-md text-xs font-semibold bg-imperial-100 text-imperial-700 dark:bg-imperial-800 dark:text-imperial-200">Di
+                    sản</button>
+                <button data-filter="food"
+                    class="filter-btn px-3 py-1.5 rounded-md text-xs font-semibold bg-imperial-100 text-imperial-700 dark:bg-imperial-800 dark:text-imperial-200">Ẩm
+                    thực</button>
+                <button data-filter="relax"
+                    class="filter-btn px-3 py-1.5 rounded-md text-xs font-semibold bg-imperial-100 text-imperial-700 dark:bg-imperial-800 dark:text-imperial-200">Thư
+                    giãn</button>
+                <button data-filter="experience"
+                    class="filter-btn px-3 py-1.5 rounded-md text-xs font-semibold bg-imperial-100 text-imperial-700 dark:bg-imperial-800 dark:text-imperial-200">Trải
+                    nghiệm</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-5 py-12 space-y-20">
+
+        <!-- Tổng quan -->
+        <section id="tongquan" class="space-y-8 animate-fadeIn">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">I</span>
+                Khởi Hành & Chuẩn Bị
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div
+                    class="backdrop-card p-6 rounded-xl shadow-glow border border-imperial-200 dark:border-imperial-700">
+                    <h3 class="font-semibold text-lg mb-3 text-imperial-700 dark:text-imperial-200">Phương tiện đề xuất
+                    </h3>
+                    <ul class="list-disc pl-5 text-sm space-y-2">
+                        <li><strong>Taxi / Grab:</strong> Đón - tiễn & khung giờ nắng nóng.</li>
+                        <li><strong>Xe máy (Ngày 2):</strong> Linh hoạt thăm lăng & làng nghề.</li>
+                        <li><strong>Xích lô:</strong> Trải nghiệm văn hóa quanh Đại Nội (có Grab Xích Lô).</li>
+                        <li><strong>Chiến lược:</strong> Kết hợp giúp tiết kiệm thể lực & tối ưu thời gian.</li>
+                    </ul>
+                </div>
+                <div
+                    class="backdrop-card p-6 rounded-xl shadow-glow border border-imperial-200 dark:border-imperial-700">
+                    <h3 class="font-semibold text-lg mb-3 text-imperial-700 dark:text-imperial-200">Khu vực lưu trú</h3>
+                    <p class="text-sm leading-relaxed">
+                        Ưu tiên <strong>Phú Hội - Vĩnh Ninh (bờ Nam sông Hương)</strong> gần ẩm thực, phố đi bộ, bến
+                        thuyền Tòa Khâm & cầu Trường Tiền. Giúp biến quãng đi bộ thành trải nghiệm khám phá.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="tag">Gần ẩm thực</span>
+                        <span class="tag">Thuận tiện di chuyển</span>
+                        <span class="tag">Không gian thơ mộng</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chi phí -->
+        <section id="chi-phi" class="space-y-8">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">II</span>
+                Bảng Chi Phí Ước Tính
+            </h2>
+            <div
+                class="overflow-hidden backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700 shadow-glow">
+                <table class="w-full text-sm">
+                    <thead class="bg-imperial-600 text-white">
+                        <tr>
+                            <th class="p-3 text-left font-semibold">Hạng mục</th>
+                            <th class="p-3 text-left font-semibold">Chi tiết</th>
+                            <th class="p-3 text-right font-semibold">Chi phí (VNĐ)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-imperial-200 dark:divide-imperial-700">
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-medium">Lưu trú</td>
+                            <td class="p-3">Khách sạn / Homestay 2 đêm</td>
+                            <td class="p-3 text-right">800,000 - 1,200,000</td>
+                        </tr>
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-medium">Di chuyển</td>
+                            <td class="p-3">Xe máy (2 ngày) + 4-5 chuyến Grab/Taxi</td>
+                            <td class="p-3 text-right">400,000 - 600,000</td>
+                        </tr>
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-medium">Ăn uống</td>
+                            <td class="p-3">3 sáng + 3 trưa + 2 tối + ăn vặt, cà phê</td>
+                            <td class="p-3 text-right">1,000,000 - 1,500,000</td>
+                        </tr>
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-medium">Vé tham quan</td>
+                            <td class="p-3">Đại Nội, Lăng Khải Định, Lăng Tự Đức, An Hiên</td>
+                            <td class="p-3 text-right">550,000</td>
+                        </tr>
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-medium">Hoạt động</td>
+                            <td class="p-3">Ca Huế trên sông Hương</td>
+                            <td class="p-3 text-right">100,000 - 150,000</td>
+                        </tr>
+                        <tr class="bg-imperial-100/70 dark:bg-imperial-800/40">
+                            <td class="p-3 font-semibold">Tổng</td>
+                            <td class="p-3"></td>
+                            <td class="p-3 text-right font-semibold">2,850,000 - 3,950,000</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-semibold">Dự phòng (10%)</td>
+                            <td class="p-3"></td>
+                            <td class="p-3 text-right font-semibold">285,000 - 395,000</td>
+                        </tr>
+                        <tr class="bg-imperial-200/60 dark:bg-imperial-700/60">
+                            <td class="p-3 font-bold">Tổng dự kiến</td>
+                            <td class="p-3"></td>
+                            <td class="p-3 text-right font-bold text-imperial-700 dark:text-imperial-100">3,135,000 -
+                                4,345,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-stone-500 dark:text-stone-400">Lưu ý: Giá có thể thay đổi tùy thời điểm & lựa chọn
+                dịch vụ. Nên dự trù thêm khi đi mùa cao điểm.</p>
+        </section>
+
+        <!-- Lịch trình tổng quan -->
+        <section id="lich-trinh" class="space-y-8">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">III</span>
+                Lịch Trình Tổng Quan
+            </h2>
+            <div
+                class="overflow-hidden backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700 shadow-glow">
+                <table class="w-full text-sm">
+                    <thead class="bg-imperial-600 text-white">
+                        <tr>
+                            <th class="p-3 text-left font-semibold w-28">Ngày</th>
+                            <th class="p-3 text-left font-semibold">Hoạt động chính</th>
+                            <th class="p-3 text-left font-semibold">Ẩm thực gợi ý</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-imperial-200 dark:divide-imperial-700">
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-semibold"><a href="#ngay-1"
+                                    class="text-imperial-700 dark:text-imperial-200 hover:underline">Ngày 1</a></td>
+                            <td class="p-3">Đến Huế – Đại Nội – Chùa Thiên Mụ – Ca Huế – Phố đêm</td>
+                            <td class="p-3">Bún bò, cơm hến, bánh bèo/nậm/lọc, bánh khoái</td>
+                        </tr>
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-semibold"><a href="#ngay-2"
+                                    class="text-imperial-700 dark:text-imperial-200 hover:underline">Ngày 2</a></td>
+                            <td class="p-3">Lăng Khải Định – Lăng Tự Đức – Làng Hương – Nhà vườn An Hiên – Ẩm thực đêm
+                            </td>
+                            <td class="p-3">Bánh canh Nam Phổ, bún thịt nướng, bánh ép, ốc, chè Huế</td>
+                        </tr>
+                        <tr class="hover:bg-imperial-50/80 dark:hover:bg-stone-800">
+                            <td class="p-3 font-semibold"><a href="#ngay-3"
+                                    class="text-imperial-700 dark:text-imperial-200 hover:underline">Ngày 3</a></td>
+                            <td class="p-3">Chợ Đông Ba – Cà phê muối – Quốc Học – Cơm Âm Phủ – Mua quà – Trở về</td>
+                            <td class="p-3">Đặc sản chợ, cà phê muối, cơm Âm Phủ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Timeline Canvas (SVG) -->
+        <section class="space-y-8">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+                <span
+                    class="w-8 h-8 rounded-lg bg-imperial-600 text-white flex items-center justify-center text-sm font-bold">SVG</span>
+                Canvas Timeline Minh Họa
+            </h3>
+            <div
+                class="relative rounded-xl overflow-hidden border border-imperial-200 dark:border-imperial-700 shadow-glow">
+                <canvas id="timelineCanvas"
+                    class="w-full h-64 block bg-gradient-to-br from-imperial-100 via-imperial-50 to-white dark:from-stone-800 dark:via-stone-900 dark:to-stone-950"></canvas>
+                <div
+                    class="absolute top-3 left-4 text-xs font-medium text-imperial-700 dark:text-imperial-200 bg-white/70 dark:bg-stone-800/60 px-3 py-1 rounded-full shadow">
+                    Trục thời gian (khái quát 3 ngày)
+                </div>
+            </div>
+        </section>
+
+        <!-- Chi tiết ngày 1 -->
+        <section id="ngay-1" class="day-anchor space-y-10">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">1</span>
+                Ngày 1: Dấu Chân Triều Nguyễn & Hương Vị Thân Quen
+            </h2>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-6 timeline-line relative">
+                    <!-- Item template -->
+                    <div class="relative pl-10 group" data-tags="food experience">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow group-hover:scale-110 transition">
+                        </div>
+                        <div
+                            class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700 shadow-sm hover:shadow-lg transition">
+                            <h4 class="font-semibold">07:00 - 08:30 | Chào Huế & Bún bò mở màn</h4>
+                            <p class="text-sm mt-2">Check-in cảm giác Huế bằng tô bún bò chuẩn vị tại Mệ Kéo hoặc O
+                                Cương Chú Điệp. Gửi hành lý ở khách sạn.</p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <span class="tag">Ẩm thực</span><span class="tag">Khởi động</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="heritage relax">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow">
+                        </div>
+                        <div class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">10:00 - 13:00 | Đại Nội</h4>
+                            <p class="text-sm mt-2">Ngọ Môn – Điện Thái Hòa – Tử Cấm Thành. Tập trung các điểm chính để
+                                tránh mệt mỏi.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Di sản</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="food">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow">
+                        </div>
+                        <div class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">13:00 - 14:30 | Cơm hến</h4>
+                            <p class="text-sm mt-2">Hoa Đông hoặc Đập Đá: Sự hòa quyện hến xào – tóp mỡ – rau thơm – vị
+                                cay Huế.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Ẩm thực</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="relax">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow">
+                        </div>
+                        <div class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">14:30 - 16:00 | Cà phê nghỉ ngơi</h4>
+                            <p class="text-sm mt-2">The Time Coffee ngắm sông Hương, hồi sức nhẹ nhàng.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Thư giãn</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="heritage">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow">
+                        </div>
+                        <div class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">16:00 - 17:30 | Chùa Thiên Mụ</h4>
+                            <p class="text-sm mt-2">Hoàng hôn nhuộm vàng tháp Phước Duyên – khoảnh khắc thiêng liêng.
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Di sản</span><span
+                                    class="tag">Hoàng hôn</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="food">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow">
+                        </div>
+                        <div class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">18:00 - 19:00 | Bánh Huế</h4>
+                            <p class="text-sm mt-2">Combo bánh bèo – nậm – lọc – bánh khoái tại Bà Đỏ hoặc Quán Hạnh.
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Ẩm thực</span><span class="tag">Đặc
+                                    sản</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="experience heritage">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow">
+                        </div>
+                        <div class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">19:00 - 21:00 | Ca Huế & Hoa đăng</h4>
+                            <p class="text-sm mt-2">Thuyền rồng – nhã nhạc – thả đèn hoa đăng trên sông Hương.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Trải nghiệm</span><span
+                                    class="tag">Văn hóa</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="experience relax">
+                        <div
+                            class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500 shadow">
+                        </div>
+                        <div class="p-5 rounded-xl backdrop-card border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">21:00+ | Phố đêm</h4>
+                            <p class="text-sm mt-2">Dạo Chu Văn An – Phạm Ngũ Lão – Võ Thị Sáu.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Trải nghiệm</span><span
+                                    class="tag">Năng lượng đêm</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Aside tips -->
+                <aside class="space-y-6">
+                    <div
+                        class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700 shadow-glow">
+                        <h4 class="font-semibold mb-2">Mẹo tối ưu</h4>
+                        <ul class="text-sm list-disc pl-4 space-y-1">
+                            <li>Mua vé Đại Nội online tránh xếp hàng.</li>
+                            <li>Bún bò nên ăn sớm (trước 9:30).</li>
+                            <li>Ca Huế nên đặt vé trước cuối tuần.</li>
+                            <li>Mang áo khoác mỏng khi đi thuyền tối.</li>
+                        </ul>
+                    </div>
+                    <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                        <h4 class="font-semibold mb-2">Thời tiết dự phòng</h4>
+                        <p class="text-sm">Nếu mưa: ưu tiên thêm thời gian trong Đại Nội (phòng trưng bày), giảm bớt dạo
+                            phố đêm.</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Chi tiết ngày 2 -->
+        <section id="ngay-2" class="day-anchor space-y-10">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">2</span>
+                Ngày 2: Lăng Tẩm & Làng Nghề
+            </h2>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-6 timeline-line relative">
+                    <div class="relative pl-10 group" data-tags="food">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full border-4 border-imperial-500 bg-white">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">07:30 - 08:30 | Bánh canh Nam Phổ / Xôi thịt hon</h4>
+                            <p class="text-sm mt-2">Đổi vị nhẹ, nạp năng lượng trước cung đường lăng tẩm.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Ẩm thực</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="heritage">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full border-4 border-imperial-500 bg-white">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">08:30 - 11:00 | Lăng Khải Định</h4>
+                            <p class="text-sm mt-2">Kiến trúc giao thoa Đông - Tây, nghệ thuật khảm sành sứ tinh xảo.
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Di sản</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="heritage relax">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full border-4 border-imperial-500 bg-white">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">11:00 - 12:30 | Lăng Tự Đức</h4>
+                            <p class="text-sm mt-2">Khung cảnh thi vị: hồ nước – đảo – nhà tạ – thơ mộng.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Di sản</span><span class="tag">Tĩnh
+                                    lặng</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="food">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full border-4 border-imperial-500 bg-white">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">12:30 - 14:00 | Bún thịt nướng Huyền Anh</h4>
+                            <p class="text-sm mt-2">Thịt nướng thơm – nem lụi – nước lèo béo bùi cân bằng.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Ẩm thực</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="experience">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full border-4 border-imperial-500 bg-white">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">14:00 - 15:30 | Làng hương Thủy Xuân</h4>
+                            <p class="text-sm mt-2">Màu sắc rực rỡ – thử se hương – trò chuyện nghệ nhân.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Trải nghiệm</span><span
+                                    class="tag">Thủ công</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="relax heritage">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full border-4 border-imperial-500 bg-white">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">15:30 - 17:00 | Nhà vườn An Hiên</h4>
+                            <p class="text-sm mt-2">Không gian nhà rường – vườn xanh – thưởng trà an yên.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Di sản</span><span class="tag">Thư
+                                    giãn</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="food experience">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full border-4 border-imperial-500 bg-white">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">19:00+ | Ẩm thực đêm: Bánh ép – Ốc – Chè</h4>
+                            <p class="text-sm mt-2">Chuỗi ăn vặt: bánh ép Nguyễn Du → Ốc Minh Nghĩa → Chè Hẻm.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Ẩm thực</span><span class="tag">Đêm
+                                    Huế</span></div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="space-y-6">
+                    <div
+                        class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700 shadow-glow">
+                        <h4 class="font-semibold mb-2">Mẹo di chuyển</h4>
+                        <ul class="text-sm list-disc pl-4 space-y-1">
+                            <li>Đi lăng Khải Định trước (đỡ nắng trưa).</li>
+                            <li>Tránh giờ 11–13h nắng gắt ngoài trời.</li>
+                            <li>Đổ xăng đầy trước khi vào tuyến lăng.</li>
+                        </ul>
+                    </div>
+                    <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                        <h4 class="font-semibold mb-2">Lưu ý vé</h4>
+                        <p class="text-sm">Mang theo tiền mặt nhỏ; bảo quản vé cẩn thận để quay lại khu phụ. Có thể mua
+                            combo vé di tích nếu đi thêm lăng khác.</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Chi tiết ngày 3 -->
+        <section id="ngay-3" class="day-anchor space-y-10">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">3</span>
+                Ngày 3: Thong Dong & Lời Tạm Biệt
+            </h2>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-6 timeline-line relative">
+                    <div class="relative pl-10 group" data-tags="experience">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">08:00 - 09:30 | Chợ Đông Ba</h4>
+                            <p class="text-sm mt-2">Khám phá văn hóa bản địa – khảo giá đặc sản.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Trải nghiệm</span><span
+                                    class="tag">Mua sắm</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="relax">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">09:30 - 11:00 | Cà phê muối</h4>
+                            <p class="text-sm mt-2">Hương vị biểu tượng – có thể chọn không gian hoài cổ.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Thư giãn</span><span
+                                    class="tag">Đặc trưng</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="heritage experience">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">11:00 - 12:00 | Quốc Học Huế (Check-in)</h4>
+                            <p class="text-sm mt-2">Kiến trúc Pháp cổ, sắc đỏ nổi bật – chụp ảnh nhanh.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Di sản</span><span class="tag">Ảnh
+                                    đẹp</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="food">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">12:00 - 13:30 | Cơm Âm Phủ</h4>
+                            <p class="text-sm mt-2">Món cơm nhiều thành phần – sắc màu – câu chuyện thú vị.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Ẩm thực</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="relax experience">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">13:30 - 15:30 | Viết lưu bút & mua quà</h4>
+                            <p class="text-sm mt-2">Quay lại chợ / quán cà phê – hoàn tất danh sách quà.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Tổng kết</span></div>
+                        </div>
+                    </div>
+                    <div class="relative pl-10 group" data-tags="relax">
+                        <div class="absolute left-1 top-2 w-6 h-6 rounded-full bg-white border-4 border-imperial-500">
+                        </div>
+                        <div class="p-5 backdrop-card rounded-xl border border-imperial-200 dark:border-imperial-700">
+                            <h4 class="font-semibold">16:00 - 16:45 | Lên xe trở về</h4>
+                            <p class="text-sm mt-2">Kết thúc hành trình – giữ nhịp bình thản để không vội vã.</p>
+                            <div class="mt-3 flex flex-wrap gap-2"><span class="tag">Kết thúc</span></div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="space-y-6">
+                    <div
+                        class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700 shadow-glow">
+                        <h4 class="font-semibold mb-2">Mẹo ngày cuối</h4>
+                        <ul class="text-sm list-disc pl-4 space-y-1">
+                            <li>Mua đặc sản gói kín chống ẩm.</li>
+                            <li>Ưu tiên quà nhẹ: mè xửng, tôm chua hút chân không.</li>
+                            <li>Chụp ảnh Quốc Học giờ nắng nghiêng 10–11h.</li>
+                        </ul>
+                    </div>
+                    <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                        <h4 class="font-semibold mb-2">Checklist quà</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>☐ Mè xửng</li>
+                            <li>☐ Tôm chua</li>
+                            <li>☐ Nem / Tré</li>
+                            <li>☐ Hương trầm</li>
+                            <li>☐ Nón bài thơ</li>
+                            <li>☐ Tinh dầu tràm</li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Ẩm thực -->
+        <section id="am-thuc" class="space-y-8">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">IV</span>
+                Bản Đồ Ẩm Thực
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700 space-y-2">
+                    <h4 class="font-semibold">Món phải thử</h4>
+                    <ul class="text-sm list-disc pl-4 space-y-1">
+                        <li>Bún bò Huế</li>
+                        <li>Cơm / Bún hến</li>
+                        <li>Bánh bèo - nậm - lọc</li>
+                        <li>Bánh khoái</li>
+                        <li>Bánh ép</li>
+                        <li>Nem lụi / Bún thịt nướng</li>
+                        <li>Chè Huế</li>
+                    </ul>
+                </div>
+                <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h4 class="font-semibold mb-2">Địa chỉ tiêu biểu</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>Bún bò: Mệ Kéo / O Cương Chú Điệp</li>
+                        <li>Cơm hến: Hoa Đông / Hàn Mặc Tử</li>
+                        <li>Bánh Huế: Bà Đỏ / Quán Hạnh</li>
+                        <li>Nem lụi: Huyền Anh / Tài Phú</li>
+                        <li>Chè: Chè Hẻm</li>
+                    </ul>
+                </div>
+                <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h4 class="font-semibold mb-2">Mẹo thưởng thức</h4>
+                    <p class="text-sm leading-relaxed">Đi sớm – hỏi giá trước – dùng ít nước chấm trước để cảm nhận vị
+                        gốc – chia nhỏ khẩu phần để thử nhiều món.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cà phê -->
+        <section id="cafe" class="space-y-8">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">V</span>
+                Không Gian Cà Phê
+            </h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h4
+                        class="font-semibold mb-2 text-sm uppercase tracking-wide text-imperial-600 dark:text-imperial-300">
+                        View Sông Hương</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>The TIME Coffee</li>
+                        <li>Sông Hương Coffee</li>
+                    </ul>
+                </div>
+                <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h4
+                        class="font-semibold mb-2 text-sm uppercase tracking-wide text-imperial-600 dark:text-imperial-300">
+                        Hoài Cổ / Yên</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>Nghĩa Cafe</li>
+                        <li>Tan. cafe</li>
+                        <li>Giao Cafe</li>
+                        <li>Mắt Biếc (Bao Vinh)</li>
+                    </ul>
+                </div>
+                <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h4
+                        class="font-semibold mb-2 text-sm uppercase tracking-wide text-imperial-600 dark:text-imperial-300">
+                        Sân Vườn</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>Vỹ Dạ Xưa</li>
+                        <li>Lavie Concept</li>
+                    </ul>
+                </div>
+                <div class="backdrop-card p-5 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h4
+                        class="font-semibold mb-2 text-sm uppercase tracking-wide text-imperial-600 dark:text-imperial-300">
+                        Hiện Đại</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>Hanok Café</li>
+                        <li>SPACE Coffee</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quà mang về -->
+        <section id="qua" class="space-y-8">
+            <h2 class="text-2xl font-display font-bold flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-full gradient-gold shadow ring-2 ring-imperial-300 flex items-center justify-center text-white font-semibold">VI</span>
+                Quà Mang Về
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="backdrop-card p-6 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h3 class="font-semibold mb-3">Quà ăn được</h3>
+                    <ul class="list-disc pl-5 text-sm space-y-1">
+                        <li>Mè xửng (Thiên Hương)</li>
+                        <li>Tôm chua</li>
+                        <li>Nem & Tré</li>
+                        <li>Bánh ép khô</li>
+                    </ul>
+                </div>
+                <div class="backdrop-card p-6 rounded-xl border border-imperial-200 dark:border-imperial-700">
+                    <h3 class="font-semibold mb-3">Lưu niệm văn hóa</h3>
+                    <ul class="list-disc pl-5 text-sm space-y-1">
+                        <li>Hương trầm Thủy Xuân</li>
+                        <li>Nón lá bài thơ</li>
+                        <li>Tinh dầu tràm</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-xs text-stone-500 dark:text-stone-400">Mua tại chợ Đông Ba hoặc trực tiếp làng nghề để có
+                trải nghiệm & chất lượng tốt.</p>
+        </section>
+
+    </main>
+
+    <footer
+        class="mt-16 py-10 border-t border-imperial-200 dark:border-imperial-700 text-center text-xs text-stone-500 dark:text-stone-400">
+        Thiết kế trực quan lịch trình Huế 3N2Đ. Có thể chỉnh sửa và mở rộng thêm.
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const btnToggleDark = document.getElementById('btnToggleDark');
+        btnToggleDark.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('hueItinDark', document.documentElement.classList.contains('dark') ? '1' : '0');
+        });
+        if (localStorage.getItem('hueItinDark') === '1') document.documentElement.classList.add('dark');
+
+        // Print
+        document.getElementById('btnPrint').addEventListener('click', () => window.print());
+
+        // Filter logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const allBtn = document.getElementById('btnFilterAll');
+        const items = document.querySelectorAll('[data-tags]');
+        const resetFilterButtons = () => {
+            filterBtns.forEach(b => b.classList.remove('filter-active'));
+            allBtn.classList.remove('filter-active');
+        };
+        allBtn.addEventListener('click', () => {
+            resetFilterButtons();
+            allBtn.classList.add('filter-active');
+            items.forEach(i => i.classList.remove('hidden'));
+        });
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tag = btn.dataset.filter;
+                resetFilterButtons();
+                btn.classList.add('filter-active');
+                items.forEach(i => {
+                    const tags = i.dataset.tags.split(' ');
+                    if (tags.includes(tag)) i.classList.remove('hidden'); else i.classList.add('hidden');
+                });
+            })
+        });
+
+        // Smooth anchor highlight
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const id = a.getAttribute('href');
+                const el = document.querySelector(id);
+                if (el) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: el.getBoundingClientRect().top + window.scrollY - 80,
+                        behavior: 'smooth'
+                    });
+                    setTimeout(() => {
+                        el.classList.add('ring-2', 'ring-imperial-500');
+                        setTimeout(() => el.classList.remove('ring-2', 'ring-imperial-500'), 1600);
+                    }, 600);
+                }
+            })
+        });
+
+        // Canvas timeline
+        function drawTimeline() {
+            const canvas = document.getElementById('timelineCanvas');
+            if (!canvas) return;
+            canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
+            canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            ctx.scale(dpr, dpr);
+
+            const w = canvas.clientWidth;
+            const h = canvas.clientHeight;
+            ctx.clearRect(0, 0, w, h);
+
+            const margin = 60;
+            const lineY = h / 2;
+            // gradient line
+            const grad = ctx.createLinearGradient(margin, lineY, w - margin, lineY);
+            grad.addColorStop(0, '#a6783b');
+            grad.addColorStop(.5, '#d0b892');
+            grad.addColorStop(1, '#a6783b');
+
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = grad;
+            ctx.globalAlpha = .35;
+            ctx.beginPath();
+            ctx.moveTo(margin, lineY);
+            ctx.lineTo(w - margin, lineY);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+
+            const nodes = [
+                { day: 'Ngày 1', label: 'Đại Nội\nChùa Thiên Mụ\nCa Huế', color: '#a6783b' },
+                { day: 'Ngày 2', label: 'Lăng Khải Định\nLăng Tự Đức\nLàng hương', color: '#855d26' },
+                { day: 'Ngày 3', label: 'Chợ Đông Ba\nCà phê muối\nQuốc Học', color: '#62441b' },
+            ];
+            const usableWidth = w - margin * 2;
+            nodes.forEach((n, i) => {
+                const x = margin + i * (usableWidth / (nodes.length - 1));
+                const y = lineY;
+                // Node circle
+                ctx.beginPath();
+                ctx.fillStyle = n.color;
+                ctx.arc(x, y, 22, 0, Math.PI * 2);
+                ctx.fill();
+                // Node inner
+                ctx.beginPath();
+                ctx.fillStyle = '#fff';
+                ctx.arc(x, y, 14, 0, Math.PI * 2);
+                ctx.fill();
+                // Day text
+                ctx.fillStyle = '#432d11';
+                ctx.font = '600 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(n.day, x, y - 36);
+                // Label text (multi-line)
+                ctx.font = '11px Inter';
+                ctx.fillStyle = '#222';
+                const lines = n.label.split('\n');
+                lines.forEach((ln, idx) => {
+                    ctx.fillText(ln, x, y + 34 + idx * 14);
+                });
+            });
+
+            // Soft glow
+            nodes.forEach((n, i) => {
+                const x = margin + i * (usableWidth / (nodes.length - 1));
+                const y = lineY;
+                const rad = ctx.createRadialGradient(x, y, 5, x, y, 60);
+                rad.addColorStop(0, n.color + '88');
+                rad.addColorStop(1, n.color + '00');
+                ctx.beginPath();
+                ctx.fillStyle = rad;
+                ctx.arc(x, y, 60, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+        window.addEventListener('resize', drawTimeline);
+        drawTimeline();
+
+    </script>
+</body>
+
+</html>
